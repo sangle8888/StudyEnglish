@@ -1,0 +1,13 @@
+@{
+    ViewData["Title"] = "Tổng quan";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Tổng quan quản trị</h1>
+    <a class="btn btn-primary" asp-area="Admin" asp-controller="Users" asp-action="Index">Quản lý người dùng</a>
+</div>
+<div class="row g-3">
+    <div class="col-md-4"><div class="card shadow-sm"><div class="card-body"><div class="text-muted">Tổng người dùng</div><div class="display-6">@ViewBag.UserCount</div></div></div></div>
+    <div class="col-md-4"><div class="card shadow-sm"><div class="card-body"><div class="text-muted">Đang hoạt động</div><div class="display-6">@ViewBag.ActiveUserCount</div></div></div></div>
+    <div class="col-md-4"><div class="card shadow-sm"><div class="card-body"><div class="text-muted">Vai trò</div><div class="display-6">@ViewBag.RoleCount</div></div></div></div>
+</div>

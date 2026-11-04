@@ -1,0 +1,2036 @@
+﻿@{
+    ViewData["Title"] = "Từ vựng - Vocabulary";
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/assets/css/Vocabulary/vocabulary-main.css" asp-append-version="true" />
+}
+
+      <main id="dashboardMain" class="flex-1 flex flex-col gap-5 min-w-0">
+        <!-- [MAIN 1/8] TIÊU ĐỀ TRANG + THỐNG KÊ NHANH
+             Model: LearnedWords / TotalWords ("10/4514 từ"), LearningWords ("Đang học 0"), MasteredWords ("Đã thuộc 0") -->
+        <!-- [MAIN 1/8] TIÊU ĐỀ TRANG + THỐNG KÊ NHANH -->
+        <div class="flex flex-col gap-2 px-1">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="topic-card-icon grid h-9 w-9 place-items-center rounded-xl bg-fuchsia-500 text-white shadow-md shadow-fuchsia-500/25"><svg
+                  xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="lucide lucide-book-open"><path d="M12 7v14"></path><path
+                    d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span>
+              <h2
+                class="text-2xl font-extrabold text-slate-900 dark:text-white">Từ
+                vựng</h2>
+            </div>
+            <p id="vocabGlobalStatsText" class="text-xs font-semibold text-slate-500 dark:text-slate-400">Đã
+              học <strong id="vocabStatLearned" class="text-fuchsia-600 dark:text-fuchsia-400">0/4514
+                từ</strong> · Đang học <span id="vocabStatLearning">0</span> · Đã thuộc <span id="vocabStatMastered">0</span></p>
+          </div>
+          <!-- Thanh kinh nghiệm / tiến độ tổng -->
+          <div class="w-full h-1.5 overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-700/80">
+            <div id="vocabGlobalProgressBar"
+              class="h-full rounded-full bg-gradient-to-r from-fuchsia-500 to-pink-500 transition-all duration-500"
+              style="width: 0%"></div>
+          </div>
+        </div>
+
+        <!-- [MAIN 2/8] 3 THẺ TỔNG QUAN → Partial: _VocabOverview
+             Thẻ 1 "Ôn tập"     : DueReviewCount; nút disabled khi = 0       (JS: chưa gắn hành động)
+             Thẻ 2 "Học từ mới" : NewWordsToday/NewWordsGoal + NextTopicTitle; nút [data-scroll-topics] cuộn tới #vocabTopics
+             Thẻ 3 "Sổ tay"     : SavedNotebookCount; nút [data-open-tab="notebook"] chuyển sang tab Sổ tay -->
+        <section class="grid grid-cols-2 gap-3 lg:grid-cols-3"
+          aria-label="Tổng quan từ vựng">
+          <article
+            class="order-first col-span-2 flex min-w-0 flex-col gap-3 rounded-[24px] border-2 border-vocab-review/40 bg-card/95 p-4 shadow-soft sm:p-5 lg:order-none lg:col-span-1">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span
+                class="inline-flex min-w-0 items-center gap-2 font-display text-base font-bold text-foreground">
+                <span
+                  class="flex size-8 shrink-0 items-center justify-center rounded-xl bg-vocab-review-soft text-vocab-review">
+                  <i class="fa-solid fa-repeat" aria-hidden="true"></i>
+                </span>
+                <span class="truncate">Ôn tập</span>
+              </span>
+              <span
+                class="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-bold text-foreground dark:bg-slate-700 dark:text-slate-100">Nên
+                làm trước</span>
+            </div>
+            <div id="reviewDueSummary"
+              class="min-w-0 flex-1 text-xs text-muted-foreground sm:text-sm">Không
+              có từ đã học cần ôn</div>
+            <button id="startReviewButton" type="button"
+              class="inline-flex items-center justify-center gap-2 whitespace-nowrap transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] motion-reduce:active:scale-100 [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-primary/90 h-11 px-6 text-base min-h-11 w-full rounded-2xl font-bold bg-spectrum text-white shadow-playful hover:opacity-95">Ôn
+              tập
+              ngay</button>
+          </article>
+          <article
+            class="flex min-w-0 flex-col gap-3 rounded-[24px] border-2 border-vocab-learn/45 bg-card/95 p-4 shadow-soft sm:p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span
+                class="inline-flex min-w-0 items-center gap-2 font-display text-base font-bold text-foreground">
+                <span
+                  class="flex size-8 shrink-0 items-center justify-center rounded-xl bg-vocab-learn-soft text-vocab-learn">
+                  <i class="fa-solid fa-wand-magic-sparkles"
+                    aria-hidden="true"></i>
+                </span>
+                <span class="truncate">Học từ mới</span>
+              </span>
+            </div>
+            <div
+              class="min-w-0 flex-1 text-xs text-muted-foreground sm:text-sm">
+              <span class="block" id="learnNewTodayCount">0/10 từ mới hôm nay</span>
+              <span class="block truncate" id="learnNextTopicText">Tiếp theo: Business Planning</span>
+            </div>
+            <button type="button" data-scroll-topics id="startLearnNewButton"
+              class="inline-flex h-11 min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-vocab-learn px-6 text-base font-bold text-white shadow-lg shadow-vocab-learn/25 transition-all hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Học
+              tiếp</button>
+          </article>
+          <article
+            class="flex min-w-0 flex-col gap-3 rounded-[24px] border-2 border-vocab-notebook/45 bg-card/95 p-4 shadow-soft sm:p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <span
+                class="inline-flex min-w-0 items-center gap-2 font-display text-base font-bold text-foreground">
+                <span
+                  class="flex size-8 shrink-0 items-center justify-center rounded-xl bg-vocab-notebook-soft text-vocab-notebook">
+                  <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
+                </span>
+                <span class="truncate">Sổ tay</span>
+              </span>
+            </div>
+            <div
+              class="min-w-0 flex-1 text-xs text-muted-foreground sm:text-sm">Chưa
+              lưu từ nào</div>
+            <button type="button" data-open-tab="notebook"
+              class="inline-flex h-11 min-h-11 w-full items-center justify-center gap-2 rounded-2xl bg-gradient-vocab-notebook px-6 text-base font-bold text-white shadow-lg shadow-vocab-notebook/25 transition-all hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Mở
+              sổ tay</button>
+          </article>
+        </section>
+
+        <!-- [MAIN 3/8] THANH CÔNG CỤ: 4 TAB + Ô TÌM KIẾM + BỘ LỌC → Partial: _VocabToolbar
+             4 tab (.vocab-tab, thuộc tính data-tab):
+                flashcards = Học thẻ   | phrases = Ghép cụm từ | learned = Sổ từ đã học (badge = số từ đã học) | notebook = Sổ tay từ vựng (badge = số từ đã lưu)
+             Bộ lọc: #vocabSearch (tìm theo data-title), #vocabTopicFilter (lọc theo data-topic).
+             2 <select> đầu (Kỳ thi / Kiểu từ vựng) hiện CHƯA có JS → sau này là query string ?exam=&type= gửi lên Controller.
+             Hiện lọc phía client (JS filterCards); khi có nhiều dữ liệu nên chuyển sang lọc phía server / API. -->
+        <section
+          class="rounded-[26px] border border-slate-200/70 bg-white/95 p-1.5 shadow-soft dark:border-slate-700/70 dark:bg-slate-900/90"
+          aria-label="Công cụ học từ vựng">
+          <div class="grid grid-cols-4 gap-1.5"
+            role="tablist" aria-label="Các mục của Từ vựng">
+            <button type="button"
+              class="vocab-tab flex min-w-0 min-h-12 flex-col items-center justify-center gap-0.5 rounded-2xl border border-emerald-500/60 bg-gradient-to-br from-emerald-50 to-emerald-100/60 px-1 py-1.5 text-[11px] font-bold text-slate-800 shadow-sm shadow-emerald-500/20 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:from-emerald-500/20 dark:to-emerald-900/20 dark:text-white sm:flex-row sm:gap-2 sm:px-3 sm:text-sm"
+              data-tab="flashcards" role="tab" aria-selected="true"
+              aria-label="Học thẻ">
+              <i
+                class="fa-solid fa-layer-group shrink-0 text-emerald-600 dark:text-emerald-300"
+                aria-hidden="true"></i>
+              <span class="max-w-full truncate">Học thẻ</span>
+            </button>
+            <button type="button"
+              class="vocab-tab flex min-w-0 min-h-12 flex-col items-center justify-center gap-0.5 rounded-2xl border border-cyan-500/25 bg-cyan-50 px-1 py-1.5 text-[11px] font-semibold text-slate-800 transition hover:bg-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-cyan-500/10 dark:text-slate-100 sm:flex-row sm:gap-2 sm:px-3 sm:text-sm"
+              data-tab="phrases" role="tab" aria-selected="false"
+              aria-label="Ghép cụm từ">
+              <i
+                class="fa-solid fa-link shrink-0 text-cyan-600 dark:text-cyan-300"
+                aria-hidden="true"></i>
+              <span class="truncate sm:hidden">Ghép</span><span
+                class="hidden truncate sm:inline">Ghép cụm từ</span>
+            </button>
+            <button type="button"
+              class="vocab-tab flex min-w-0 min-h-12 flex-col items-center justify-center gap-0.5 rounded-2xl border border-fuchsia-500/25 bg-fuchsia-50 px-1 py-1.5 text-[11px] font-semibold text-slate-800 transition hover:bg-fuchsia-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-fuchsia-500/10 dark:text-slate-100 sm:flex-row sm:gap-2 sm:px-3 sm:text-sm"
+              data-tab="learned" role="tab" aria-selected="false"
+              aria-label="Sổ từ đã học (10)">
+              <i
+                class="fa-regular fa-floppy-disk shrink-0 text-fuchsia-600 dark:text-fuchsia-300"
+                aria-hidden="true"></i>
+              <span class="truncate sm:hidden">Đã học</span><span
+                class="hidden truncate sm:inline">Sổ từ đã học</span>
+              <span
+                class="hidden rounded-full bg-white/80 px-1.5 text-[11px] font-bold tabular-nums text-slate-800 sm:inline dark:bg-slate-800 dark:text-white">10</span>
+            </button>
+            <button type="button"
+              class="vocab-tab flex min-w-0 min-h-12 flex-col items-center justify-center gap-0.5 rounded-2xl border border-amber-500/25 bg-amber-50 px-1 py-1.5 text-[11px] font-semibold text-slate-800 transition hover:bg-amber-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring dark:bg-amber-500/10 dark:text-slate-100 sm:flex-row sm:gap-2 sm:px-3 sm:text-sm"
+              data-tab="notebook" role="tab" aria-selected="false"
+              aria-label="Sổ tay từ vựng (0)">
+              <i
+                class="fa-regular fa-bookmark shrink-0 text-amber-600 dark:text-amber-300"
+                aria-hidden="true"></i>
+              <span class="truncate sm:hidden">Sổ tay</span><span
+                class="hidden truncate sm:inline">Sổ tay từ vựng</span>
+              <span
+                class="hidden rounded-full bg-white/80 px-1.5 text-[11px] font-bold tabular-nums text-slate-800 sm:inline dark:bg-slate-800 dark:text-white">0</span>
+            </button>
+          </div>
+          <div id="vocabCatalogFilters"
+            class="mt-1.5 border-t border-slate-200/70 px-1.5 pb-1.5 pt-3 dark:border-slate-700/70 sm:px-2.5">
+            <div
+              class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div
+                class="flex min-w-0 items-start gap-2 lg:w-full lg:max-w-[420px]">
+                <label class="relative min-w-0 flex-1">
+                  <span class="sr-only">Tìm từ vựng</span>
+                  <i
+                    class="fa-solid fa-magnifying-glass pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                    aria-hidden="true"></i>
+                  <input id="vocabSearch" type="search"
+                    placeholder="Tìm từ vựng..."
+                    class="h-11 w-full rounded-2xl border border-slate-200 bg-white/80 pl-10 pr-4 text-sm text-slate-700 outline-none transition-colors placeholder:text-slate-400 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:focus:ring-emerald-900/40 sm:h-12">
+                </label>
+                <button id="vocabFilterToggle" type="button"
+                  aria-expanded="false" aria-controls="vocabFilterOptions"
+                  class="inline-flex h-11 shrink-0 items-center gap-1.5 rounded-2xl border border-slate-200 bg-white/80 px-3 text-sm font-semibold text-slate-800 shadow-sm transition-colors dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 sm:h-12 lg:hidden">
+                  <i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Bộ
+                    lọc</span>
+                </button>
+              </div>
+              <div id="vocabFilterOptions"
+                class="hidden flex-wrap items-center gap-2 lg:flex">
+                <label><span class="sr-only">Kỳ thi</span><select
+                    class="h-11 cursor-pointer rounded-2xl border border-slate-200 bg-white/85 px-3.5 text-sm font-semibold text-slate-700 outline-none dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-100 sm:h-12"><option>TOEIC</option><option>IELTS</option></select></label>
+                <label><span class="sr-only">Kiểu từ vựng</span><select
+                    class="h-11 cursor-pointer rounded-2xl border border-slate-200 bg-white/85 px-3.5 text-sm font-semibold text-slate-700 outline-none dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-100 sm:h-12"><option>TOEIC
+                      theo chủ đề</option><option>TOEIC thường
+                      gặp</option></select></label>
+                <label><span class="sr-only">Nhóm từ vựng</span><select
+                    id="vocabTopicFilter"
+                    class="h-11 max-w-full cursor-pointer rounded-2xl border border-slate-200 bg-white/85 px-3.5 text-sm font-semibold text-slate-700 outline-none dark:border-slate-700 dark:bg-slate-900/70 dark:text-slate-100 sm:h-12"><option
+                      value="all">Tất cả nhóm</option><option
+                      value="business">Business &amp; Workplace</option><option
+                      value="office">Office</option><option value="toeic">TOEIC
+                      theo chủ đề</option><option value="finance">Finance &amp;
+                      Operations</option><option
+                      value="health">Health</option><option
+                      value="travel">Travel</option><option
+                      value="dining">Dining &amp;
+                      Entertainment</option></select></label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- [MAIN 4/8] DANH SÁCH BỘ TỪ THEO CHỦ ĐỀ  #vocabTopics → Partial: _VocabGroupList
+             Cấu trúc lặp 2 tầng (sinh bằng foreach):
+               foreach group in Model.Groups  →  <section.vocab-group data-group="...">  (tiêu đề + "N bộ từ")
+                 foreach set in group.Sets    →  <article.vocab-card>  (xem chú thích bên dưới)
+             Nhóm hiện có: business · toeic · finance · health · travel · dining
+             (Chú ý: topic "office" được JS gộp vào filter "business"). -->
+        <section id="vocabTopics" class="space-y-5"
+          aria-label="Các chủ đề từ vựng">
+          <section class="vocab-group" data-group="business"
+            aria-labelledby="topicHeading">
+            <div class="mb-3 flex flex-wrap items-baseline gap-2"><span
+                class="h-2.5 w-2.5 rounded-full bg-fuchsia-500"
+                aria-hidden="true"></span><h3 id="topicHeading"
+                class="text-lg font-extrabold text-slate-900 dark:text-white">Business
+                &amp; Workplace</h3> <span
+                class="text-xs font-medium text-slate-500 dark:text-slate-400">10
+                bộ từ</span></div>
+            <div id="vocabCardGrid"
+              class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <!-- [MVC][PARTIAL] _VocabCard.cshtml — 1 THẺ BỘ TỪ (mẫu, các thẻ sau y hệt)
+                   Model VocabSet: { Title, Topic, Color, IsLearned, LearnedCount, TotalCount, Percent }
+                     data-title   ← Title          (JS dùng để tìm kiếm + mở bài học)
+                     data-topic   ← Topic          (JS dùng để lọc)
+                     data-learned ← "true" nếu đã học ít nhất 1 từ (tab "Sổ từ đã học")
+                     thanh tiến độ: style="width:{Percent}%"  |  "12/12 từ" ← LearnedCount/TotalCount
+                     nút ".study-set": đã học >0 và <100% → "Học tiếp", ngược lại "Học bài"; badge "Mới" khi Percent = 0
+                   Màu theo nhóm (CSS class): fuchsia=business, amber=toeic, emerald=finance, rose=health, cyan=travel, orange=dining -->
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-fuchsia-500 p-4"
+                data-topic="business" data-learned="true"
+                data-title="Contracts">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-fuchsia-600 dark:text-fuchsia-300">Contracts</h4></div><span
+                    class="rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-bold text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"><i
+                      class="fa-solid fa-check mr-1" aria-hidden="true"></i>Xong</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-fuchsia-600 dark:text-fuchsia-300">100%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-fuchsia-500"
+                    style="width:100%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-fuchsia-100 px-2 py-1 text-[10px] font-bold text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>12/12 từ</span><button
+                    type="button"
+                    class="study-set rounded-full bg-fuchsia-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:bg-fuchsia-600">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-fuchsia-500 p-4"
+                data-topic="business" data-learned="true" data-title="Business Planning">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-fuchsia-600 dark:text-fuchsia-300">Business
+                      Planning</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-fuchsia-600 dark:text-fuchsia-300">8%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-fuchsia-500"
+                    style="width:8%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-fuchsia-100 px-2 py-1 text-[10px] font-bold text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>1/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-fuchsia-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:bg-fuchsia-600">Học
+                    tiếp <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-fuchsia-500 p-4"
+                data-topic="business" data-title="Conferences">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-fuchsia-600 dark:text-fuchsia-300">Conferences</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-fuchsia-600 dark:text-fuchsia-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-fuchsia-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-fuchsia-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:bg-fuchsia-600">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-fuchsia-500 p-4"
+                data-topic="office" data-learned="true" data-title="Office Technology">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-fuchsia-600 dark:text-fuchsia-300">Office
+                      Technology</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-fuchsia-600 dark:text-fuchsia-300">33%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-fuchsia-500"
+                    style="width:33%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-fuchsia-100 px-2 py-1 text-[10px] font-bold text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>4/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-fuchsia-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:bg-fuchsia-600">Học
+                    tiếp <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-fuchsia-500 p-4"
+                data-topic="office" data-learned="true" data-title="Office Procedures">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-fuchsia-600 dark:text-fuchsia-300">Office
+                      Procedures</h4></div><span
+                    class="sr-only">Đang học</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-fuchsia-600 dark:text-fuchsia-300">8%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-fuchsia-500"
+                    style="width:8%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-fuchsia-100 px-2 py-1 text-[10px] font-bold text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>1/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-fuchsia-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:bg-fuchsia-600">Học
+                    tiếp <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-fuchsia-500 p-4"
+                data-topic="office" data-title="Correspondence">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-fuchsia-600 dark:text-fuchsia-300">Correspondence</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-fuchsia-600 dark:text-fuchsia-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-fuchsia-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-fuchsia-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:bg-fuchsia-600">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-fuchsia-500 p-4"
+                data-topic="business" data-title="Meetings">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-fuchsia-600 dark:text-fuchsia-300">Meetings</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-fuchsia-600 dark:text-fuchsia-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-fuchsia-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-fuchsia-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:bg-fuchsia-600">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-fuchsia-500 p-4"
+                data-topic="business" data-title="Marketing">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-fuchsia-600 dark:text-fuchsia-300">Marketing</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-fuchsia-600 dark:text-fuchsia-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-fuchsia-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-fuchsia-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:bg-fuchsia-600">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-fuchsia-500 p-4"
+                data-topic="business" data-title="Finance">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-fuchsia-100 text-fuchsia-600 dark:bg-fuchsia-500/15 dark:text-fuchsia-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-fuchsia-600 dark:text-fuchsia-300">Finance</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-fuchsia-600 dark:text-fuchsia-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-fuchsia-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-fuchsia-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:bg-fuchsia-600">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+            </div>
+          </section>
+          <section class="vocab-group" data-group="toeic"
+            aria-label="TOEIC theo chủ đề">
+            <div class="mb-3 flex flex-wrap items-baseline gap-2"><span
+                class="h-2.5 w-2.5 rounded-full bg-amber-500"
+                aria-hidden="true"></span><h3
+                class="text-lg font-extrabold text-slate-900 dark:text-white">TOEIC
+                theo chủ đề</h3><span
+                class="text-xs font-medium text-slate-500 dark:text-slate-400">17
+                bộ từ</span></div>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Marketing">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Marketing</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Warranties">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Warranties</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Computers">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Computers</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Electronics">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Electronics</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Apply &amp; Interview">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Apply
+                      &amp; Interview</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic"
+                data-title="Promotions, Pensions &amp; Awards">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Promotions,
+                      Pensions &amp; Awards</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Shopping">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Shopping</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Property &amp; Departments">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Property
+                      &amp; Departments</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Board Meetings &amp; Committees">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Board
+                      Meetings &amp; Committees</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Quality Control">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Quality
+                      Control</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Product Development">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Product
+                      Development</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Renting &amp; Leasing">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Renting
+                      &amp; Leasing</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Selecting a Theater">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Selecting
+                      a Theater</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Performing Arts">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Performing
+                      Arts</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Movies">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Movies</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Museums">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Museums</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-amber-500 p-4"
+                data-topic="toeic" data-title="Media">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/15 dark:text-amber-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-amber-600 dark:text-amber-300">Media</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-amber-600 dark:text-amber-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-amber-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-amber-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+            </div>
+          </section>
+          <section class="vocab-group" data-group="finance"
+            aria-label="Finance &amp; Operations">
+            <div class="mb-3 flex flex-wrap items-baseline gap-2"><span
+                class="h-2.5 w-2.5 rounded-full bg-emerald-500"
+                aria-hidden="true"></span><h3
+                class="text-lg font-extrabold text-slate-900 dark:text-white">Finance
+                &amp; Operations</h3><span
+                class="text-xs font-medium text-slate-500 dark:text-slate-400">9
+                bộ từ</span></div>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-emerald-500 p-4"
+                data-topic="finance" data-title="Ordering Supplies">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-emerald-600 dark:text-emerald-300">Ordering
+                      Supplies</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-emerald-600 dark:text-emerald-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-emerald-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-emerald-500 p-4"
+                data-topic="finance" data-title="Shipping">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-emerald-600 dark:text-emerald-300">Shipping</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-emerald-600 dark:text-emerald-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-emerald-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-emerald-500 p-4"
+                data-topic="finance" data-title="Invoices">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-emerald-600 dark:text-emerald-300">Invoices</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-emerald-600 dark:text-emerald-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-emerald-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-emerald-500 p-4"
+                data-topic="finance" data-title="Inventory">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-emerald-600 dark:text-emerald-300">Inventory</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-emerald-600 dark:text-emerald-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-emerald-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-emerald-500 p-4"
+                data-topic="finance" data-title="Banking">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-emerald-600 dark:text-emerald-300">Banking</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-emerald-600 dark:text-emerald-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-emerald-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-emerald-500 p-4"
+                data-topic="finance" data-title="Accounting">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-emerald-600 dark:text-emerald-300">Accounting</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-emerald-600 dark:text-emerald-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-emerald-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-emerald-500 p-4"
+                data-topic="finance" data-title="Investments">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-emerald-600 dark:text-emerald-300">Investments</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-emerald-600 dark:text-emerald-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-emerald-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-emerald-500 p-4"
+                data-topic="finance" data-title="Taxes">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-emerald-600 dark:text-emerald-300">Taxes</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-emerald-600 dark:text-emerald-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-emerald-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-emerald-500 p-4"
+                data-topic="finance" data-title="Financial Statements">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-emerald-100 text-emerald-600 dark:bg-emerald-500/15 dark:text-emerald-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-emerald-600 dark:text-emerald-300">Financial
+                      Statements</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-emerald-600 dark:text-emerald-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-emerald-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-emerald-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+            </div>
+          </section>
+          <section class="vocab-group" data-group="health" aria-label="Health">
+            <div class="mb-3 flex flex-wrap items-baseline gap-2"><span
+                class="h-2.5 w-2.5 rounded-full bg-rose-500"
+                aria-hidden="true"></span><h3
+                class="text-lg font-extrabold text-slate-900 dark:text-white">Health</h3><span
+                class="text-xs font-medium text-slate-500 dark:text-slate-400">4
+                bộ từ</span></div>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-rose-500 p-4"
+                data-topic="health" data-title="Health Insurance">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-rose-600 dark:text-rose-300">Health
+                      Insurance</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-rose-600 dark:text-rose-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-rose-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-rose-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-rose-500 p-4"
+                data-topic="health" data-title="Hospitals">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-rose-600 dark:text-rose-300">Hospitals</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-rose-600 dark:text-rose-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-rose-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-rose-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-rose-500 p-4"
+                data-topic="health" data-title="Pharmacy">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-rose-600 dark:text-rose-300">Pharmacy</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-rose-600 dark:text-rose-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-rose-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-rose-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-rose-500 p-4"
+                data-topic="health" data-title="Healthy Living">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-rose-100 text-rose-600 dark:bg-rose-500/15 dark:text-rose-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-rose-600 dark:text-rose-300">Healthy
+                      Living</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-rose-600 dark:text-rose-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-rose-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-rose-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+            </div>
+          </section>
+          <section class="vocab-group" data-group="travel" aria-label="Travel">
+            <div class="mb-3 flex flex-wrap items-baseline gap-2"><span
+                class="h-2.5 w-2.5 rounded-full bg-cyan-500"
+                aria-hidden="true"></span><h3
+                class="text-lg font-extrabold text-slate-900 dark:text-white">Travel</h3><span
+                class="text-xs font-medium text-slate-500 dark:text-slate-400">5
+                bộ từ</span></div>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-cyan-500 p-4"
+                data-topic="travel" data-title="Air Travel">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-cyan-100 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-cyan-600 dark:text-cyan-300">Air
+                      Travel</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-cyan-600 dark:text-cyan-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-cyan-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-cyan-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-cyan-500 p-4"
+                data-topic="travel" data-title="Trains">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-cyan-100 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-cyan-600 dark:text-cyan-300">Trains</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-cyan-600 dark:text-cyan-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-cyan-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-cyan-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-cyan-500 p-4"
+                data-topic="travel" data-title="Hotels">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-cyan-100 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-cyan-600 dark:text-cyan-300">Hotels</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-cyan-600 dark:text-cyan-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-cyan-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-cyan-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-cyan-500 p-4"
+                data-topic="travel" data-title="Car Rentals">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-cyan-100 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-cyan-600 dark:text-cyan-300">Car
+                      Rentals</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-cyan-600 dark:text-cyan-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-cyan-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-cyan-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-cyan-500 p-4"
+                data-topic="travel" data-title="Sightseeing">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-cyan-100 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-cyan-600 dark:text-cyan-300">Sightseeing</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-cyan-600 dark:text-cyan-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-cyan-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-cyan-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+            </div>
+          </section>
+          <section class="vocab-group" data-group="dining"
+            aria-label="Dining &amp; Entertainment">
+            <div class="mb-3 flex flex-wrap items-baseline gap-2"><span
+                class="h-2.5 w-2.5 rounded-full bg-orange-500"
+                aria-hidden="true"></span><h3
+                class="text-lg font-extrabold text-slate-900 dark:text-white">Dining
+                &amp; Entertainment</h3><span
+                class="text-xs font-medium text-slate-500 dark:text-slate-400">5
+                bộ từ</span></div>
+            <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-orange-500 p-4"
+                data-topic="dining" data-title="Dining Out">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-orange-100 text-orange-600 dark:bg-orange-500/15 dark:text-orange-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-orange-600 dark:text-orange-300">Dining
+                      Out</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-orange-600 dark:text-orange-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-orange-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-orange-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-orange-500 p-4"
+                data-topic="dining" data-title="Eating Entertainment">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-orange-100 text-orange-600 dark:bg-orange-500/15 dark:text-orange-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-orange-600 dark:text-orange-300">Eating
+                      Entertainment</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-orange-600 dark:text-orange-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-orange-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-orange-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-orange-500 p-4"
+                data-topic="dining" data-title="Ordering Food">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-orange-100 text-orange-600 dark:bg-orange-500/15 dark:text-orange-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-orange-600 dark:text-orange-300">Ordering
+                      Food</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-orange-600 dark:text-orange-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-orange-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-orange-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-orange-500 p-4"
+                data-topic="dining" data-title="Cookbooks">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-orange-100 text-orange-600 dark:bg-orange-500/15 dark:text-orange-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-orange-600 dark:text-orange-300">Cookbooks</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-orange-600 dark:text-orange-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-orange-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-orange-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+              <article
+                class="vocab-card glass-card rounded-3xl border-l-4 border-orange-500 p-4"
+                data-topic="dining" data-title="Food Preparation">
+                <div class="mb-3 flex items-start justify-between gap-2"><div
+                    class="flex items-center gap-2.5"><span
+                      class="grid h-9 w-9 place-items-center rounded-2xl bg-orange-100 text-orange-600 dark:bg-orange-500/15 dark:text-orange-300"><span class="topic-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg></span></span><h4
+                      class="text-sm font-extrabold text-orange-600 dark:text-orange-300">Food
+                      Preparation</h4></div><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300">Mới</span></div>
+                <div
+                  class="flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400"><span>Đã
+                    học trong bộ</span><span
+                    class="text-orange-600 dark:text-orange-300">0%</span></div><div
+                  class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><div
+                    class="h-full rounded-full bg-orange-500"
+                    style="width:0%"></div></div>
+                <div
+                  class="mt-3 flex items-center justify-between border-t border-slate-100 pt-2.5 dark:border-slate-700"><span
+                    class="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500 dark:bg-slate-700 dark:text-slate-300"><i
+                      class="fa-solid fa-layer-group mr-1"
+                      aria-hidden="true"></i>0/12 từ</span><button type="button"
+                    class="study-set rounded-full bg-orange-500 px-3 py-1.5 text-[10px] font-extrabold text-white transition hover:brightness-95">Học
+                    bài <i class="fa-solid fa-arrow-right ml-1"
+                      aria-hidden="true"></i></button></div>
+              </article>
+            </div>
+          </section>
+          <p id="vocabEmptyState"
+            class="glass-card mt-3 hidden rounded-2xl p-6 text-center text-sm text-slate-500 dark:text-slate-400">Chưa
+            có từ vựng phù hợp với lựa chọn này.</p>
+        </section>
+
+        <!-- [MAIN 5/8] DANH MỤC BỘ GHÉP CỤM TỪ  #vocabPhraseCatalog  (rỗng, JS đổ dữ liệu vào khi bấm tab "Ghép cụm từ")
+             Hiện dữ liệu nằm trong JS (phraseBanks / phraseSets). Sau này: GET /api/phrase-sets → render. -->
+        <section id="vocabPhraseCatalog" hidden
+          aria-label="Các bộ ghép cụm từ"></section>
+
+        <!-- [MAIN 6/8] MÀN LUYỆN GHÉP CỤM TỪ  #vocabPhrasePractice → Partial: _PhrasePractice  (ẩn mặc định)
+             Luồng: chọn VẾ ĐẦU + VẾ SAU → ghép thành cụm đúng → câu tiếp theo → màn kết quả #phrasePracticeResult.
+             Điều khiển: tự phát âm (#phraseAutoSpeak), tự qua câu (#phraseAutoNext), giải thích thêm (#phraseExplain).
+             API gợi ý: GET /api/phrase-sets/{id}/questions · POST /api/phrase-sets/{id}/answers · POST /api/bookmarks -->
+        <section id="vocabPhrasePractice" class="phrase-practice" hidden
+          aria-labelledby="phrasePracticeTitle">
+          <nav class="phrase-practice-breadcrumb"
+            aria-label="Đường dẫn bài ghép">
+            <button id="phrasePracticeHome" type="button"
+              aria-label="Quay lại từ vựng" title="Quay lại từ vựng"><i
+                class="fa-solid fa-house" aria-hidden="true"></i></button>
+            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            <button id="phrasePracticeBack" type="button">Từ vựng</button>
+            <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+            <h2 id="phrasePracticeTitle"></h2>
+          </nav>
+          <div class="phrase-practice-controls">
+            <div class="phrase-practice-navigation">
+              <button id="phrasePracticePrevious" class="phrase-nav-button"
+                type="button" aria-label="Câu trước" title="Câu trước"
+                disabled><i class="fa-solid fa-chevron-left"
+                  aria-hidden="true"></i></button>
+              <span id="phrasePracticeCounter"></span>
+              <button id="phrasePracticeForward" class="phrase-nav-button"
+                type="button" aria-label="Câu tiếp theo" title="Câu tiếp theo"
+                disabled><i class="fa-solid fa-chevron-right"
+                  aria-hidden="true"></i></button>
+            </div>
+            <div class="phrase-practice-switches">
+              <label class="phrase-switch">Tự phát âm <input
+                  id="phraseAutoSpeak" type="checkbox" role="switch"
+                  aria-label="Tự phát âm"></label>
+              <label class="phrase-switch">Tự qua câu <input id="phraseAutoNext"
+                  type="checkbox" role="switch" aria-label="Tự qua câu"></label>
+              <label class="phrase-switch">Giải thích thêm <input
+                  id="phraseExplain" type="checkbox" role="switch"
+                  aria-label="Giải thích thêm"></label>
+            </div>
+          </div>
+          <nav id="phrasePracticeProgress" class="phrase-practice-track"
+            aria-label="Tiến độ câu hỏi"></nav>
+          <section class="phrase-question-card"
+            aria-label="Câu hỏi ghép cụm từ">
+            <div class="phrase-question-top">
+              <button id="phrasePracticeBookmark" class="phrase-bookmark"
+                type="button" aria-label="Lưu cụm từ" title="Lưu cụm từ"
+                aria-pressed="false"><i class="fa-regular fa-bookmark"
+                  aria-hidden="true"></i></button>
+              <span id="phrasePracticeStatus" class="phrase-question-status"><i
+                  class="fa-solid fa-wand-magic-sparkles"
+                  aria-hidden="true"></i><span>Cụm chưa ghép</span></span>
+            </div>
+            <div id="phraseExerciseBody">
+              <p class="phrase-question-instruction">CHỌN HAI VẾ ĐỂ HOÀN THÀNH
+                CÂU</p>
+              <p class="phrase-question-sentence"><span
+                  id="phraseSentenceBefore"></span><span id="phraseAnswerLeft"
+                  class="phrase-answer-slot"
+                  aria-label="Vế đầu đã chọn"></span><span
+                  id="phraseAnswerRight" class="phrase-answer-slot suffix"
+                  aria-label="Vế sau đã chọn"></span><span
+                  id="phraseSentenceAfter"></span></p>
+              <p class="phrase-question-hint"><i class="fa-regular fa-lightbulb"
+                  aria-hidden="true"></i><span
+                  id="phrasePracticeHint"></span></p>
+              <div id="phraseMatchBoard" class="phrase-match-board">
+                <section><h3 class="phrase-match-column-title">VẾ ĐẦU</h3><div
+                    id="phraseMatchLeft" class="phrase-match-column"
+                    role="group" aria-label="Vế đầu"></div></section>
+                <section><h3 class="phrase-match-column-title suffix">VẾ
+                    SAU</h3><div id="phraseMatchRight"
+                    class="phrase-match-column" role="group"
+                    aria-label="Vế sau"></div></section>
+              </div>
+              <p id="phrasePracticeFeedback" class="phrase-practice-feedback"
+                role="status" aria-live="polite"></p>
+              <section id="phrasePracticeExplanation" class="phrase-explanation"
+                hidden><h3>Giải thích</h3><p
+                  id="phrasePracticeExplanationText"></p></section>
+            </div>
+            <section id="phrasePracticeResult" class="phrase-result" hidden
+              aria-live="polite"><i class="fa-regular fa-circle-check"
+                aria-hidden="true"></i><h3>Hoàn thành bộ cụm từ</h3><p
+                id="phrasePracticeResultText"></p></section>
+          </section>
+          <footer class="phrase-practice-footer">
+            <button id="phrasePracticeNext" class="phrase-practice-next"
+              type="button" disabled hidden><span>Câu tiếp theo</span><i
+                class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+            <div class="phrase-practice-footer-actions">
+              <button id="phrasePracticeReport" class="phrase-report"
+                type="button"><i class="fa-solid fa-triangle-exclamation"
+                  aria-hidden="true"></i>Báo lỗi</button>
+              <button id="phrasePracticeFeedbackButton" class="phrase-feedback"
+                type="button"><i class="fa-regular fa-message"
+                  aria-hidden="true"></i>Góp ý</button>
+            </div>
+          </footer>
+        </section>
+
+        <!-- [MAIN 7/8] MÀN HỌC TỪ  #vocabLessonView → Partial: _VocabLesson  (ẩn mặc định, mở khi bấm ".study-set")
+             5 chế độ (.vocab-lesson-tab, data-lesson-mode):
+                term   = thẻ từ (lật thẻ, phát âm US/UK)      lesson = chi tiết đầy đủ (ví dụ, họ từ, lỗi thường gặp, mẹo nhớ)
+                quiz   = trắc nghiệm nghĩa                      typing = điền từ vào câu     review = đánh giá mức nhớ (again/hard/good/easy)
+             Model VocabWord: { Word, Type, Meaning, Definition, UsIpa, UkIpa, Examples[], Collocations[], Synonyms[], Antonyms[],
+                                WordFamily[], CommonMistake{Wrong,Right,Note}, MemoryTip, Tags[] }
+             API gợi ý: GET /api/vocab-sets/{id}/words · POST /api/vocab/{word}/rating · POST /api/bookmarks -->
+        <section id="vocabLessonView" class="vocab-lesson-view" hidden
+          aria-label="Bài học từ vựng">
+          <nav class="vocab-lesson-breadcrumb" aria-label="Đường dẫn">
+            <button type="button" id="lessonHomeButton"
+              aria-label="Quay lại từ vựng">
+              <i class="fa-solid fa-house" aria-hidden="true"></i>
+            </button>
+            <i class="fa-solid fa-chevron-right text-[10px]"
+              aria-hidden="true"></i>
+            <button type="button" id="lessonBackButton">Từ vựng</button>
+            <i class="fa-solid fa-chevron-right text-[10px]"
+              aria-hidden="true"></i>
+            <strong id="lessonSetTitle">Contracts</strong>
+          </nav>
+
+          <div class="vocab-lesson-status">
+            <div class="vocab-lesson-status-copy">
+              <span class="vocab-lesson-new">Học từ mới</span>
+              <span class="vocab-lesson-count" id="lessonCounter">Thẻ 1/2</span>
+            </div>
+            <div class="vocab-lesson-switches">
+              <label class="vocab-lesson-switch" for="lessonAutoPronounce">
+                Tự phát âm
+                <input id="lessonAutoPronounce" type="checkbox" role="switch"
+                  aria-label="Tự phát âm">
+              </label>
+              <label class="vocab-lesson-switch" for="lessonFastMode">
+                Học nhanh
+                <input id="lessonFastMode" type="checkbox" role="switch"
+                  aria-label="Học nhanh">
+              </label>
+            </div>
+          </div>
+          <div class="vocab-lesson-progress" id="lessonProgress"
+            role="progressbar" aria-label="Tiến độ học từ vựng"
+            aria-valuemin="0" aria-valuemax="8" aria-valuenow="0"
+            aria-valuetext="0 từ đã hoàn thành">
+            <div class="vocab-lesson-progress-fill"
+              id="lessonProgressFill"></div>
+          </div>
+
+          <div class="vocab-lesson-workspace" id="lessonWorkspace">
+            <aside class="review-word-list" id="reviewWordList" hidden
+              aria-label="Danh sách từ đã học">
+              <div class="review-word-list-header">
+                <h2>Danh sách từ <span id="reviewWordCount">0</span></h2>
+                <button class="review-word-list-toggle" id="reviewWordListToggle" type="button" aria-label="Ẩn/hiện danh sách từ" aria-expanded="true">
+                  <i class="fa-solid fa-list-ul" aria-hidden="true"></i>
+                </button>
+              </div>
+              <ol id="reviewWordItems"></ol>
+            </aside>
+            <div class="vocab-lesson-tabs" role="tablist" aria-label="Chế độ học">
+              <button class="vocab-lesson-tab" type="button" role="tab"
+                aria-selected="true" data-lesson-mode="term">Từ</button>
+              <button class="vocab-lesson-tab" type="button" role="tab"
+                aria-selected="false" data-lesson-mode="lesson">Bài học</button>
+              <button class="vocab-lesson-tab" type="button" role="tab"
+                aria-selected="false" data-lesson-mode="quiz">Quiz</button>
+              <button class="vocab-lesson-tab" type="button" role="tab"
+                aria-selected="false" data-lesson-mode="typing">Gõ</button>
+              <button class="vocab-lesson-tab" type="button" role="tab"
+                aria-selected="false" data-lesson-mode="review">Đánh giá</button>
+            </div>
+            <section class="vocab-lesson-card" data-mode="term"
+              aria-label="Thẻ từ vựng">
+              <button class="vocab-lesson-bookmark" id="lessonBookmark"
+                type="button"
+                aria-label="Lưu từ này" aria-pressed="false">
+                <i class="fa-regular fa-bookmark" aria-hidden="true"></i>
+              </button>
+              <div class="vocab-lesson-card-content">
+                <span class="vocab-lesson-type" id="lessonWordType">VERB</span>
+                <h1 class="vocab-lesson-word" id="lessonWord">resolve</h1>
+                <p class="vocab-lesson-meaning" id="lessonMeaning" hidden>giải
+                  quyết</p>
+                <div class="vocab-lesson-pronunciation">
+                  <span>US <span
+                      id="lessonUsPronunciation">/rɪˈzɑːlv/</span></span>
+                  <span>UK <span
+                      id="lessonUkPronunciation">/rɪˈzɒlv/</span></span>
+                </div>
+                <div class="vocab-lesson-audio">
+                  <button type="button" data-speak="en-US"><i
+                      class="fa-solid fa-volume-high mr-2"
+                      aria-hidden="true"></i>US</button>
+                  <button type="button" data-speak="en-GB"><i
+                      class="fa-solid fa-volume-high mr-2"
+                      aria-hidden="true"></i>UK</button>
+                </div>
+                <button class="vocab-lesson-flip" id="lessonFlipButton"
+                  type="button">
+                  <i class="fa-solid fa-rotate mr-2" aria-hidden="true"></i>Lật
+                  thẻ
+                </button>
+              </div>
+              <div class="vocab-lesson-detail" id="lessonDetail" hidden>
+                <div class="lesson-fast-summary" id="lessonFastSummary" hidden>
+                  <article class="lesson-detail-panel">
+                    <div class="lesson-detail-title">
+                      <span class="lesson-detail-type"
+                        id="lessonFastType">PHRASE</span>
+                      <span class="lesson-detail-meaning"
+                        id="lessonFastMeaning"></span>
+                    </div>
+                    <p class="lesson-detail-definition"
+                      id="lessonFastDefinition" hidden></p>
+                    <div class="lesson-examples">
+                      <div class="lesson-example">
+                        <div class="lesson-example-label">❞ VÍ DỤ</div>
+                        <p id="lessonFastExample"></p>
+                        <span id="lessonFastTranslation"></span>
+                      </div>
+                    </div>
+                    <div class="lesson-detail-row">
+                      <strong>Cụm từ đi kèm:</strong>
+                      <div class="lesson-chip-list">
+                        <span class="lesson-chip" id="lessonFastCollocation"></span>
+                        <span id="lessonFastCollocationMeaning" hidden></span>
+                      </div>
+                    </div>
+                    <p id="lessonFastTip" hidden></p>
+                  </article>
+                  <button class="lesson-quick-check" id="lessonFastNext"
+                    type="button">Tiếp</button>
+                  <section class="lesson-fast-rating" id="lessonFastRating" hidden>
+                    <h3>Bạn nhớ từ này tốt đến đâu?</h3>
+                    <div class="lesson-rating-options" role="group"
+                      aria-label="Đánh giá mức độ ghi nhớ">
+                      <button class="lesson-rating-button again" type="button"
+                        data-fast-rating="again"><strong>Học
+                          lại</strong><span>Quên</span></button>
+                      <button class="lesson-rating-button hard" type="button"
+                        data-fast-rating="hard"><strong>Khó</strong><span>Nhớ
+                          chậm</span></button>
+                      <button class="lesson-rating-button good" type="button"
+                        data-fast-rating="good"><strong>Tốt</strong><span>Nhớ
+                          được</span></button>
+                      <button class="lesson-rating-button easy" type="button"
+                        data-fast-rating="easy"><strong>Dễ</strong><span>Thuộc
+                          lòng</span></button>
+                    </div>
+                  </section>
+                  <button class="lesson-fast-toggle" id="lessonFastToggle"
+                    type="button" aria-expanded="false">
+                    <i class="fa-solid fa-chevron-down mr-2"
+                      aria-hidden="true"></i>Xem thêm
+                  </button>
+                </div>
+                <div class="lesson-full-details" id="lessonFullDetails">
+                  <article class="lesson-detail-panel">
+                    <div class="lesson-detail-title">
+                      <span class="lesson-detail-type"
+                        id="lessonDetailType">ADJECTIVE</span>
+                      <span class="lesson-detail-meaning"
+                        id="lessonDetailMeaning"></span>
+                    </div>
+                    <p class="lesson-detail-definition"
+                      id="lessonDetailDefinition"></p>
+                    <div class="lesson-examples" id="lessonExamples"></div>
+                    <div class="lesson-detail-row"><strong>Cụm từ đi
+                        kèm:</strong><div class="lesson-chip-list"
+                        id="lessonCollocations"></div></div>
+                    <div class="lesson-detail-row"><strong>Đồng
+                        nghĩa:</strong><div class="lesson-chip-list"
+                        id="lessonSynonyms"></div></div>
+                    <div class="lesson-detail-row"><strong>Trái
+                        nghĩa:</strong><div class="lesson-chip-list"
+                        id="lessonAntonyms"></div></div>
+                  </article>
+                  <article class="lesson-detail-panel">
+                    <h2 class="lesson-detail-title lesson-note-heading"><i
+                        class="fa-solid fa-layer-group text-fuchsia-500"
+                        aria-hidden="true"></i> Họ từ</h2>
+                    <div class="lesson-word-family" id="lessonWordFamily"></div>
+                  </article>
+                  <div class="lesson-detail-bottom">
+                    <article class="lesson-note-panel">
+                      <h2 class="lesson-note-heading"><i
+                          class="fa-solid fa-triangle-exclamation text-amber-500"
+                          aria-hidden="true"></i> Lỗi thường gặp</h2>
+                      <p class="lesson-mistake-wrong"
+                        id="lessonMistakeWrong"></p>
+                      <p class="lesson-mistake-right"
+                        id="lessonMistakeRight"></p>
+                      <p id="lessonMistakeNote"></p>
+                    </article>
+                    <article class="lesson-note-panel tip">
+                      <h2 class="lesson-note-heading"><i
+                          class="fa-regular fa-lightbulb text-fuchsia-500"
+                          aria-hidden="true"></i> Mẹo nhớ</h2>
+                      <p id="lessonMemoryTip"></p>
+                    </article>
+                  </div>
+                  <div class="lesson-tags" id="lessonTags"></div>
+                  <button class="lesson-quick-check" id="lessonQuickCheck"
+                    type="button">
+                    <i class="fa-regular fa-circle-check mr-2"
+                      aria-hidden="true"></i>Kiểm tra nhanh
+                  </button>
+                </div>
+              </div>
+              <div class="vocab-lesson-quiz" id="lessonQuiz" hidden>
+                <span class="lesson-quiz-badge">Trắc nghiệm nhanh</span>
+                <h2 class="lesson-quiz-question" id="lessonQuizQuestion"></h2>
+                <p class="lesson-quiz-instruction"
+                  id="lessonQuizInstruction">Chọn
+                  một lần, hệ thống sẽ khóa đáp án để bạn tự kiểm tra.</p>
+                <div class="lesson-quiz-options" id="lessonQuizOptions"
+                  role="group" aria-label="Chọn nghĩa đúng"></div>
+                <p class="lesson-quiz-feedback" id="lessonQuizFeedback"
+                  aria-live="polite" hidden></p>
+                <button class="lesson-quiz-forgot" id="lessonQuizForgot"
+                  type="button">Không nhớ</button>
+                <button class="lesson-quiz-next" id="lessonQuizNext"
+                  type="button"
+                  hidden>Tiếp</button>
+              </div>
+              <div class="vocab-lesson-typing" id="lessonTyping" hidden>
+                <span class="lesson-typing-badge">Gõ từ</span>
+                <h2 class="lesson-typing-title">Điền từ vào chỗ trống</h2>
+                <p class="lesson-typing-instruction">Hoàn thành câu ví dụ bằng
+                  từ
+                  bạn vừa học.</p>
+                <div class="lesson-typing-panel">
+                  <p class="lesson-typing-sentence">
+                    <span id="lessonTypingBefore"></span>
+                    <input class="lesson-typing-input" id="lessonTypingInput"
+                      type="text" autocomplete="off" autocapitalize="none"
+                      spellcheck="false" placeholder="..."
+                      aria-label="Nhập từ còn thiếu">
+                    <span id="lessonTypingAfter"></span>
+                  </p>
+                  <p class="lesson-typing-translation"
+                    id="lessonTypingTranslation"></p>
+                </div>
+                <p class="lesson-typing-feedback" id="lessonTypingFeedback"
+                  aria-live="polite" hidden></p>
+                <button class="lesson-typing-submit" id="lessonTypingSubmit"
+                  type="button">Kiểm tra</button>
+              </div>
+              <div class="lesson-review" id="lessonReview" hidden>
+                <section class="lesson-review-summary">
+                  <span class="lesson-review-badge">Tóm tắt nhanh</span>
+                  <h2 class="lesson-review-word" id="lessonReviewWord"></h2>
+                  <div class="lesson-review-pronunciation">
+                    <span>US <span id="lessonReviewUs"></span></span>
+                    <span> · UK <span id="lessonReviewUk"></span></span>
+                  </div>
+                  <div class="lesson-review-audio">
+                    <button type="button" data-speak="en-US"><i
+                        class="fa-solid fa-volume-high mr-1"
+                        aria-hidden="true"></i>US</button>
+                    <button type="button" data-speak="en-GB"><i
+                        class="fa-solid fa-volume-high mr-1"
+                        aria-hidden="true"></i>UK</button>
+                  </div>
+                  <p class="lesson-review-meaning" id="lessonReviewMeaning"></p>
+                  <p class="lesson-review-definition"
+                    id="lessonReviewDefinition"></p>
+                </section>
+                <article class="lesson-review-example">
+                  <h3 class="lesson-review-example-label">Ví dụ nhớ nhanh</h3>
+                  <p id="lessonReviewExample"></p>
+                  <span id="lessonReviewTranslation"></span>
+                </article>
+                <div class="lesson-review-columns">
+                  <article class="lesson-review-detail">
+                    <h3>Cụm từ đi kèm:</h3>
+                    <strong id="lessonReviewCollocation"></strong>
+                    <p id="lessonReviewCollocationMeaning"></p>
+                  </article>
+                  <article class="lesson-review-detail tip">
+                    <h3><i class="fa-regular fa-lightbulb"
+                        aria-hidden="true"></i>
+                      Mẹo nhớ</h3>
+                    <p id="lessonReviewTip"></p>
+                  </article>
+                </div>
+                <div class="lesson-review-results">
+                  <article class="lesson-review-detail result-wrong"
+                    id="lessonReviewQuizResult">
+                    <h3>Trắc nghiệm</h3>
+                    <p id="lessonReviewQuizText"></p>
+                  </article>
+                  <article class="lesson-review-detail result-right"
+                    id="lessonReviewTypingResult">
+                    <h3>Gõ từ</h3>
+                    <p id="lessonReviewTypingText"></p>
+                  </article>
+                </div>
+                <section class="lesson-review-rating">
+                  <h3>Bạn nhớ từ này tốt đến đâu?</h3>
+                  <div class="lesson-rating-options" role="group"
+                    aria-label="Đánh giá mức độ ghi nhớ">
+                    <button class="lesson-rating-button again" type="button"
+                      data-rating="again" aria-pressed="false"><strong>Học
+                        lại</strong><span>Quên</span></button>
+                    <button class="lesson-rating-button hard" type="button"
+                      data-rating="hard"
+                      aria-pressed="false"><strong>Khó</strong><span>Nhớ
+                        chậm</span></button>
+                    <button class="lesson-rating-button good" type="button"
+                      data-rating="good"
+                      aria-pressed="false"><strong>Tốt</strong><span>Nhớ
+                        được</span></button>
+                    <button class="lesson-rating-button easy" type="button"
+                      data-rating="easy"
+                      aria-pressed="false"><strong>Dễ</strong><span>Thuộc
+                        lòng</span></button>
+                  </div>
+                </section>
+              </div>
+            </section>
+          </div>
+
+          <div class="vocab-lesson-actions">
+            <button class="vocab-lesson-report" id="lessonReportButton"
+              type="button">
+              <i class="fa-solid fa-triangle-exclamation mr-2"
+                aria-hidden="true"></i>Báo lỗi
+            </button>
+            <button class="vocab-lesson-feedback" id="lessonFeedbackButton"
+              type="button">
+              <i class="fa-regular fa-message mr-2" aria-hidden="true"></i>Góp ý
+            </button>
+            <button class="vocab-lesson-skip" id="lessonSkipButton"
+              type="button">
+              <i class="fa-regular fa-circle-check mr-2"
+                aria-hidden="true"></i>Đã biết từ này, bỏ qua
+            </button>
+          </div>
+          <div class="vocab-lesson-complete" id="lessonCompletePanel" hidden>
+            <div class="lesson-complete-card">
+              <img src="~/assets/images/Sidebar/study-sidebar-buddy-owl.webp" asp-append-version="true" alt="" aria-hidden="true"
+                class="lesson-complete-mascot"
+                onerror="this.style.display='none'">
+              <div class="lesson-complete-icon" aria-hidden="true">
+                <i class="fa-solid fa-champagne-glasses"></i>
+              </div>
+              <h2 class="lesson-complete-title" id="lessonCompleteTitle">Bạn đã học hết chủ đề này!</h2>
+              <p class="lesson-complete-desc" id="lessonCompleteDesc">Mọi từ trong chủ đề đã được học. Các từ sẽ quay lại khi đến hạn ôn; bạn có thể sang chủ đề tiếp theo.</p>
+              <div class="lesson-complete-stats">
+                <div class="lesson-complete-stat">
+                  <strong class="is-remembered" id="lessonCompleteRemembered">0</strong>
+                  <span>Nhớ được</span>
+                </div>
+                <div class="lesson-complete-stat">
+                  <strong class="is-again" id="lessonCompleteAgain">0</strong>
+                  <span>Học lại</span>
+                </div>
+                <div class="lesson-complete-stat">
+                  <strong id="lessonCompleteSkipped">0</strong>
+                  <span>Đã bỏ qua</span>
+                </div>
+                <div class="lesson-complete-stat">
+                  <strong class="is-rate" id="lessonCompleteRate">—</strong>
+                  <span>Tỷ lệ tự đánh giá nhớ</span>
+                </div>
+              </div>
+            </div>
+            <div class="lesson-complete-footer">
+              <div class="lesson-complete-left-actions">
+                <div class="lesson-complete-top-buttons">
+                  <button type="button" class="lesson-complete-btn-secondary" id="lessonCompletePhrasesBtn">
+                    Củng cố bằng Ghép cụm từ <i class="fa-solid fa-link" aria-hidden="true"></i>
+                  </button>
+                  <button type="button" class="lesson-complete-btn-secondary" id="lessonCompleteRestartBtn">
+                    Ôn lại cả bộ <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <button type="button" class="lesson-complete-btn-back" id="lessonCompleteBackBtn">
+                  Về Từ vựng
+                </button>
+              </div>
+              <button type="button" class="lesson-complete-btn-next" id="lessonCompleteNextTopicBtn">
+                Chủ đề tiếp theo <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+          <p id="lessonLiveMessage" class="sr-only" aria-live="polite"></p>
+        </section>
+
+        <!-- [MAIN 8/8] POPUP HỌC NHANH  #vocabStudyModal (modal đơn giản: 1 từ + nút Lưu / Từ tiếp theo). Hiện chưa dùng nhiều. -->
+        <section id="vocabStudyModal"
+          class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/50 p-4 backdrop-blur-sm"
+          role="dialog" aria-modal="true" aria-labelledby="studyModalTitle">
+          <div
+            class="glass-card w-full max-w-md rounded-3xl bg-white p-6 dark:bg-slate-900">
+            <div class="flex items-start justify-between gap-4"><div><p
+                  class="text-xs font-bold uppercase tracking-wide text-fuchsia-600 dark:text-fuchsia-300">Bộ
+                  từ vựng</p><h3 id="studyModalTitle"
+                  class="mt-1 text-xl font-extrabold text-slate-900 dark:text-white">Contracts</h3></div><button
+                type="button" id="closeStudyModal"
+                class="grid h-9 w-9 place-items-center rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-200"
+                aria-label="Đóng"><i class="fa-solid fa-xmark"
+                  aria-hidden="true"></i></button></div>
+            <div
+              class="my-6 rounded-2xl bg-fuchsia-50 p-6 text-center dark:bg-fuchsia-500/10"><p
+                id="studyWord"
+                class="text-2xl font-extrabold text-fuchsia-700 dark:text-fuchsia-300">contract</p><p
+                id="studyMeaning"
+                class="mt-2 text-sm text-slate-600 dark:text-slate-300">hợp
+                đồng</p></div>
+            <div class="flex items-center justify-between gap-3"><button
+                type="button" id="saveStudyWord"
+                class="rounded-xl border border-fuchsia-200 px-4 py-2 text-xs font-bold text-fuchsia-700 dark:border-fuchsia-500/30 dark:text-fuchsia-300"><i
+                  class="fa-regular fa-bookmark mr-1" aria-hidden="true"></i>Lưu
+                từ</button><button type="button" id="nextStudyWord"
+                class="rounded-xl bg-fuchsia-600 px-4 py-2 text-xs font-bold text-white">Từ
+                tiếp theo <i class="fa-solid fa-arrow-right ml-1"
+                  aria-hidden="true"></i></button></div>
+          </div>
+        </section>
+        <!-- # [MVC][VIEW] Views/Vocabulary/Index.cshtml — KẾT THÚC KHU VỰC MAIN  # -->
+      </main>
+
+@section Scripts {
+    <script src="~/assets/js/Vocabulary/vocabulary-main.js" asp-append-version="true"></script>
+}

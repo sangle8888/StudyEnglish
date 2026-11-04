@@ -1,0 +1,135 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Dark Soft Gamified Learning Canvas midnight background">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1920" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0B1728"/>
+      <stop offset="0.42" stop-color="#101A2C"/>
+      <stop offset="0.72" stop-color="#15162A"/>
+      <stop offset="1" stop-color="#1A1529"/>
+    </linearGradient>
+
+    <radialGradient id="skyGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(260 125) rotate(30) scale(560 370)">
+      <stop offset="0" stop-color="#2F8EDC" stop-opacity="0.34"/>
+      <stop offset="0.52" stop-color="#174367" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#174367" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="mintGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(760 440) rotate(18) scale(760 440)">
+      <stop offset="0" stop-color="#1FAF86" stop-opacity="0.22"/>
+      <stop offset="0.56" stop-color="#0F4A41" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#0F4A41" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="amberGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1590 820) rotate(-25) scale(640 430)">
+      <stop offset="0" stop-color="#B86D2B" stop-opacity="0.24"/>
+      <stop offset="0.52" stop-color="#5A301D" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#5A301D" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="roseGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1720 150) rotate(-18) scale(500 350)">
+      <stop offset="0" stop-color="#B84D86" stop-opacity="0.24"/>
+      <stop offset="0.54" stop-color="#512142" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#512142" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="violetGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(180 955) rotate(22) scale(560 370)">
+      <stop offset="0" stop-color="#6756C8" stop-opacity="0.28"/>
+      <stop offset="0.52" stop-color="#292458" stop-opacity="0.16"/>
+      <stop offset="1" stop-color="#292458" stop-opacity="0"/>
+    </radialGradient>
+
+    <filter id="softBlur" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+
+    <filter id="tinyBlur" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+
+    <pattern id="dotGrid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#8CCBFF" opacity="0.11"/>
+    </pattern>
+
+    <linearGradient id="leafBlue" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#5B98E8" stop-opacity="0.20"/>
+      <stop offset="1" stop-color="#3159A8" stop-opacity="0.10"/>
+    </linearGradient>
+
+    <linearGradient id="leafPurple" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#8B78E8" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#4B3E9A" stop-opacity="0.09"/>
+    </linearGradient>
+
+    <linearGradient id="starGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#FFC765" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#FF7DBB" stop-opacity="0.18"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#base)"/>
+  <rect width="1920" height="1080" fill="url(#dotGrid)" opacity="0.52"/>
+
+  <rect width="1920" height="1080" fill="url(#skyGlow)"/>
+  <rect width="1920" height="1080" fill="url(#mintGlow)"/>
+  <rect width="1920" height="1080" fill="url(#amberGlow)"/>
+  <rect width="1920" height="1080" fill="url(#roseGlow)"/>
+  <rect width="1920" height="1080" fill="url(#violetGlow)"/>
+
+  <path d="M0 0H1920V128C1578 90 1268 62 943 68C593 74 306 122 0 178V0Z" fill="#6FB6FF" opacity="0.045"/>
+  <path d="M0 210C261 150 602 98 1018 113C1338 125 1642 188 1920 264V0H0V210Z" fill="#A788FF" opacity="0.04"/>
+
+  <g opacity="0.72" filter="url(#softBlur)">
+    <ellipse cx="95" cy="1048" rx="210" ry="110" fill="#3B347E" opacity="0.34"/>
+    <ellipse cx="1780" cy="1040" rx="230" ry="120" fill="#24466E" opacity="0.34"/>
+    <ellipse cx="1550" cy="900" rx="220" ry="130" fill="#6B391E" opacity="0.20"/>
+    <ellipse cx="420" cy="915" rx="260" ry="145" fill="#1A5D4E" opacity="0.18"/>
+  </g>
+
+  <g transform="translate(18 792)" opacity="0.34">
+    <path d="M40 250C73 207 79 152 64 93" stroke="#6FA4FF" stroke-width="4" stroke-linecap="round" opacity="0.26"/>
+    <ellipse cx="42" cy="205" rx="36" ry="82" transform="rotate(-34 42 205)" fill="url(#leafBlue)"/>
+    <ellipse cx="93" cy="172" rx="26" ry="72" transform="rotate(26 93 172)" fill="url(#leafPurple)"/>
+    <ellipse cx="25" cy="118" rx="23" ry="62" transform="rotate(-30 25 118)" fill="url(#leafBlue)"/>
+    <ellipse cx="116" cy="92" rx="20" ry="56" transform="rotate(34 116 92)" fill="url(#leafPurple)"/>
+    <ellipse cx="133" cy="220" rx="46" ry="105" transform="rotate(42 133 220)" fill="url(#leafBlue)" opacity="0.58"/>
+  </g>
+
+  <g transform="translate(1715 785)" opacity="0.32">
+    <path d="M105 260C73 206 73 155 93 90" stroke="#6FA4FF" stroke-width="4" stroke-linecap="round" opacity="0.24"/>
+    <ellipse cx="92" cy="204" rx="32" ry="78" transform="rotate(32 92 204)" fill="url(#leafBlue)"/>
+    <ellipse cx="38" cy="168" rx="24" ry="70" transform="rotate(-28 38 168)" fill="url(#leafPurple)"/>
+    <ellipse cx="142" cy="122" rx="23" ry="62" transform="rotate(30 142 122)" fill="url(#leafBlue)"/>
+    <ellipse cx="18" cy="96" rx="19" ry="55" transform="rotate(-32 18 96)" fill="url(#leafPurple)"/>
+    <ellipse cx="-10" cy="225" rx="45" ry="103" transform="rotate(-42 -10 225)" fill="url(#leafBlue)" opacity="0.58"/>
+  </g>
+
+  <g opacity="0.42">
+    <circle cx="1812" cy="130" r="25" fill="#D56FA6" opacity="0.28"/>
+    <circle cx="1848" cy="156" r="12" fill="#F19CC8" opacity="0.30"/>
+    <circle cx="1744" cy="925" r="18" fill="#8F7BFF" opacity="0.25"/>
+    <circle cx="1688" cy="938" r="8" fill="#FFC774" opacity="0.24"/>
+    <circle cx="78" cy="965" r="14" fill="#EC7FAF" opacity="0.22"/>
+    <circle cx="225" cy="1002" r="10" fill="#8F7BFF" opacity="0.28"/>
+    <circle cx="70" cy="646" r="5" fill="#9888FF" opacity="0.52" filter="url(#tinyBlur)"/>
+    <circle cx="1780" cy="657" r="5" fill="#73B5FF" opacity="0.48" filter="url(#tinyBlur)"/>
+  </g>
+
+  <g opacity="0.48">
+    <path d="M87 890L103 926L140 942L104 958L88 994L72 958L36 942L72 926L87 890Z" fill="url(#starGrad)" opacity="0.34"/>
+    <path d="M1785 870L1800 903L1834 918L1800 933L1785 966L1770 933L1736 918L1770 903L1785 870Z" fill="url(#starGrad)" opacity="0.30"/>
+    <path d="M45 642L55 665L78 675L55 685L45 708L35 685L12 675L35 665L45 642Z" fill="#FFC765" opacity="0.30"/>
+    <path d="M1687 778L1695 797L1714 805L1695 813L1687 832L1679 813L1660 805L1679 797L1687 778Z" fill="#FFC765" opacity="0.28"/>
+    <path d="M1818 996L1828 1019L1852 1029L1828 1039L1818 1062L1808 1039L1784 1029L1808 1019L1818 996Z" fill="#8F7BFF" opacity="0.30"/>
+    <path d="M228 76L234 91L249 97L234 103L228 118L222 103L207 97L222 91L228 76Z" fill="#FFC765" opacity="0.18"/>
+    <path d="M1510 87L1517 104L1534 111L1517 118L1510 135L1503 118L1486 111L1503 104L1510 87Z" fill="#EC7FAF" opacity="0.20"/>
+  </g>
+
+  <g opacity="0.18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M92 705C105 688 123 688 134 704" stroke="#9C8BFF" stroke-width="3"/>
+    <path d="M126 720C138 704 156 704 168 719" stroke="#9C8BFF" stroke-width="3"/>
+    <path d="M1652 706C1666 688 1684 688 1696 705" stroke="#73B5FF" stroke-width="3"/>
+    <path d="M1688 723C1700 706 1719 706 1730 722" stroke="#73B5FF" stroke-width="3"/>
+    <path d="M1820 660C1839 646 1859 648 1874 665" stroke="#9C8BFF" stroke-width="3"/>
+  </g>
+
+  <rect width="1920" height="1080" fill="#030712" opacity="0.08"/>
+</svg>

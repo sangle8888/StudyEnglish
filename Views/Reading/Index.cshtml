@@ -1,0 +1,1235 @@
+@{
+    ViewData["Title"] = "Luyện Đọc - Reading";
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml"; 
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/assets/css/Reading/reading-main.css" asp-append-version="true" />
+}
+
+<!-- MAIN CONTENT AREA -->
+<main id="dashboardMain" class="flex-1 flex flex-col gap-4 min-w-0">
+  <section class="glass-card reading-hero relative overflow-hidden rounded-3xl border border-emerald-200/80 bg-gradient-to-br from-emerald-50/90 via-teal-50/80 to-cyan-100/90 p-4 shadow-lg dark:border-emerald-500/20 dark:from-emerald-950/50 dark:via-slate-900/80 dark:to-cyan-950/40 sm:p-5" aria-labelledby="readingTitle">
+    <div class="reading-hero-main relative z-10 flex flex-wrap items-start justify-between gap-4 pr-0">
+      <div class="flex min-w-0 items-center gap-3">
+        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-emerald-500 text-white shadow-md">
+          <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+        </span>
+        <h1 id="readingTitle" class="text-xl font-extrabold text-slate-900 dark:text-white sm:text-2xl">Luyện đọc theo Part</h1>
+      </div>
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-center lg:shrink-0">
+        <div class="-mx-1 flex scroll-strip gap-2 px-1 sm:mx-0 sm:flex-wrap sm:justify-end sm:overflow-x-visible sm:px-0">
+          <div class="min-w-[6.75rem] rounded-xl border border-border/70 bg-card/70 px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2">
+            <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+              <span class="[&_svg]:size-3.5 text-skill-reading">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-timer"><line x1="10" x2="14" y1="2" y2="2"></line><line x1="12" x2="15" y1="14" y2="11"></line><circle cx="12" cy="14" r="8"></circle></svg>
+              </span>Phút luyện
+            </div>
+            <div class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">65 phút</div>
+          </div>
+          <div class="min-w-[6.75rem] rounded-xl border border-border/70 bg-card/70 px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2">
+            <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+              <span class="[&_svg]:size-3.5 text-skill-reading">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>
+              </span>Câu đã làm
+            </div>
+            <div class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">10/2100</div>
+          </div>
+          <div class="min-w-[6.75rem] rounded-xl border border-border/70 bg-card/70 px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2">
+            <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+              <span class="[&_svg]:size-3.5 text-skill-reading">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-gauge"><path d="m12 14 4-4"></path><path d="M3.34 19a10 10 0 1 1 17.32 0"></path></svg>
+              </span>Pace TOEIC
+            </div>
+            <div class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">4m19s/câu</div>
+          </div>
+          <div class="min-w-[6.75rem] rounded-xl border border-border/70 bg-card/70 px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2">
+            <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+              <span class="[&_svg]:size-3.5 text-skill-reading">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+              </span>Phần đã luyện
+            </div>
+            <div id="readingPracticedPartsCount" class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">0/3</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <img src="~/assets/images/Reading/reading-list-buddy-owl.webp" asp-append-version="true" alt="Cú TART luyện đọc" class="reading-hero-mascot">
+    <div class="reading-progress relative z-10 mt-3">
+      <div class="mb-1 flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+        <span>Độ phủ ngân hàng câu đọc</span>
+        <span id="readingTotalCoveragePercent" class="font-extrabold text-emerald-500">0%</span>
+      </div>
+      <div class="h-1.5 overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-700">
+        <div id="readingTotalCoverageBar" class="h-full rounded-full bg-emerald-500 transition-all duration-500" style="width: 0%;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="glass-card reading-basic flex flex-wrap items-center justify-between gap-3 rounded-2xl px-4 py-3" aria-label="Đọc cơ bản">
+    <div class="flex min-w-0 flex-1 items-center gap-2.5 sm:gap-3">
+      <span class="flex size-9 shrink-0 items-center justify-center rounded-xl [&_svg]:size-[18px] sm:size-10 sm:[&_svg]:size-5 bg-skill-reading-soft text-skill-reading">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+      </span>
+      <div class="min-w-0">
+        <p class="truncate text-[10px] font-bold uppercase tracking-wide sm:text-xs text-skill-reading">Mới bắt đầu · News in Levels</p>
+        <h2 class="truncate font-display text-[15px] font-bold text-foreground sm:text-base">Đọc cơ bản (News in Levels)</h2>
+      </div>
+    </div>
+    <button type="button" id="basicReadingButton" class="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-xs font-extrabold text-white shadow-md transition hover:bg-emerald-700">
+      Đọc ngay <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+    </button>
+  </section>
+
+  <section id="readingParts" class="grid grid-cols-1 gap-3 lg:grid-cols-2" aria-label="Các phần luyện đọc">
+    <section class="reading-part glass-card relative overflow-hidden rounded-2xl border-l-4 border-emerald-500" aria-labelledby="part-5-title" data-reading-card-part="Part 5" data-reading-card-total="630">
+      <div class="absolute right-4 top-4 flex items-center gap-1.5">
+        <span class="shrink-0">
+          <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 transition-colors [&_svg]:size-3 gap-1.5 text-xs font-bold shadow-sm border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-border dark:bg-muted dark:text-skill-reading">
+            <span class="size-1.5 rounded-full bg-current opacity-70"></span>Part 5
+          </span>
+        </span>
+      </div>
+      <div class="p-4 sm:p-5">
+        <div class="flex items-start gap-2.5 pr-20 sm:gap-3 sm:pr-24">
+          <span class="flex shrink-0 items-center justify-center sm:size-10 sm:[&_svg]:size-5 bg-skill-reading-soft size-14 rounded-2xl bg-gradient-to-br from-emerald-400 to-green-500 text-white shadow-[0_10px_22px_-8px_rgb(16_185_129_/_0.9)] ring-4 ring-emerald-100/80 dark:ring-emerald-400/25 [&_svg]:size-7">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pen-line"><path d="M12 20h9"></path><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"></path></svg>
+          </span>
+          <div class="min-w-0">
+            <h2 id="part-5-title" class="text-sm font-extrabold text-emerald-600 dark:text-emerald-300">Incomplete Sentences</h2>
+            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Điền từ</p>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-400">
+          <span>Độ phủ câu hỏi</span>
+          <span data-reading-card-percent class="font-bold text-slate-800 dark:text-slate-200">0%</span>
+        </div>
+        <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-700">
+          <div data-reading-card-bar class="h-full rounded-full transition-all duration-500 bg-emerald-500" style="width: 0%;"></div>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-x-2.5 gap-y-2 bg-slate-100/80 px-4 py-3 text-[10px] font-semibold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300 sm:px-5">
+        <span class="inline-flex items-center rounded-full bg-white/90 px-2.5 py-1 shadow-sm text-slate-700 dark:bg-slate-700/90 dark:text-slate-200">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks mr-1 shrink-0 text-emerald-600 dark:text-emerald-400"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>
+          <span data-reading-card-count>0/630 câu</span>
+        </span>
+        <span class="text-slate-400 dark:text-slate-500">·</span>
+        <span class="text-slate-600 dark:text-slate-300">630 bài</span>
+        <span class="text-slate-400 dark:text-slate-500">·</span>
+        <span class="inline-flex items-center text-slate-600 dark:text-slate-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock mr-1 shrink-0 text-slate-400 dark:text-slate-400"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          ~12 phút
+        </span>
+        <span class="text-slate-400 dark:text-slate-500">·</span>
+        <span class="font-bold text-emerald-600 dark:text-emerald-400">0% đúng · 0 phút · 7s/câu · Chưa đủ dữ liệu</span>
+        <button type="button" class="reading-start ml-auto inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[10px] font-extrabold transition border border-emerald-200 bg-white text-emerald-700 hover:bg-emerald-50 dark:border-emerald-500/30 dark:bg-slate-900/60 dark:text-emerald-300" data-part="Part 5" data-title="Incomplete Sentences" data-subtitle="Điền từ" data-questions="630" data-lessons="630" data-minutes="12">
+          Vào luyện <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
+      </div>
+    </section>
+
+    <section class="reading-part glass-card relative overflow-hidden rounded-2xl border-l-4 border-cyan-500" aria-labelledby="part-6-title" data-reading-card-part="Part 6" data-reading-card-total="336">
+      <div class="absolute right-4 top-4 flex items-center gap-1.5">
+        <span class="shrink-0">
+          <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 transition-colors [&_svg]:size-3 gap-1.5 text-xs font-bold shadow-sm border-teal-200 bg-teal-50 text-teal-700 dark:border-border dark:bg-muted dark:text-skill-reading">
+            <span class="size-1.5 rounded-full bg-current opacity-70"></span>Part 6
+          </span>
+        </span>
+      </div>
+      <div class="p-4 sm:p-5">
+        <div class="flex items-start gap-2.5 pr-20 sm:gap-3 sm:pr-24">
+          <span class="flex shrink-0 items-center justify-center sm:size-10 sm:[&_svg]:size-5 bg-skill-reading-soft size-14 rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-500 text-white shadow-[0_10px_22px_-8px_rgb(20_184_166_/_0.9)] ring-4 ring-teal-100/80 dark:ring-teal-400/25 [&_svg]:size-7">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path><path d="M14 2v4a2 2 0 0 0 2 2h4"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path></svg>
+          </span>
+          <div class="min-w-0">
+            <h2 id="part-6-title" class="text-sm font-extrabold text-cyan-600 dark:text-cyan-300">Text Completion</h2>
+            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Điền đoạn văn</p>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-400">
+          <span>Độ phủ câu hỏi</span>
+          <span data-reading-card-percent class="font-bold text-slate-800 dark:text-slate-200">0%</span>
+        </div>
+        <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-700">
+          <div data-reading-card-bar class="h-full rounded-full transition-all duration-500 bg-cyan-500" style="width: 0%;"></div>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-x-2.5 gap-y-2 bg-slate-100/80 px-4 py-3 text-[10px] font-semibold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300 sm:px-5">
+        <span class="inline-flex items-center rounded-full bg-white/90 px-2.5 py-1 shadow-sm text-slate-700 dark:bg-slate-700/90 dark:text-slate-200">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks mr-1 shrink-0 text-cyan-600 dark:text-cyan-400"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>
+          <span data-reading-card-count>0/336 câu</span>
+        </span>
+        <span class="text-slate-400 dark:text-slate-500">·</span>
+        <span class="text-slate-600 dark:text-slate-300">84 bài</span>
+        <span class="text-slate-400 dark:text-slate-500">·</span>
+        <span class="inline-flex items-center text-slate-600 dark:text-slate-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock mr-1 shrink-0 text-slate-400 dark:text-slate-400"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          ~10 phút
+        </span>
+        <span class="text-slate-400 dark:text-slate-500">·</span>
+        <span class="font-bold text-cyan-600 dark:text-cyan-400">0% đúng · 0 phút · 7s/câu · Chưa đủ dữ liệu</span>
+        <button type="button" class="reading-start ml-auto inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[10px] font-extrabold transition border border-cyan-200 bg-white text-cyan-700 hover:bg-cyan-50 dark:border-cyan-500/30 dark:bg-slate-900/60 dark:text-cyan-300" data-part="Part 6" data-title="Text Completion" data-subtitle="Điền đoạn văn" data-questions="336" data-lessons="84" data-minutes="10">
+          Vào luyện <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
+      </div>
+    </section>
+
+    <section class="reading-part glass-card relative overflow-hidden rounded-2xl border-l-4 border-blue-500 lg:col-span-2" aria-labelledby="part-7-title" data-reading-card-part="Part 7" data-reading-card-total="1134">
+      <div class="absolute right-4 top-4 flex items-center gap-1.5">
+        <span class="shrink-0">
+          <span class="inline-flex items-center rounded-full border px-2.5 py-0.5 transition-colors [&_svg]:size-3 gap-1.5 text-xs font-bold shadow-sm border-blue-200 bg-blue-50 text-blue-700 dark:border-border dark:bg-muted dark:text-skill-reading">
+            <span class="size-1.5 rounded-full bg-current opacity-70"></span>Part 7
+          </span>
+        </span>
+      </div>
+      <div class="p-4 sm:p-5">
+        <div class="flex items-start gap-2.5 pr-20 sm:gap-3 sm:pr-24">
+          <span class="flex shrink-0 items-center justify-center sm:size-10 sm:[&_svg]:size-5 bg-skill-reading-soft size-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-500 text-white shadow-[0_10px_22px_-8px_rgb(6_182_212_/_0.9)] ring-4 ring-cyan-100/80 dark:ring-cyan-400/25 [&_svg]:size-7">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg>
+          </span>
+          <div class="min-w-0">
+            <h2 id="part-7-title" class="text-sm font-extrabold text-blue-600 dark:text-blue-300">Reading Comprehension</h2>
+            <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Đọc hiểu</p>
+          </div>
+        </div>
+        <div class="mt-4 flex items-center justify-between text-xs font-semibold text-slate-600 dark:text-slate-400">
+          <span>Độ phủ câu hỏi</span>
+          <span data-reading-card-percent class="font-bold text-slate-800 dark:text-slate-200">0%</span>
+        </div>
+        <div class="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-200/80 dark:bg-slate-700">
+          <div data-reading-card-bar class="h-full rounded-full transition-all duration-500 bg-blue-500" style="width: 0%;"></div>
+        </div>
+      </div>
+      <div class="flex flex-wrap items-center gap-x-2.5 gap-y-2 bg-slate-100/80 px-4 py-3 text-[10px] font-semibold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300 sm:px-5">
+        <span class="inline-flex items-center rounded-full bg-white/90 px-2.5 py-1 shadow-sm text-slate-700 dark:bg-slate-700/90 dark:text-slate-200">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks mr-1 shrink-0 text-blue-600 dark:text-blue-400"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>
+          <span data-reading-card-count>0/1134 câu</span>
+        </span>
+        <span class="text-slate-400 dark:text-slate-500">·</span>
+        <span class="text-slate-600 dark:text-slate-300">315 bài</span>
+        <span class="text-slate-400 dark:text-slate-500">·</span>
+        <span class="inline-flex items-center text-slate-600 dark:text-slate-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock mr-1 shrink-0 text-slate-400 dark:text-slate-400"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          ~25 phút
+        </span>
+        <span class="text-slate-400 dark:text-slate-500">·</span>
+        <span class="font-bold text-blue-600 dark:text-blue-400">0% đúng · 0 phút · 7s/câu · Chưa đủ dữ liệu</span>
+        <button type="button" class="reading-start ml-auto inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-[10px] font-extrabold transition border border-blue-200 bg-white text-blue-700 hover:bg-blue-50 dark:border-blue-500/30 dark:bg-slate-900/60 dark:text-blue-300" data-part="Part 7" data-title="Reading Comprehension" data-subtitle="Đọc hiểu" data-questions="1134" data-lessons="315" data-minutes="25">
+          Vào luyện <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+        </button>
+      </div>
+    </section>
+  </section>
+
+  <!-- Part 5 Practice Screen -->
+  <section id="readingPracticeScreen" hidden aria-label="Luyện tập Part 5">
+    <header class="reading-practice-topbar">
+      <div class="reading-practice-title">
+        <button id="closeReadingPractice" type="button" aria-label="Quay lại danh sách"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+        <div><strong>Part 5 - Incomplete Sentences (Điền từ)</strong><small>ETS 2019 - Test 2</small></div>
+      </div>
+      <strong class="reading-practice-test">ETS 2019 - Test 2</strong>
+      <div class="reading-practice-tools" role="group" aria-label="Công cụ câu hỏi">
+        <button type="button" data-reading-tool="translation" aria-pressed="false"><i class="fa-solid fa-language" aria-hidden="true"></i> Song ngữ</button>
+        <button type="button" data-reading-tool="explanation" aria-pressed="false"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i> Giải thích</button>
+        <button type="button" id="readingPracticeVocabularyButton" aria-pressed="false"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Từ vựng</button>
+        <button type="button" id="readingPracticeNotesButton" aria-pressed="false"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Ghi chú</button>
+      </div>
+    </header>
+    <main class="reading-practice-main">
+      <section class="reading-practice-question-pane" aria-label="Hướng dẫn câu hỏi">
+        <h2 class="reading-practice-prompt">Select the best answer to complete the sentence.</h2>
+      </section>
+      <section class="reading-practice-answer-pane" aria-label="Câu hỏi và đáp án">
+        <h2 class="text-blue-600 font-bold text-base mb-3">Question</h2>
+        <div class="reading-practice-question-card rounded-2xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+          <div class="mb-4">
+            <h3 id="part5QuestionText" class="text-sm font-semibold text-slate-800 dark:text-slate-100 leading-relaxed">101. Ms. Carpenter will be attending the conference with ------- marketing team.</h3>
+            <p id="readingPracticeTranslation" class="mt-1.5 border-l-2 border-blue-400 pl-2.5 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Bà Carpenter sẽ dự hội nghị cùng với nhóm tiếp thị của cô ấy.</p>
+          </div>
+          <div class="reading-practice-options flex flex-col gap-2.5" role="radiogroup" aria-label="Chọn đáp án Part 5">
+            <button class="reading-practice-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-reading-answer="A">
+              <span class="reading-practice-option-mark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+              </span>
+              <span class="font-semibold shrink-0">(A)</span>
+              <span class="flex flex-col text-left">
+                <span class="part5-option-word font-medium">she</span>
+                <span class="part5-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>cô ấy (đại từ chủ ngữ)</span>
+              </span>
+            </button>
+            <button class="reading-practice-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-reading-answer="B">
+              <span class="reading-practice-option-mark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+              </span>
+              <span class="font-semibold shrink-0">(B)</span>
+              <span class="flex flex-col text-left">
+                <span class="part5-option-word font-medium">her</span>
+                <span class="part5-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>của cô ấy (tính từ sở hữu)</span>
+              </span>
+            </button>
+            <button class="reading-practice-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-reading-answer="C">
+              <span class="reading-practice-option-mark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+              </span>
+              <span class="font-semibold shrink-0">(C)</span>
+              <span class="flex flex-col text-left">
+                <span class="part5-option-word font-medium">hers</span>
+                <span class="part5-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>của cô ấy (đại từ sở hữu)</span>
+              </span>
+            </button>
+            <button class="reading-practice-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-reading-answer="D">
+              <span class="reading-practice-option-mark">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle"><circle cx="12" cy="12" r="10"></circle></svg>
+              </span>
+              <span class="font-semibold shrink-0">(D)</span>
+              <span class="flex flex-col text-left">
+                <span class="part5-option-word font-medium">herself</span>
+                <span class="part5-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>chính cô ấy (đại từ phản thân)</span>
+              </span>
+            </button>
+          </div>
+
+          <div id="readingPracticeExplanation" class="mt-4 border-t border-slate-100 pt-4 dark:border-slate-800" hidden>
+            <div class="mb-3">
+              <span class="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-3 py-1 text-xs font-semibold text-blue-600 dark:border-blue-800 dark:bg-blue-950/50 dark:text-blue-300">
+                <i class="fa-regular fa-lightbulb" aria-hidden="true"></i> Ngữ pháp
+              </span>
+            </div>
+
+            <!-- SUY LUẬN -->
+            <div class="rounded-xl border border-emerald-200 bg-emerald-50/70 p-4 text-xs leading-relaxed text-slate-700 dark:border-emerald-800/50 dark:bg-emerald-950/30 dark:text-slate-200">
+              <div class="mb-2.5 flex items-center gap-1.5 font-bold uppercase tracking-wide text-emerald-700 dark:text-emerald-400">
+                <i class="fa-solid fa-route" aria-hidden="true"></i> SUY LUẬN
+              </div>
+              <div class="space-y-3">
+                <div>
+                  <div class="flex items-center gap-2 font-bold text-emerald-700 dark:text-emerald-300">
+                    <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-200/80 text-[11px] font-bold text-emerald-800 dark:bg-emerald-800 dark:text-emerald-100">1</span>
+                    Vị trí chỗ trống
+                  </div>
+                  <p class="mt-1 pl-7 text-slate-700 dark:text-slate-300">Chỗ trống đứng sau giới từ "with" và ngay trước danh từ "marketing team", nên cần một từ xác định quyền sở hữu cho nhóm tiếp thị.</p>
+                </div>
+                <div>
+                  <div class="flex items-center gap-2 font-bold text-emerald-700 dark:text-emerald-300">
+                    <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-200/80 text-[11px] font-bold text-emerald-800 dark:bg-emerald-800 dark:text-emerald-100">2</span>
+                    Xét từ loại
+                  </div>
+                  <p class="mt-1 pl-7 text-slate-700 dark:text-slate-300">"Her" là tính từ sở hữu, có thể đứng trực tiếp trước danh từ: "her marketing team". Cấu trúc này diễn tả nhóm tiếp thị thuộc về bà Carpenter.</p>
+                </div>
+                <div class="pt-0.5 font-bold text-emerald-700 dark:text-emerald-400">Chọn B — her.</div>
+              </div>
+            </div>
+
+            <!-- BẪY ĐÁP ÁN -->
+            <div class="mt-3 rounded-xl border border-amber-200 bg-amber-50/60 p-4 text-xs leading-relaxed text-slate-700 dark:border-amber-800/50 dark:bg-amber-950/20 dark:text-slate-200">
+              <div class="mb-2.5 flex items-center gap-1.5 font-bold uppercase tracking-wide text-amber-600 dark:text-amber-400">
+                <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> BẪY ĐÁP ÁN
+              </div>
+              <div class="space-y-2">
+                <div data-part5-trap="A" data-trap-label="(A) - Đại từ chủ ngữ:" class="rounded-lg border border-slate-200/90 bg-slate-100/80 p-3 dark:border-slate-700 dark:bg-slate-800/60">
+                  <span data-part5-trap-title="A" class="font-bold text-amber-600 dark:text-amber-400">❖ (A) - Đại từ chủ ngữ:</span>
+                  <span> Sai. "She" là đại từ chủ ngữ, không thể đứng trước danh từ "marketing team" để chỉ sở hữu.</span>
+                </div>
+                <div data-part5-trap="C" data-trap-label="(C) - Đại từ sở hữu:" class="rounded-lg border border-slate-200/90 bg-slate-100/80 p-3 dark:border-slate-700 dark:bg-slate-800/60">
+                  <span data-part5-trap-title="C" class="font-bold text-amber-600 dark:text-amber-400">❖ (C) - Đại từ sở hữu:</span>
+                  <span> Sai. "Hers" đứng độc lập thay cho cả cụm danh từ, không đứng ngay trước "marketing team".</span>
+                </div>
+                <div data-part5-trap="D" data-trap-label="(D) - Đại từ phản thân:" class="rounded-lg border border-slate-200/90 bg-slate-100/80 p-3 dark:border-slate-700 dark:bg-slate-800/60">
+                  <span data-part5-trap-title="D" class="font-bold text-amber-600 dark:text-amber-400">❖ (D) - Đại từ phản thân:</span>
+                  <span> Sai. "Herself" nhấn mạnh chính chủ thể hoặc làm tân ngữ phản thân, không phải tính từ sở hữu trước danh từ.</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CẦN NHỚ -->
+            <div class="mt-3 rounded-xl border border-blue-200/80 bg-slate-100/90 p-4 text-xs leading-relaxed text-slate-700 dark:border-blue-800/50 dark:bg-slate-800/70 dark:text-slate-200">
+              <div class="mb-1.5 flex items-center gap-1.5 font-bold uppercase tracking-wide text-blue-600 dark:text-blue-400">
+                <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> CẦN NHỚ
+              </div>
+              <p class="text-slate-700 dark:text-slate-300">Tính từ sở hữu (my, your, his, her, their) luôn đứng trước danh từ: her marketing team. Đại từ sở hữu (mine, yours, hers, theirs) đứng độc lập thay cho cả cụm danh từ. Dấu hiệu nhận biết: ngay sau chỗ trống có danh từ thì cần tính từ sở hữu.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-3 flex items-center">
+          <button type="button" id="readingPracticeReset" class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+            Làm lại
+          </button>
+        </div>
+
+        <section id="readingVocabularyPanel" class="reading-vocabulary" aria-label="Từ vựng trong bài" hidden>
+          <header class="reading-vocabulary-head">
+            <span class="reading-vocabulary-icon"><i class="fa-solid fa-book-bookmark" aria-hidden="true"></i></span>
+            <div class="reading-vocabulary-head-copy">
+              <strong>Từ vựng bài này</strong>
+              <small>3 từ/cụm TOEIC liên quan trực tiếp đến bài này.</small>
+            </div>
+            <button id="readingVocabularyExpand" class="reading-vocabulary-toggle" type="button" aria-expanded="true"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i> Xem đầy đủ</button>
+          </header>
+          <div id="readingVocabularyList" class="reading-vocabulary-list is-expanded">
+            <article class="reading-vocabulary-item">
+              <div class="reading-vocabulary-term">
+                <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-purple-100 text-[11px] font-bold text-purple-700">1</span>
+                <strong>Her</strong>
+                <span class="reading-vocabulary-meta"><span>/hɜː/</span></span>
+                <span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="her" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="her" data-accent="en-GB">◖ UK</button></span>
+                <span class="reading-vocabulary-meta"><span class="!bg-purple-100 !text-purple-700 font-semibold">possessive determiner</span><span class="!bg-purple-100 !text-purple-700 font-bold">A1</span></span>
+              </div>
+              <button class="reading-vocabulary-save" type="button" data-reading-save="her" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button>
+              <span class="reading-vocabulary-meaning pl-7">của cô ấy</span>
+              <span class="reading-vocabulary-example ml-7"><b class="mr-1.5 rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold uppercase text-emerald-700 not-italic">TRONG BÀI</b> “Ms. Carpenter will be attending the conference with her marketing team.”</span>
+            </article>
+            <article class="reading-vocabulary-item">
+              <div class="reading-vocabulary-term">
+                <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-purple-100 text-[11px] font-bold text-purple-700">2</span>
+                <strong>Attend a conference</strong>
+                <span class="reading-vocabulary-meta"><span>/əˈtend ə ˈkɒnfərəns/</span></span>
+                <span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="attend a conference" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="attend a conference" data-accent="en-GB">◖ UK</button></span>
+                <span class="reading-vocabulary-meta"><span class="!bg-purple-100 !text-purple-700 font-semibold">verb phrase</span><span class="!bg-purple-100 !text-purple-700 font-bold">B1</span></span>
+              </div>
+              <button class="reading-vocabulary-save" type="button" data-reading-save="attend-a-conference" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button>
+              <span class="reading-vocabulary-meaning pl-7">tham dự hội nghị</span>
+              <span class="reading-vocabulary-example ml-7"><b class="mr-1.5 rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold uppercase text-emerald-700 not-italic">TRONG BÀI</b> “Ms. Carpenter will be attending the conference with her marketing team.”</span>
+            </article>
+            <article class="reading-vocabulary-item">
+              <div class="reading-vocabulary-term">
+                <span class="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-purple-100 text-[11px] font-bold text-purple-700">3</span>
+                <strong>Marketing team</strong>
+                <span class="reading-vocabulary-meta"><span>/ˈmɑːkɪtɪŋ tiːm/</span></span>
+                <span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="marketing team" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="marketing team" data-accent="en-GB">◖ UK</button></span>
+                <span class="reading-vocabulary-meta"><span class="!bg-purple-100 !text-purple-700 font-semibold">noun phrase</span><span class="!bg-purple-100 !text-purple-700 font-bold">B1</span></span>
+              </div>
+              <button class="reading-vocabulary-save" type="button" data-reading-save="marketing-team" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button>
+              <span class="reading-vocabulary-meaning pl-7">đội ngũ tiếp thị</span>
+              <span class="reading-vocabulary-example ml-7"><b class="mr-1.5 rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-bold uppercase text-emerald-700 not-italic">TRONG BÀI</b> “Ms. Carpenter will be attending the conference with her marketing team.”</span>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+    <footer class="reading-practice-footer">
+      <div class="reading-practice-feedback">
+        <button type="button" data-reading-feedback="report"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Báo lỗi</button>
+        <button type="button" data-reading-feedback="feedback"><i class="fa-regular fa-message" aria-hidden="true"></i> Góp ý</button>
+      </div>
+      <div class="reading-practice-nav">
+        <button type="button" disabled aria-label="Câu trước"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+        <strong><i class="fa-solid fa-grip" aria-hidden="true"></i> 1/630</strong>
+        <button type="button" aria-label="Câu tiếp theo"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+      </div>
+    </footer>
+    <aside id="readingNotesDrawer" class="reading-notes-drawer" aria-label="Ghi chú câu hỏi" hidden>
+      <header class="reading-notes-head">
+        <div class="reading-notes-head-copy">
+          <div class="reading-notes-title"><i class="fa-solid fa-pen" aria-hidden="true"></i><strong>Ghi chú</strong></div>
+          <small>ETS 2019 - Test 2</small>
+        </div>
+        <button id="closeReadingNotes" class="reading-notes-close" type="button" aria-label="Đóng ghi chú"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      </header>
+      <div class="reading-notes-toolbar" role="toolbar" aria-label="Định dạng ghi chú">
+        <button type="button" data-reading-note-command="bold" aria-label="In đậm"><i class="fa-solid fa-bold" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="italic" aria-label="In nghiêng"><i class="fa-solid fa-italic" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="underline" aria-label="Gạch chân"><i class="fa-solid fa-underline" aria-hidden="true"></i></button>
+        <span aria-hidden="true" style="height:22px;border-left:1px solid #d4deeb;margin:0 5px"></span>
+        <button type="button" data-reading-note-command="insertUnorderedList" aria-label="Danh sách dấu đầu dòng"><i class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="insertOrderedList" aria-label="Danh sách đánh số"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="formatBlock" data-reading-note-value="blockquote" aria-label="Trích dẫn"><i class="fa-solid fa-quote-right" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="removeFormat" aria-label="Xóa định dạng"><i class="fa-solid fa-eraser" aria-hidden="true"></i></button>
+      </div>
+      <div id="readingNotesEditor" class="reading-notes-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Viết ghi chú khi luyện tập..."></div>
+      <span id="readingNotesStatus" class="reading-notes-status" aria-live="polite">Đã lưu</span>
+    </aside>
+  </section>
+
+  <!-- Part 6 Practice Screen -->
+  <section id="readingPart6PracticeScreen" hidden aria-label="Luyện tập Part 6">
+    <header class="reading-practice-topbar">
+      <div class="reading-practice-title">
+        <button id="closeReadingPart6Practice" type="button" aria-label="Quay lại danh sách"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+        <div><strong>Part 6 - Text Completion (Điền đoạn văn)</strong><small>ETS 2019 - Test 2</small></div>
+      </div>
+      <strong class="reading-practice-test">ETS 2019 - Test 2</strong>
+      <div class="reading-practice-tools">
+        <button id="readingPart6TranslationButton" type="button" aria-pressed="false"><i class="fa-solid fa-language" aria-hidden="true"></i> Song ngữ</button>
+        <button id="readingPart6ExplanationButton" type="button" aria-pressed="false"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i> Giải thích</button>
+        <button id="readingPart6VocabularyButton" type="button" aria-pressed="false"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Từ vựng</button>
+        <button id="readingPart6NotesButton" type="button" aria-pressed="false"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Ghi chú</button>
+      </div>
+    </header>
+    <main class="reading-part6-main">
+      <section class="reading-part6-passage-pane" aria-label="Đoạn văn Part 6">
+        <h2 class="reading-part6-prompt">Select the best answer to complete the text.</h2>
+        <article class="reading-part6-passage">
+          <h3>Garden Shade Tree Landscaping</h3>
+          <p>Garden Shade creates tree landscapes and hedges to suit every garden, no matter the size. Our designs have _____[131] small urban gardens as well as large-scale projects commissioned by architects and property developers. _____[132].</p>
+          <p>However, no single nursery can offer trees of all species and sizes. That is why Garden Shade has developed close relationships with many specialist growers _____[133] to provide us with the trees we need. Such resources give us the variety necessary to complete any _____[134].</p>
+          <p>In other words, whatever your landscape design dream, we can make it happen.</p>
+        </article>
+        <article id="readingPart6Translation" class="reading-part6-translation" hidden>
+          <h3>Bản dịch</h3>
+          <h3>Cảnh quan cây xanh Garden Shade</h3>
+          <p>Garden Shade tạo cảnh quan cây xanh và hàng rào cây phù hợp với mọi khu vườn, bất kể diện tích. Các thiết kế của chúng tôi đã _____[131] những khu vườn đô thị nhỏ cũng như các dự án quy mô lớn do các kiến trúc sư và nhà phát triển bất động sản đặt hàng. _____[132]</p>
+          <p>Tuy nhiên, không một vườn ươm nào có thể cung cấp cây thuộc mọi loài và kích cỡ. Đó là lý do Garden Shade đã xây dựng mối quan hệ hợp tác chặt chẽ với nhiều nhà trồng cây chuyên biệt _____[133] sẵn sàng cung cấp cho chúng tôi những loại cây cần thiết. Những nguồn lực này mang lại cho chúng tôi sự đa dạng cần thiết để hoàn thành bất kỳ _____[134] nào.</p>
+          <p>Nói cách khác, bất kể ước mơ thiết kế cảnh quan của bạn là gì, chúng tôi đều có thể biến nó thành hiện thực.</p>
+        </article>
+      </section>
+      <section class="reading-part6-question-pane" aria-label="Câu hỏi và đáp án">
+        <h2>Question</h2>
+        <article class="reading-part6-question-card" data-part6-card="131">
+          <h3>131.</h3>
+          <div class="reading-part6-options" role="radiogroup" aria-label="Câu 131">
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="131-A">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(A)</span>
+              <span class="flex flex-col text-left">
+                <span>transformed</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>đã biến đổi, cải tạo (V3/V-ed)</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="131-B">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(B)</span>
+              <span class="flex flex-col text-left">
+                <span>related</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>có liên quan (V3/V-ed)</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="131-C">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(C)</span>
+              <span class="flex flex-col text-left">
+                <span>collected</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>đã thu thập, sưu tầm (V3/V-ed)</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="131-D">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(D)</span>
+              <span class="flex flex-col text-left">
+                <span>planted</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>đã trồng cây (V3/V-ed)</span>
+              </span>
+            </button>
+          </div>
+          <section class="reading-part6-analysis" data-part6-analysis="131" hidden>
+            <div class="reading-part6-analysis-card reading-part6-evidence">
+              <strong><i class="fa-regular fa-file-lines" aria-hidden="true"></i> DẪN CHỨNG</strong>
+              <div>“Garden Shade creates tree landscapes and hedges to suit every garden, no matter the size.”</div>
+              <p>Câu giới thiệu cho biết công ty tạo cảnh quan phù hợp với mọi khu vườn.</p>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-reasoning">
+              <strong><i class="fa-solid fa-route" aria-hidden="true"></i> SUY LUẬN</strong>
+              <div><b>1. Vị trí chỗ trống</b><br>Chỗ trống đứng sau trợ động từ “have” và trước hai tân ngữ song song là “small urban gardens” và “large-scale projects”.</div>
+              <p><b>2. Xét nghĩa từ</b><br>“Transform” nghĩa là biến đổi, cải tạo. “Have transformed” phù hợp với việc các thiết kế đã làm thay đổi những khu vườn đô thị nhỏ và dự án quy mô lớn.</p>
+              <b>Chọn A — transformed.</b>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-traps">
+              <strong><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> BẪY ĐÁP ÁN</strong>
+              <div>
+                <p><b>(B) related:</b> Có liên quan, không diễn tả việc tạo ra hoặc cải tạo khu vườn.</p>
+                <p><b>(C) collected:</b> Thu thập, không hợp với “gardens” và “projects”.</p>
+                <p><b>(D) planted:</b> Trồng, không thể dùng để nói về cả khu vườn và dự án cảnh quan.</p>
+              </div>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-remember">
+              <strong><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> CẦN NHỚ</strong>
+              Cấu trúc “have + V3/V-ed” có thể diễn tả kết quả đã hoàn thành. “Transform + object” nghĩa là biến đổi hoặc cải tạo đối tượng.
+            </div>
+          </section>
+          <div class="mt-3">
+            <button class="reading-part6-reset inline-flex items-center gap-1.5" type="button" data-part6-reset="131"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Làm lại</button>
+          </div>
+        </article>
+
+        <article class="reading-part6-question-card" data-part6-card="132">
+          <h3>132.</h3>
+          <div class="reading-part6-options" role="radiogroup" aria-label="Câu 132">
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="132-A">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(A)</span>
+              <span class="flex flex-col text-left">
+                <span>We are here to answer your landscaping questions.</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Chúng tôi ở đây để giải đáp các thắc mắc về cảnh quan của bạn.</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="132-B">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(B)</span>
+              <span class="flex flex-col text-left">
+                <span>For most projects, we use trees from our own nurseries.</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Đối với hầu hết dự án, chúng tôi sử dụng cây từ vườn ươm riêng.</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="132-C">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(C)</span>
+              <span class="flex flex-col text-left">
+                <span>Some trees have specific growing requirements.</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Một số loại cây có những yêu cầu sinh trưởng đặc thù.</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="132-D">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(D)</span>
+              <span class="flex flex-col text-left">
+                <span>Under normal conditions, nursery stock is guaranteed for one year.</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Trong điều kiện bình thường, cây giống được bảo hành một năm.</span>
+              </span>
+            </button>
+          </div>
+          <section class="reading-part6-analysis" data-part6-analysis="132" hidden>
+            <div class="reading-part6-analysis-card reading-part6-evidence">
+              <strong><i class="fa-regular fa-file-lines" aria-hidden="true"></i> DẪN CHỨNG</strong>
+              <div>“However, no single nursery can offer trees of all species and sizes.”</div>
+              <p>Đoạn tiếp theo nói rằng không một vườn ươm nào có thể cung cấp cây thuộc mọi loài và kích cỡ.</p>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-reasoning">
+              <strong><i class="fa-solid fa-route" aria-hidden="true"></i> SUY LUẬN</strong>
+              <div>Câu trước cần nêu một khó khăn của việc trồng cây. “Some trees have specific growing requirements” giải thích vì sao mỗi vườn ươm không thể có đủ mọi loại cây.</div>
+              <p><b>Chọn C — Some trees have specific growing requirements.</b></p>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-traps">
+              <strong><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> BẪY ĐÁP ÁN</strong>
+              <div>
+                <p><b>(A):</b> Nói về hỗ trợ khách hàng, không liên kết với ý về nguồn cung cây.</p>
+                <p><b>(B):</b> Mâu thuẫn với thông tin rằng không một vườn ươm nào có đủ mọi loại cây.</p>
+                <p><b>(D):</b> Nói về bảo hành cây giống, không giải thích vấn đề chủng loại và kích cỡ.</p>
+              </div>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-remember">
+              <strong><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> CẦN NHỚ</strong>
+              Trong câu hỏi điền câu, hãy nối ý trước và sau chỗ trống để tìm câu giải thích hoặc chuyển ý hợp lý.
+            </div>
+          </section>
+          <div class="mt-3">
+            <button class="reading-part6-reset inline-flex items-center gap-1.5" type="button" data-part6-reset="132"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Làm lại</button>
+          </div>
+        </article>
+
+        <article class="reading-part6-question-card" data-part6-card="133">
+          <h3>133.</h3>
+          <div class="reading-part6-options" role="radiogroup" aria-label="Câu 133">
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="133-A">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(A)</span>
+              <span class="flex flex-col text-left">
+                <span>readiness</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>sự sẵn sàng (danh từ)</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="133-B">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(B)</span>
+              <span class="flex flex-col text-left">
+                <span>readies</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>chuẩn bị sẵn sàng (động từ chia ngôi)</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="133-C">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(C)</span>
+              <span class="flex flex-col text-left">
+                <span>readiest</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>sẵn sàng nhất (so sánh nhất)</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="133-D">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(D)</span>
+              <span class="flex flex-col text-left">
+                <span>ready</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>sẵn sàng (tính từ)</span>
+              </span>
+            </button>
+          </div>
+          <section class="reading-part6-analysis" data-part6-analysis="133" hidden>
+            <div class="reading-part6-analysis-card reading-part6-evidence">
+              <strong><i class="fa-regular fa-file-lines" aria-hidden="true"></i> DẪN CHỨNG</strong>
+              <div>“Many specialist growers _____ to provide us with the trees we need.”</div>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-reasoning">
+              <strong><i class="fa-solid fa-route" aria-hidden="true"></i> SUY LUẬN</strong>
+              <div>Chỗ trống đứng sau danh từ “growers” và trước cụm “to provide”. Tính từ “ready” bổ nghĩa cho người trồng cây, nghĩa là sẵn sàng cung cấp cây.</div>
+              <p><b>Chọn D — ready.</b></p>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-traps">
+              <strong><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> BẪY ĐÁP ÁN</strong>
+              <div>
+                <p><b>(A) readiness:</b> Danh từ, không thể bổ nghĩa trực tiếp cho “growers”.</p>
+                <p><b>(B) readies:</b> Động từ chia ngôi, không phù hợp vị trí sau danh từ.</p>
+                <p><b>(C) readiest:</b> Dạng so sánh nhất, không có ý so sánh trong câu.</p>
+              </div>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-remember">
+              <strong><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> CẦN NHỚ</strong>
+              “Be ready to do something” nghĩa là sẵn sàng làm việc gì; có thể dùng tính từ sau danh từ để mô tả trạng thái của người hoặc vật.
+            </div>
+          </section>
+          <div class="mt-3">
+            <button class="reading-part6-reset inline-flex items-center gap-1.5" type="button" data-part6-reset="133"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Làm lại</button>
+          </div>
+        </article>
+
+        <article class="reading-part6-question-card" data-part6-card="134">
+          <h3>134.</h3>
+          <div class="reading-part6-options" role="radiogroup" aria-label="Câu 134">
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="134-A">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(A)</span>
+              <span class="flex flex-col text-left">
+                <span>study</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>nghiên cứu (danh từ)</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="134-B">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(B)</span>
+              <span class="flex flex-col text-left">
+                <span>form</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>biểu mẫu, mẫu đơn (danh từ)</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="134-C">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(C)</span>
+              <span class="flex flex-col text-left">
+                <span>order</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>đơn đặt hàng (danh từ)</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part6-answer="134-D">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(D)</span>
+              <span class="flex flex-col text-left">
+                <span>survey</span>
+                <span class="part6-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>cuộc khảo sát (danh từ)</span>
+              </span>
+            </button>
+          </div>
+          <section class="reading-part6-analysis" data-part6-analysis="134" hidden>
+            <div class="reading-part6-analysis-card reading-part6-evidence">
+              <strong><i class="fa-regular fa-file-lines" aria-hidden="true"></i> DẪN CHỨNG</strong>
+              <div>“Such resources give us the variety necessary to complete any _____.”</div>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-reasoning">
+              <strong><i class="fa-solid fa-route" aria-hidden="true"></i> SUY LUẬN</strong>
+              <div>Cụm “complete an order” có nghĩa là hoàn thành một đơn hàng, phù hợp với ngữ cảnh cung cấp cây cho dự án.</div>
+              <p><b>Chọn C — order.</b></p>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-traps">
+              <strong><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> BẪY ĐÁP ÁN</strong>
+              <div>
+                <p><b>(A) study:</b> Một nghiên cứu không phải thứ được hoàn thành bằng việc cung cấp các loại cây.</p>
+                <p><b>(B) form:</b> Biểu mẫu không hợp nghĩa trong ngữ cảnh đơn hàng.</p>
+                <p><b>(D) survey:</b> Một cuộc khảo sát không liên quan đến việc đặt mua cây.</p>
+              </div>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-remember">
+              <strong><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> CẦN NHỚ</strong>
+              Học cụm từ theo ngữ cảnh: “complete an order” là xử lý hoặc hoàn thành đơn hàng.
+            </div>
+          </section>
+          <div class="mt-3">
+            <button class="reading-part6-reset inline-flex items-center gap-1.5" type="button" data-part6-reset="134"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Làm lại</button>
+          </div>
+        </article>
+
+        <p class="reading-part6-data-note">Đang hiển thị các câu có dữ liệu trong bài mẫu.</p>
+
+        <section id="readingPart6VocabularyPanel" class="reading-vocabulary" aria-label="Từ vựng trong bài Part 6" hidden>
+          <header class="reading-vocabulary-head">
+            <span class="reading-vocabulary-icon"><i class="fa-solid fa-book-bookmark" aria-hidden="true"></i></span>
+            <div class="reading-vocabulary-head-copy">
+              <strong>Từ vựng bài này</strong>
+              <small>22 từ/cụm TOEIC liên quan trực tiếp đến bài đọc.</small>
+            </div>
+            <button id="readingPart6VocabularyExpand" class="reading-vocabulary-toggle" type="button" aria-expanded="false"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i> Xem đầy đủ</button>
+          </header>
+          <div id="readingPart6VocabularyList" class="reading-vocabulary-list">
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Transform</strong><span class="reading-vocabulary-meta"><span>/trænsˈfɔːrm/</span><span>verb</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="transform" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="transform" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="transform" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">cải tạo, biến đổi</span><span class="reading-vocabulary-example">TRONG BÀI: “Our designs have transformed small urban gardens.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Ready</strong><span class="reading-vocabulary-meta"><span>/ˈredi/</span><span>adjective</span><span>A1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="ready" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="ready" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="ready" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">sẵn sàng</span><span class="reading-vocabulary-example">TRONG BÀI: “Specialist growers ready to provide us with the trees we need.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Order</strong><span class="reading-vocabulary-meta"><span>/ˈɔːrdər/</span><span>noun</span><span>A2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="order" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="order" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="order" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">đơn hàng</span><span class="reading-vocabulary-example">TRONG BÀI: “Complete any order.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>No matter</strong><span class="reading-vocabulary-meta"><span>/noʊ ˈmætər/</span><span>conjunction</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="no matter" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="no matter" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="no-matter" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">bất kể</span><span class="reading-vocabulary-example">TRONG BÀI: “No matter the size.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>As well as</strong><span class="reading-vocabulary-meta"><span>/əz wel æz/</span><span>conjunction</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="as well as" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="as well as" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="as-well-as" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">cũng như</span><span class="reading-vocabulary-example">TRONG BÀI: “Small urban gardens as well as large-scale projects.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Commission</strong><span class="reading-vocabulary-meta"><span>/kəˈmɪʃən/</span><span>verb</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="commission" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="commission" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="commission" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">đặt làm, ủy nhiệm</span><span class="reading-vocabulary-example">TRONG BÀI: “Projects commissioned by architects.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Large-scale</strong><span class="reading-vocabulary-meta"><span>/ˌlɑːrdʒ ˈskeɪl/</span><span>adjective</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="large scale" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="large scale" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="large-scale" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">quy mô lớn</span><span class="reading-vocabulary-example">TRONG BÀI: “Large-scale projects.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Developer</strong><span class="reading-vocabulary-meta"><span>/dɪˈveləpər/</span><span>noun</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="developer" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="developer" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="developer" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">nhà phát triển, đơn vị phát triển dự án</span><span class="reading-vocabulary-example">TRONG BÀI: “Property developers.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Nursery</strong><span class="reading-vocabulary-meta"><span>/ˈnɜːrsəri/</span><span>noun</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="nursery" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="nursery" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="nursery" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">vườn ươm</span><span class="reading-vocabulary-example">TRONG BÀI: “No single nursery can offer trees of all species.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Species</strong><span class="reading-vocabulary-meta"><span>/ˈspiːʃiːz/</span><span>noun</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="species" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="species" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="species" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">loài</span><span class="reading-vocabulary-example">TRONG BÀI: “Trees of all species and sizes.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Size</strong><span class="reading-vocabulary-meta"><span>/saɪz/</span><span>noun</span><span>A2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="size" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="size" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="size" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">kích cỡ</span><span class="reading-vocabulary-example">TRONG BÀI: “Trees of all species and sizes.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Develop a relationship</strong><span class="reading-vocabulary-meta"><span>/dɪˈveləp ə rɪˈleɪʃənʃɪp/</span><span>verb phrase</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="develop a relationship" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="develop a relationship" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="develop-relationship" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">xây dựng mối quan hệ</span><span class="reading-vocabulary-example">TRONG BÀI: “Has developed close relationships with many specialist growers.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Specialist</strong><span class="reading-vocabulary-meta"><span>/ˈspeʃəlɪst/</span><span>noun/adjective</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="specialist" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="specialist" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="specialist" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">chuyên biệt, chuyên môn</span><span class="reading-vocabulary-example">TRONG BÀI: “Many specialist growers.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Grower</strong><span class="reading-vocabulary-meta"><span>/ˈɡroʊər/</span><span>noun</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="grower" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="grower" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="grower" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">người trồng, nhà vườn</span><span class="reading-vocabulary-example">TRONG BÀI: “Specialist growers ready to provide us with the trees we need.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Variety</strong><span class="reading-vocabulary-meta"><span>/vəˈraɪəti/</span><span>noun</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="variety" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="variety" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="variety" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">sự đa dạng</span><span class="reading-vocabulary-example">TRONG BÀI: “The variety necessary to complete any order.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Necessary</strong><span class="reading-vocabulary-meta"><span>/ˈnesəseri/</span><span>adjective</span><span>A2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="necessary" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="necessary" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="necessary" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">cần thiết</span><span class="reading-vocabulary-example">TRONG BÀI: “The variety necessary to complete any order.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Complete</strong><span class="reading-vocabulary-meta"><span>/kəmˈpliːt/</span><span>verb</span><span>A2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="complete" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="complete" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="complete" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">hoàn thành</span><span class="reading-vocabulary-example">TRONG BÀI: “Complete any order.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Landscape</strong><span class="reading-vocabulary-meta"><span>/ˈlændskeɪp/</span><span>noun</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="landscape" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="landscape" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="landscape" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">cảnh quan, thiết kế cảnh quan</span><span class="reading-vocabulary-example">TRONG BÀI: “Garden Shade creates tree landscapes.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Hedge</strong><span class="reading-vocabulary-meta"><span>/hedʒ/</span><span>noun</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="hedge" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="hedge" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="hedge" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">hàng rào cây</span><span class="reading-vocabulary-example">TRONG BÀI: “Tree landscapes and hedges.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Urban</strong><span class="reading-vocabulary-meta"><span>/ˈɜːrbən/</span><span>adjective</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="urban" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="urban" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="urban" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">thuộc đô thị</span><span class="reading-vocabulary-example">TRONG BÀI: “Small urban gardens.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Project</strong><span class="reading-vocabulary-meta"><span>/ˈprɑːdʒekt/</span><span>noun</span><span>A2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="project" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="project" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="project" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">dự án</span><span class="reading-vocabulary-example">TRONG BÀI: “Large-scale projects commissioned by architects.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Resource</strong><span class="reading-vocabulary-meta"><span>/ˈriːsɔːrs/</span><span>noun</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="resource" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="resource" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="resource" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">nguồn lực, tài nguyên</span><span class="reading-vocabulary-example">TRONG BÀI: “Such resources give us the variety necessary.”</span></article>
+          </div>
+        </section>
+      </section>
+    </main>
+    <footer class="reading-practice-footer">
+      <div class="reading-practice-feedback">
+        <button type="button" data-reading-feedback="report"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Báo lỗi</button>
+        <button type="button" data-reading-feedback="feedback"><i class="fa-regular fa-message" aria-hidden="true"></i> Góp ý</button>
+      </div>
+      <div class="reading-practice-nav">
+        <button type="button" disabled aria-label="Câu trước"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+        <strong><i class="fa-solid fa-grip" aria-hidden="true"></i> 1-2/336</strong>
+        <button type="button" disabled aria-label="Câu tiếp theo"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+      </div>
+    </footer>
+    <aside id="readingPart6NotesDrawer" class="reading-notes-drawer" aria-label="Ghi chú Part 6" hidden>
+      <header class="reading-notes-head">
+        <div class="reading-notes-head-copy">
+          <div class="reading-notes-title"><i class="fa-solid fa-pen" aria-hidden="true"></i><strong>Ghi chú</strong></div>
+          <small>ETS 2019 - Test 2 · Part 6</small>
+        </div>
+        <button id="closeReadingPart6Notes" class="reading-notes-close" type="button" aria-label="Đóng ghi chú"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      </header>
+      <div class="reading-notes-toolbar reading-part6-notes-toolbar" role="toolbar" aria-label="Định dạng ghi chú">
+        <button type="button" data-reading-note-command="bold" aria-label="In đậm"><i class="fa-solid fa-bold" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="italic" aria-label="In nghiêng"><i class="fa-solid fa-italic" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="underline" aria-label="Gạch chân"><i class="fa-solid fa-underline" aria-hidden="true"></i></button>
+        <span aria-hidden="true" style="height:22px;border-left:1px solid #d4deeb;margin:0 5px"></span>
+        <button type="button" data-reading-note-command="insertUnorderedList" aria-label="Danh sách dấu đầu dòng"><i class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="insertOrderedList" aria-label="Danh sách đánh số"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="formatBlock" data-reading-note-value="blockquote" aria-label="Trích dẫn"><i class="fa-solid fa-quote-right" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="removeFormat" aria-label="Xóa định dạng"><i class="fa-solid fa-eraser" aria-hidden="true"></i></button>
+      </div>
+      <div id="readingPart6NotesEditor" class="reading-notes-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Viết ghi chú cho bài đọc Part 6..."></div>
+      <span id="readingPart6NotesStatus" class="reading-notes-status" aria-live="polite">Đã lưu</span>
+    </aside>
+  </section>
+
+  <!-- Part 7 Practice Screen -->
+  <section id="readingPart7PracticeScreen" hidden aria-label="Luyện tập Part 7">
+    <header class="reading-practice-topbar">
+      <div class="reading-practice-title">
+        <button id="closeReadingPart7Practice" type="button" aria-label="Quay lại danh sách"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+        <div><strong>Part 7 - Reading Comprehension (Đọc hiểu)</strong><small>ETS 2019 - Test 2</small></div>
+      </div>
+      <strong class="reading-practice-test">ETS 2019 - Test 2</strong>
+      <div class="reading-practice-tools" role="group" aria-label="Công cụ bài đọc">
+        <button id="readingPart7TranslationButton" type="button" aria-pressed="false"><i class="fa-solid fa-language" aria-hidden="true"></i> Song ngữ</button>
+        <button id="readingPart7EvidenceButton" type="button" aria-pressed="false"><i class="fa-regular fa-file-lines" aria-hidden="true"></i> Dẫn chứng</button>
+        <button id="readingPart7ExplanationButton" type="button" aria-pressed="false"><i class="fa-regular fa-lightbulb" aria-hidden="true"></i> Giải thích</button>
+        <button id="readingPart7VocabularyButton" type="button" aria-pressed="false"><i class="fa-solid fa-book-open" aria-hidden="true"></i> Từ vựng</button>
+        <button id="readingPart7NotesButton" type="button" aria-pressed="false"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i> Ghi chú</button>
+      </div>
+    </header>
+    <main class="reading-part6-main">
+      <section class="reading-part6-passage-pane" aria-label="Bài đọc Part 7">
+        <h2 class="reading-part6-prompt">Questions 147-148 refer to the following notice.</h2>
+        <article class="reading-part6-passage">
+          <h3>Fastest Fleet</h3>
+          <p><strong>RATE OUR SERVICES AND WIN FREE TRAVEL!</strong></p>
+          <p>Visit our Web site at www.fastestfleet.com/feedback and fill out the 5-minute questionnaire. You could win one of 10 FREE round-trip bus trips to any destination within the continental United States!</p>
+          <p>You must be 18 or older to participate. Only customers who have previously traveled with Fastest Fleet are eligible to enter.</p>
+        </article>
+        <article id="readingPart7Translation" class="reading-part7-translation" hidden>
+          <h3>Bản dịch</h3>
+          <h3>Fastest Fleet</h3>
+          <p><strong>ĐÁNH GIÁ DỊCH VỤ VÀ CÓ CƠ HỘI NHẬN CHUYẾN ĐI MIỄN PHÍ!</strong></p>
+          <p>Truy cập trang web www.fastestfleet.com/feedback và điền bảng câu hỏi trong 5 phút. Bạn có cơ hội thắng một trong 10 chuyến xe buýt khứ hồi miễn phí đến bất kỳ điểm đến nào trong vùng lục địa Hoa Kỳ!</p>
+          <p>Bạn phải từ 18 tuổi trở lên mới được tham gia. Chỉ khách hàng từng đi Fastest Fleet mới đủ điều kiện dự thưởng.</p>
+        </article>
+      </section>
+      <section class="reading-part6-question-pane" aria-label="Câu hỏi và đáp án Part 7">
+        <h2>Question</h2>
+        <article class="reading-part6-question-card" data-part7-card="147">
+          <div class="mb-3">
+            <h3 class="!mb-1">147. Where would the notice likely be seen?</h3>
+            <p class="part7-question-translation border-l-2 border-blue-400 pl-2.5 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Thông báo này nhiều khả năng được nhìn thấy ở đâu?</p>
+          </div>
+          <div class="reading-part6-options" role="radiogroup" aria-label="Câu 147">
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part7-answer="147-A">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(A)</span>
+              <span class="flex flex-col text-left">
+                <span>In an airport</span>
+                <span class="part7-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Tại một sân bay</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part7-answer="147-B">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(B)</span>
+              <span class="flex flex-col text-left">
+                <span>In a bus station</span>
+                <span class="part7-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Tại một bến xe buýt</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part7-answer="147-C">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(C)</span>
+              <span class="flex flex-col text-left">
+                <span>In a train station</span>
+                <span class="part7-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Tại một nhà ga tàu hỏa</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part7-answer="147-D">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(D)</span>
+              <span class="flex flex-col text-left">
+                <span>In a ferry terminal</span>
+                <span class="part7-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Tại một bến phà</span>
+              </span>
+            </button>
+          </div>
+          <section class="reading-part6-analysis" data-part7-evidence="147" hidden>
+            <div class="reading-part6-analysis-card reading-part6-evidence">
+              <strong><i class="fa-regular fa-file-lines" aria-hidden="true"></i> DẪN CHỨNG</strong>
+              <div class="reading-part7-evidence-quote">“You could win one of 10 FREE round-trip bus trips...”</div>
+              <p>Thông báo quảng bá dịch vụ xe buýt Fastest Fleet và chuyến đi bằng xe buýt.</p>
+            </div>
+          </section>
+          <section class="reading-part6-analysis" data-part7-analysis="147" hidden>
+            <div class="reading-part6-analysis-card reading-part6-reasoning">
+              <strong><i class="fa-solid fa-route" aria-hidden="true"></i> SUY LUẬN</strong>
+              <div>Nội dung quảng bá các chuyến xe buýt của Fastest Fleet nên thông báo nhiều khả năng được đặt tại bến xe buýt, nơi hành khách có thể nhìn thấy.</div>
+              <p><b>Chọn B — In a bus station.</b></p>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-traps">
+              <strong><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> BẪY ĐÁP ÁN</strong>
+              <div>
+                <p><b>(A) In an airport:</b> Sân bay không gắn với dịch vụ xe buýt đường bộ của Fastest Fleet.</p>
+                <p><b>(C) In a train station:</b> Nhà ga tàu hỏa không phải địa điểm chính của dịch vụ xe buýt này.</p>
+                <p><b>(D) In a ferry terminal:</b> Bến phà không liên quan đến phương tiện bus trips được nêu trong bài.</p>
+              </div>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-remember">
+              <strong><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> CẦN NHỚ</strong>
+              Với câu hỏi suy luận địa điểm (“Where would the notice likely be seen?”), hãy tìm từ khóa chỉ phương tiện hoặc dịch vụ chính trong bài (ở đây là “bus trips”).
+            </div>
+          </section>
+          <div class="mt-3">
+            <button class="reading-part6-reset inline-flex items-center gap-1.5" type="button" data-part7-reset="147"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Làm lại</button>
+          </div>
+        </article>
+
+        <article class="reading-part6-question-card" data-part7-card="148">
+          <div class="mb-3">
+            <h3 class="!mb-1">148. What are customers asked to do?</h3>
+            <p class="part7-question-translation border-l-2 border-blue-400 pl-2.5 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Khách hàng được yêu cầu làm gì?</p>
+          </div>
+          <div class="reading-part6-options" role="radiogroup" aria-label="Câu 148">
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part7-answer="148-A">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(A)</span>
+              <span class="flex flex-col text-left">
+                <span>Provide feedback</span>
+                <span class="part7-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Cung cấp ý kiến phản hồi</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part7-answer="148-B">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(B)</span>
+              <span class="flex flex-col text-left">
+                <span>Buy a round-trip ticket</span>
+                <span class="part7-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Mua một vé khứ hồi</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part7-answer="148-C">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(C)</span>
+              <span class="flex flex-col text-left">
+                <span>Take advantage of a discount</span>
+                <span class="part7-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Tận dụng chương trình giảm giá</span>
+              </span>
+            </button>
+            <button class="reading-part6-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-part7-answer="148-D">
+              <span class="reading-part6-option-mark"></span>
+              <span class="font-semibold shrink-0">(D)</span>
+              <span class="flex flex-col text-left">
+                <span>Join a customer loyalty program</span>
+                <span class="part7-option-translation mt-1 border-l-2 border-blue-300 pl-2 text-xs font-normal text-slate-600 dark:text-slate-300" hidden>Tham gia chương trình khách hàng thân thiết</span>
+              </span>
+            </button>
+          </div>
+          <section class="reading-part6-analysis" data-part7-evidence="148" hidden>
+            <div class="reading-part6-analysis-card reading-part6-evidence">
+              <strong><i class="fa-regular fa-file-lines" aria-hidden="true"></i> DẪN CHỨNG</strong>
+              <div class="reading-part7-evidence-quote">“Visit our Web site ... and fill out the 5-minute questionnaire.”</div>
+              <p>Khách hàng được yêu cầu truy cập trang web và hoàn thành bảng câu hỏi.</p>
+            </div>
+          </section>
+          <section class="reading-part6-analysis" data-part7-analysis="148" hidden>
+            <div class="reading-part6-analysis-card reading-part6-reasoning">
+              <strong><i class="fa-solid fa-route" aria-hidden="true"></i> SUY LUẬN</strong>
+              <div>Điền bảng câu hỏi (“fill out the questionnaire”) và đánh giá dịch vụ (“rate our services”) đồng nghĩa với việc cung cấp ý kiến phản hồi (“provide feedback”).</div>
+              <p><b>Chọn A — Provide feedback.</b></p>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-traps">
+              <strong><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> BẪY ĐÁP ÁN</strong>
+              <div>
+                <p><b>(B) Buy a round-trip ticket:</b> Vé khứ hồi là phần thưởng miễn phí, không phải yêu cầu mua.</p>
+                <p><b>(C) Take advantage of a discount:</b> Thông báo không đề cập đến chương trình giảm giá.</p>
+                <p><b>(D) Join a customer loyalty program:</b> Không nhắc đến việc đăng ký thẻ thành viên thân thiết.</p>
+              </div>
+            </div>
+            <div class="reading-part6-analysis-card reading-part6-remember">
+              <strong><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> CẦN NHỚ</strong>
+              Cách diễn đạt tương đương (paraphrasing) thường gặp trong TOEIC Part 7: “rate services / fill out a questionnaire” = “provide feedback”.
+            </div>
+          </section>
+          <div class="mt-3">
+            <button class="reading-part6-reset inline-flex items-center gap-1.5" type="button" data-part7-reset="148"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Làm lại</button>
+          </div>
+        </article>
+
+        <section id="readingPart7VocabularyPanel" class="reading-vocabulary reading-part7-vocabulary" aria-label="Từ vựng trong bài Part 7" hidden>
+          <header class="reading-vocabulary-head">
+            <span class="reading-vocabulary-icon"><i class="fa-solid fa-book-bookmark" aria-hidden="true"></i></span>
+            <div class="reading-vocabulary-head-copy">
+              <strong>Từ vựng bài này</strong>
+              <small>17 từ/cụm từ trong thông báo Fastest Fleet.</small>
+            </div>
+            <button id="readingPart7VocabularyExpand" class="reading-vocabulary-toggle" type="button" aria-expanded="false"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i> Xem đầy đủ</button>
+          </header>
+          <div id="readingPart7VocabularyList" class="reading-vocabulary-list">
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Rate</strong><span class="reading-vocabulary-meta"><span>verb</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="rate" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="rate" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="rate" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">đánh giá, xếp hạng</span><span class="reading-vocabulary-example">TRONG BÀI: “Rate our services.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Service</strong><span class="reading-vocabulary-meta"><span>noun</span><span>A2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="service" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="service" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="service" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">dịch vụ</span><span class="reading-vocabulary-example">TRONG BÀI: “Rate our services.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Win</strong><span class="reading-vocabulary-meta"><span>verb</span><span>A2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="win" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="win" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="win" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">thắng, giành được</span><span class="reading-vocabulary-example">TRONG BÀI: “You could win one of 10 trips.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Travel</strong><span class="reading-vocabulary-meta"><span>noun/verb</span><span>A2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="travel" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="travel" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="travel" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">việc đi lại, du lịch</span><span class="reading-vocabulary-example">TRONG BÀI: “Win free travel.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Fill out</strong><span class="reading-vocabulary-meta"><span>verb phrase</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="fill out" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="fill out" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="fill-out" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">điền vào</span><span class="reading-vocabulary-example">TRONG BÀI: “Fill out the 5-minute questionnaire.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Questionnaire</strong><span class="reading-vocabulary-meta"><span>noun</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="questionnaire" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="questionnaire" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="questionnaire" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">bảng câu hỏi</span><span class="reading-vocabulary-example">TRONG BÀI: “The 5-minute questionnaire.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Round-trip</strong><span class="reading-vocabulary-meta"><span>adjective</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="round trip" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="round trip" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="round-trip" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">khứ hồi</span><span class="reading-vocabulary-example">TRONG BÀI: “FREE round-trip bus trips.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Destination</strong><span class="reading-vocabulary-meta"><span>noun</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="destination" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="destination" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="destination" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">điểm đến</span><span class="reading-vocabulary-example">TRONG BÀI: “To any destination within the continental United States.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Continental</strong><span class="reading-vocabulary-meta"><span>adjective</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="continental" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="continental" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="continental" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">thuộc lục địa</span><span class="reading-vocabulary-example">TRONG BÀI: “The continental United States.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Participate</strong><span class="reading-vocabulary-meta"><span>verb</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="participate" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="participate" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="participate" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">tham gia</span><span class="reading-vocabulary-example">TRONG BÀI: “You must be 18 or older to participate.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Previously</strong><span class="reading-vocabulary-meta"><span>adverb</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="previously" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="previously" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="previously" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">trước đây</span><span class="reading-vocabulary-example">TRONG BÀI: “Customers who have previously traveled.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Eligible</strong><span class="reading-vocabulary-meta"><span>adjective</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="eligible" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="eligible" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="eligible" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">đủ điều kiện</span><span class="reading-vocabulary-example">TRONG BÀI: “Are eligible to enter.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Enter</strong><span class="reading-vocabulary-meta"><span>verb</span><span>A2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="enter" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="enter" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="enter" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">tham gia, đăng ký</span><span class="reading-vocabulary-example">TRONG BÀI: “Eligible to enter.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Free</strong><span class="reading-vocabulary-meta"><span>adjective</span><span>A1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="free" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="free" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="free" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">miễn phí</span><span class="reading-vocabulary-example">TRONG BÀI: “Win free travel.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Feedback</strong><span class="reading-vocabulary-meta"><span>noun</span><span>B1</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="feedback" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="feedback" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="feedback" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">ý kiến phản hồi</span><span class="reading-vocabulary-example">TRONG BÀI: “fastestfleet.com/feedback.”</span></article>
+            <article class="reading-vocabulary-item"><div class="reading-vocabulary-term"><strong>Be eligible to</strong><span class="reading-vocabulary-meta"><span>phrase</span><span>B2</span></span><span class="reading-vocabulary-pronounce"><button type="button" data-reading-pronounce="be eligible to" data-accent="en-US">◖ US</button><button type="button" data-reading-pronounce="be eligible to" data-accent="en-GB">◖ UK</button></span></div><button class="reading-vocabulary-save" type="button" data-reading-save="be-eligible-to" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="reading-vocabulary-meaning">đủ điều kiện để</span><span class="reading-vocabulary-example">TRONG BÀI: “Are eligible to enter.”</span></article>
+          </div>
+        </section>
+      </section>
+    </main>
+    <footer class="reading-practice-footer">
+      <div class="reading-practice-feedback">
+        <button type="button" data-reading-feedback="report"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Báo lỗi</button>
+        <button type="button" data-reading-feedback="feedback"><i class="fa-regular fa-message" aria-hidden="true"></i> Góp ý</button>
+      </div>
+      <div class="reading-practice-nav">
+        <button type="button" disabled aria-label="Câu trước"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button>
+        <strong><i class="fa-solid fa-grip" aria-hidden="true"></i> 147-148/1134</strong>
+        <button type="button" disabled aria-label="Câu tiếp theo"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button>
+      </div>
+    </footer>
+    <aside id="readingPart7NotesDrawer" class="reading-notes-drawer" aria-label="Ghi chú Part 7" hidden>
+      <header class="reading-notes-head">
+        <div class="reading-notes-head-copy">
+          <div class="reading-notes-title"><i class="fa-solid fa-pen" aria-hidden="true"></i><strong>Ghi chú</strong></div>
+          <small>ETS 2019 - Test 2 · Part 7</small>
+        </div>
+        <button id="closeReadingPart7Notes" class="reading-notes-close" type="button" aria-label="Đóng ghi chú"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      </header>
+      <div class="reading-notes-toolbar reading-part7-notes-toolbar" role="toolbar" aria-label="Định dạng ghi chú">
+        <button type="button" data-reading-note-command="bold" aria-label="In đậm"><i class="fa-solid fa-bold" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="italic" aria-label="In nghiêng"><i class="fa-solid fa-italic" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="underline" aria-label="Gạch chân"><i class="fa-solid fa-underline" aria-hidden="true"></i></button>
+        <span aria-hidden="true" style="height:22px;border-left:1px solid #d4deeb;margin:0 5px"></span>
+        <button type="button" data-reading-note-command="insertUnorderedList" aria-label="Danh sách dấu đầu dòng"><i class="fa-solid fa-list-ul" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="insertOrderedList" aria-label="Danh sách đánh số"><i class="fa-solid fa-list-ol" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="formatBlock" data-reading-note-value="blockquote" aria-label="Trích dẫn"><i class="fa-solid fa-quote-right" aria-hidden="true"></i></button>
+        <button type="button" data-reading-note-command="removeFormat" aria-label="Xóa định dạng"><i class="fa-solid fa-eraser" aria-hidden="true"></i></button>
+      </div>
+      <div id="readingPart7NotesEditor" class="reading-notes-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Viết ghi chú cho bài đọc này..."></div>
+      <span id="readingPart7NotesStatus" class="reading-notes-status" aria-live="polite">Đã lưu</span>
+    </aside>
+  </section>
+
+  <!-- Basic Reading Experience (News in Levels) -->
+  <section id="basicReadingExperience" class="hidden min-w-0 max-w-6xl mx-auto w-full animate-fade-up space-y-4 pb-32" aria-labelledby="basicReadingHeading">
+    <nav aria-label="Breadcrumb" class="items-center gap-1 overflow-x-auto text-xs text-muted-foreground hidden lg:flex">
+      <button id="readingBreadcrumbBack" type="button" class="flex min-h-touch min-w-touch shrink-0 items-center justify-center gap-1 rounded-md px-1.5 py-1 hover:text-foreground lg:min-h-0 lg:min-w-0" aria-label="Trang chủ">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house size-3.5"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+      </button>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3 shrink-0 text-muted-foreground/60" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+      <button id="readingBreadcrumbReading" type="button" class="inline-flex min-h-touch shrink-0 items-center truncate rounded-md px-1.5 py-1 hover:text-foreground lg:min-h-0">Đọc</button>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3 shrink-0 text-muted-foreground/60" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+      <span class="shrink-0 truncate px-1.5 py-1 font-medium text-foreground" aria-current="page">Đọc cơ bản (News in Levels)</span>
+    </nav>
+
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <div class="flex flex-wrap items-end justify-between gap-3">
+        <div class="space-y-1">
+          <p class="text-[11px] font-bold uppercase tracking-wide text-emerald-600">Đọc hiểu cơ bản (News in Levels)</p>
+          <h2 id="basicReadingHeading" class="font-display text-xl font-bold tracking-tight text-foreground sm:text-2xl">Luyện đọc cơ bản</h2>
+          <p class="text-xs sm:text-sm text-muted-foreground">Đọc tin tức thực tế được viết lại ở nhiều cấp độ, song ngữ Anh - Việt, có câu hỏi kiểm tra hiểu biết.</p>
+        </div>
+      </div>
+      <div class="items-center gap-3 rounded-2xl border border-[#86efac] bg-white px-3.5 py-2.5 shadow-sm backdrop-blur hidden max-w-xs md:flex dark:bg-slate-900/90 dark:border-emerald-500/40">
+        <img alt="Cú TART" loading="lazy" width="48" height="48" class="pointer-events-none shrink-0 select-none object-contain drop-shadow-sm size-11" src="~/assets/images/Reading/reading-list-buddy-owl.webp" asp-append-version="true">
+        <div class="min-w-0 space-y-0.5">
+          <p class="text-xs font-bold text-emerald-600 dark:text-emerald-400">Mẹo từ TART</p>
+          <p class="text-xs font-medium leading-snug text-slate-600 dark:text-slate-300">Đọc hiểu từng câu để nắm nội dung tốt hơn nhé!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2">
+      <button type="button" data-reading-level="1" class="reading-level-button rounded-full px-4 py-1.5 text-xs font-bold transition bg-[#059669] text-white shadow-sm dark:bg-emerald-600">News in Levels - Level 1</button>
+      <button type="button" data-reading-level="2" class="reading-level-button rounded-full px-4 py-1.5 text-xs font-semibold transition bg-white text-slate-700 hover:text-slate-900 border border-slate-200/80 shadow-sm dark:bg-slate-900 dark:border-slate-800 dark:text-slate-300 dark:hover:text-white">News in Levels - Level 2</button>
+      <button id="readingBackButton" type="button" class="ml-auto inline-flex items-center rounded-full bg-[#f1f5f9] hover:bg-slate-200 text-slate-700 py-1.5 text-xs font-semibold transition-colors [&_svg]:size-3 cursor-pointer gap-1.5 px-3.5 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left size-3"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg> Quay lại luyện thi
+      </button>
+    </div>
+
+    <div class="relative group/lesson-scroll">
+      <button type="button" id="readingScrollLeft" aria-label="Lướt sang trái" class="absolute -left-3 top-1/2 -translate-y-1/2 z-10 hidden md:flex size-8 items-center justify-center rounded-full bg-white/95 shadow-md border border-slate-200 text-slate-700 hover:bg-slate-100 transition-all opacity-0 group-hover/lesson-scroll:opacity-100 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left size-4"><path d="m15 18-6-6 6-6"></path></svg>
+      </button>
+      <div id="readingLessonList" class="flex gap-2.5 overflow-x-auto pb-2 pt-0.5 select-none scroll-smooth cursor-grab active:cursor-grabbing no-scrollbar"></div>
+      <button type="button" id="readingScrollRight" aria-label="Lướt sang phải" class="absolute -right-3 top-1/2 -translate-y-1/2 z-10 hidden md:flex size-8 items-center justify-center rounded-full bg-white/95 shadow-md border border-slate-200 text-slate-700 hover:bg-slate-100 transition-all opacity-0 group-hover/lesson-scroll:opacity-100 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-4"><path d="m9 18 6-6-6-6"></path></svg>
+      </button>
+    </div>
+
+    <div class="flex items-stretch rounded-2xl border border-border/60 bg-card/70 p-1 lg:hidden dark:border-slate-800 dark:bg-slate-900/80">
+      <button type="button" id="mobileTabPassage" aria-pressed="true" class="min-h-touch flex-1 rounded-xl text-xs font-bold transition-colors bg-emerald-50 text-emerald-700 shadow-sm dark:bg-emerald-950/60 dark:text-emerald-300">Bài đọc</button>
+      <button type="button" id="mobileTabQuestion" aria-pressed="false" class="min-h-touch flex-1 rounded-xl text-xs font-bold transition-colors text-muted-foreground hover:text-foreground">Câu hỏi</button>
+    </div>
+
+    <div class="flex flex-col gap-5 lg:flex-row lg:items-start">
+      <div id="readingPassageContainer" class="min-w-0 flex-1">
+        <div class="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm dark:bg-slate-900/90 dark:border-slate-800">
+          <div class="bg-[#e6fbf2] px-5 py-3.5 sm:px-6 dark:bg-emerald-950/40 dark:border-b dark:border-slate-800">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="min-w-0 space-y-1">
+                <div class="flex flex-wrap items-center gap-1.5">
+                  <span id="readingDifficulty" class="inline-flex items-center gap-1 rounded-full border border-[#a7f3d0] bg-[#d1fae5] px-2 py-0.5 text-[11px] font-bold text-[#065f46] dark:border-emerald-700/50 dark:bg-emerald-900/50 dark:text-emerald-300">Dễ</span>
+                  <span id="readingSentenceCount" class="inline-flex items-center gap-1 text-[11px] font-medium text-slate-600 dark:text-slate-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open size-3"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg> 15 câu
+                  </span>
+                </div>
+                <h2 id="readingArticleTitle" class="font-display text-base font-bold leading-snug text-slate-900 sm:text-lg dark:text-white">News in Levels - Level 1</h2>
+              </div>
+              <div class="flex max-w-full items-center gap-2 overflow-x-auto pb-0.5 premium-scrollbar">
+                <div class="flex items-center gap-1.5">
+                  <button id="readingTranslationToggle" type="button" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-languages size-3"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg><span class="hidden sm:inline">Dịch song ngữ</span>
+                  </button>
+                  <button id="readingStructureToggle" type="button" aria-pressed="false" class="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sigma size-3"><path d="M18 7V5a1 1 0 0 0-1-1H6.5a.5.5 0 0 0-.4.8l4.5 6a2 2 0 0 1 0 2.4l-4.5 6a.5.5 0 0 0 .4.8H17a1 1 0 0 0 1-1v-2"></path></svg><span class="hidden sm:inline">Cấu trúc câu</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="space-y-3 p-4 sm:p-5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <p class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#059669] dark:text-emerald-400">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles size-3.5 text-[#059669] dark:text-emerald-400"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg>ĐOẠN VĂN + BẢN DỊCH (THEO CÂU)
+              </p>
+            </div>
+            <div class="rounded-xl bg-white p-2 sm:p-3 dark:bg-slate-900/40">
+              <div id="readingPassage" class="space-y-1 text-sm leading-6 [&>span]:border-b [&>span]:border-slate-100 dark:[&>span]:border-slate-800 [&>span]:px-0 [&>span]:py-2 last:[&>span]:border-b-0 [&_span.text-foreground]:font-normal [&_span.text-foreground]:text-slate-800 dark:[&_span.text-foreground]:text-slate-100">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="readingQuestionContainer" class="lg:sticky lg:top-4 lg:w-[380px] xl:w-[400px] w-full">
+        <div class="flex flex-col rounded-2xl border border-slate-200/80 bg-white p-4 sm:p-5 shadow-sm dark:bg-slate-900/90 dark:border-slate-800 max-h-[calc(100vh-2rem)] overflow-y-auto">
+          <div class="mb-3 space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5">
+                <span class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">Câu hỏi kiểm tra</span>
+                <span id="readingQuestionProgress" class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-bold text-slate-600 dark:bg-slate-800 dark:text-slate-300">1/3</span>
+              </div>
+              <button id="readingBookmarkButton" type="button" aria-pressed="false" class="flex items-center gap-1 text-xs font-medium text-slate-500 hover:text-slate-800 transition-colors dark:text-slate-400 dark:hover:text-slate-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark size-3.5"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg>Đánh dấu
+              </button>
+            </div>
+            <div class="h-1.5 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+              <div id="readingQuestionProgressBar" class="h-full rounded-full bg-slate-300 dark:bg-slate-600 transition-all duration-500" style="width: 33%;"></div>
+            </div>
+          </div>
+
+          <h3 class="mb-3 text-sm sm:text-[14px] font-bold leading-snug text-slate-900 dark:text-white">
+            <span id="readingQuestionPrompt" lang="en"></span>
+          </h3>
+
+          <div id="readingAnswerOptions" class="space-y-2"></div>
+          <p id="readingAnswerFeedback" class="mt-2.5 min-h-4 text-xs font-bold" aria-live="polite"></p>
+        </div>
+
+        <button id="readingNextButton" type="button" class="mt-2.5 inline-flex min-h-touch w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 bg-white py-2.5 text-xs font-bold text-slate-700 shadow-sm transition hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-700">
+          Bài tiếp theo<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3.5"><path d="m9 18 6-6-6-6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reading Info Modal -->
+  <section id="readingInfoModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/50 p-4 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="readingModalTitle">
+    <div class="glass-card w-full max-w-lg rounded-3xl bg-white p-5 shadow-2xl dark:bg-slate-900 sm:p-6">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p id="readingModalPart" class="text-[11px] font-extrabold uppercase tracking-wide text-emerald-600 dark:text-emerald-300"></p>
+          <h2 id="readingModalTitle" class="mt-1 text-xl font-extrabold text-slate-900 dark:text-white"></h2>
+        </div>
+        <button type="button" id="closeReadingModal" class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-200" aria-label="Đóng">
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+      </div>
+      <p id="readingModalDescription" class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300"></p>
+      <div id="readingModalMeta" class="mt-4 rounded-2xl bg-emerald-50 p-4 text-xs leading-relaxed text-slate-600 dark:bg-emerald-500/10 dark:text-slate-300"></div>
+      <div class="mt-5 flex justify-end">
+        <button type="button" id="readingModalDone" class="rounded-xl bg-emerald-600 px-4 py-2.5 text-xs font-extrabold text-white">Đã hiểu</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+@section Modals {
+  <div id="goalModal" class="goal-modal-overlay" hidden>
+    <section class="goal-modal" role="dialog" aria-modal="true" aria-labelledby="goalModalTitle" aria-describedby="goalModalDescription">
+      <header class="goal-modal-header">
+        <span class="goal-modal-icon" aria-hidden="true">
+          <i class="fa-solid fa-trophy"></i>
+        </span>
+        <h2 class="goal-modal-title" id="goalModalTitle">Mục tiêu kỳ thi</h2>
+        <button class="goal-modal-close" id="goalModalClose" type="button" aria-label="Đóng">
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+      </header>
+      <form class="goal-modal-form" id="goalForm">
+        <p id="goalModalDescription" class="sr-only">Chọn kỳ thi, điểm TOEIC mục tiêu và ngày thi dự kiến.</p>
+        <div class="goal-field">
+          <span class="goal-field-label">Kỳ thi</span>
+          <div class="goal-exam-options" role="group" aria-label="Chọn kỳ thi">
+            <button class="goal-exam-option" type="button" aria-pressed="true">TOEIC</button>
+            <button class="goal-exam-option" type="button" disabled>VSTEP · Chưa hỗ trợ</button>
+          </div>
+        </div>
+        <label class="goal-field" for="goalScoreInput">
+          <span class="goal-field-label">Điểm mục tiêu TOEIC</span>
+          <input class="goal-input" id="goalScoreInput" name="score" type="number" min="10" max="990" step="5" value="650" required>
+        </label>
+        <label class="goal-field" for="goalDateInput">
+          <span class="goal-field-label">Ngày thi dự kiến</span>
+          <input class="goal-input" id="goalDateInput" name="date" type="date" required>
+        </label>
+        <div class="goal-modal-actions">
+          <button class="goal-cancel" id="goalCancelButton" type="button">Hủy</button>
+          <button class="goal-save" id="goalSaveButton" type="submit" disabled>Lưu mục tiêu</button>
+        </div>
+      </form>
+    </section>
+  </div>
+}
+
+@section Scripts {
+  <script src="~/assets/js/Reading/reading-main.js" asp-append-version="true"></script>
+}

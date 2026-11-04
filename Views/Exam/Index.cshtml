@@ -1,0 +1,385 @@
+@{
+    ViewData["Title"] = "Thi thử";
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/assets/mock-practice.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/assets/css/Exam/exam-main.css" asp-append-version="true" />
+}
+
+<!-- MAIN CONTENT AREA -->
+<main id="dashboardMain" class="flex-1 flex flex-col gap-4 min-w-0">
+    <section
+        class="learning-surface relative overflow-hidden rounded-3xl border pad-card shadow-soft sm:min-h-[188px] sm:rounded-[28px] sm:p-6 isolate border-skill-mock-test/20 ring-1 ring-border/70 backdrop-blur-xl shadow-[0_24px_60px_-24px_hsl(38_60%_28%_/_0.30)] [background:radial-gradient(130%_150%_at_88%_-20%,hsl(var(--skill-mock-test-soft))_0%,transparent_58%),radial-gradient(90%_130%_at_-5%_115%,hsl(var(--skill-mock-test-soft)_/_0.85)_0%,transparent_62%),linear-gradient(118deg,hsl(var(--card))_0%,hsl(var(--card)_/_0.92)_46%,hsl(var(--skill-mock-test-soft)_/_0.7)_100%)]"
+        aria-labelledby="mockTestTitle">
+        <div class="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl opacity-[0.16] bg-gradient-to-br from-skill-mock-test to-skill-speaking" aria-hidden="true"></div>
+        <div class="pointer-events-none absolute top-0 left-5 right-5 h-0.5 rounded-full" aria-hidden="true" style="background-image: linear-gradient(90deg, hsl(var(--skill-mock-test)), transparent);"></div>
+        <div class="relative flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between sm:pr-36 lg:pr-44 xl:pr-52">
+            <div class="flex min-w-0 items-center gap-2.5 sm:gap-3">
+                <span class="flex size-9 shrink-0 items-center justify-center rounded-xl shadow-soft [&_svg]:size-[18px] sm:size-11 sm:rounded-2xl sm:[&_svg]:size-5 bg-skill-mock-test text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                </span>
+                <div class="min-w-0 flex-1">
+                    <h1 id="mockTestTitle" class="text-page-title truncate text-foreground">TOEIC Mock Test</h1>
+                    <p class="hidden max-w-2xl truncate text-sm text-muted-foreground sm:block">Thi thử mô phỏng phòng thi thật, đề thi và chấm điểm chuẩn TOEIC/VSTEP.</p>
+                </div>
+            </div>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center lg:shrink-0">
+                <div class="-mx-1 flex scroll-strip gap-2 px-1 sm:mx-0 sm:flex-wrap sm:justify-end sm:overflow-x-visible sm:px-0">
+                    <div class="min-w-[6.75rem] rounded-xl border px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2 border-skill-mock-test/15 bg-card/70 ring-1 ring-inset ring-border/60">
+                        <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+                            <span class="[&_svg]:size-3.5 text-skill-mock-test">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+                            </span>Điểm kỷ lục
+                        </div>
+                        <div id="mockBestScore" class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">
+                            <span class="text-muted-foreground">—</span>
+                        </div>
+                    </div>
+                    <div class="min-w-[6.75rem] rounded-xl border px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2 border-skill-mock-test/15 bg-card/70 ring-1 ring-inset ring-border/60">
+                        <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+                            <span class="[&_svg]:size-3.5 text-skill-mock-test">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                            </span>Lần gần nhất
+                        </div>
+                        <div id="mockLastScore" class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">—</div>
+                    </div>
+                    <div class="min-w-[6.75rem] rounded-xl border px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2 border-skill-mock-test/15 bg-card/70 ring-1 ring-inset ring-border/60">
+                        <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+                            <span class="[&_svg]:size-3.5 text-skill-mock-test">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>
+                            </span>Đã hoàn thành
+                        </div>
+                        <div id="mockCompletedCount" class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">
+                            14 <span class="text-sm font-bold text-slate-800 dark:text-slate-200">lượt</span>
+                        </div>
+                    </div>
+                    <div class="min-w-[6.75rem] rounded-xl border px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2 border-skill-mock-test/15 bg-card/70 ring-1 ring-inset ring-border/60">
+                        <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+                            <span class="[&_svg]:size-3.5 text-skill-mock-test">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+                            </span>Đề thi
+                        </div>
+                        <div class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">73</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pointer-events-none absolute inset-y-2 right-4 z-10 hidden w-36 items-center justify-center sm:flex lg:w-44 xl:w-48">
+            <img alt="Cú TART cổ vũ bạn thi thử" width="192" height="192" decoding="async"
+                class="pointer-events-none select-none object-contain drop-shadow-md animate-float motion-reduce:animate-none size-36 sm:size-40 lg:size-48"
+                src="~/assets/images/Exam/test-buddy-owl.webp" asp-append-version="true">
+        </div>
+    </section>
+
+    <section
+        class="glass-card flex flex-wrap items-center justify-between gap-3 rounded-2xl border-l-4 border-amber-600 bg-gradient-to-r from-amber-50/80 to-white/80 px-4 py-3 dark:from-amber-950/25 dark:to-slate-900/70"
+        aria-label="Bài thi đang dở">
+        <div class="flex items-center gap-3">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-amber-700 text-white shadow-sm">
+                <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+            </span>
+            <div>
+                <p class="text-[10px] font-extrabold uppercase tracking-wide text-amber-700 dark:text-amber-300">BÀI THI ĐANG DỞ</p>
+                <h2 class="text-sm font-extrabold text-slate-800 dark:text-white">RaidTUTOR 2026 - Test 2</h2>
+                <p class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">Đã làm 0/200 câu · +2 bài khác</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <button id="mockResumeButton" type="button"
+                class="rounded-xl bg-amber-800 px-4 py-2 text-xs font-extrabold text-white transition hover:bg-amber-900 shadow-sm flex items-center gap-1.5">
+                Làm tiếp <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+            </button>
+            <button id="mockHistoryButton" type="button"
+                class="rounded-xl border border-amber-300 bg-white/70 px-4 py-2 text-xs font-extrabold text-amber-700 transition hover:bg-amber-50 dark:border-amber-500/30 dark:bg-slate-800 dark:text-amber-300 flex items-center gap-1.5">
+                <i class="fa-solid fa-clock-rotate-left mr-1" aria-hidden="true"></i>Lịch sử làm bài
+            </button>
+        </div>
+    </section>
+
+    <section
+        class="glass-card grid grid-cols-1 gap-4 rounded-2xl p-3 sm:grid-cols-2 sm:p-4"
+        aria-label="Lọc đề thi">
+        <div>
+            <p class="mb-1.5 text-[10px] font-extrabold text-slate-500 dark:text-slate-400">Nguồn đề</p>
+            <div id="mockSourceFilters"
+                class="inline-flex max-w-full flex-wrap rounded-2xl border border-slate-200 bg-slate-100 p-1 dark:border-slate-700 dark:bg-slate-800"
+                role="group" aria-label="Lọc theo nguồn đề">
+                <button type="button"
+                    class="mock-source-filter rounded-xl bg-white px-3 py-2 text-[10px] font-extrabold text-amber-700 shadow-sm dark:bg-slate-700 dark:text-amber-300"
+                    data-source="hot" aria-pressed="true">ĐỀ HOT</button>
+                <button type="button"
+                    class="mock-source-filter rounded-xl px-3 py-2 text-[10px] font-bold text-slate-500 dark:text-slate-300"
+                    data-source="ets" aria-pressed="false">ETS</button>
+                <button type="button"
+                    class="mock-source-filter rounded-xl px-3 py-2 text-[10px] font-bold text-slate-500 dark:text-slate-300"
+                    data-source="ybm" aria-pressed="false">YBM</button>
+            </div>
+        </div>
+        <div>
+            <p class="mb-1.5 text-[10px] font-extrabold text-slate-500 dark:text-slate-400">Năm phát hành</p>
+            <div id="mockYearFilters"
+                class="flex max-w-full flex-wrap rounded-2xl border border-slate-200 bg-slate-100 p-1 dark:border-slate-700 dark:bg-slate-800"
+                role="group" aria-label="Lọc theo năm">
+                <button type="button"
+                    class="mock-year-filter rounded-xl bg-white px-3 py-2 text-[10px] font-extrabold text-amber-700 shadow-sm dark:bg-slate-700 dark:text-amber-300"
+                    data-year="2026" aria-pressed="true">2026</button>
+                <button type="button"
+                    class="mock-year-filter rounded-xl px-2.5 py-2 text-[10px] font-bold text-slate-400"
+                    data-year="2025" aria-pressed="false">2025</button>
+                <button type="button"
+                    class="mock-year-filter rounded-xl px-2.5 py-2 text-[10px] font-bold text-slate-400"
+                    data-year="2024" aria-pressed="false">2024</button>
+                <button type="button"
+                    class="mock-year-filter rounded-xl px-2.5 py-2 text-[10px] font-bold text-slate-400"
+                    data-year="2023" aria-pressed="false">2023</button>
+                <button type="button"
+                    class="mock-year-filter rounded-xl px-2.5 py-2 text-[10px] font-bold text-slate-400"
+                    data-year="2022" aria-pressed="false">2022</button>
+                <button type="button"
+                    class="mock-year-filter rounded-xl px-2.5 py-2 text-[10px] font-bold text-slate-400"
+                    data-year="2021" aria-pressed="false">2021</button>
+                <button type="button"
+                    class="mock-year-filter rounded-xl px-2.5 py-2 text-[10px] font-bold text-slate-600 dark:text-slate-300"
+                    data-year="2020" aria-pressed="false">2020</button>
+                <button type="button"
+                    class="mock-year-filter rounded-xl px-2.5 py-2 text-[10px] font-bold text-slate-600 dark:text-slate-300"
+                    data-year="2019" aria-pressed="false">2019</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="mockTestGrid" class="grid grid-cols-1 gap-3 lg:grid-cols-3"
+        aria-label="Danh sách đề thi">
+        <article
+            class="mock-card glass-card overflow-hidden rounded-2xl border-l-4 border-amber-600"
+            data-source="ets" data-year="2026"
+            data-title="RaidTUTOR 2026 - Test 1">
+            <div class="p-4">
+                <div class="flex items-start gap-2.5">
+                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300">
+                        <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                    </span>
+                    <div class="min-w-0">
+                        <h2 class="text-sm font-extrabold text-amber-700 dark:text-amber-300">RaidTUTOR 2026 - Test 1</h2>
+                        <p class="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">Đề thi thử TOEIC RaidTUTOR 2026 - Test 1.</p>
+                    </div>
+                </div>
+                <div class="mt-3 flex items-center gap-2 border-t border-slate-200/70 pt-2.5 text-[10px] font-semibold text-slate-500 dark:border-slate-700 dark:text-slate-400">
+                    <span><i class="fa-regular fa-clock mr-1" aria-hidden="true"></i>120 phút</span>
+                    <span>·</span>
+                    <span>200 câu</span>
+                </div>
+                <div class="mt-4 flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                    <span class="mock-progress-label">Chưa luyện câu nào</span>
+                    <span class="mock-progress-percent">0%</span>
+                </div>
+                <div class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+                    <div class="mock-progress-bar h-full w-0 rounded-full bg-amber-600"></div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2 px-3 pb-3 sm:flex-row">
+                <button type="button"
+                    class="mock-practice flex-1 rounded-xl bg-amber-700 px-3 py-2 text-xs font-extrabold text-white transition hover:bg-amber-800">
+                    <i class="fa-solid fa-book-open mr-1" aria-hidden="true"></i>Luyện tập
+                </button>
+                <button type="button"
+                    class="mock-start flex-1 rounded-xl border border-amber-300 bg-slate-50 px-3 py-2 text-xs font-extrabold text-amber-700 transition hover:bg-amber-50 dark:border-amber-500/30 dark:bg-slate-800 dark:text-amber-300 dark:hover:bg-slate-700">
+                    <i class="fa-regular fa-stopwatch mr-1" aria-hidden="true"></i>Thi thử
+                </button>
+            </div>
+        </article>
+        <article
+            class="mock-card glass-card overflow-hidden rounded-2xl border-l-4 border-amber-600"
+            data-source="ets" data-year="2026"
+            data-title="RaidTUTOR 2026 - Test 2">
+            <div class="p-4">
+                <div class="flex items-start gap-2.5">
+                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300">
+                        <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                    </span>
+                    <div class="min-w-0">
+                        <h2 class="text-sm font-extrabold text-amber-700 dark:text-amber-300">RaidTUTOR 2026 - Test 2</h2>
+                        <p class="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">Đề thi thử TOEIC RaidTUTOR 2026 - Test 2.</p>
+                    </div>
+                </div>
+                <div class="mt-3 flex items-center gap-2 border-t border-slate-200/70 pt-2.5 text-[10px] font-semibold text-slate-500 dark:border-slate-700 dark:text-slate-400">
+                    <span><i class="fa-regular fa-clock mr-1" aria-hidden="true"></i>120 phút</span>
+                    <span>·</span>
+                    <span>200 câu</span>
+                </div>
+                <div class="mt-4 flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                    <span class="mock-progress-label">Chưa luyện câu nào</span>
+                    <span class="mock-progress-percent">0%</span>
+                </div>
+                <div class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+                    <div class="mock-progress-bar h-full w-0 rounded-full bg-amber-600"></div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2 px-3 pb-3 sm:flex-row">
+                <button type="button"
+                    class="mock-practice flex-1 rounded-xl bg-amber-700 px-3 py-2 text-xs font-extrabold text-white transition hover:bg-amber-800">
+                    <i class="fa-solid fa-book-open mr-1" aria-hidden="true"></i>Luyện tập
+                </button>
+                <button type="button"
+                    class="mock-start flex-1 rounded-xl border border-amber-300 bg-slate-50 px-3 py-2 text-xs font-extrabold text-amber-700 transition hover:bg-amber-50 dark:border-amber-500/30 dark:bg-slate-800 dark:text-amber-300 dark:hover:bg-slate-700">
+                    <i class="fa-regular fa-stopwatch mr-1" aria-hidden="true"></i>Thi thử
+                </button>
+            </div>
+        </article>
+        <article
+            class="mock-card glass-card overflow-hidden rounded-2xl border-l-4 border-amber-600"
+            data-source="ets" data-year="2026"
+            data-title="RaidTUTOR 2026 - Test 3">
+            <div class="p-4">
+                <div class="flex items-start gap-2.5">
+                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-2xl bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300">
+                        <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                    </span>
+                    <div class="min-w-0">
+                        <h2 class="text-sm font-extrabold text-amber-700 dark:text-amber-300">RaidTUTOR 2026 - Test 3</h2>
+                        <p class="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">Đề thi thử TOEIC RaidTUTOR 2026 - Test 3 (bộ tách PART 1-4 / 5-6 / 7).</p>
+                    </div>
+                </div>
+                <div class="mt-3 flex items-center gap-2 border-t border-slate-200/70 pt-2.5 text-[10px] font-semibold text-slate-500 dark:border-slate-700 dark:text-slate-400">
+                    <span><i class="fa-regular fa-clock mr-1" aria-hidden="true"></i>120 phút</span>
+                    <span>·</span>
+                    <span>200 câu</span>
+                </div>
+                <div class="mt-4 flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                    <span class="mock-progress-label">Chưa luyện câu nào</span>
+                    <span class="mock-progress-percent">0%</span>
+                </div>
+                <div class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+                    <div class="mock-progress-bar h-full w-0 rounded-full bg-amber-600"></div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-2 px-3 pb-3 sm:flex-row">
+                <button type="button"
+                    class="mock-practice flex-1 rounded-xl bg-amber-700 px-3 py-2 text-xs font-extrabold text-white transition hover:bg-amber-800">
+                    <i class="fa-solid fa-book-open mr-1" aria-hidden="true"></i>Luyện tập
+                </button>
+                <button type="button"
+                    class="mock-start flex-1 rounded-xl border border-amber-300 bg-slate-50 px-3 py-2 text-xs font-extrabold text-amber-700 transition hover:bg-amber-50 dark:border-amber-500/30 dark:bg-slate-800 dark:text-amber-300 dark:hover:bg-slate-700">
+                    <i class="fa-regular fa-stopwatch mr-1" aria-hidden="true"></i>Thi thử
+                </button>
+            </div>
+        </article>
+    </section>
+
+    <p id="mockEmptyState"
+        class="glass-card hidden rounded-2xl p-6 text-center text-sm text-slate-500 dark:text-slate-400">
+        Không có đề thi phù hợp với bộ lọc.
+    </p>
+
+    <div id="mockPracticeModal" class="mock-practice-overlay" hidden>
+        <section class="mock-practice-dialog" role="dialog" aria-modal="true"
+            aria-labelledby="mockPracticeTitle" aria-describedby="mockPracticeTest">
+            <header class="mock-practice-header">
+                <span class="mock-practice-icon" id="mockPracticeIcon" aria-hidden="true"><i class="fa-solid fa-stopwatch"></i></span>
+                <div class="mock-practice-heading">
+                    <h2 id="mockPracticeTitle">Thi thử TOEIC</h2>
+                    <p id="mockPracticeTest"></p>
+                </div>
+                <button id="closeMockPractice" class="mock-practice-close" type="button" aria-label="Đóng" title="Đóng">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </header>
+            <div class="mock-practice-body">
+                <div class="mock-practice-presets" role="group" aria-label="Chọn nhanh các Part">
+                    <button class="mock-practice-preset" type="button" data-parts="1,2,3,4,5,6,7" aria-pressed="true">Full 7 Part</button>
+                    <button class="mock-practice-preset" type="button" data-parts="1,2,3,4" aria-pressed="false">Listening 1–4</button>
+                    <button class="mock-practice-preset" type="button" data-parts="5,6,7" aria-pressed="false">Reading 5–7</button>
+                </div>
+                <div id="mockPracticeParts" class="mock-practice-parts" role="group" aria-label="Các Part luyện tập"></div>
+            </div>
+            <footer class="mock-practice-footer">
+                <p id="mockPracticeSummary" class="mock-practice-summary" aria-live="polite"></p>
+                <button id="mockPracticeBegin" class="mock-practice-begin" type="button">
+                    Vào phòng thi <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </button>
+            </footer>
+        </section>
+    </div>
+
+    <section id="mockInfoModal"
+        class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/50 p-4 backdrop-blur-sm"
+        role="dialog" aria-modal="true" aria-labelledby="mockModalTitle">
+        <div class="glass-card w-full max-w-lg rounded-3xl bg-white p-5 shadow-2xl dark:bg-slate-900 sm:p-6">
+            <div class="flex items-start justify-between gap-4">
+                <div>
+                    <p id="mockModalEyebrow" class="text-[11px] font-extrabold uppercase tracking-wide text-amber-700 dark:text-amber-300"></p>
+                    <h2 id="mockModalTitle" class="mt-1 text-xl font-extrabold text-slate-900 dark:text-white"></h2>
+                </div>
+                <button type="button" id="closeMockModal"
+                    class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-200"
+                    aria-label="Đóng">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
+            <p id="mockModalDescription" class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300"></p>
+            <div id="mockModalMeta" class="mt-4 rounded-2xl bg-amber-50 p-4 text-xs leading-relaxed text-slate-600 dark:bg-amber-500/10 dark:text-slate-300"></div>
+            <div class="mt-5 flex justify-end">
+                <button type="button" id="mockModalDone" class="rounded-xl bg-amber-700 px-4 py-2.5 text-xs font-extrabold text-white">Đã hiểu</button>
+            </div>
+        </div>
+    </section>
+
+    <div hidden aria-hidden="true">
+        <button id="goalSettingsButton" type="button"></button>
+        <span id="goalSummaryTitle"></span>
+        <span id="goalSummaryDetails"></span>
+        <span id="taskCounterText"></span>
+        <button id="profileMenuTrigger" type="button" aria-expanded="false"></button>
+        <div id="profileMenu" role="menu" hidden>
+            <a role="menuitem" href="#">Tài khoản</a>
+        </div>
+        <button id="profileFeedbackButton" type="button"></button>
+    </div>
+</main>
+
+@section Modals {
+    <div id="goalModal" class="goal-modal-overlay" hidden>
+        <section class="goal-modal" role="dialog" aria-modal="true"
+            aria-labelledby="goalModalTitle"
+            aria-describedby="goalModalDescription">
+            <header class="goal-modal-header">
+                <span class="goal-modal-icon" aria-hidden="true">
+                    <i class="fa-solid fa-trophy"></i>
+                </span>
+                <h2 class="goal-modal-title" id="goalModalTitle">Mục tiêu kỳ thi</h2>
+                <button class="goal-modal-close" id="goalModalClose" type="button" aria-label="Đóng">
+                    <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                </button>
+            </header>
+            <form class="goal-modal-form" id="goalForm">
+                <p id="goalModalDescription" class="sr-only">Chọn kỳ thi, điểm TOEIC mục tiêu và ngày thi dự kiến.</p>
+                <div class="goal-field">
+                    <span class="goal-field-label">Kỳ thi</span>
+                    <div class="goal-exam-options" role="group" aria-label="Chọn kỳ thi">
+                        <button class="goal-exam-option" type="button" aria-pressed="true">TOEIC</button>
+                        <button class="goal-exam-option" type="button" disabled>VSTEP · Chưa hỗ trợ</button>
+                    </div>
+                </div>
+                <label class="goal-field" for="goalScoreInput">
+                    <span class="goal-field-label">Điểm mục tiêu TOEIC</span>
+                    <input class="goal-input" id="goalScoreInput" name="score" type="number" min="10" max="990" step="5" value="650" required>
+                </label>
+                <label class="goal-field" for="goalDateInput">
+                    <span class="goal-field-label">Ngày thi dự kiến</span>
+                    <input class="goal-input" id="goalDateInput" name="date" type="date" required>
+                </label>
+                <div class="goal-modal-actions">
+                    <button class="goal-cancel" id="goalCancelButton" type="button">Hủy</button>
+                    <button class="goal-save" id="goalSaveButton" type="submit" disabled>Lưu mục tiêu</button>
+                </div>
+            </form>
+        </section>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/assets/mock-practice.js" asp-append-version="true"></script>
+    <script src="~/assets/js/Exam/exam-main.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,391 @@
+@{
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString() ?? "Dashboard";
+}
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>@ViewData["Title"] - Tiếng Anh Ra Trường</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Nunito:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet">
+
+    <!-- Script cấu hình Tailwind -->
+    <script src="~/assets/js/LayoutSidebar/sidebar-tailwind.js" asp-append-version="true"></script>
+
+    <!-- CSS dùng chung của Sidebar -->
+    <link rel="stylesheet" href="~/assets/css/LayoutSidebar/sidebar.css" asp-append-version="true" />
+    @await RenderSectionAsync("Styles", required: false)
+  </head>
+  <body
+    class="bg-canvas-light text-slate-800 dark:text-slate-100 min-h-screen relative overflow-x-hidden transition-colors duration-300">
+
+    <div class="canvas-wash pointer-events-none fixed inset-0 z-0"
+      aria-hidden="true"></div>
+    <div class="canvas-dots pointer-events-none fixed inset-0 z-[1]"
+      aria-hidden="true"></div>
+
+    <header id="mobileAppBar" aria-label="Thanh điều hướng">
+      <button id="mobileMenuToggle" type="button"
+        aria-label="Mở menu điều hướng" aria-haspopup="dialog"
+        aria-expanded="false" aria-controls="dashboardSidebar">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><line x1="4" x2="20" y1="12"
+            y2="12"></line><line
+            x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20"
+            y1="18"
+            y2="18"></line></svg>
+      </button>
+      <button id="mobilePagePicker" type="button" aria-haspopup="dialog"
+        aria-expanded="false" aria-controls="dashboardSidebar">
+        <span id="mobilePageTitle">Hôm nay</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+      </button>
+      <button id="mobileThemeToggle" type="button"
+        aria-label="Giao diện: Sáng. Bấm để đổi."
+        title="Giao diện: Sáng">
+        <svg class="theme-icon-sun" xmlns="http://www.w3.org/2000/svg"
+          width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true"><circle cx="12"
+            cy="12"
+            r="4"></circle><path d="M12 2v2"></path><path
+            d="M12 20v2"></path><path
+            d="m4.93 4.93 1.41 1.41"></path><path
+            d="m17.66 17.66 1.41 1.41"></path><path
+            d="M2 12h2"></path><path
+            d="M20 12h2"></path><path
+            d="m6.34 17.66-1.41-1.41"></path><path
+            d="m19.07 4.93-1.41 1.41"></path></svg>
+        <svg class="theme-icon-moon" xmlns="http://www.w3.org/2000/svg"
+          width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true"><path
+            d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6.5 6.5 0 0 0 8.268 8.268c.344-.215.825-.003.803.401"></path></svg>
+      </button>
+      <button id="mobileNotificationToggle" type="button"
+        aria-label="Thông báo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><path
+            d="M10.268 21a2 2 0 0 0 3.464 0"></path><path
+            d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+      </button>
+      <button id="mobileProfileToggle" type="button"
+        aria-label="Tài khoản">
+        <img src="@Url.Content("~/assets/images/Sidebar/study-sidebar-buddy-owl.webp")" asp-append-version="true" alt="Tài khoản">
+      </button>
+    </header>
+    <button id="mobileSidebarBackdrop" type="button"
+      aria-label="Đóng menu điều hướng" tabindex="-1"></button>
+
+    <nav id="mobileBottomNav" aria-label="Điều hướng nhanh"></nav>
+
+    <!-- Main Container -->
+    <div id="dashboardLayout"
+      class="relative z-10 max-w-[1600px] mx-auto p-3 sm:p-5 lg:p-6 flex flex-col lg:flex-row gap-6 min-h-screen">
+
+      <!-- LEFT SIDEBAR -->
+      <aside id="dashboardSidebar"
+        class="w-full lg:w-64 flex-shrink-0 flex flex-col justify-between gap-6">
+        <div class="glass-card rounded-3xl p-5 flex flex-col h-full">
+          <!-- Logo Header -->
+          <div
+            class="sidebar-brand flex items-center gap-3 mb-8 px-2">
+            <div
+              class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex shrink-0 items-center justify-center text-white shadow-lg shadow-blue-500/30 transform hover:scale-105 transition-transform">
+              <i class="fa-solid fa-graduation-cap text-2xl"></i>
+            </div>
+            <div class="sidebar-brand-text flex flex-col min-w-0 flex-1 whitespace-nowrap">
+              <span
+                class="text-xs font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase">Tiếng
+                Anh</span>
+              <span
+                class="text-xl font-extrabold text-slate-900 dark:text-white leading-tight">Ra
+                Trường</span>
+            </div>
+            <button id="drawerClose" type="button" aria-label="Đóng menu">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            </button>
+          </div>
+
+          <!-- Navigation Section -->
+          <div class="space-y-6 flex-1">
+            <div>
+              <span
+                class="text-[12px] font-bold uppercase tracking-wider text-[#41485d] dark:text-slate-300 px-3 block mb-2">
+                HỌC TẬP
+              </span>
+              <nav class="space-y-1.5" id="navContainer">
+                <a asp-controller="Dashboard" asp-action="Index"
+                  class="nav-item @(string.Equals(currentController, "Dashboard", StringComparison.OrdinalIgnoreCase) ? "active" : "") flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
+                  aria-current="@(string.Equals(currentController, "Dashboard", StringComparison.OrdinalIgnoreCase) ? "page" : null)">
+                  <svg class="nav-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"><path
+                      d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path
+                      d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+                  <span>Hôm nay</span>
+                </a>
+                <a asp-controller="Grammar" asp-action="Index"
+                  class="nav-item @(string.Equals(currentController, "Grammar", StringComparison.OrdinalIgnoreCase) ? "active" : "") flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
+                  aria-current="@(string.Equals(currentController, "Grammar", StringComparison.OrdinalIgnoreCase) ? "page" : null)">
+                  <svg
+                    class="nav-icon lucide lucide-book-open"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true">
+                    <path d="M12 7v14"></path>
+                    <path
+                      d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path>
+                  </svg>
+                  <span>Ngữ pháp</span>
+                </a>
+                <a asp-controller="Vocabulary" asp-action="Index"
+                  class="nav-item @(string.Equals(currentController, "Vocabulary", StringComparison.OrdinalIgnoreCase) ? "active" : "") flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
+                  aria-current="@(string.Equals(currentController, "Vocabulary", StringComparison.OrdinalIgnoreCase) ? "page" : null)">
+                  <svg class="nav-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"><path
+                      d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path><path
+                      d="m8 13 4-7 4 7"></path><path
+                      d="M9.1 11h5.7"></path></svg>
+                  <span>Từ vựng</span>
+                </a>
+                <a asp-controller="Listening" asp-action="Index"
+                  class="nav-item @(string.Equals(currentController, "Listening", StringComparison.OrdinalIgnoreCase) ? "active" : "") flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
+                  aria-current="@(string.Equals(currentController, "Listening", StringComparison.OrdinalIgnoreCase) ? "page" : null)">
+                  <svg class="nav-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"><path
+                      d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>
+                  <span>Nghe</span>
+                </a>
+                <a asp-controller="Reading" asp-action="Index"
+                  class="nav-item @(string.Equals(currentController, "Reading", StringComparison.OrdinalIgnoreCase) ? "active" : "") flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
+                  aria-current="@(string.Equals(currentController, "Reading", StringComparison.OrdinalIgnoreCase) ? "page" : null)">
+                  <svg class="nav-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"><path
+                      d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path
+                      d="M14 2v6h6"></path><path
+                      d="M8 13h8"></path><path
+                      d="M8 17h8"></path><path
+                      d="M8 9h2"></path></svg>
+                  <span>Đọc</span>
+                </a>
+                <a asp-controller="Exam" asp-action="Index"
+                  class="nav-item @(string.Equals(currentController, "Exam", StringComparison.OrdinalIgnoreCase) ? "active" : "") flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
+                  aria-current="@(string.Equals(currentController, "Exam", StringComparison.OrdinalIgnoreCase) ? "page" : null)">
+                  <svg class="nav-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"><path
+                      d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                  <span>Thi thử</span>
+                </a>
+                <a asp-controller="Leaderboard" asp-action="Index"
+                  class="nav-item @(string.Equals(currentController, "Leaderboard", StringComparison.OrdinalIgnoreCase) ? "active" : "") flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-blue-600 dark:hover:text-blue-400 transition-all"
+                  aria-current="@(string.Equals(currentController, "Leaderboard", StringComparison.OrdinalIgnoreCase) ? "page" : null)">
+                  <svg class="nav-icon"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24" height="24"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"><path
+                      d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path
+                      d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path
+                      d="M4 22h16"></path><path
+                      d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path
+                      d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path
+                      d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+                  <span>Bảng xếp hạng</span>
+                </a>
+              </nav>
+            </div>
+          </div>
+
+          <!-- Theme Toggle Switcher -->
+          <div
+            class="pt-4 border-t border-slate-200/60 dark:border-slate-700/50 mt-4">
+            <div
+              class="flex items-center justify-between px-2 text-sm font-semibold text-[#41485d] dark:text-slate-300">
+              <span class="flex items-center gap-2">
+                <i
+                  class="fa-solid fa-circle-half-stroke text-[#41485d] dark:text-slate-300"></i>
+                Giao diện
+              </span>
+              <button id="themeToggle"
+                aria-label="Chuyển đổi giao diện"
+                title="Giao diện: Sáng"
+                class="inline-flex size-11 items-center justify-center rounded-full border border-transparent bg-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                <svg class="theme-icon-sun"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24" height="24" viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"><circle cx="12"
+                    cy="12" r="4"></circle><path
+                    d="M12 2v2"></path><path
+                    d="M12 20v2"></path><path
+                    d="m4.93 4.93 1.41 1.41"></path><path
+                    d="m17.66 17.66 1.41 1.41"></path><path
+                    d="M2 12h2"></path><path
+                    d="M20 12h2"></path><path
+                    d="m6.34 17.66-1.41-1.41"></path><path
+                    d="m19.07 4.93-1.41 1.41"></path></svg>
+                <svg class="theme-icon-moon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24" height="24" viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"><path
+                    d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6.5 6.5 0 0 0 8.268 8.268c.344-.215.825-.003.803.401"></path></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <button id="sidebarCollapseToggle" type="button"
+          aria-controls="dashboardSidebar"
+          aria-expanded="true" aria-label="Thu gọn thanh điều hướng">
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+
+        <!-- Owl Mascot Widget Left Bottom -->
+        <div role="complementary" aria-label="TART buddy"
+          class="sidebar-mascot-panel glass-card rounded-3xl p-3 text-center relative overflow-hidden">
+          <div class="relative z-10 flex flex-col items-center">
+            <div class="sidebar-mascot-frame relative">
+              <img src="~/assets/images/Sidebar/study-sidebar-buddy-owl.webp" asp-append-version="true"
+                alt="Linh vật cú TART"
+                class="drop-shadow-md">
+            </div>
+            <p
+              class="text-sm font-extrabold text-slate-800 dark:text-slate-100 px-2 mt-3 leading-5">
+              Cùng TART chinh phục tiếng Anh mỗi ngày!
+            </p>
+            <button onclick="triggerFeedbackModal()"
+              class="w-full min-h-[44px] mt-3 px-3 bg-blue-50 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-slate-700 text-blue-600 dark:text-slate-200 text-sm font-bold rounded-2xl transition-all border border-blue-200 dark:border-slate-700 flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24"
+                viewBox="0 0 24 24" fill="none"
+                stroke="currentColor"
+                stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round"
+                class="size-4" aria-hidden="true"><path
+                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path
+                  d="M12 7v6"></path><path
+                  d="M9 10h6"></path></svg>
+              Góp ý cho trang web
+            </button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- MAIN CONTENT AREA -->
+      @RenderBody()
+    </div>
+
+    @await RenderSectionAsync("Modals", required: false)
+
+    <div id="websiteFeedbackDialog" hidden>
+      <section class="website-feedback-card" role="dialog" aria-modal="true"
+        aria-labelledby="websiteFeedbackTitle"
+        aria-describedby="websiteFeedbackDescription">
+        <header class="website-feedback-header">
+          <span class="website-feedback-icon" aria-hidden="true"><i
+              class="fa-regular fa-message"></i></span>
+          <div class="website-feedback-heading">
+            <h2 id="websiteFeedbackTitle">Góp ý cho TART</h2>
+            <p id="websiteFeedbackDescription">Ý tưởng của bạn giúp TART tốt hơn
+              mỗi ngày.</p>
+          </div>
+          <button type="button" id="websiteFeedbackClose"
+            class="website-feedback-close" aria-label="Đóng góp ý"><i
+              class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </header>
+        <div class="website-feedback-body">
+          <span class="website-feedback-label">LOẠI GÓP Ý</span>
+          <div class="website-feedback-types" role="group"
+            aria-label="Loại góp ý">
+            <button type="button" class="website-feedback-type"
+              data-feedback-type="feature" aria-pressed="true">Đề xuất tính năng
+              mới</button>
+            <button type="button" class="website-feedback-type"
+              data-feedback-type="design" aria-pressed="false">Giao diện khó
+              dùng</button>
+            <button type="button" class="website-feedback-type"
+              data-feedback-type="content" aria-pressed="false">Nội dung
+              học</button>
+            <button type="button" class="website-feedback-type"
+              data-feedback-type="other" aria-pressed="false">Khác</button>
+          </div>
+          <label for="websiteFeedbackText" class="website-feedback-label">NỘI
+            DUNG GÓP Ý</label>
+          <textarea id="websiteFeedbackText" maxlength="1000"
+            placeholder="Ví dụ: mong có chế độ ôn nhanh 5 phút trước khi đi thi..."
+            aria-label="Nội dung góp ý"></textarea>
+          <div class="website-feedback-count-row">
+            <p id="websiteFeedbackStatus" class="website-feedback-status"
+              role="status" aria-live="polite"></p>
+            <span id="websiteFeedbackCount" class="website-feedback-count"
+              aria-live="polite">0/1000</span>
+          </div>
+        </div>
+        <footer class="website-feedback-footer">
+          <div class="website-feedback-actions">
+            <button type="button" id="websiteFeedbackCancel">Hủy</button>
+            <button type="button" id="websiteFeedbackSubmit">Gửi góp ý</button>
+          </div>
+        </footer>
+      </section>
+    </div>
+
+    <!-- Script chung của Sidebar -->
+    <script src="~/assets/js/LayoutSidebar/sidebar.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+  </body>
+</html>

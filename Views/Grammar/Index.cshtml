@@ -1,0 +1,735 @@
+@{
+    ViewData["Title"] = "Ngữ Pháp - Grammar";
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml"; 
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/assets/css/Grammar/grammar-main.css" asp-append-version="true" />
+}
+
+      <!-- MAIN CONTENT AREA -->
+      <main id="grammarPage">
+        <div id="grammarCatalog">
+          <section class="grammar-hero" aria-labelledby="pageTitle">
+            <div class="grammar-hero-content">
+              <div class="grammar-hero-top">
+                <div class="grammar-hero-copy">
+                  <div class="grammar-title-row">
+                    <span class="grammar-title-icon" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                        height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-book-open"><path
+                          d="M12 7v14"></path><path
+                          d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path>
+                        </svg>
+                    </span>
+                    <div class="grammar-title-copy">
+                      <h1 id="pageTitle">Các chủ đề ngữ pháp</h1>
+                      <p class="grammar-subtitle">Luyện tập các chủ đề ngữ pháp
+                        trọng tâm cho TOEIC &amp; VSTEP.</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="grammar-stats" aria-label="Thống kê học tập">
+                  <div class="grammar-stat">
+                    <div class="grammar-stat-label">
+                      <span class="grammar-stat-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                      </span>
+                      <span>Câu đã làm</span>
+                    </div>
+                    <div class="grammar-stat-value" id="answeredCount">0</div>
+                  </div>
+                  <div class="grammar-stat">
+                    <div class="grammar-stat-label">
+                      <span class="grammar-stat-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+                      </span>
+                      <span>Chủ đề</span>
+                    </div>
+                    <div class="grammar-stat-value" id="topicCount">30</div>
+                  </div>
+                  <div class="grammar-stat">
+                    <div class="grammar-stat-label">
+                      <span class="grammar-stat-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                      </span>
+                      <span>Điểm yếu</span>
+                    </div>
+                    <div class="grammar-stat-value" id="weakCount">0</div>
+                  </div>
+                </div>
+              </div>
+              <div class="grammar-progress-wrap">
+                <div class="grammar-progress-label">
+                  <span>Độ chính xác tổng</span>
+                  <span class="grammar-progress-value"
+                    id="accuracyValue">0%</span>
+                </div>
+                <div class="grammar-progress-track" role="progressbar"
+                  aria-label="Độ chính xác tổng" aria-valuemin="0"
+                  aria-valuemax="100" aria-valuenow="0">
+                  <div class="grammar-progress-fill" id="accuracyFill"></div>
+                </div>
+              </div>
+            </div>
+            <img class="grammar-mascot" src="~/assets/images/Grammar/grammar-list-buddy-owl.webp" asp-append-version="true"
+              alt="Cú TART đang học ngữ pháp" width="192" height="192"
+              decoding="async">
+          </section>
+
+          <div class="grammar-tabs" role="tablist"
+            aria-label="Danh mục ngữ pháp">
+            <button class="grammar-tab" id="learningTab"
+              type="button" role="tab"
+              aria-selected="true" aria-controls="topicSections">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="lucide lucide-book-open size-4" aria-hidden="true"><path
+                  d="M12 7v14"></path><path
+                  d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+              Học tập
+            </button>
+            <button class="grammar-tab" id="notebookTab"
+              type="button" role="tab"
+              aria-selected="false" aria-controls="topicSections">
+              <i class="fa-regular fa-bookmark"
+                aria-hidden="true"></i>
+              Sổ tay cá nhân (<span class="grammar-tab-count"
+                id="bookmarkCount">0</span>)
+            </button>
+          </div>
+
+          <section class="grammar-tools"
+            aria-label="Tìm và lọc chủ đề">
+            <div class="grammar-tools-left">
+              <label class="grammar-search">
+                <i class="fa-solid fa-magnifying-glass"
+                  aria-hidden="true"></i>
+                <input id="topicSearch" type="search"
+                  placeholder="Tìm chủ đề..."
+                  autocomplete="off"
+                  aria-label="Tìm chủ đề ngữ pháp">
+              </label>
+              <button class="tool-button" id="filterToggle"
+                type="button"
+                aria-expanded="false"
+                aria-controls="filterPanel">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="lucide lucide-sliders-horizontal size-4"
+                  aria-hidden="true"><line x1="21" x2="14" y1="4"
+                    y2="4"></line><line x1="10" x2="3" y1="4"
+                    y2="4"></line><line x1="21" x2="12" y1="12"
+                    y2="12"></line><line x1="8" x2="3" y1="12"
+                    y2="12"></line><line x1="21" x2="16" y1="20"
+                    y2="20"></line><line x1="12" x2="3" y1="20"
+                    y2="20"></line><line x1="14" x2="14" y1="2"
+                    y2="6"></line><line x1="8" x2="8" y1="10"
+                    y2="14"></line><line x1="16" x2="16" y1="18"
+                    y2="22"></line></svg> Bộ lọc
+              </button>
+            </div>
+            <div class="grammar-tools-right">
+              <div class="segmented-control"
+                aria-label="Lọc theo kỳ thi">
+                <button type="button" data-exam="all"
+                  aria-pressed="true">Tất
+                  cả</button>
+                <button type="button" data-exam="TOEIC"
+                  aria-pressed="false">TOEIC</button>
+                <button type="button" data-exam="VSTEP"
+                  aria-pressed="false">VSTEP</button>
+              </div>
+              <div class="segmented-control"
+                aria-label="Sắp xếp chủ đề">
+                <button type="button" data-sort="default"
+                  aria-pressed="true">Mặc
+                  định</button>
+                <button type="button" data-sort="weak"
+                  aria-pressed="false">Điểm
+                  yếu trước</button>
+              </div>
+            </div>
+          </section>
+          <div id="filterBackdrop" class="filter-backdrop" aria-hidden="true"
+            hidden></div>
+          <aside id="filterPanel" class="filter-drawer" aria-label="Bộ lọc"
+            aria-modal="true" role="dialog" tabindex="-1" hidden>
+            <header class="filter-drawer-header">
+              <span class="filter-drawer-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round"><line x1="4" x2="4" y1="21"
+                    y2="14"></line><line x1="4" x2="4" y1="10"
+                    y2="3"></line><line x1="12" x2="12" y1="21"
+                    y2="12"></line><line x1="12" x2="12" y1="8"
+                    y2="3"></line><line x1="20" x2="20" y1="21"
+                    y2="16"></line><line x1="20" x2="20" y1="12"
+                    y2="3"></line><line x1="2" x2="6" y1="14"
+                    y2="14"></line><line x1="10" x2="14" y1="8"
+                    y2="8"></line><line x1="18" x2="22" y1="16"
+                    y2="16"></line></svg>
+              </span>
+              <div class="filter-drawer-title"><strong>Bộ lọc</strong><span>Lọc
+                  và sắp xếp danh sách</span></div>
+              <button type="button" id="filterClose" class="filter-close"
+                aria-label="Đóng bộ lọc" title="Đóng">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                  viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                  stroke-width="2" stroke-linecap="round"
+                  stroke-linejoin="round" aria-hidden="true"><path
+                    d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+              </button>
+            </header>
+            <div class="filter-drawer-content">
+              <section class="filter-group"
+                aria-label="Lọc theo nhóm chủ đề ngữ pháp">
+                <h2>LỌC THEO NHÓM CHỦ ĐỀ NGỮ PHÁP</h2>
+                <div class="filter-options" id="categoryFilters">
+                  <button class="category-filter filter-option" type="button"
+                    data-category="all" aria-pressed="true">Tất cả chủ
+                    đề</button>
+                </div>
+              </section>
+              <section class="filter-group" aria-label="Kỳ thi">
+                <h2>KỲ THI</h2>
+                <div class="filter-options">
+                  <button class="filter-option" type="button" data-exam="all"
+                    aria-pressed="true">Tất cả</button>
+                  <button class="filter-option" type="button" data-exam="TOEIC"
+                    aria-pressed="false">TOEIC</button>
+                  <button class="filter-option" type="button" data-exam="VSTEP"
+                    aria-pressed="false">VSTEP</button>
+                </div>
+              </section>
+              <section class="filter-group" aria-label="Sắp xếp">
+                <h2>SẮP XẾP</h2>
+                <div class="filter-options">
+                  <button class="filter-option" type="button"
+                    data-sort="default" aria-pressed="true">Mặc định</button>
+                  <button class="filter-option" type="button" data-sort="weak"
+                    aria-pressed="false">Điểm yếu trước</button>
+                </div>
+              </section>
+            </div>
+            <footer class="filter-drawer-footer">
+              <button type="button" id="filterReset" class="filter-reset"
+                disabled>Xóa bộ
+                lọc</button>
+            </footer>
+          </aside>
+
+          <div id="topicSections" role="tabpanel"
+            aria-labelledby="learningTab"></div>
+          <div id="emptyState">
+            <i class="fa-solid fa-magnifying-glass mb-2 text-xl"
+              aria-hidden="true"></i>
+            <p class="m-0 font-bold">Không tìm thấy chủ đề phù
+              hợp.</p>
+            <p class="mb-0 mt-1 text-xs">Thử đổi từ khóa hoặc bộ lọc
+              nhé.</p>
+          </div>
+        </div>
+        <section id="practicePage" class="practice-page" hidden
+          aria-labelledby="practiceTitle">
+          <div class="practice-content">
+            <nav aria-label="Breadcrumb" class="practice-breadcrumb">
+              <a class="practice-breadcrumb-link" aria-label="Trang chủ" href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house size-3.5"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+              </a>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3.5 shrink-0 text-muted-foreground/60" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+              <span class="practice-breadcrumb-item">
+                <a class="practice-breadcrumb-link" href="/Grammar">Ngữ pháp</a>
+              </span>
+              <span class="practice-breadcrumb-item" id="practiceTopicCrumbWrap">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3.5 shrink-0 text-muted-foreground/60" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+                <span class="practice-breadcrumb-link" id="practiceTopicCrumb">Các thì hiện tại</span>
+              </span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right size-3.5 shrink-0 text-muted-foreground/60" aria-hidden="true"><path d="m9 18 6-6-6-6"></path></svg>
+              <span class="practice-breadcrumb-current" id="practiceBreadcrumbTitle" aria-current="page">Luyện</span>
+            </nav>
+            <header class="practice-session-header">
+              <div class="mini-test-status" id="miniTestStatus"
+                hidden>
+                <span class="mini-test-status-label"><i
+                    class="fa-solid fa-list-check"
+                    aria-hidden="true"></i>
+                  Câu <strong
+                    id="miniTestQuestionNumber">1</strong> /
+                  50
+                </span>
+                <span class="mini-test-timer"
+                  id="miniTestTimerWrap" role="timer"
+                  aria-live="off">
+                  <i class="fa-regular fa-clock"
+                    aria-hidden="true"></i>
+                  <span id="miniTestTimer">01:00</span>
+                </span>
+              </div>
+              <div class="practice-header-main">
+                <button class="practice-dialog-close"
+                  id="practiceClose" type="button"
+                  aria-label="Quay lại danh sách chủ đề">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                </button>
+                <div class="practice-heading">
+                  <h2 id="practiceTitle">Luyện tập ngữ
+                    pháp</h2>
+                  <div id="practiceProgress"
+                    aria-live="polite"></div>
+                </div>
+                <div class="practice-actions"
+                  aria-label="Công cụ luyện tập">
+                  <button class="practice-action"
+                    id="practiceTheoryToggle"
+                    type="button" aria-pressed="false"
+                    aria-controls="grammarTheoryDialog">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open">
+                      <path d="M12 7v14"></path>
+                      <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path>
+                    </svg>
+                    <span>Lý thuyết</span>
+                  </button>
+                  <button class="practice-action"
+                    id="practiceTranslationToggle"
+                    type="button" aria-pressed="false"
+                    aria-controls="practiceQuestionTranslation"
+                    title="Bật hoặc tắt bản dịch tiếng Việt">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-languages"><path d="m5 8 6 6">
+                  </path><path d="m4 14 6-6 2-3">
+                  </path><path d="M2 5h12"></path><path d="M7 2h1"></path>
+                  <path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path>
+                  </svg>
+                    <span>Đa ngữ</span>
+                  </button>
+                  <button class="practice-action"
+                    id="practiceExplainToggle"
+                    type="button" aria-pressed="false"
+                    aria-controls="practiceOptions" disabled
+                    title="Hiện hoặc ẩn giải thích dưới từng đáp án">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
+                    <span>Giải thích đáp án</span>
+                  </button>
+                  <button class="practice-action"
+                    id="practiceBookmarkToggle"
+                    type="button" aria-pressed="false"
+                    aria-label="Đánh dấu câu hỏi">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+                    <span>Đánh dấu</span>
+                  </button>
+                  <button class="practice-action"
+                    id="practiceReportToggle" type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+                    <span>Báo lỗi</span>
+                  </button>
+                  <button class="practice-action"
+                    id="practiceFeedbackToggle"
+                    type="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square-plus"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" x2="15" y1="10" y2="10"/><line x1="12" x2="12" y1="7" y2="13"/></svg>
+                    <span>Góp ý</span>
+                  </button>
+                  <button class="practice-action"
+                    id="practiceQuestionMapToggle"
+                    type="button" aria-expanded="false"
+                    aria-controls="practiceQuestionMap"
+                    aria-haspopup="dialog">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                    <span>Bản đồ câu</span>
+                  </button>
+                </div>
+              </div>
+              <div class="practice-progress-track"
+                role="progressbar"
+                aria-label="Tiến độ bài luyện tập"
+                aria-valuemin="0"
+                aria-valuemax="100" aria-valuenow="0">
+                <div class="practice-progress-fill"
+                  id="practiceProgressFill"></div>
+              </div>
+            </header>
+            <div class="practice-layout">
+              <div class="practice-question-column">
+                <section class="practice-question-panel"
+                  aria-label="Câu hỏi">
+                  <span class="practice-prompt-badge"
+                    id="practicePromptBadge">CHỌN ĐÁP ÁN
+                    ĐÚNG ĐỂ HOÀN THÀNH CÂU</span>
+                  <p id="practiceQuestion"></p>
+                  <div id="practiceOptions"></div>
+                  <div id="practiceQuestionTranslation"
+                    class="practice-question-translation"
+                    lang="vi" hidden>
+                    <span class="practice-question-translation-label">NGHĨA CÂU HỎI</span>
+                    <p class="practice-question-translation-text" id="practiceQuestionTranslationText"></p>
+                  </div>
+                  <p id="practiceFeedback" role="status"
+                    aria-live="polite"></p>
+                </section>
+                <div class="practice-next-row">
+                  <button id="practicePrevious" type="button" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-left"><path d="m15 18-6-6 6-6"/></svg>
+                    <span>Câu trước</span>
+                  </button>
+                  <button id="practiceNext" type="button" disabled>
+                    <span id="practiceNextLabel">Câu tiếp theo</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg>
+                  </button>
+                </div>
+              </div>
+              <aside class="practice-explanation-panel"
+                id="practiceExplanationPanel"
+                aria-label="Hướng dẫn cách suy luận"
+                aria-live="polite">
+                <div id="practiceResultBanner"
+                  class="practice-result-banner" hidden>
+                  <span class="practice-result-status"><i
+                      id="practiceResultIcon"
+                      class="fa-regular fa-circle-xmark"
+                      aria-hidden="true"></i><span
+                      id="practiceResultText"></span></span>
+                  <span class="practice-result-answer"
+                    id="practiceCorrectLetter"></span>
+                </div>
+                <h3 class="practice-explanation-heading">CÁCH
+                  SUY LUẬN</h3>
+                <div class="practice-guidance-placeholder">
+                  <span class="practice-guidance-icon"><i
+                      class="fa-regular fa-lightbulb"
+                      aria-hidden="true"></i></span>
+                  <strong>Hướng dẫn suy luận</strong>
+                </div>
+                <div class="practice-explanation-body"
+                  id="practiceExplanation"></div>
+                <div class="practice-answer-summary"
+                  id="practiceAnswerSummary" hidden>
+                  <i class="fa-regular fa-circle-check"
+                    aria-hidden="true"></i>
+                  <span id="practiceAnswerText"></span>
+                </div>
+                <section class="practice-grammar-reminder"
+                  id="practiceGrammarReminder" hidden>
+                  <h3><i class="fa-solid fa-graduation-cap"
+                      aria-hidden="true"></i> NGỮ PHÁP CẦN
+                    NHỚ</h3>
+                  <p id="practiceGrammarRule"></p>
+                  <button class="practice-theory-link"
+                    id="practiceFullTheory" type="button">
+                    <i class="fa-solid fa-book-open"
+                      aria-hidden="true"></i> Xem lý
+                    thuyết đầy đủ
+                  </button>
+                </section>
+              </aside>
+            </div>
+          </div>
+        </section>
+      </main>
+
+@section Modals {
+    <!-- Grammar dialogs (outside #dashboardLayout because the JS makes the layout inert while the question map is open) -->
+    <div id="grammarTheoryDialog" role="dialog" aria-modal="true" aria-label="Lý thuyết" tabindex="-1" hidden>
+      <div class="grammar-theory-window">
+        <header class="grammar-theory-header">
+          <div class="grammar-theory-header-left">
+            <span class="grammar-theory-header-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+            </span>
+            <div class="grammar-theory-header-copy">
+              <h2 id="grammarTheoryDialogTitle">Lý thuyết</h2>
+              <p id="grammarTheoryDialogSubtitle">Các thì hiện tại</p>
+            </div>
+          </div>
+          <div id="theoryToast" class="theory-toast" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+            <span>Đã lưu vào sổ tay cá nhân</span>
+          </div>
+          <button id="grammarTheoryClose" type="button" aria-label="Đóng">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </header>
+
+        <div class="grammar-theory-scroll premium-scrollbar">
+          <div class="grammar-theory-content">
+            <!-- Hero section: Golden rules, Quick tips, Mascot -->
+            <section class="grammar-theory-hero">
+              <article class="grammar-theory-card grammar-theory-golden">
+                <div class="grammar-theory-golden-decor" aria-hidden="true"></div>
+                <div class="grammar-theory-card-badge">
+                  <span class="grammar-theory-badge-icon badge-golden">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-quote"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path></svg>
+                  </span>
+                  <span class="grammar-theory-badge-text text-golden">Quy tắc vàng:</span>
+                </div>
+                <div class="grammar-theory-golden-rules" id="theoryGoldenRules">
+                  <p><span>S + V(s/es)</span></p>
+                  <p><span>S + am/is/are + V-ing</span></p>
+                </div>
+                <p class="grammar-theory-summary" id="theorySummary">Nắm chắc quy tắc này để tăng tốc khi gặp câu hỏi ngữ pháp trong bài thi.</p>
+              </article>
+
+              <article class="grammar-theory-card grammar-theory-quick">
+                <div class="grammar-theory-card-badge">
+                  <span class="grammar-theory-badge-icon badge-info">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>
+                  </span>
+                  <h3 class="grammar-theory-badge-title text-info">Mẹo nhớ nhanh</h3>
+                </div>
+                <p class="grammar-theory-quick-intro" id="theoryQuickIntro">Trước khi sang phần luyện tập, tự kiểm tra nhanh:</p>
+                <ul class="grammar-theory-quick-list" id="theoryQuickList">
+                  <li class="grammar-theory-quick-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                    <span><span>He, She, It, danh từ số ít</span><strong>→ V(s/es)</strong></span>
+                  </li>
+                  <li class="grammar-theory-quick-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                    <span><span>We, They, danh từ số nhiều</span><strong>→ V nguyên mẫu</strong></span>
+                  </li>
+                </ul>
+              </article>
+
+              <aside class="grammar-theory-card grammar-theory-mascot" aria-hidden="true">
+                <div class="grammar-theory-mascot-glow"></div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles mascot-sparkle-top" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles mascot-sparkle-left" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg>
+                <img src="~/assets/images/Grammar/grammar-theory-buddy-owl.webp" asp-append-version="true" alt="Tart Owl">
+              </aside>
+            </section>
+
+            <!-- Grid cards: Mental model, Fast formulas, Usage, Mistakes, Examples -->
+            <div class="grammar-theory-grid-layout">
+              <!-- Mental Model (col-span-3) -->
+              <section class="grammar-theory-card grammar-theory-mental">
+                <div class="grammar-theory-card-badge">
+                  <span class="grammar-theory-badge-icon badge-info">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-brain"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"></path><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"></path><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"></path><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"></path><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"></path><path d="M3.477 10.896a4 4 0 0 1 .585-.396"></path><path d="M19.938 10.5a4 4 0 0 1 .585.396"></path><path d="M6 18a4 4 0 0 1-1.967-.516"></path><path d="M19.967 17.484A4 4 0 0 1 18 18"></path></svg>
+                  </span>
+                  <h3 class="grammar-theory-badge-title text-info">Mental model</h3>
+                </div>
+                <p class="grammar-theory-intro-lead">Tư duy cực nhanh:</p>
+                <div class="grammar-theory-model">
+                  <span id="theoryModelLeft" class="theory-model-pill pill-purple">Ai / Điều gì</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                  <span id="theoryModelRight" class="theory-model-pill pill-green">làm gì?</span>
+                </div>
+                <p class="grammar-theory-intro" id="theoryMentalDescription">Thì hiện tại trong tiếng Anh gồm 4 thì chính: Hiện tại đơn (Present Simple), Hiện tại tiếp diễn (Present Continuous), Hiện tại hoàn thành (Present Perfect) và Hiện tại hoàn thành tiếp diễn (Present Perfect Continuous).</p>
+              </section>
+
+              <!-- Formulas (col-span-3) -->
+              <section class="grammar-theory-card grammar-theory-formulas">
+                <div class="grammar-theory-card-badge">
+                  <span class="grammar-theory-badge-icon badge-vocabulary">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-scroll-text"><path d="M15 12h-5"></path><path d="M15 8h-5"></path><path d="M19 17V5a2 2 0 0 0-2-2H4"></path><path d="M8 21h12a2 2 0 0 0 2-2v-1a1 1 0 0 0-1-1H11a1 1 0 0 0-1 1v1a2 2 0 1 1-4 0V5a2 2 0 1 0-4 0v2a1 1 0 0 0 1 1h3"></path></svg>
+                  </span>
+                  <h3 class="grammar-theory-badge-title text-vocabulary">Công thức nhanh</h3>
+                </div>
+                <div class="grammar-theory-formula-list" id="theoryFormulaList">
+                  <div class="grammar-theory-formula">
+                    <code>S + V(s/es)</code>
+                    <button type="button" aria-label="Lưu công thức"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg></button>
+                  </div>
+                  <div class="grammar-theory-formula">
+                    <code>S + am/is/are + V-ing</code>
+                    <button type="button" aria-label="Lưu công thức"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg></button>
+                  </div>
+                  <div class="grammar-theory-formula">
+                    <code>S + have/has + V3/ed</code>
+                    <button type="button" aria-label="Lưu công thức"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg></button>
+                  </div>
+                  <div class="grammar-theory-formula">
+                    <code>S + have/has + been + V-ing</code>
+                    <button type="button" aria-label="Lưu công thức"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg></button>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Usage (col-span-6) -->
+              <section class="grammar-theory-card grammar-theory-usage">
+                <div class="grammar-theory-card-badge">
+                  <span class="grammar-theory-badge-icon badge-reading">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                  </span>
+                  <h3 class="grammar-theory-badge-title text-reading">Cách dùng</h3>
+                </div>
+                <div class="grammar-theory-usage-columns" id="theoryUsageList">
+                  <div class="grammar-theory-usage-box usage-singular">
+                    <div class="usage-box-header">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>
+                      <strong>Số ít</strong>
+                    </div>
+                    <p class="usage-box-text">He, She, It, danh từ số ít, Each, Every</p>
+                    <p class="usage-box-result text-purple">→ V(s/es)</p>
+                  </div>
+                  <div class="grammar-theory-usage-box usage-plural">
+                    <div class="usage-box-header">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round"><path d="M18 21a8 8 0 0 0-16 0"></path><circle cx="10" cy="8" r="5"></circle><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"></path></svg>
+                      <strong>Số nhiều</strong>
+                    </div>
+                    <p class="usage-box-text">We, They, danh từ số nhiều, These, Those</p>
+                    <p class="usage-box-result text-green">→ V nguyên mẫu</p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Mistakes (col-span-6) -->
+              <section class="grammar-theory-card grammar-theory-mistakes">
+                <div class="grammar-theory-card-badge">
+                  <span class="grammar-theory-badge-icon badge-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-triangle-alert"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"></path><path d="M12 9v4"></path><path d="M12 17h.01"></path></svg>
+                  </span>
+                  <h3 class="grammar-theory-badge-title text-warning">Bẫy thường gặp</h3>
+                </div>
+                <div class="grammar-theory-mistakes-list" id="theoryMistakes">
+                  <div class="mistake-item">
+                    <div class="mistake-item-header">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg>
+                      <span>Bẫy 1: Stative verbs không dùng tiếp diễn</span>
+                    </div>
+                    <p class="mistake-item-body">Các động từ như know, believe, belong, contain, seem, want, need, understand, prefer — KHÔNG bao giờ chia ở dạng tiếp diễn. Sai: I am knowing the answer. Đúng: I know the answer.</p>
+                  </div>
+                  <div class="mistake-item">
+                    <div class="mistake-item-header">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg>
+                      <span>Bẫy 2: "Since" chỉ mốc thời gian, "For" chỉ khoảng thời gian</span>
+                    </div>
+                    <p class="mistake-item-body">TOEIC Part 5 thường đánh lừa bằng cách đặt since với khoảng thời gian (since two hours — sai) hoặc for với mốc thời gian (for last month — sai). Since + mốc: since Monday, since 2020. For + khoảng: for two hours, for a week.</p>
+                  </div>
+                  <div class="mistake-item">
+                    <div class="mistake-item-header">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x"><circle cx="12" cy="12" r="10"></circle><path d="m15 9-6 6"></path><path d="m9 9 6 6"></path></svg>
+                      <span>Bẫy 3: Nhầm Present Perfect và Present Perfect Continuous</span>
+                    </div>
+                    <p class="mistake-item-body">Present Perfect nhấn mạnh kết quả (I have written 10 emails). Present Perfect Continuous nhấn mạnh quá trình liên tục (I have been writing emails all morning). TOEIC Part 5 thường hỏi sự khác biệt này.</p>
+                  </div>
+                </div>
+              </section>
+
+              <!-- Examples (col-span-6) -->
+              <section class="grammar-theory-card grammar-theory-examples">
+                <div class="grammar-theory-card-badge">
+                  <span class="grammar-theory-badge-icon badge-pink">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-sparkles"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg>
+                  </span>
+                  <h3 class="grammar-theory-badge-title text-pink">Ví dụ</h3>
+                </div>
+                <div class="grammar-theory-examples-list" id="theoryExamples">
+                  <div class="example-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-quote quote-icon"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path></svg>
+                    <div class="example-copy">
+                      <p class="example-text">The company launches its new product line every quarter.</p>
+                      <p class="example-subtext">Công ty ra mắt dòng sản phẩm mới mỗi quý. (Present Simple — thói quen định kỳ)</p>
+                    </div>
+                    <button type="button" aria-label="Lưu ví dụ"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg></button>
+                  </div>
+                  <div class="example-item">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-quote quote-icon"><path d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path><path d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"></path></svg>
+                    <div class="example-copy">
+                      <p class="example-text">The marketing team is preparing the campaign materials this week.</p>
+                      <p class="example-subtext">Đội ngũ tiếp thị đang chuẩn bị tài liệu chiến dịch trong tuần này. (Present Continuous — tình huống tạm thời)</p>
+                    </div>
+                    <button type="button" aria-label="Lưu ví dụ"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bookmark"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"></path></svg></button>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="practiceQuestionMap" class="practice-question-map" hidden>
+      <aside class="practice-map-drawer" role="dialog" aria-modal="true"
+        aria-labelledby="practiceQuestionMapTitle">
+        <header class="practice-map-header">
+          <span class="practice-map-header-icon" aria-hidden="true"><i
+              class="fa-solid fa-border-all"></i></span>
+          <div class="practice-map-header-copy">
+            <h2 id="practiceQuestionMapTitle">Bản đồ câu hỏi</h2>
+            <p id="practiceQuestionMapProgress"></p>
+          </div>
+          <button id="practiceQuestionMapClose" type="button"
+            aria-label="Đóng bản đồ câu hỏi">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </header>
+        <div class="practice-map-filters" role="group"
+          aria-label="Lọc câu hỏi">
+          <button class="practice-map-filter" type="button"
+            data-map-filter="all" aria-pressed="true">Tất
+            cả</button>
+          <button class="practice-map-filter" type="button"
+            data-map-filter="unanswered" aria-pressed="false">Chưa
+            làm</button>
+          <button class="practice-map-filter" type="button"
+            data-map-filter="incorrect" aria-pressed="false">Làm
+            sai</button>
+        </div>
+        <div class="practice-map-scroll"
+          id="practiceQuestionMapContent"></div>
+        <p class="practice-map-legend">
+          <span><i class="practice-map-dot current"></i> Đang
+            làm</span>
+          <span><i class="practice-map-dot correct"></i> Đúng</span>
+          <span><i class="practice-map-dot incorrect"></i> Sai</span>
+          <span><i class="practice-map-dot"></i> Chưa làm</span>
+        </p>
+      </aside>
+    </div>
+
+    <div id="practiceReportDialog" hidden>
+      <div class="practice-report-card" role="dialog" aria-modal="true"
+        aria-labelledby="practiceReportTitle">
+        <h2 id="practiceReportTitle">Báo lỗi câu hỏi</h2>
+        <p class="practice-report-question"
+          id="practiceReportQuestion"></p>
+        <textarea id="practiceReportDetails"
+          placeholder="Mô tả lỗi bạn gặp (đáp án sai, nội dung khó hiểu…)"
+          aria-label="Mô tả lỗi"></textarea>
+        <p class="practice-report-status" id="practiceReportStatus"
+          role="status" aria-live="polite"></p>
+        <div class="practice-report-actions">
+          <button id="practiceReportCancel" type="button">Hủy</button>
+          <button id="practiceReportSubmit" type="button">Gửi báo
+            lỗi</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dialog xác nhận làm lại chủ đề -->
+    <div id="resetTopicModal" class="grammar-dialog-backdrop" hidden>
+      <div role="dialog" aria-modal="true" aria-label="Làm lại chủ đề này?" tabindex="-1" class="relative z-10 flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-3xl border border-border bg-card shadow-2xl outline-none animate-fade-up motion-reduce:animate-none sm:max-w-md bg-white">
+        <div class="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
+          <div class="flex items-center gap-3">
+            <span class="flex size-10 items-center justify-center rounded-2xl bg-primary/10 text-primary" style="width:40px;height:40px;border-radius:16px;background:rgba(118,87,255,0.12);color:#7657ff;display:flex;align-items:center;justify-content:center;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw size-5"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+            </span>
+            <div>
+              <p class="font-display text-base font-bold text-foreground" style="margin:0;font-size:16px;font-weight:700;color:#1e293b;">Làm lại chủ đề này?</p>
+            </div>
+          </div>
+          <button id="resetTopicClose" type="button" class="inline-flex size-11 shrink-0 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary lg:size-9" style="width:36px;height:36px;border:none;background:transparent;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#64748b;" aria-label="Đóng">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x size-4"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </div>
+        <div class="premium-scrollbar min-h-0 flex-1 overflow-y-auto px-5 py-5" style="padding:20px;">
+          <p class="text-sm leading-relaxed text-muted-foreground" style="margin:0;font-size:14px;line-height:1.6;color:#64748b;">Toàn bộ đáp án đã làm ở chủ đề này sẽ bị xoá và độ chính xác của chủ đề trở về 0.</p>
+        </div>
+        <div class="border-t border-border px-5 py-4" style="border-top:1px solid #e2e8f0;padding:16px 20px;">
+          <div class="flex justify-end gap-2" style="display:flex;justify-content:flex-end;gap:10px;">
+            <button id="resetTopicCancel" type="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-all border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2" style="height:40px;padding:0 16px;border-radius:10px;border:1px solid #e2e8f0;background:#ffffff;font-size:13.5px;font-weight:600;color:#475569;cursor:pointer;">Huỷ</button>
+            <button id="resetTopicConfirm" type="button" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-all bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2" style="height:40px;padding:0 16px;border-radius:10px;border:none;background:#ef4444;font-size:13.5px;font-weight:600;color:#ffffff;cursor:pointer;">Làm lại từ đầu</button>
+          </div>
+        </div>
+      </div>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/assets/js/Grammar/grammar-main.js" asp-append-version="true"></script>
+}

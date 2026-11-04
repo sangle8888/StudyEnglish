@@ -1,0 +1,1189 @@
+﻿@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tiếng Anh Ra Trường - Học Tiếng Anh Vững Vàng</title>
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <!-- FontAwesome Icons -->
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <!-- Google Fonts: Be Vietnam Pro -->
+        <link
+            href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
+            rel="stylesheet">
+            
+    <script src="@Url.Content("~/assets/js/Home/home-index-01.js")"></script>
+<link rel="stylesheet" href="@Url.Content("~/assets/css/Home/home-index.css")">
+    </head>
+    <body
+        class="font-sans antialiased text-slate-800 dark:text-slate-100 bg-white dark:bg-slate-900 transition-colors duration-300 min-h-screen flex flex-col">
+
+        <header
+            class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-colors duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-20">
+
+                    <!-- Logo -->
+                    <div
+                        class="flex-shrink-0 flex items-center gap-3 cursor-pointer">
+                        <div
+                            class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30 transform hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-graduation-cap text-2xl"></i>
+                        </div>
+                        <div class="flex flex-col">
+                            <span
+                                class="text-xs font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase">Tiếng
+                                Anh</span>
+                            <span
+                                class="text-xl font-extrabold text-slate-900 dark:text-white leading-tight">Ra
+                                Trường</span>
+                        </div>
+                    </div>
+
+                    <!-- Desktop Menu -->
+                    <nav
+                        class="hidden md:flex items-center space-x-1 bg-slate-100/80 dark:bg-slate-800/80 p-1.5 rounded-full border border-slate-200/50 dark:border-slate-700/50">
+                        <a href="#stats"
+                            class="px-5 py-2 rounded-full text-sm font-semibold text-blue-600 dark:text-blue-400 bg-white dark:bg-slate-700 shadow-sm transition">Số
+                            liệu</a>
+                        <a href="#foundation"
+                            class="px-5 py-2 rounded-full text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Nền
+                            tảng</a>
+                        <a href="#nghe-doc"
+                            class="px-5 py-2 rounded-full text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Nghe
+                            + Đọc</a>
+                        <a href="#thi-thu"
+                            class="px-5 py-2 rounded-full text-sm font-medium text-slate-600 dark:text-slate-300 hover:text-blue-600 dark:hover:text-blue-400 transition">Thi
+                            thử</a>
+                    </nav>
+
+                    <!-- Right Actions -->
+                    <div class="hidden items-center gap-2 md:flex">
+                        <button id="themeToggle" type="button"
+                            aria-label="Giao diện: Tối. Bấm để đổi."
+                            title="Giao diện: Tối"
+                            class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-600 transition-colors hover:border-blue-400 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 dark:hover:text-white">
+                            <i id="themeIcon" class="fa-solid fa-moon text-lg"
+                                aria-hidden="true"></i>
+                        </button>
+                        <a asp-controller="Login" asp-action="Index"
+                            class="inline-flex h-9 items-center justify-center rounded-xl border border-slate-300 bg-white px-3 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-blue-400 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800">
+                            Đăng nhập
+                        </a>
+                        <a asp-controller="Login" asp-action="Index" asp-fragment="register"
+                            class="inline-flex h-9 items-center justify-center rounded-xl bg-gradient-to-r from-blue-500 to-indigo-500 px-3 text-sm font-semibold text-white shadow-md shadow-blue-500/20 transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500">
+                            Đăng ký
+                        </a>
+                    </div>
+
+                    <!-- Mobile Menu Button -->
+                    <div class="md:hidden flex items-center gap-2">
+                        <button id="mobileThemeToggle" type="button"
+                            aria-label="Giao diện: Tối. Bấm để đổi."
+                            title="Giao diện: Tối"
+                            class="w-9 h-9 rounded-full border border-slate-300 bg-white text-slate-600 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-300 flex items-center justify-center">
+                            <i id="mobileThemeIcon" class="fa-solid fa-moon"
+                                aria-hidden="true"></i>
+                        </button>
+                        <button id="mobileMenuBtn"
+                            class="text-slate-600 dark:text-slate-300 p-2 text-xl">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobileMenu"
+                class="hidden md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-2 pb-6 space-y-3">
+                <a href="#stats"
+                    class="block px-3 py-2 rounded-lg font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-slate-800">Số
+                    liệu</a>
+                <a href="#foundation"
+                    class="block px-3 py-2 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Nền
+                    tảng</a>
+                <a href="#nghe-doc"
+                    class="block px-3 py-2 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Nghe
+                    + Đọc</a>
+                <a href="#thi-thu"
+                    class="block px-3 py-2 rounded-lg font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800">Thi
+                    thử</a>
+                <div
+                    class="pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+                    <a href="dangnhap.html"
+                        class="w-1/2 py-2.5 rounded-xl text-center text-sm font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800">Đăng
+                        nhập</a>
+                    <a href="dangnhap.html#register"
+                        class="w-1/2 py-2.5 rounded-xl text-center text-sm font-semibold text-white bg-blue-600">Đăng
+                        ký</a>
+                </div>
+            </div>
+        </header>
+
+        <section
+            class="relative isolate overflow-hidden hero-bg-light bg-learning-canvas pb-8 pt-5 sm:pb-16 sm:pt-14 lg:pb-20 lg:pt-16">
+            <div
+                class="hero-dot-pattern pointer-events-none absolute inset-0 opacity-40"
+                aria-hidden="true"></div>
+            <div
+                class="pointer-events-none absolute -right-28 top-0 size-[26rem] rounded-full bg-blue-300/20 blur-3xl"
+                aria-hidden="true"></div>
+            <div
+                class="relative mx-auto grid max-w-7xl items-center gap-5 px-4 sm:gap-10 sm:px-6 lg:grid-cols-[1.05fr_.95fr] lg:gap-10">
+                <div class="relative z-10 text-center lg:text-left">
+                    <div
+                        class="flex flex-wrap items-center justify-center gap-2 lg:justify-start">
+                        <span
+                            class="inline-flex items-center gap-1.5 rounded-full border border-blue-200/80 bg-white/85 px-3.5 py-1.5 text-xs font-extrabold text-blue-600 shadow-sm backdrop-blur">
+                            <i class="fa-solid fa-bullseye"></i> TOEIC
+                        </span>
+                        <span
+                            class="inline-flex items-center gap-1.5 rounded-full border border-violet-200/80 bg-white/85 px-3.5 py-1.5 text-xs font-extrabold text-violet-600 shadow-sm backdrop-blur">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            VSTEP
+                        </span>
+                    </div>
+
+                    <h1
+                        class="mt-4 text-[2.05rem] font-black leading-[1.14] sm:mt-6 sm:text-5xl lg:text-[3.3rem]">
+                        <span
+                            class="block py-[0.06em] text-[#123665] dark:text-blue-100">Học
+                            tiếng Anh vững vàng,</span>
+                        <span
+                            class="block py-[0.06em] text-[#123665] dark:text-blue-100">tự
+                            tin ra trường với
+                            <span
+                                class="relative mx-auto mt-1 block w-fit pb-[0.12em] text-blue-600 dark:text-sky-300 lg:mx-0">
+                                <span class="relative z-10">việc tốt, lương
+                                    cao.</span>
+                                <span
+                                    class="absolute bottom-0 left-0 h-1.5 w-[58%] -rotate-2 rounded-full bg-amber-400"
+                                    aria-hidden="true"></span>
+                            </span>
+                        </span>
+                    </h1>
+
+                    <p
+                        class="hero-copy mx-auto mt-3 max-w-xl text-[15px] leading-6 text-slate-600 sm:mt-5 sm:text-lg sm:leading-8 lg:mx-0">
+                        Ngữ pháp, từ vựng, nghe, đọc ... với lời giải chi tiết.
+                        Chế độ phòng thi sát với thi thật.
+                    </p>
+
+                    <div
+                        class="mt-5 flex flex-col items-stretch justify-center gap-3 sm:mt-8 sm:flex-row sm:items-center lg:justify-start">
+                        <a href="dangnhap.html#register"
+                            class="inline-flex h-14 min-h-[44px] w-full items-center justify-center gap-2 whitespace-nowrap rounded-2xl bg-blue-600 px-6 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition hover:-translate-y-0.5 hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 sm:w-[15.5rem] sm:px-8 sm:text-base">
+                            Bắt đầu học miễn phí <i
+                                class="fa-solid fa-arrow-right text-sm"></i>
+                        </a>
+                        <a href="#foundation"
+                            class="inline-flex h-12 min-h-[44px] w-full items-center justify-center gap-2 whitespace-nowrap rounded-2xl border border-slate-300 bg-slate-700 px-6 text-sm font-bold text-white transition hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 sm:h-14 sm:w-[15.5rem] sm:px-8 sm:text-base">
+                            Xem thử một buổi học <i
+                                class="fa-solid fa-arrow-down text-sm"></i>
+                        </a>
+                    </div>
+
+                    <p
+                        class="hero-copy mt-5 flex items-center justify-center gap-2 text-xs font-semibold text-slate-600 lg:justify-start">
+                        <i
+                            class="fa-solid fa-check flex size-4 items-center justify-center rounded-full bg-emerald-100 p-0.5 text-emerald-600"></i>
+                        Đăng ký miễn phí, bắt đầu ngay với các nội dung hấp dẫn.
+                    </p>
+                </div>
+
+                <div
+                    class="relative mx-auto min-h-[360px] w-full max-w-[560px] sm:min-h-[460px] lg:min-h-[500px]">
+                    <div
+                        class="pointer-events-none absolute inset-x-10 bottom-6 h-24 rounded-[50%] bg-blue-400/20 blur-3xl"
+                        aria-hidden="true"></div>
+                    <div
+                        class="absolute inset-x-0 bottom-14 top-0 flex items-end justify-center">
+                        <img src="~/assets/images/Home/home-hero-buddy-owl.webp"
+                            alt="Cú mèo đồng hành học tiếng Anh" width="560"
+                            height="560"
+                            class="hero-mascot pointer-events-none h-auto w-[88%] max-w-[520px] select-none object-contain drop-shadow-[0_24px_30px_rgba(37,99,235,0.22)] animate-float" />
+                    </div>
+
+                    <span
+                        class="hero-float absolute left-0 top-14 inline-flex items-center gap-2 rounded-2xl border border-slate-300/70 bg-slate-700 px-2.5 py-1.5 text-[11px] font-extrabold text-white shadow-lg sm:px-3 sm:py-2 sm:text-xs">
+                        <span
+                            class="flex size-7 items-center justify-center rounded-lg bg-purple-100 text-purple-600"><i
+                                class="fa-solid fa-book-open"></i></span>Ngữ
+                        pháp
+                    </span>
+                    <span
+                        class="hero-float absolute right-0 top-6 inline-flex items-center gap-2 rounded-2xl border border-slate-300/70 bg-slate-700 px-2.5 py-1.5 text-[11px] font-extrabold text-white shadow-lg sm:px-3 sm:py-2 sm:text-xs"
+                        style="animation-delay: 1s">
+                        <span
+                            class="flex size-7 items-center justify-center rounded-lg bg-pink-100 text-pink-600"><i
+                                class="fa-solid fa-font"></i></span>Từ vựng
+                    </span>
+                    <span
+                        class="hero-float absolute bottom-28 left-1 inline-flex items-center gap-2 rounded-2xl border border-slate-300/70 bg-slate-700 px-2.5 py-1.5 text-[11px] font-extrabold text-white shadow-lg sm:bottom-32 sm:px-3 sm:py-2 sm:text-xs"
+                        style="animation-delay: 1.5s">
+                        <span
+                            class="flex size-7 items-center justify-center rounded-lg bg-cyan-100 text-cyan-700"><i
+                                class="fa-solid fa-headphones"></i></span>Nghe
+                    </span>
+                    <span
+                        class="hero-float absolute bottom-24 right-1 inline-flex items-center gap-2 rounded-2xl border border-slate-300/70 bg-slate-700 px-2.5 py-1.5 text-[11px] font-extrabold text-white shadow-lg sm:px-3 sm:py-2 sm:text-xs">
+                        <span
+                            class="flex size-7 items-center justify-center rounded-lg bg-emerald-100 text-emerald-700"><i
+                                class="fa-solid fa-file-lines"></i></span>Đọc
+                    </span>
+                    <div
+                        class="absolute bottom-0 left-1/2 flex w-[94%] max-w-sm -translate-x-1/2 items-center gap-3 rounded-2xl border border-slate-300/70 bg-slate-700 p-3 text-white shadow-xl">
+                        <span
+                            class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-md"><i
+                                class="fa-solid fa-stopwatch text-lg animate-pulse-slow"></i></span>
+                        <div class="min-w-0 flex-1">
+                            <p
+                                class="text-[11px] font-bold uppercase tracking-wider text-blue-300">Đang
+                                luyện</p>
+                            <p class="truncate text-sm font-extrabold">Part 5 ·
+                                Giới từ chỉ thời gian</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="stats"
+            class="relative scroll-mt-20 overflow-hidden border-y border-[#dce9f7] bg-[#f7fbff] py-10 dark:border-slate-700/60 dark:bg-slate-900 sm:py-20">
+            <div
+                class="hero-dot-pattern pointer-events-none absolute inset-0 opacity-30"
+                aria-hidden="true"></div>
+            <div class="relative mx-auto max-w-6xl px-4 sm:px-6">
+                <h2
+                    class="text-center text-[2rem] font-black leading-[1.18] sm:text-5xl">
+                    <span
+                        class="inline-block bg-gradient-to-r from-[#2879ed] via-[#7452ef] to-[#d244ef] bg-clip-text px-1 py-[0.12em] text-transparent">Học
+                        tập và tiến bộ hằng ngày.</span>
+                </h2>
+
+                <div
+                    class="mx-auto mt-10 grid max-w-6xl grid-cols-2 gap-4 sm:gap-5 md:grid-cols-4">
+                    <article class="stats-card stats-blue">
+                        <div class="stats-icon"><i
+                                class="fa-solid fa-users"></i></div>
+                        <p
+                            class="stats-value text-[#155dcc] dark:text-blue-300"><span
+                                class="counter" data-target="4469">0</span>+</p>
+                        <h3>Học viên</h3>
+                        <svg viewBox="0 0 168 80" preserveAspectRatio="none"
+                            aria-hidden="true"><path
+                                d="M0 21c25 13 39 43 69 42 27-1 36-20 57-12 19 8 29-2 42-13v42H0Z"
+                                fill="currentColor"></path><g
+                                fill="currentColor"><circle cx="121" cy="67"
+                                    r="2.5"></circle><circle cx="140" cy="56"
+                                    r="4"></circle><circle cx="156" cy="43"
+                                    r="6"></circle></g></svg>
+                    </article>
+
+                    <article class="stats-card stats-purple">
+                        <div class="stats-icon"><i
+                                class="fa-solid fa-comments"></i></div>
+                        <p
+                            class="stats-value text-[#6534d5] dark:text-purple-300"><span
+                                class="counter"
+                                data-target="16100">0</span>+</p>
+                        <h3>Câu hỏi</h3>
+                        <svg viewBox="0 0 168 80" preserveAspectRatio="none"
+                            aria-hidden="true"><path
+                                d="M0 71c31-8 57 7 91 1 25-5 48-2 77-9v17H0Z"
+                                fill="currentColor" opacity=".7"></path><g
+                                fill="currentColor"><rect x="104" y="61"
+                                    width="11" height="19" rx="4"
+                                    opacity=".35"></rect><rect x="121" y="47"
+                                    width="11" height="33" rx="4"
+                                    opacity=".55"></rect><rect x="138" y="32"
+                                    width="11" height="48" rx="4"
+                                    opacity=".72"></rect><rect x="155" y="18"
+                                    width="11" height="62"
+                                    rx="4"></rect></g></svg>
+                    </article>
+
+                    <article class="stats-card stats-orange">
+                        <div class="stats-icon"><i
+                                class="fa-solid fa-book-open"></i></div>
+                        <p
+                            class="stats-value text-[#e87900] dark:text-orange-300"><span
+                                class="counter" data-target="4514">0</span></p>
+                        <h3>Từ vựng</h3>
+                        <svg viewBox="0 0 168 80" preserveAspectRatio="none"
+                            aria-hidden="true"><path
+                                d="M0 80V69c34-18 64-13 86-14 27-1 42-10 56-27l-10-5 25-12 4 27-10-5c-19 28-41 39-73 40-29 1-50-1-78 7Z"
+                                fill="currentColor"></path><circle cx="155"
+                                cy="67" r="4"
+                                fill="currentColor"></circle></svg>
+                    </article>
+
+                    <article class="stats-card stats-teal">
+                        <div class="stats-icon"><i
+                                class="fa-solid fa-file-circle-check"></i></div>
+                        <p
+                            class="stats-value text-[#168b79] dark:text-teal-300"><span
+                                class="counter" data-target="73">0</span></p>
+                        <h3>Đề thi</h3>
+                        <svg viewBox="0 0 168 80" preserveAspectRatio="none"
+                            aria-hidden="true"><g fill="currentColor"><circle
+                                    cx="143" cy="61" r="29"></circle><circle
+                                    cx="84" cy="65" r="3"></circle><circle
+                                    cx="105" cy="52" r="4.5"></circle></g><path
+                                d="M143 61V32a29 29 0 0 1 27 18Z"
+                                fill="currentColor" opacity=".72"></path><path
+                                d="M143 61V32M143 61l27-11" fill="none"
+                                stroke="white" stroke-width="3"></path></svg>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="foundation"
+            class="foundation-section scroll-mt-20 py-9 sm:py-16 transition-colors duration-300 border-y border-slate-200/70 dark:border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <div class="mb-7">
+                    <h2
+                        class="text-[1.85rem] sm:text-4xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
+                        Luyện ngữ pháp và từ vựng nền tảng
+                    </h2>
+                </div>
+
+                <div
+                    class="grid grid-cols-1 xl:grid-cols-2 gap-6 items-stretch">
+
+                    <!-- CARD 1: TỪ VỰNG -->
+                    <div
+                        class="bg-white dark:bg-slate-900 rounded-[2rem] p-4 sm:p-5 shadow-xl shadow-slate-200/50 dark:shadow-none border border-indigo-100/80 dark:border-slate-800 flex flex-col justify-between transition-all duration-300">
+                        <div>
+                            <div
+                                class="foundation-card-header flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-2xl bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 flex items-center justify-center font-bold">
+                                        <i class="fa-solid fa-font text-lg"></i>
+                                    </div>
+                                    <h3
+                                        class="text-xl font-extrabold text-slate-900 dark:text-white">Từ
+                                        vựng</h3>
+                                </div>
+                                <a href="tuvung.html"
+                                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-purple-500/20 active:scale-95 transition-all">
+                                    <span>Vào học từ vựng</span>
+                                    <i
+                                        class="fa-solid fa-arrow-right text-xs"></i>
+                                </a>
+                            </div>
+
+                            <div
+                                class="vocab-summary rounded-2xl p-5 mt-4 text-center border relative group">
+                                <span
+                                    class="inline-block px-3 py-1 rounded-full bg-white/85 dark:bg-white/10 text-fuchsia-600 dark:text-fuchsia-300 shadow-sm font-bold text-[11px] mb-1">
+                                    Tóm tắt nhanh
+                                </span>
+
+                                <h4
+                                    class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white tracking-wide mb-2">
+                                    access
+                                </h4>
+
+                                <div
+                                    class="flex items-center justify-center gap-3 mb-4 flex-wrap">
+                                    <span
+                                        class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">/'ækses/</span>
+
+                                    <button onclick="playPronunciation('US')"
+                                        class="px-3 py-1 rounded-full bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95">
+                                        <i
+                                            class="fa-solid fa-volume-high text-purple-500"></i>
+                                        US
+                                    </button>
+
+                                    <button onclick="playPronunciation('UK')"
+                                        class="px-3 py-1 rounded-full bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-300 text-xs font-bold transition flex items-center gap-1.5 shadow-sm active:scale-95">
+                                        <i
+                                            class="fa-solid fa-volume-high text-purple-500"></i>
+                                        UK
+                                    </button>
+                                </div>
+
+                                <p
+                                    class="text-base sm:text-lg font-black text-fuchsia-600 dark:text-fuchsia-300">
+                                    quyền truy cập, sự tiếp cận
+                                </p>
+                            </div>
+
+                            <div
+                                class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
+                                <div
+                                    class="p-4 rounded-2xl bg-sky-50/70 dark:bg-slate-800/80 border border-sky-100 dark:border-slate-700">
+                                    <span
+                                        class="text-[10px] font-extrabold tracking-wider text-sky-600 dark:text-sky-400 uppercase block mb-2">
+                                        VÍ DỤ NHỚ NHANH
+                                    </span>
+                                    <p
+                                        class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-slate-200 italic leading-relaxed mb-2">
+                                        “Only authorized employees have access
+                                        to the company database.”
+                                    </p>
+                                    <p
+                                        class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                                        Chỉ nhân viên được ủy quyền mới có quyền
+                                        truy cập cơ sở dữ liệu công ty.
+                                    </p>
+                                </div>
+
+                                <div
+                                    class="p-4 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-900/40">
+                                    <span
+                                        class="text-[10px] font-extrabold tracking-wider text-amber-600 dark:text-amber-400 uppercase block mb-1">
+                                        COLLOCATION
+                                    </span>
+                                    <p
+                                        class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 mb-0.5">
+                                        have access to
+                                    </p>
+                                    <p
+                                        class="text-xs text-slate-500 dark:text-slate-400 mb-3">
+                                        có quyền truy cập vào
+                                    </p>
+
+                                    <span
+                                        class="text-[10px] font-extrabold tracking-wider text-amber-600 dark:text-amber-400 uppercase block mb-0.5 flex items-center gap-1">
+                                        <i class="fa-regular fa-lightbulb"></i>
+                                        MẸO NHỚ
+                                    </span>
+                                    <p
+                                        class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                                        “Access” là đi đến dữ liệu, tức là vào
+                                        và sử dụng nó.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2: NGỮ PHÁP -->
+                    <div
+                        class="bg-white dark:bg-slate-900 rounded-[2rem] p-4 sm:p-5 shadow-xl shadow-slate-200/50 dark:shadow-none border border-indigo-100/80 dark:border-slate-800 flex flex-col justify-between transition-all duration-300">
+                        <div>
+                            <div
+                                class="foundation-card-header flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-2xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center font-bold">
+                                        <i
+                                            class="fa-solid fa-book-open text-lg"></i>
+                                    </div>
+                                    <h3
+                                        class="text-xl font-extrabold text-slate-900 dark:text-white">Ngữ
+                                        pháp</h3>
+                                </div>
+                                <a href="nguphap.html"
+                                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-violet-500/20 active:scale-95 transition-all">
+                                    <span>Vào luyện ngữ pháp</span>
+                                    <i
+                                        class="fa-solid fa-arrow-right text-xs"></i>
+                                </a>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-12 gap-5">
+                                <div
+                                    class="sm:col-span-7 p-5 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex flex-col justify-between">
+                                    <div>
+                                        <span
+                                            class="inline-block px-3 py-1 rounded-full bg-indigo-100/80 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300 font-bold text-[10px] tracking-wider uppercase mb-3">
+                                            CHỌN ĐÁP ÁN ĐÚNG
+                                        </span>
+
+                                        <p
+                                            class="text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-100 leading-relaxed mb-4">
+                                            Mr. Tanaka usually <span
+                                                class="border-b-2 border-indigo-500 px-2 font-extrabold text-indigo-600 dark:text-indigo-400"
+                                                id="selectedAnswerDisplay">submits</span>
+                                            his monthly reports on the first
+                                            Friday of each month.
+                                        </p>
+
+                                        <div class="space-y-2">
+                                            <button
+                                                onclick="selectOption('A', 'submit')"
+                                                class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 text-left flex items-center gap-3 transition">
+                                                <span
+                                                    class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold flex items-center justify-center flex-shrink-0">A</span>
+                                                <span
+                                                    class="text-xs font-semibold text-slate-700 dark:text-slate-200">submit</span>
+                                            </button>
+
+                                            <button
+                                                onclick="selectOption('B', 'submits')"
+                                                class="w-full p-2.5 rounded-xl border border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/40 text-left flex items-center gap-3 transition">
+                                                <span
+                                                    class="w-6 h-6 rounded-full bg-emerald-500 text-white text-xs font-bold flex items-center justify-center flex-shrink-0">
+                                                    <i
+                                                        class="fa-solid fa-check"></i>
+                                                </span>
+                                                <span
+                                                    class="text-xs font-bold text-emerald-800 dark:text-emerald-300">submits</span>
+                                            </button>
+
+                                            <button
+                                                onclick="selectOption('C', 'is submitting')"
+                                                class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 text-left flex items-center gap-3 transition">
+                                                <span
+                                                    class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold flex items-center justify-center flex-shrink-0">C</span>
+                                                <span
+                                                    class="text-xs font-semibold text-slate-700 dark:text-slate-200">is
+                                                    submitting</span>
+                                            </button>
+
+                                            <button
+                                                onclick="selectOption('D', 'has submitted')"
+                                                class="w-full p-2.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-white dark:hover:bg-slate-700 text-left flex items-center gap-3 transition">
+                                                <span
+                                                    class="w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold flex items-center justify-center flex-shrink-0">D</span>
+                                                <span
+                                                    class="text-xs font-semibold text-slate-700 dark:text-slate-200">has
+                                                    submitted</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="sm:col-span-5 p-5 rounded-2xl bg-indigo-50/50 dark:bg-slate-800/80 border border-indigo-100 dark:border-slate-700 flex flex-col justify-between">
+                                    <div>
+                                        <div
+                                            class="flex items-center justify-between gap-2 mb-3">
+                                            <span
+                                                class="inline-block px-2.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 font-bold text-[10px]">
+                                                Chính xác!
+                                            </span>
+                                            <span
+                                                class="inline-block px-2.5 py-0.5 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-bold text-[10px]">
+                                                Đáp án: B
+                                            </span>
+                                        </div>
+
+                                        <span
+                                            class="text-[10px] font-extrabold tracking-wider text-slate-400 dark:text-slate-400 uppercase block mb-3">
+                                            CÁCH SUY LUẬN
+                                        </span>
+
+                                        <div class="space-y-3">
+                                            <div class="flex items-start gap-2">
+                                                <span
+                                                    class="w-4 h-4 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 text-[10px] font-extrabold flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+                                                <div>
+                                                    <h5
+                                                        class="text-xs font-bold text-slate-800 dark:text-slate-200">Vị
+                                                        trí chỗ trống</h5>
+                                                    <p
+                                                        class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">Sau
+                                                        chủ ngữ cần một động từ
+                                                        chính đã chia thì.</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex items-start gap-2">
+                                                <span
+                                                    class="w-4 h-4 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 text-[10px] font-extrabold flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+                                                <div>
+                                                    <h5
+                                                        class="text-xs font-bold text-slate-800 dark:text-slate-200">Xét
+                                                        thì</h5>
+                                                    <p
+                                                        class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">“Usually”
+                                                        chỉ thói quen nên dùng
+                                                        hiện tại đơn.</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex items-start gap-2">
+                                                <span
+                                                    class="w-4 h-4 rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 text-[10px] font-extrabold flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+                                                <div>
+                                                    <h5
+                                                        class="text-xs font-bold text-slate-800 dark:text-slate-200">Hòa
+                                                        hợp S-V</h5>
+                                                    <p
+                                                        class="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">“Mr.
+                                                        Tanaka” là ngôi thứ ba
+                                                        số ít, động từ thêm
+                                                        “s”.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div
+                                        class="mt-4 p-2.5 rounded-xl bg-indigo-100/70 dark:bg-indigo-950/60 text-center border border-indigo-200/60 dark:border-indigo-800/60">
+                                        <span
+                                            class="text-xs font-extrabold text-indigo-700 dark:text-indigo-300">
+                                            Chọn B – “submits”.
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="nghe-doc"
+            class="skills-section scroll-mt-20 py-9 sm:py-16 transition-colors duration-300 border-t border-slate-200/70 dark:border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Section Header -->
+                <div class="section-heading mb-7">
+                    <h2
+                        class="text-[1.85rem] sm:text-4xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
+                        Luyện nghe và đọc theo đúng cấu trúc đề thi
+                    </h2>
+                </div>
+
+                <!-- Two Interactive Cards Container -->
+                <div
+                    class="skills-grid grid grid-cols-1 xl:grid-cols-2 items-stretch">
+
+                    <!-- CARD 1: NGHE PART 1, 2, 3, 4 -->
+                    <div
+                        class="bg-white dark:bg-slate-900 rounded-[2rem] p-4 sm:p-5 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 flex flex-col justify-between transition-all duration-300">
+                        <div>
+                            <!-- Header Row -->
+                            <div
+                                class="skills-card-header flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-2xl bg-teal-100 dark:bg-teal-950/60 text-teal-600 dark:text-teal-400 flex items-center justify-center font-bold">
+                                        <i
+                                            class="fa-solid fa-headphones text-lg"></i>
+                                    </div>
+                                    <h3
+                                        class="text-xl font-extrabold text-slate-900 dark:text-white">Nghe
+                                        Part 1,2,3,4</h3>
+                                </div>
+                                <a href="nghe.html"
+                                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-600 text-white font-bold text-xs sm:text-sm shadow-md shadow-teal-500/20 active:scale-95 transition-all">
+                                    <span>Vào luyện nghe</span>
+                                    <i
+                                        class="fa-solid fa-arrow-right text-xs"></i>
+                                </a>
+                            </div>
+
+                            <!-- Top Test Banner -->
+                            <div
+                                class="bg-slate-900 text-white p-3 sm:p-4 rounded-t-2xl flex items-center justify-between">
+                                <div>
+                                    <h4
+                                        class="text-xs sm:text-sm font-bold">Part
+                                        4 • Bài nói ngắn</h4>
+                                    <span
+                                        class="text-[10px] text-slate-400 block uppercase">TART
+                                        • Test 1</span>
+                                </div>
+                                <span
+                                    class="px-3 py-1 rounded-full bg-slate-800 text-teal-400 text-xs font-bold border border-slate-700">
+                                    Câu 71
+                                </span>
+                            </div>
+
+                            <!-- Dark Test Body Shell -->
+                            <div
+                                class="p-4 sm:p-6 bg-slate-50 dark:bg-slate-800/40 rounded-b-2xl border-x border-b border-slate-200/80 dark:border-slate-700/80">
+
+                                <div
+                                    class="grid grid-cols-1 sm:grid-cols-12 gap-5">
+
+                                    <!-- Audio Player & Transcript -->
+                                    <div class="sm:col-span-6 space-y-4">
+                                        <!-- Audio Player Widget -->
+                                        <div
+                                            class="bg-white dark:bg-slate-800 p-3 rounded-2xl border border-slate-200/70 dark:border-slate-700 shadow-sm flex items-center gap-3">
+                                            <button id="playAudioBtn"
+                                                onclick="toggleAudio()"
+                                                class="w-10 h-10 rounded-full bg-teal-500 hover:bg-teal-600 text-white flex items-center justify-center shadow-md active:scale-95 transition flex-shrink-0">
+                                                <i id="playAudioIcon"
+                                                    class="fa-solid fa-play text-xs"></i>
+                                            </button>
+                                            <div class="flex-grow">
+                                                <div
+                                                    class="flex justify-between text-[11px] font-bold text-slate-500 dark:text-slate-400 mb-1">
+                                                    <span
+                                                        id="currentTimeText">00:14</span>
+                                                    <span>01:47</span>
+                                                </div>
+                                                <!-- Progress Bar -->
+                                                <div
+                                                    class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full overflow-hidden cursor-pointer"
+                                                    onclick="seekAudio(event)">
+                                                    <div id="audioProgressBar"
+                                                        class="bg-teal-500 h-full rounded-full w-[25%] transition-all"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Transcript Box -->
+                                        <div
+                                            class="bg-sky-50/60 dark:bg-slate-800/90 p-3.5 rounded-2xl border border-sky-100 dark:border-slate-700">
+                                            <span
+                                                class="text-[10px] font-extrabold tracking-wider text-teal-600 dark:text-teal-400 uppercase block mb-1">
+                                                TRANSCRIPT
+                                            </span>
+                                            <p
+                                                class="text-xs font-semibold text-slate-800 dark:text-slate-200 leading-relaxed mb-2">
+                                                Some of our employees flew to
+                                                San Antonio to attend a
+                                                conference on <mark
+                                                    class="bg-teal-100 dark:bg-teal-950/80 text-teal-900 dark:text-teal-200 px-1 rounded">property
+                                                    rental and sales</mark>.
+                                            </p>
+                                            <p
+                                                class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed italic border-t border-sky-100 dark:border-slate-700 pt-1.5">
+                                                Một số nhân viên đã bay đến hội
+                                                nghị về cho thuê và mua bán bất
+                                                động sản.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Question & Choices -->
+                                    <div
+                                        class="sm:col-span-6 flex flex-col justify-between space-y-3">
+                                        <div>
+                                            <span
+                                                class="text-[10px] font-extrabold tracking-wider text-slate-400 uppercase block mb-1">
+                                                QUESTION
+                                            </span>
+                                            <h5
+                                                class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-snug mb-3">
+                                                In which industry does the
+                                                speaker most likely work?
+                                            </h5>
+
+                                            <!-- Multiple Choices -->
+                                            <div class="space-y-1.5">
+                                                <div
+                                                    class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-left flex items-center gap-2.5">
+                                                    <span
+                                                        class="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-bold flex items-center justify-center flex-shrink-0">A</span>
+                                                    <span
+                                                        class="text-xs font-medium text-slate-700 dark:text-slate-300">Construction</span>
+                                                </div>
+
+                                                <div
+                                                    class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-left flex items-center gap-2.5">
+                                                    <span
+                                                        class="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-bold flex items-center justify-center flex-shrink-0">B</span>
+                                                    <span
+                                                        class="text-xs font-medium text-slate-700 dark:text-slate-300">Air
+                                                        transportation</span>
+                                                </div>
+
+                                                <div
+                                                    class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-left flex items-center gap-2.5">
+                                                    <span
+                                                        class="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-bold flex items-center justify-center flex-shrink-0">C</span>
+                                                    <span
+                                                        class="text-xs font-medium text-slate-700 dark:text-slate-300">Financial
+                                                        services</span>
+                                                </div>
+
+                                                <!-- Correct Option D -->
+                                                <div
+                                                    class="p-2 rounded-xl border border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-left flex items-center gap-2.5">
+                                                    <span
+                                                        class="w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+                                                        <i
+                                                            class="fa-solid fa-check"></i>
+                                                    </span>
+                                                    <span
+                                                        class="text-xs font-bold text-emerald-800 dark:text-emerald-300">Real
+                                                        estate</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Proof / Evidence Box -->
+                                        <div
+                                            class="p-2.5 rounded-xl bg-teal-50/80 dark:bg-teal-950/30 border border-teal-200/60 dark:border-teal-800/60">
+                                            <p
+                                                class="text-[11px] font-bold text-teal-800 dark:text-teal-300">
+                                                Dẫn chứng: <span
+                                                    class="font-normal italic">“property
+                                                    rental and sales”</span> →
+                                                Real estate.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CARD 2: ĐỌC PART 5, 6, 7 -->
+                    <div
+                        class="bg-white dark:bg-slate-900 rounded-[2rem] p-4 sm:p-5 shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 flex flex-col justify-between transition-all duration-300">
+                        <div>
+                            <!-- Header Row -->
+                            <div
+                                class="skills-card-header flex items-center justify-between gap-4">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold">
+                                        <i
+                                            class="fa-solid fa-book-open-reader text-lg"></i>
+                                    </div>
+                                    <h3
+                                        class="text-xl font-extrabold text-slate-900 dark:text-white">Đọc
+                                        Part 5,6,7</h3>
+                                </div>
+                                <a href="doc.html"
+                                    class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-emerald-500/20 active:scale-95 transition-all">
+                                    <span>Vào luyện đọc</span>
+                                    <i
+                                        class="fa-solid fa-arrow-right text-xs"></i>
+                                </a>
+                            </div>
+
+                            <!-- Top Test Banner -->
+                            <div
+                                class="bg-slate-900 text-white p-3 sm:p-4 rounded-t-2xl flex items-center justify-between">
+                                <div>
+                                    <h4
+                                        class="text-xs sm:text-sm font-bold">Part
+                                        7 • Đọc hiểu</h4>
+                                    <span
+                                        class="text-[10px] text-slate-400 block uppercase">TART
+                                        • Test 3</span>
+                                </div>
+                                <span
+                                    class="px-3 py-1 rounded-full bg-slate-800 text-emerald-400 text-xs font-bold border border-slate-700">
+                                    Câu 176
+                                </span>
+                            </div>
+
+                            <!-- Dark Test Body Shell -->
+                            <div
+                                class="p-4 sm:p-6 bg-slate-50 dark:bg-slate-800/40 rounded-b-2xl border-x border-b border-slate-200/80 dark:border-slate-700/80">
+
+                                <div
+                                    class="grid grid-cols-1 sm:grid-cols-12 gap-5">
+
+                                    <!-- Passage Text -->
+                                    <div
+                                        class="sm:col-span-6 bg-white dark:bg-slate-800 p-3.5 rounded-2xl border border-slate-200/70 dark:border-slate-700 text-xs space-y-2">
+                                        <div
+                                            class="text-center pb-2 border-b border-slate-100 dark:border-slate-700">
+                                            <h5
+                                                class="font-extrabold text-slate-800 dark:text-white">Ready
+                                                Barn</h5>
+                                        </div>
+                                        <div
+                                            class="grid grid-cols-2 text-[10px] text-slate-500 dark:text-slate-400 gap-1 pt-1">
+                                            <div><span class="font-bold">Order
+                                                    #:</span> #13565</div>
+                                            <div><span
+                                                    class="font-bold">Delivery:</span>
+                                                24-hour Express</div>
+                                        </div>
+                                        <div
+                                            class="text-[10px] text-slate-500 dark:text-slate-400">
+                                            <span
+                                                class="font-bold">Items:</span>
+                                            <mark
+                                                class="bg-emerald-100 dark:bg-emerald-950/80 text-emerald-900 dark:text-emerald-200 px-1 rounded">Countertop
+                                                Electric Grill</mark> - Egg
+                                            Beater - Tea Kettle
+                                        </div>
+                                        <div
+                                            class="pt-2 border-t border-slate-100 dark:border-slate-700">
+                                            <p
+                                                class="text-[11px] font-bold text-slate-700 dark:text-slate-300 mb-1">Subject:
+                                                Order #13565</p>
+                                            <p
+                                                class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                                                I recently placed an order with
+                                                Ready Barn. The items I
+                                                purchased are housewarming gifts
+                                                for my niece.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Question & Choices -->
+                                    <div
+                                        class="sm:col-span-6 flex flex-col justify-between space-y-3">
+                                        <div>
+                                            <span
+                                                class="text-[10px] font-extrabold tracking-wider text-slate-400 uppercase block mb-1">
+                                                QUESTION
+                                            </span>
+                                            <h5
+                                                class="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-snug mb-3">
+                                                What most likely does Ready Barn
+                                                specialize in?
+                                            </h5>
+
+                                            <!-- Multiple Choices -->
+                                            <div class="space-y-1.5">
+                                                <!-- Correct Option A -->
+                                                <div
+                                                    class="p-2 rounded-xl border border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-left flex items-center gap-2.5">
+                                                    <span
+                                                        class="w-5 h-5 rounded-full bg-emerald-500 text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">
+                                                        <i
+                                                            class="fa-solid fa-check"></i>
+                                                    </span>
+                                                    <span
+                                                        class="text-xs font-bold text-emerald-800 dark:text-emerald-300">Kitchen
+                                                        equipment</span>
+                                                </div>
+
+                                                <div
+                                                    class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-left flex items-center gap-2.5">
+                                                    <span
+                                                        class="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-bold flex items-center justify-center flex-shrink-0">B</span>
+                                                    <span
+                                                        class="text-xs font-medium text-slate-700 dark:text-slate-300">Party
+                                                        invitations</span>
+                                                </div>
+
+                                                <div
+                                                    class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-left flex items-center gap-2.5">
+                                                    <span
+                                                        class="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-bold flex items-center justify-center flex-shrink-0">C</span>
+                                                    <span
+                                                        class="text-xs font-medium text-slate-700 dark:text-slate-300">Shipping
+                                                        supplies</span>
+                                                </div>
+
+                                                <div
+                                                    class="p-2 rounded-xl border border-slate-200 dark:border-slate-700 text-left flex items-center gap-2.5">
+                                                    <span
+                                                        class="w-5 h-5 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-bold flex items-center justify-center flex-shrink-0">D</span>
+                                                    <span
+                                                        class="text-xs font-medium text-slate-700 dark:text-slate-300">Large
+                                                        appliances</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Proof / Evidence Box -->
+                                        <div
+                                            class="p-2.5 rounded-xl bg-emerald-50/80 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/60">
+                                            <p
+                                                class="text-[11px] font-bold text-emerald-800 dark:text-emerald-300">
+                                                Dẫn chứng: <span
+                                                    class="font-normal italic">“Countertop
+                                                    Electric Grill”</span> cho
+                                                thấy Ready Barn bán thiết bị nhà
+                                                bếp.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="thi-thu"
+            class="exam-section scroll-mt-20 py-9 sm:py-16 transition-colors duration-300 border-t border-slate-200/70 dark:border-slate-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                <!-- Header Row with Section Title & Top Button -->
+                <div
+                    class="section-heading flex flex-col items-start sm:flex-row sm:items-center sm:justify-between gap-4 mb-7">
+                    <h2
+                        class="text-[1.85rem] sm:text-4xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
+                        Luyện tập và Thi thử theo format thi online
+                    </h2>
+                    <a href="thithu.html"
+                        class="px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-slate-950 font-extrabold text-sm shadow-md transition flex items-center gap-2 flex-shrink-0">
+                        <span>Vào phòng thi</span>
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Exam Simulator Interface Card -->
+                <div
+                    class="exam-surface max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-[2rem] shadow-2xl shadow-slate-200/60 dark:shadow-none border border-slate-200/80 dark:border-slate-800 overflow-hidden">
+
+                    <!-- Online Exam Top Bar -->
+                    <div
+                        class="exam-topbar bg-slate-900 text-white px-6 py-4 flex flex-wrap items-center justify-between gap-4 border-b border-slate-800">
+                        <div class="flex items-center gap-3">
+                            <div class="flex flex-col">
+                                <span
+                                    class="text-sm font-extrabold tracking-wide text-white">Listening</span>
+                                <span
+                                    class="text-[10px] text-slate-400 font-semibold uppercase">PART
+                                    1 • Test 2</span>
+                            </div>
+                        </div>
+
+                        <div
+                            class="px-4 py-1.5 rounded-full bg-slate-800 text-slate-200 text-xs font-bold border border-slate-700">
+                            Question 1 of 6
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <button
+                                class="w-8 h-8 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition">
+                                <i class="fa-solid fa-volume-high text-xs"></i>
+                            </button>
+
+                            <div
+                                class="px-3 py-1 rounded-full bg-sky-500/20 text-sky-400 text-xs font-bold border border-sky-500/30 flex items-center gap-1.5">
+                                <i class="fa-regular fa-clock"></i>
+                                <span>01:30</span>
+                            </div>
+
+                            <button
+                                class="px-4 py-1.5 rounded-full bg-amber-400 hover:bg-amber-500 text-slate-900 text-xs font-extrabold transition shadow-sm">
+                                Submit
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Online Exam Body -->
+                    <div
+                        class="exam-body p-4 sm:p-6 grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 bg-slate-50/50 dark:bg-slate-900">
+
+                        <!-- Left Column: Audio Instruction & Picture -->
+                        <div class="md:col-span-6 space-y-4">
+                            <div
+                                class="p-3.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700">
+                                <p
+                                    class="text-xs font-bold text-slate-700 dark:text-slate-300">
+                                    Select the one statement that best describes
+                                    what you see in the picture.
+                                </p>
+                            </div>
+
+                            <div
+                                class="w-full aspect-[4/3] rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 flex flex-col items-center justify-center p-6 text-center relative overflow-hidden group">
+                                <!-- Ảnh Mascot Owl đang đeo tai nghe luyện Listening -->
+                                <img
+                                    src="~/assets/images/Home/listening-practice-buddy-owl.webp"
+                                    alt="Listening Practice Mascot"
+                                    class="w-48 sm:w-56 md:w-64 h-auto object-contain transform group-hover:scale-105 transition-transform duration-300 drop-shadow-[0_10px_25px_rgba(37,99,235,0.2)]" />
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Interactive Options -->
+                        <div
+                            class="md:col-span-6 bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700 flex flex-col justify-between">
+                            <div>
+                                <span
+                                    class="text-[10px] font-extrabold tracking-wider text-slate-400 uppercase block mb-3">
+                                    QUESTION
+                                </span>
+
+                                <div class="space-y-3"
+                                    id="examOptionsContainer">
+                                    <button onclick="selectExamOption(this)"
+                                        class="exam-opt w-full p-3 rounded-xl border border-amber-300 bg-amber-50/70 dark:bg-amber-950/30 text-left flex items-center gap-3 transition">
+                                        <span
+                                            class="opt-badge w-6 h-6 rounded-full bg-amber-200 dark:bg-amber-900 text-amber-900 dark:text-amber-200 text-xs font-bold flex items-center justify-center flex-shrink-0">A</span>
+                                    </button>
+
+                                    <button onclick="selectExamOption(this)"
+                                        class="exam-opt w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 text-left flex items-center gap-3 transition">
+                                        <span
+                                            class="opt-badge w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold flex items-center justify-center flex-shrink-0">B</span>
+                                    </button>
+
+                                    <button onclick="selectExamOption(this)"
+                                        class="exam-opt w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 text-left flex items-center gap-3 transition">
+                                        <span
+                                            class="opt-badge w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold flex items-center justify-center flex-shrink-0">C</span>
+                                    </button>
+
+                                    <button onclick="selectExamOption(this)"
+                                        class="exam-opt w-full p-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-700/50 text-left flex items-center gap-3 transition">
+                                        <span
+                                            class="opt-badge w-6 h-6 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 text-xs font-bold flex items-center justify-center flex-shrink-0">D</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <section
+            class="relative overflow-hidden border-t border-slate-200/70 bg-white py-10 dark:border-slate-800 dark:bg-slate-900 sm:py-20">
+            <div class="mx-auto max-w-7xl px-4 sm:px-6">
+                <div
+                    class="hero-card relative overflow-hidden rounded-[2rem] px-6 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-12">
+                    <div
+                        class="hero-dot-pattern pointer-events-none absolute inset-0 opacity-30"
+                        aria-hidden="true"></div>
+                    <div
+                        class="relative grid items-center gap-5 md:grid-cols-[minmax(0,1fr)_210px] lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-10">
+                        <div class="min-w-0 text-center md:text-left">
+                            <p
+                                class="inline-flex items-center gap-2 text-xs font-extrabold uppercase tracking-[0.18em] text-blue-600 dark:text-sky-300">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                Bắt đầu
+                            </p>
+                            <h2
+                                class="mt-3 break-words text-[1.8rem] font-black leading-[1.16] text-slate-900 dark:text-white sm:text-[2.25rem] lg:text-[2.65rem]">
+                                Học ngay hôm nay, tự tin cho kì thi sắp tới nhé!
+                            </h2>
+                            <p
+                                class="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-600 dark:text-slate-300 sm:text-base md:mx-0">
+                                Lộ trình rõ ràng, bài học phù hợp, đa dạng chủ
+                                đề, giúp bạn tiến bộ hơn từng ngày.
+                            </p>
+                            <div
+                                class="mt-6 flex justify-center md:justify-start">
+                                <a href="dangnhap.html#register"
+                                    class="inline-flex h-14 min-h-[44px] w-full max-w-full items-center justify-center gap-2 whitespace-nowrap rounded-2xl bg-blue-600 px-6 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition hover:-translate-y-0.5 hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 sm:w-[15.5rem] sm:px-8 sm:text-base">
+                                    Bắt đầu học miễn phí <i
+                                        class="fa-solid fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div
+                            class="relative mx-auto flex h-40 w-44 items-end justify-center sm:h-44 sm:w-52 md:h-52 md:w-full lg:h-60">
+                            <img src="~/assets/images/Home/success-buddy-owl.webp"
+                                alt="Cú mèo chúc mừng thành quả học tập"
+                                width="360" height="360" loading="lazy"
+                                class="relative max-h-full w-auto object-contain drop-shadow-[0_18px_24px_rgba(37,99,235,0.2)]" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer
+            class="mt-auto py-8 bg-slate-50 dark:bg-slate-950 border-t border-slate-200/60 dark:border-slate-800 transition-colors duration-300">
+            <div
+                class="max-w-7xl mx-auto px-4 text-center text-xs text-slate-500 dark:text-slate-400">
+                <p>Copy right Lê Xuân Sáng</p>
+                <p>© 2026 Tiếng Anh Ra Trường. Tất cả quyền được bảo lưu.</p>
+            </div>
+        </footer>
+    <script src="@Url.Content("~/assets/js/Home/home-index-02.js")"></script>
+    </body>
+</html>

@@ -1,0 +1,2994 @@
+:root {
+  --font-nunito: "Nunito", "Nunito Fallback";
+  --font-inter: "Inter", "Inter Fallback";
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+/* Soft pastel SVG background */
+.bg-canvas-light {
+  background: #eaf8f7 url("/assets/images/Sidebar/light-soft-gamified-learning-canvas-bg.svg") center / cover fixed;
+  background-repeat: no-repeat;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.bg-canvas-dark {
+  background: #0b1120 url("/assets/images/Sidebar/dark-soft-gamified-learning-canvas-bg.svg") center / cover fixed;
+  background-repeat: no-repeat;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+/* Glassmorphism Cards */
+.glass-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.04), 0 4px 12px -2px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.dark .glass-card {
+  background: rgba(30, 41, 59, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.2);
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.glass-card:hover {
+  border-color: rgba(59, 130, 246, 0.4);
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.glass-card-interactive:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px -8px rgba(59, 130, 246, 0.12);
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+::-webkit-scrollbar-thumb {
+  background: rgba(156, 163, 175, 0.4);
+  border-radius: 10px;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(107, 114, 128, 0.7);
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+/* Goal modal */
+.goal-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(20, 30, 43, 0.28);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-modal-overlay[hidden] { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-modal {
+  width: min(416px, 100%);
+  overflow: hidden;
+  border: 1px solid rgba(226, 232, 240, 0.9);
+  border-radius: 22px;
+  color: #1f2937;
+  background: #fff;
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.24);
+  animation: goalModalIn 0.18s ease-out;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+@keyframes goalModalIn {
+  from { opacity: 0; transform: translateY(8px) scale(0.985); }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  to { opacity: 1; transform: translateY(0) scale(1); }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-modal-header {
+  display: flex;
+  min-height: 68px;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-modal-icon {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 14px;
+  color: #1677f5;
+  background: #e7f1ff;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-modal-title { flex: 1; margin: 0; font-size: 14px; font-weight: 800; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-modal-close {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 0;
+  border-radius: 10px;
+  color: #64748b;
+  background: transparent;
+  cursor: pointer;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-modal-close:hover { color: #1e293b; background: #f1f5f9; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.goal-modal-form { display: grid; gap: 20px; padding: 20px 18px 18px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.goal-field { display: grid; gap: 8px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.goal-field-label { color: #334155; font-size: 12px; font-weight: 700; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.goal-exam-options { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-exam-option {
+  min-height: 41px;
+  border: 1px solid #d7e1ed;
+  border-radius: 15px;
+  color: #596579;
+  background: #f1f5f9;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-exam-option[aria-pressed="true"] {
+  border-color: #2782ff;
+  color: #1474ee;
+  background: #e6f1ff;
+  box-shadow: inset 0 0 0 1px rgba(39, 130, 255, 0.12);
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-exam-option:disabled { cursor: not-allowed; opacity: 1; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-input {
+  width: 100%;
+  height: 39px;
+  padding: 0 12px;
+  border: 1px solid #d5dfeb;
+  border-radius: 13px;
+  outline: 0;
+  color: #334155;
+  background: #f5f8fb;
+  font: inherit;
+  font-size: 13px;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-input:focus {
+  border-color: #3988ff;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1px;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-modal-actions button {
+  min-height: 38px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.goal-cancel { color: #475569; background: transparent; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.goal-cancel:hover { background: #f1f5f9; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.goal-save { color: #fff; background: linear-gradient(100deg, #72b2ff, #a88af5); }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.goal-save:disabled { cursor: not-allowed; opacity: 0.58; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+html.dark .goal-modal {
+  border-color: rgba(148, 163, 184, 0.2);
+  color: #e2e8f0;
+  background: #1c2431;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+html.dark .goal-modal-header { border-bottom-color: rgba(148, 163, 184, 0.18); }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+html.dark .goal-modal-icon { color: #7dd3fc; background: rgba(14, 165, 233, 0.16); }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+html.dark .goal-modal-title, html.dark .goal-field-label { color: #e2e8f0; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+html.dark .goal-modal-close { color: #94a3b8; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+html.dark .goal-modal-close:hover, html.dark .goal-cancel:hover { color: #e2e8f0; background: #293548; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+html.dark .goal-exam-option { border-color: rgba(148, 163, 184, 0.2); color: #cbd5e1; background: #252e3d; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+html.dark .goal-exam-option[aria-pressed="true"] { border-color: #38bdf8; color: #7dd3fc; background: #233447; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+html.dark .goal-input { border-color: rgba(148, 163, 184, 0.2); color: #e2e8f0; background: #252e3d; color-scheme: dark; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+html.dark .goal-cancel { color: #cbd5e1; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+/* Responsive adjustments for Reading */
+@media (min-width: 1024px) {
+  #dashboardMain > section.reading-basic {
+    box-sizing: border-box;
+    width: min(100%, 1472px);
+    height: 74px;
+    align-self: center;
+  }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+  #dashboardMain > section[aria-labelledby="readingTitle"] {
+    box-sizing: border-box;
+    width: min(100%, 1472px);
+    min-height: 188px;
+    align-self: center;
+    padding-top: 16px !important;
+    padding-bottom: 16px !important;
+  }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+  #dashboardMain { width: 100%; max-width: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+  #readingParts {
+    box-sizing: border-box;
+    width: min(100%, 1472px);
+    align-self: center;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+  #readingParts > .reading-part:not([aria-labelledby="part-7-title"]) {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 183px;
+    justify-self: center;
+  }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+  #readingParts > .reading-part[aria-labelledby="part-7-title"] {
+    min-height: 183px;
+  }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.scroll-strip {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.scroll-strip::-webkit-scrollbar {
+  display: none;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#dashboardMain .reading-hero-main { padding-right: 0; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+#dashboardMain .reading-progress { margin-right: 0; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-hero-mascot { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+@media (min-width: 640px) {
+  #dashboardMain .reading-hero-main { padding-right: 174px !important; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  #dashboardMain .reading-progress { margin-right: 174px !important; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  #dashboardMain .reading-hero-main,
+  #dashboardMain .reading-progress { top: 12px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-hero-mascot {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    display: block;
+    width: 150px;
+    height: 138px;
+    object-fit: contain;
+    transform: translateY(-50%);
+    transform-origin: center;
+    animation: reading-owl-float 3.2s ease-in-out infinite;
+    pointer-events: none;
+    filter: drop-shadow(0 8px 10px rgba(30, 89, 122, .16));
+  }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+@media (min-width: 1024px) {
+  #dashboardMain .reading-hero-main { padding-right: 220px !important; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  #dashboardMain .reading-progress { margin-right: 220px !important; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  #dashboardMain .reading-hero-main,
+  #dashboardMain .reading-progress { top: 16px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-hero-mascot { right: 12px; width: 192px; height: 192px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+@keyframes reading-owl-float {
+  0%, 100% { transform: translateY(-50%); }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  50% { transform: translateY(calc(-50% - 6px)) rotate(-1deg); }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+@media (prefers-reduced-motion: reduce) {
+  .reading-hero-mascot { animation: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#readingParts .reading-part h2 {
+  font-size: 18px !important;
+  line-height: 1.35 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#readingParts .reading-part h2 + p {
+  margin-top: 4px !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#readingParts .reading-part > div:first-child > div.mt-4 {
+  margin-top: 12px !important;
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#readingParts .reading-part > div:last-child {
+  font-size: 13px !important;
+  line-height: 1.45 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#readingParts .reading-part > div:last-child > span {
+  font-size: 12px !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#readingParts .reading-part > div:last-child button {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#dashboardMain > section[aria-labelledby="readingTitle"] #readingTitle {
+  font-size: 28px !important;
+  line-height: 1.3 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#dashboardMain > section[aria-labelledby="readingTitle"] .reading-hero-main > .grid > div > p:first-child {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#dashboardMain > section[aria-labelledby="readingTitle"] .reading-hero-main > .grid > div > p:last-child {
+  font-size: 16px !important;
+  line-height: 1.35 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#dashboardMain > section[aria-labelledby="readingTitle"] .reading-progress > div:first-child {
+  font-size: 13px !important;
+  line-height: 1.4 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#dashboardMain > section.reading-basic > div p:first-child {
+  font-size: 12px !important;
+  line-height: 1.4 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#dashboardMain > section.reading-basic > div p:last-child {
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#dashboardMain > section.reading-basic > button {
+  font-size: 14px !important;
+  line-height: 1.35 !important;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+/* Practice Screens */
+#readingPracticeScreen[hidden] { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+#readingPracticeScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-rows: 54px minmax(0, 1fr) 64px;
+  color: #172033;
+  background: #fff;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#readingPart6PracticeScreen[hidden] { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+#readingPart6PracticeScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-rows: 54px minmax(0, 1fr) 64px;
+  color: #172033;
+  background: #fff;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+#readingPart7PracticeScreen[hidden] { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+#readingPart7PracticeScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  grid-template-rows: 54px minmax(0, 1fr) 64px;
+  color: #172033;
+  background: #fff;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.reading-part7-translation {
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid #93c5fd;
+  border-radius: 4px;
+  color: #172033;
+  background: #e5efff;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part7-translation[hidden] { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part7-translation h3 { margin: 0 0 8px; font-size: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part7-translation p { margin: 0 0 10px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part7-translation p:last-child { margin-bottom: 0; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part7-evidence-quote { font-style: italic; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part7-vocabulary { margin-top: 16px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.reading-practice-topbar {
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+  align-items: center;
+  gap: 12px;
+  padding: 0 14px;
+  color: #f8fbff;
+  background: #142846;
+  box-shadow: 0 5px 18px rgba(13,31,55,.18);
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-title, .reading-practice-tools { display: flex; min-width: 0; align-items: center; gap: 8px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-title { gap: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-title button, .reading-practice-tools button {
+  min-height: 34px;
+  padding: 0 10px;
+  border: 1px solid rgba(214,226,244,.25);
+  border-radius: 12px;
+  color: inherit;
+  background: rgba(255,255,255,.07);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-title button { border: 0; background: transparent; font-size: 19px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-title strong { display: block; overflow: hidden; font-size: 15px; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-title small { display: block; margin-top: 2px; color: #a7c4e9; font-size: 11px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-test { padding: 7px 14px; border: 1px solid rgba(214,226,244,.35); border-radius: 999px; color: #f8fbff; font-size: 13px; font-weight: 800; white-space: nowrap; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-tools { justify-content: flex-end; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-tools [aria-pressed="true"] { border-color: #63c7ff; box-shadow: 0 0 0 1px #63c7ff; }
+.reading-practice-tools [data-reading-tool="translation"][aria-pressed="true"],
+.reading-practice-tools #readingPart6TranslationButton[aria-pressed="true"],
+.reading-practice-tools #readingPart7TranslationButton[aria-pressed="true"] {
+  border-color: #14b8a6;
+  background: rgba(20, 184, 166, 0.25);
+  color: #5eead4;
+  box-shadow: 0 0 0 1px #14b8a6;
+}
+.reading-practice-tools [data-reading-tool="explanation"][aria-pressed="true"],
+.reading-practice-tools #readingPart6ExplanationButton[aria-pressed="true"],
+.reading-practice-tools #readingPart7ExplanationButton[aria-pressed="true"] {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.22);
+  color: #fcd34d;
+  box-shadow: 0 0 0 1px #f59e0b;
+}
+.reading-practice-tools #readingPracticeVocabularyButton[aria-pressed="true"],
+.reading-practice-tools #readingPart6VocabularyButton[aria-pressed="true"],
+.reading-practice-tools #readingPart7VocabularyButton[aria-pressed="true"] {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.25);
+  color: #6ee7b7;
+  box-shadow: 0 0 0 1px #10b981;
+}
+.reading-practice-tools #readingPart7EvidenceButton[aria-pressed="true"] {
+  border-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.22);
+  color: #7dd3fc;
+  box-shadow: 0 0 0 1px #38bdf8;
+}
+.part5-option-translation[hidden],
+.part6-option-translation[hidden],
+.part7-option-translation[hidden],
+.part7-question-translation[hidden],
+#readingPracticeTranslation[hidden] {
+  display: none !important;
+}
+#readingVocabularyList:not(.is-expanded) .reading-vocabulary-example {
+  display: none;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+.reading-practice-main { display: grid; min-height: 0; grid-template-columns: minmax(0,1fr) minmax(0,1fr); overflow: hidden; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-question-pane, .reading-practice-answer-pane { min-width: 0; padding: 20px 24px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-question-pane { border-right: 1px solid #ccd7e5; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-answer-pane { overflow: auto; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-prompt, .reading-practice-answer-pane > h2 { margin: 4px 0 18px; color: #0875f5; font-size: 19px; font-weight: 700; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-question-card { padding: 18px 16px 16px; border: 1px solid #d1dceb; border-radius: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-question-card h3 { margin: 0 0 16px; color: #152238; font-size: 15px; line-height: 1.5; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-options { display: grid; gap: 8px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-option {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  color: #334155;
+  background: #fff;
+  text-align: left;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-option:hover:not(.is-correct):not(.is-incorrect) { border-color: #cbd5e1; background: #f8fafc; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-option[aria-pressed="true"] { border-color: #cbd5e1; background: #fff; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-option.is-correct { border-color: #86efac !important; background-color: #f0fdf4 !important; color: #15803d !important; box-shadow: none !important; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-option.is-incorrect { border-color: #fca5a5 !important; background-color: #fef2f2 !important; color: #b91c1c !important; box-shadow: none !important; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-option-mark { display: flex; width: 22px; height: 22px; flex: 0 0 auto; align-items: center; justify-content: center; border: none; background: transparent; color: inherit; }
+.reading-practice-option-mark svg { width: 20px; height: 20px; display: block; }
+.reading-practice-option.is-correct .reading-practice-option-mark { color: #16a34a !important; }
+.reading-practice-option.is-incorrect .reading-practice-option-mark { color: #ef4444 !important; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-option[aria-pressed="true"] .reading-practice-option-mark { border-color: transparent; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-explanation { margin-top: 12px; padding: 12px 14px; border-radius: 12px; color: #36536c; background: #edf7ff; font-size: 13px; line-height: 1.55; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-explanation[hidden], .reading-vocabulary[hidden], .reading-practice-translation[hidden], .reading-notes-drawer[hidden] { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-translation { margin: 14px 0 0; color: #526174; font-size: 14px; line-height: 1.5; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+/* Vocabulary Panel */
+.reading-vocabulary { margin-top: 16px; overflow: hidden; border: 1px solid #e7c8ff; border-radius: 20px; background: linear-gradient(115deg,#fcf5ff,#fff); box-shadow: 0 8px 24px rgba(142,52,199,.08); }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-head { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-bottom: 1px solid #f0d9ff; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-icon { display: grid; width: 36px; height: 36px; flex: 0 0 auto; place-items: center; border-radius: 50%; color: #fff; background: #b638df; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-head-copy { flex: 1; min-width: 0; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-head-copy strong { display: block; color: #a427d3; font-size: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-head-copy small { display: block; margin-top: 2px; color: #596579; font-size: 11px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-toggle { min-height: 32px; padding: 0 12px; border: 1px solid #e4b8fb; border-radius: 999px; color: #a427d3; background: #fff; font-size: 11px; font-weight: 800; cursor: pointer; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-list { display: grid; gap: 9px; padding: 14px 16px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-list:not(.is-expanded) .reading-vocabulary-item:nth-child(n+4) { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 8px 12px; padding: 12px 14px; border: 1px solid #f0d9ff; border-left: 4px solid #26a673; border-radius: 14px; background: #fff; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-item:nth-child(3n) { border-left-color: #b638df; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-term { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; color: #1d2433; font-size: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-meta { display: inline-flex; gap: 5px; color: #68758a; font-size: 10px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-meta span { padding: 3px 7px; border-radius: 99px; background: #f1f5f9; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-pronounce { display: inline-flex; gap: 5px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-pronounce button, .reading-vocabulary-save { min-height: 28px; padding: 0 8px; border: 1px solid #b6eff5; border-radius: 999px; color: #0796aa; background: #eaffff; font-size: 10px; font-weight: 800; cursor: pointer; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-save { grid-column: 2; grid-row: 1; align-self: start; border-color: #e7b6fb; color: #ae2ed8; background: #fcf0ff; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-save[aria-pressed="true"] { color: #fff; background: #b638df; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-meaning { grid-column: 1 / -1; color: #526174; font-size: 13px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-vocabulary-example { grid-column: 1 / -1; padding: 8px 10px; border-radius: 99px; color: #536273; background: #edfaf5; font-size: 12px; font-style: italic; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+/* Practice Footer */
+.reading-practice-footer { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px; border-top: 1px solid #d4deeb; background: #fff; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-footer button { min-width: 42px; height: 44px; border: 1px solid #d4deeb; border-radius: 14px; color: #243247; background: #fff; cursor: pointer; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-footer button:disabled { opacity: .45; cursor: not-allowed; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-feedback, .reading-practice-nav { display: flex; align-items: center; gap: 8px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-nav strong { padding: 12px 17px; border-radius: 12px; color: #fff; background: #076af1; font-size: 13px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-feedback { gap: 8px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-feedback button { display: inline-flex; width: 88px; min-width: 88px; align-items: center; justify-content: center; gap: 7px; padding: 0 10px; font-size: 12px; font-weight: 800; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-feedback button:first-child { border-color: #fed7aa; background: #fff7ed; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-feedback button:first-child i { color: #ea580c; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-practice-feedback button:last-child { width: 84px; min-width: 84px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+/* Notes Drawer */
+.reading-notes-drawer[hidden] { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-drawer {
+  position: fixed;
+  top: 54px;
+  right: 0;
+  bottom: 64px;
+  z-index: 110;
+  display: grid;
+  width: min(380px,92vw);
+  grid-template-rows: 68px 48px minmax(0,1fr);
+  border-left: 1px solid #cbd7e8;
+  background: #f4f7fb;
+  box-shadow: -12px 0 30px rgba(20,40,70,.16);
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px; border-bottom: 1px solid #d8e0eb; background: #e2e8f0; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-head-copy { flex: 1; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-title { display: flex; align-items: center; gap: 8px; color: #1d2939; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-head strong { display: block; color: #1d2939; font-size: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-head small { display: block; margin-top: 3px; color: #69778b; font-size: 11px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-close { width: 36px; height: 36px; border: 1px solid #d2dbea !important; border-radius: 12px !important; color: #334155 !important; background: #fff !important; font-size: 18px !important; cursor: pointer; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-toolbar { display: flex; align-items: center; gap: 2px; padding: 0 12px; border-bottom: 1px solid #d8e0eb; background: #fff; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-toolbar button { width: 32px; height: 32px; min-width: 32px; border: 0 !important; border-radius: 7px !important; color: #475569 !important; background: transparent !important; font-size: 14px !important; cursor: pointer; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-toolbar button:hover { background: #edf2f8 !important; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-editor { min-height: 0; overflow: auto; padding: 18px; outline: none; color: #263449; background: #f6f9fc; font-size: 14px; line-height: 1.65; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-editor:empty::before { color: #8a97a9; content: attr(data-placeholder); pointer-events: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-editor blockquote { margin: 10px 0; padding-left: 12px; border-left: 3px solid #6aa7f5; color: #526174; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-notes-status { position: absolute; right: 14px; bottom: 10px; color: #6b7b90; font-size: 10px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+/* Part 6 Main */
+.reading-part6-main { display: grid; min-height: 0; grid-template-columns: minmax(0,1fr) minmax(0,1fr); overflow: hidden; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-passage-pane, .reading-part6-question-pane { min-width: 0; padding: 20px 24px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-passage-pane { overflow: auto; border-right: 1px solid #ccd7e5; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-question-pane { overflow: auto; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-prompt, .reading-part6-question-pane > h2 { margin: 4px 0 18px; color: #0875f5; font-size: 19px; font-weight: 700; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-passage { color: #172033; font-size: 15px; line-height: 1.85; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-passage h3 { margin: 0 0 4px; text-align: center; font-size: 15px; font-weight: 800; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-passage p { margin: 0 0 2px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-translation { margin-top: 16px; padding: 16px; border: 1px solid #93c5fd; border-radius: 4px; color: #172033; background: #e5efff; font-size: 14px; line-height: 1.8; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-translation[hidden], .reading-part6-explanation[hidden] { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-translation h3 { margin: 0 0 4px; font-size: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-translation p { margin: 0 0 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-translation p:last-child { margin-bottom: 0; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-question-card { margin-bottom: 16px; padding: 16px; border: 1px solid #d1dceb; border-radius: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-question-card h3 { margin: 0 0 14px; color: #152238; font-size: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-options { display: grid; gap: 8px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-option { display: flex; min-height: 50px; align-items: center; gap: 12px; padding: 8px 14px; border: 1px solid #cbd7e8; border-radius: 13px; color: #253247; background: #fff; text-align: left; font: inherit; font-size: 14px; cursor: pointer; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-option:hover { border-color: #76aaff; background: #f6faff; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-option[aria-pressed="true"] { border-color: #1475f6; background: #eef5ff; box-shadow: inset 0 0 0 1px #1475f6; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-option.is-correct { border-color: #20a66a; color: #15945e; background: #e8f7f0; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-option.is-incorrect { border-color: #ef4444; color: #dc2626; background: #fee8e7; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-option.is-correct .reading-part6-option-mark, .reading-part6-option.is-incorrect .reading-part6-option-mark { border: 0; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-option-mark i { font-size: 20px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-option-mark { display: grid; width: 20px; height: 20px; flex: 0 0 auto; place-items: center; border: 2px solid #475569; border-radius: 50%; font-size: 11px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-explanation { margin-top: 12px; padding: 12px 14px; border-radius: 10px; color: #36536c; background: #edf7ff; font-size: 13px; line-height: 1.5; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-data-note { margin: 0 0 16px; color: #667085; font-size: 12px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-analysis, .reading-part6-vocabulary { display: grid; gap: 10px; margin-top: 12px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-analysis[hidden], .reading-part6-vocabulary[hidden] { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-analysis-card { padding: 12px; border: 1px solid #cbd7e8; border-radius: 12px; font-size: 13px; line-height: 1.55; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-analysis-card strong { display: block; margin-bottom: 4px; font-size: 12px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-evidence { border-color: #93c5fd; background: #e8f1ff; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-evidence strong { color: #0875f5; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-reasoning { border-color: #a7e1c5; background: #eaf7f1; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-reasoning strong { color: #15945e; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-traps { border-color: #fdcf85; background: #fff7e8; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-traps strong { color: #dc8200; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-remember { border-color: #cbd7e8; background: #eef3f9; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-remember strong { color: #0875f5; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-vocabulary { padding: 12px; border: 1px solid #bfdbfe; border-radius: 12px; background: #f4f8ff; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-vocabulary h4 { margin: 0 0 2px; color: #0875f5; font-size: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-vocabulary-item { display: grid; grid-template-columns: minmax(0,1fr) auto; gap: 4px 10px; padding: 10px 12px; border: 1px solid #d5e1f1; border-radius: 10px; background: #fff; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-vocabulary-item strong { font-size: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-vocabulary-item small { color: #64748b; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-vocabulary-item p { grid-column: 1 / -1; margin: 0; color: #475569; font-size: 13px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+.reading-part6-reset { justify-self: start; min-height: 32px; padding: 0 12px; border: 1px solid #cbd7e8; border-radius: 10px; color: #334155; background: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+
+/* Basic Reading lesson list custom scroll */
+#readingLessonList {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(16, 185, 129, 0.3) transparent;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+#readingLessonList::-webkit-scrollbar {
+  height: 5px;
+}
+#readingLessonList::-webkit-scrollbar-track {
+  background: transparent;
+}
+#readingLessonList::-webkit-scrollbar-thumb {
+  background: rgba(16, 185, 129, 0.25);
+  border-radius: 999px;
+}
+#readingLessonList::-webkit-scrollbar-thumb:hover {
+  background: rgba(16, 185, 129, 0.5);
+}
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+
+/* Responsive Practice */
+@media (max-width: 760px) {
+  .reading-practice-topbar { grid-template-columns: minmax(0,1fr) auto; gap: 6px; padding: 0 8px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-test { display: none; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-tools { gap: 3px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-title { gap: 4px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-title strong { max-width: 38vw; font-size: 12px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-tools button { min-height: 32px; padding: 0 6px; font-size: 10px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-main { grid-template-columns: 1fr; overflow-y: auto; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-question-pane { min-height: 140px; padding: 12px 16px; border-right: 0; border-bottom: 1px solid #ccd7e5; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-answer-pane { overflow: visible; padding: 12px 16px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-prompt, .reading-practice-answer-pane > h2 { margin-bottom: 10px; font-size: 16px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-question-card { padding: 12px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-option { min-height: 44px; padding: 6px 10px; font-size: 13px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  #readingPart6PracticeScreen { grid-template-rows: auto minmax(0,1fr) 58px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  #readingPart7PracticeScreen { grid-template-rows: auto minmax(0,1fr) 58px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-part6-main { grid-template-columns: minmax(0,1fr); overflow-y: auto; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-part6-passage-pane { max-height: 45vh; border-right: 0; border-bottom: 1px solid #ccd7e5; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-part6-passage-pane, .reading-part6-question-pane { padding: 12px 16px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-part6-prompt, .reading-part6-question-pane > h2 { margin-bottom: 10px; font-size: 16px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-part6-passage { font-size: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-part6-question-card { padding: 12px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-part6-option { min-height: 44px; padding: 6px 10px; font-size: 13px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-footer { gap: 6px; padding: 0 8px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-feedback { gap: 4px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-feedback button { width: 38px; min-width: 38px; overflow: hidden; padding: 0; font-size: 0; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-practice-feedback button i { font-size: 14px; }
+
+/* Skill theme utility fallbacks */
+.bg-skill-reading { background-color: #10b981; }
+.text-skill-reading { color: #10b981; }
+.bg-skill-reading-soft { background-color: rgba(16, 185, 129, 0.12); }
+.border-skill-reading\/30 { border-color: rgba(16, 185, 129, 0.3); }
+.ring-skill-reading\/30 { --tw-ring-color: rgba(16, 185, 129, 0.3); }
+
+  .reading-notes-drawer { top: 58px; bottom: 58px; }
+
+}
+
+/* =========================================================
+   GIẢI PHÓNG CUỘN TRANG READING CHO MỌI KÍCH THƯỚC MÀN HÌNH
+   ========================================================= */
+@media (min-width: 1712px) and (min-height: 900px) {
+  html,
+  body {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  #dashboardLayout {
+    height: auto !important;
+    min-height: 100vh !important;
+    overflow: visible !important;
+    padding-bottom: 48px !important;
+  }
+
+  #dashboardMain {
+    height: auto !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+  }
+}
+
+html, body {
+  overflow-y: auto !important;
+}
+
+#dashboardLayout {
+  overflow: visible !important;
+}
+
+#dashboardMain {
+  overflow: visible !important;
+}
+
+/* =========================================================
+   DARK MODE HOÀN CHỈNH CHO TRANG READING
+   ========================================================= */
+html.dark #readingPracticeScreen,
+html.dark #readingPart6PracticeScreen,
+html.dark #readingPart7PracticeScreen {
+  background: #0b1320 !important;
+  color: #f1f5f9 !important;
+}
+
+html.dark .reading-practice-topbar {
+  background: #0f172a !important;
+  border-bottom: 1px solid #1e293b !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .reading-practice-title button {
+  color: #94a3b8 !important;
+}
+html.dark .reading-practice-title button:hover {
+  color: #f1f5f9 !important;
+}
+
+html.dark .reading-practice-title strong {
+  color: #f1f5f9 !important;
+}
+
+html.dark .reading-practice-title small {
+  color: #64748b !important;
+}
+
+html.dark .reading-practice-test {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  color: #e2e8f0 !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+html.dark .reading-practice-tools button {
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #cbd5e1 !important;
+}
+html.dark .reading-practice-tools button:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #f1f5f9 !important;
+}
+
+html.dark .reading-practice-question-pane {
+  background: #0b1320 !important;
+  border-right-color: #1e293b !important;
+}
+
+html.dark .reading-practice-prompt {
+  color: #38bdf8 !important;
+}
+
+html.dark .reading-practice-answer-pane {
+  background: #0b1320 !important;
+}
+
+html.dark .reading-practice-question-card {
+  background: #151f32 !important;
+  border-color: #1e293b !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+html.dark #part5QuestionText,
+html.dark .reading-practice-question-text {
+  color: #f1f5f9 !important;
+}
+
+html.dark #readingPracticeTranslation {
+  border-left-color: #38bdf8 !important;
+  color: #94a3b8 !important;
+}
+
+html.dark .reading-practice-option {
+  background: #172236 !important;
+  border-color: #27354d !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark .reading-practice-option:hover:not(.is-correct):not(.is-incorrect) {
+  background: #1e2d48 !important;
+  border-color: #3b82f6 !important;
+  color: #f8fafc !important;
+}
+
+html.dark .reading-practice-option.is-correct {
+  background-color: rgba(6, 78, 59, 0.5) !important;
+  border-color: #059669 !important;
+  color: #6ee7b7 !important;
+}
+
+html.dark .reading-practice-option.is-incorrect {
+  background-color: rgba(127, 29, 29, 0.45) !important;
+  border-color: #dc2626 !important;
+  color: #fca5a5 !important;
+}
+
+html.dark .reading-practice-explanation {
+  background: #151f32 !important;
+  border-color: #1e293b !important;
+}
+
+html.dark .reading-practice-explanation-title {
+  color: #38bdf8 !important;
+}
+
+html.dark .reading-practice-footer {
+  background: #0f172a !important;
+  border-top-color: #1e293b !important;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark .reading-practice-footer button {
+  background: #172236 !important;
+  border-color: #27354d !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark .reading-practice-footer button:hover:not(:disabled) {
+  background: #1e2d48 !important;
+  border-color: #3b82f6 !important;
+  color: #fff !important;
+}
+
+html.dark .reading-practice-footer button:disabled {
+  opacity: 0.3 !important;
+  background: #0f172a !important;
+}
+
+html.dark .reading-practice-nav strong {
+  background: #172236 !important;
+  border-color: #27354d !important;
+  color: #e2e8f0 !important;
+}
+
+/* Part 6 & 7 Dark Mode */
+html.dark .reading-part6-passage-pane,
+html.dark .reading-part7-passage-pane {
+  background: #0b1320 !important;
+  border-right-color: #1e293b !important;
+}
+
+html.dark .reading-part6-passage-card,
+html.dark .reading-part7-passage-card {
+  background: #151f32 !important;
+  border-color: #1e293b !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark .reading-part6-passage-title,
+html.dark .reading-part7-passage-title {
+  color: #f1f5f9 !important;
+}
+
+html.dark .reading-part6-reset {
+  background: #172236 !important;
+  border-color: #27354d !important;
+  color: #cbd5e1 !important;
+}
+html.dark .reading-part6-reset:hover {
+  background: #1e2d48 !important;
+  color: #fff !important;
+}
+
+/* Vocabulary & Notes Drawer Dark Mode */
+html.dark .reading-vocabulary {
+  background: #151f32 !important;
+  border-color: #27354d !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark .reading-vocabulary-item {
+  border-bottom-color: #1e293b !important;
+}
+
+html.dark .reading-vocabulary-term strong {
+  color: #f1f5f9 !important;
+}
+
+html.dark .reading-vocabulary-meaning {
+  color: #cbd5e1 !important;
+}
+
+html.dark .reading-vocabulary-example {
+  background: #0b1320 !important;
+  border-color: #1e293b !important;
+  color: #94a3b8 !important;
+}
+
+html.dark .reading-notes-drawer {
+  background: #0f172a !important;
+  border-color: #1e293b !important;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark .reading-notes-head {
+  background: #151f32 !important;
+  border-bottom-color: #1e293b !important;
+}
+
+html.dark .reading-notes-title {
+  color: #f1f5f9 !important;
+}
+
+html.dark .reading-notes-toolbar {
+  background: #172236 !important;
+  border-bottom-color: #1e293b !important;
+}
+
+html.dark .reading-notes-toolbar button {
+  background: transparent !important;
+  color: #94a3b8 !important;
+}
+
+html.dark .reading-notes-toolbar button:hover,
+html.dark .reading-notes-toolbar button[aria-pressed="true"] {
+  background: #27354d !important;
+  color: #38bdf8 !important;
+}
+
+html.dark .reading-notes-editor {
+  background: #0b1320 !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark .reading-notes-status {
+  background: #0f172a !important;
+  border-top-color: #1e293b !important;
+  color: #64748b !important;
+}
+
+/* ===================================================
+   READING DASHBOARD CARDS & HERO - DARK MODE CONTRAST
+   =================================================== */
+html.dark #dashboardMain .reading-hero {
+  background: linear-gradient(135deg, rgba(6, 78, 59, 0.35) 0%, rgba(15, 23, 42, 0.85) 50%, rgba(8, 51, 68, 0.35) 100%) !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
+}
+
+html.dark #dashboardMain .reading-hero .scroll-strip > div {
+  background: rgba(15, 23, 42, 0.75) !important;
+  border-color: rgba(51, 65, 85, 0.6) !important;
+}
+
+html.dark #dashboardMain .reading-hero .scroll-strip > div .text-foreground {
+  color: #f8fafc !important;
+}
+
+html.dark #dashboardMain .reading-hero .scroll-strip > div .text-muted-foreground {
+  color: #94a3b8 !important;
+}
+
+html.dark #dashboardMain section.reading-basic {
+  background-color: rgba(15, 23, 42, 0.75) !important;
+  border: 1px solid rgba(51, 65, 85, 0.6) !important;
+}
+
+html.dark #dashboardMain section.reading-basic h2 {
+  color: #f1f5f9 !important;
+}
+
+/* Part Cards in Dark Mode */
+html.dark #readingParts .reading-part {
+  background-color: rgba(15, 23, 42, 0.8) !important;
+  border-color: rgba(51, 65, 85, 0.5) !important;
+}
+
+html.dark #readingParts .reading-part > div:last-child {
+  background-color: rgba(30, 41, 59, 0.85) !important;
+  color: #cbd5e1 !important;
+  border-top: 1px solid rgba(51, 65, 85, 0.7) !important;
+}
+
+html.dark #readingParts .reading-part > div:last-child span,
+html.dark #readingParts .reading-part > div:last-child span.text-slate-600,
+html.dark #readingParts .reading-part > div:last-child span[class*="text-"] {
+  color: #cbd5e1 !important;
+}
+
+html.dark #readingParts .reading-part > div:last-child svg {
+  color: #94a3b8 !important;
+}
+
+/* Highlight badge và % đúng theo từng Part */
+html.dark #readingParts .reading-part[data-reading-card-part="Part 5"] > div:last-child .font-bold {
+  color: #34d399 !important;
+}
+
+html.dark #readingParts .reading-part[data-reading-card-part="Part 6"] > div:last-child .font-bold {
+  color: #22d3ee !important;
+}
+
+html.dark #readingParts .reading-part[data-reading-card-part="Part 7"] > div:last-child .font-bold {
+  color: #60a5fa !important;
+}
+
+/* Badge số câu */
+html.dark #readingParts .reading-part > div:last-child > span:first-child {
+  background-color: rgba(51, 65, 85, 0.8) !important;
+  border: 1px solid rgba(71, 85, 105, 0.6) !important;
+  color: #f1f5f9 !important;
+}
+
+html.dark #readingParts .reading-part > div:last-child > span:first-child span {
+  color: #f1f5f9 !important;
+}
+
+html.dark #readingParts .reading-part[data-reading-card-part="Part 5"] > div:last-child > span:first-child svg {
+  color: #34d399 !important;
+}
+
+html.dark #readingParts .reading-part[data-reading-card-part="Part 6"] > div:last-child > span:first-child svg {
+  color: #22d3ee !important;
+}
+
+html.dark #readingParts .reading-part[data-reading-card-part="Part 7"] > div:last-child > span:first-child svg {
+  color: #60a5fa !important;
+}
+
+/* Dấu chấm phân cách */
+html.dark #readingParts .reading-part > div:last-child > span.text-slate-400 {
+  color: #64748b !important;
+}
+
+

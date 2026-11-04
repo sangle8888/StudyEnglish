@@ -1,0 +1,1076 @@
+@{
+    ViewData["Title"] = "Luyện Nghe - Listening";
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/assets/css/Listening/listening-main.css" asp-append-version="true" />
+}
+
+      <main id="basicListeningPage" class="basic-listening-page" hidden aria-labelledby="basicListeningTitle">
+        <div class="basic-page-content">
+          <nav class="basic-breadcrumbs" aria-label="Đường dẫn">
+            <a href="/Dashboard" class="inline-flex items-center text-slate-500 hover:text-cyan-600 transition" aria-label="Trang chủ Dashboard">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-house size-3.5"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"></path><path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            </a>
+            <span aria-hidden="true">›</span>
+            <a href="/Listening" id="basicBreadcrumbListening" class="hover:text-cyan-600 transition font-medium">Nghe</a>
+            <span aria-hidden="true">›</span>
+            <strong>Nghe cơ bản (A1 - B1)</strong>
+          </nav>
+          <header class="basic-page-heading">
+            <div>
+              <p class="basic-eyebrow">NGHE HIỂU CƠ BẢN (ELLLO)</p>
+              <h1 id="basicListeningTitle" tabindex="-1">Listening Basic A1 - B1</h1>
+              <p>Luyện nghe từ cơ bản đến trung cấp với hội thoại thực tế, ngữ pháp và từ vựng theo chủ đề.</p>
+            </div>
+            <aside class="basic-tip">
+              <img src="~/assets/images/Listening/listening-basic-buddy-owl.webp" asp-append-version="true" alt="Cú TART">
+              <div><strong>Mẹo từ TART</strong><p>Nghe từng câu và đọc transcript song ngữ để nắm nội dung tốt hơn nhé!</p></div>
+            </aside>
+          </header>
+          <div class="basic-page-toolbar">
+            <div class="basic-levels" role="group" aria-label="Trình độ">
+              <button class="basic-level" type="button" aria-pressed="true">A1 Beginner</button>
+              <button class="basic-level" type="button" aria-pressed="false">A2 Elementary</button>
+              <button class="basic-level" type="button" aria-pressed="false">B1 Intermediate</button>
+            </div>
+            <button id="basicListeningBack" class="basic-back" type="button"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Quay lại luyện thi</button>
+          </div>
+          <section class="basic-topic-row" aria-label="Chủ đề nghe">
+            <button class="basic-topic" type="button" aria-pressed="true" data-topic="short"><span class="basic-topic-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square size-5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            </span><span class="basic-topic-copy"><strong>Hội thoại ngắn</strong><span>Độc thoại &amp; hội thoại đơn giản</span></span><span class="basic-topic-count">2 bài</span></button>
+            <button class="basic-topic" type="button" aria-pressed="false" data-topic="grammar"><span class="basic-topic-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open size-5"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+            </span><span class="basic-topic-copy"><strong>Hội thoại ngữ pháp</strong><span>Ngữ pháp trong giao tiếp</span></span><span class="basic-topic-count">25 bài</span></button>
+            <button class="basic-topic" type="button" aria-pressed="false"><span class="basic-topic-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers size-5"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg>
+            </span><span class="basic-topic-copy"><strong>Từ vựng theo chủ đề</strong><span>Bài nghe theo chủ điểm</span></span><span class="basic-topic-count">0 bài</span></button>
+          </section>
+          <section class="basic-study-grid" aria-label="Bài nghe">
+            <div class="basic-study-left">
+              <div>
+                <div id="basicGoalCard" class="basic-goal-card">
+                <h3 id="basicGoalTitle" class="basic-goal-title">MỤC TIÊU BÀI HỌC</h3>
+                <p id="basicGoalDesc" class="basic-goal-desc">Luyện nghe độc thoại giới thiệu bản thân sử dụng thì hiện tại đơn với động từ Be.</p>
+              </div>
+              <p class="basic-section-label"><span>TRÌNH PHÁT BÀI NGHE</span><span class="basic-topic-count">A1</span></p>
+                <div class="basic-player">
+                  <div class="basic-player-main">
+                    <button id="basicPlayButton" class="basic-player-button" type="button" aria-label="Phát bài nghe"><i class="fa-solid fa-play" aria-hidden="true"></i></button>
+                    <div class="basic-player-track"><input id="basicProgress" type="range" min="0" max="72" value="0" aria-label="Vị trí bài nghe"><div class="basic-player-times"><span id="basicCurrentTime">00:00</span><span id="basicDuration">01:12</span></div></div>
+                  </div>
+                  <div class="basic-player-tools"><button type="button" data-seek="-5" aria-label="Tua lùi 5 giây"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> 5s</button><button type="button" data-seek="5" aria-label="Tua tới 5 giây"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> 5s</button><label><i class="fa-solid fa-volume-high" aria-hidden="true"></i><input type="range" min="0" max="100" value="75" aria-label="Âm lượng"></label></div>
+                </div>
+              </div>
+              <div class="basic-lesson-nav"><button id="basicPrevLesson" type="button" disabled><i class="fa-solid fa-chevron-left" aria-hidden="true"></i> Bài trước</button><button id="basicNextLesson" type="button">Bài tiếp theo <i class="fa-solid fa-chevron-right" aria-hidden="true"></i></button></div>
+              <section class="basic-lesson-list" aria-label="Danh sách bài học">
+                <h2 id="basicLessonListHeader">DANH SÁCH BÀI HỌC (1 / 2)</h2>
+                <div id="basicLessonItemsContainer">
+                  <button class="basic-lesson-item" type="button" aria-current="true" data-lesson-id="1"><span class="basic-lesson-item-number"><i class="fa-solid fa-play" aria-hidden="true"></i></span><span>Beginner English - 1 - Ten Things about Me!</span></button>
+                  <button class="basic-lesson-item" type="button" aria-current="false" data-lesson-id="2"><span class="basic-lesson-item-number">2</span><span>Beginner English - 2 - Where Are You From?</span></button>
+                </div>
+              </section>
+            </div>
+            <div class="basic-study-right">
+              <div class="basic-current-heading">
+                <h2 id="basicCurrentLessonHeading">Beginner English - 1 - Ten Things about Me!</h2>
+                <div class="flex items-center gap-2">
+                  <button id="basicTranslateButton" class="basic-translate" type="button" aria-pressed="true"><i class="fa-solid fa-language" aria-hidden="true"></i> Dịch song ngữ</button>
+                  <button id="basicExpandButton" class="basic-translate" style="width:36px;min-width:36px;padding:0;display:grid;place-items:center;" type="button" title="Phóng to"><i class="fa-solid fa-expand" aria-hidden="true"></i></button>
+                </div>
+              </div>
+              <div id="basicSectionsBar" class="basic-sections-bar mt-2 mb-2" hidden role="tablist" aria-label="Chọn đoạn hội thoại">
+                <button class="basic-section-tab" type="button" role="tab" aria-selected="true" data-section-idx="0">Đoạn 1</button>
+                <button class="basic-section-tab" type="button" role="tab" aria-selected="false" data-section-idx="1">Đoạn 2</button>
+                <button class="basic-section-tab" type="button" role="tab" aria-selected="false" data-section-idx="2">Đoạn 3</button>
+                <button class="basic-section-tab" type="button" role="tab" aria-selected="false" data-section-idx="3">Đoạn 4</button>
+              </div>
+              <div class="basic-transcript-tabs" role="tablist" aria-label="Nội dung bài nghe"><button class="basic-tab" type="button" role="tab" aria-selected="true" data-transcript-tab="content">Nội dung</button><button class="basic-tab" type="button" role="tab" aria-selected="false" data-transcript-tab="notes">Ghi chú</button></div>
+              <div id="basicTranscriptList" class="basic-transcript-list">
+                <article class="basic-transcript-card"><div class="basic-transcript-meta"><span>00:00</span><button class="basic-transcript-play" type="button" data-speak="Hi, my name is Sarah and I will say 10 things about myself using present simple with Be."><i class="fa-solid fa-play" aria-hidden="true"></i> Play</button></div><p class="basic-transcript-en">Hi, my name is Sarah and I will say 10 things about myself using present simple with Be.</p><p class="basic-transcript-vi">Xin chào, tên tôi là Sarah và tôi sẽ nói 10 điều về bản thân bằng cách sử dụng thì hiện tại đơn với Be.</p></article>
+                <article class="basic-transcript-card"><div class="basic-transcript-meta"><span>00:06</span><button class="basic-transcript-play" type="button" data-speak="My name is Sarah. I am a mother. I am also a teacher. I am not a farmer. I am not shy. My daughter is seven years old. She is brave. My son is five years old. He is kind. My children are friendly. They are happy, too. My family is from the USA. We are American."><i class="fa-solid fa-play" aria-hidden="true"></i> Play</button></div><p class="basic-transcript-en">My name is Sarah. I am a mother. I am also a teacher. I am not a farmer. I am not shy. My daughter is seven years old. She is brave. My son is five years old. He is kind. My children are friendly. They are happy, too. My family is from the USA. We are American.</p><p class="basic-transcript-vi">Tên tôi là Sarah. Tôi là một người mẹ. Tôi cũng là một giáo viên. Tôi không phải là nông dân. Tôi không nhút nhát. Con gái tôi bảy tuổi. Con bé dũng cảm. Con trai tôi năm tuổi. Con bé tốt bụng. Các con tôi thân thiện và vui vẻ. Gia đình tôi đến từ Mỹ. Chúng tôi là người Mỹ.</p></article>
+                <article class="basic-transcript-card"><div class="basic-transcript-meta"><span>00:12</span><button class="basic-transcript-play" type="button" data-speak="How about you?"><i class="fa-solid fa-play" aria-hidden="true"></i> Play</button></div><p class="basic-transcript-en">How about you?</p><p class="basic-transcript-vi">Còn bạn thì sao?</p></article>
+                <article class="basic-transcript-card"><div class="basic-transcript-meta"><span>00:18</span><button class="basic-transcript-play" type="button" data-speak="Can you say 10 things using simple present with Be? You should try."><i class="fa-solid fa-play" aria-hidden="true"></i> Play</button></div><p class="basic-transcript-en">Can you say 10 things using simple present with Be? You should try.</p><p class="basic-transcript-vi">Bạn có thể nói 10 điều bằng thì hiện tại đơn với Be không? Bạn nên thử.</p></article>
+              </div>
+              <section id="basicNotes" class="basic-notes-card" hidden aria-label="Ghi chú của tôi">
+                <h3 class="basic-notes-card-title">GHI CHÚ CỦA TÔI</h3>
+                <textarea id="basicNotesInput" class="basic-notes-textarea" placeholder="Ghi lại từ mới, ý chính hoặc câu khó..." spellcheck="false"></textarea>
+                <div class="basic-notes-footer">
+                  <span id="basicNotesStatus" class="basic-notes-status" aria-live="polite"></span>
+                  <span id="basicNotesWordCount">0 ký tự</span>
+                </div>
+              </section>
+            </div>
+          </section>
+        </div>
+        <footer class="basic-rating"><p><strong>BẠN ĐÁNH GIÁ BÀI NGHE NÀY THẾ NÀO?</strong>Chọn một mức độ để đánh dấu đã học.</p><div class="basic-rating-actions"><button type="button" aria-pressed="false">Dễ 😊</button><button type="button" aria-pressed="false">Đã hiểu 👍</button><button type="button" aria-pressed="false">Khó 😟</button></div></footer>
+      </main>
+
+      <!-- MAIN CONTENT AREA -->
+      <main id="dashboardMain" class="flex-1 flex flex-col gap-4 min-w-0">
+        <section
+          class="glass-card relative overflow-hidden rounded-3xl border border-cyan-200/80 bg-gradient-to-br from-cyan-50/90 via-teal-50/80 to-emerald-100/90 p-4 shadow-lg dark:border-cyan-500/20 dark:from-cyan-950/50 dark:via-slate-900/80 dark:to-emerald-950/40 sm:p-5"
+          aria-labelledby="listeningTitle">
+          <div
+            class="listening-hero-main relative z-10 flex flex-wrap items-start justify-between gap-4 pr-0">
+            <div class="flex min-w-0 items-center gap-2.5 sm:gap-3">
+              <span class="flex size-9 shrink-0 items-center justify-center rounded-xl shadow-soft [&_svg]:size-[18px] sm:size-11 sm:rounded-2xl sm:[&_svg]:size-5 bg-skill-listening text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-headphones"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>
+              </span>
+              <div class="min-w-0 flex-1">
+                <h1 id="listeningTitle" class="text-page-title truncate text-foreground">Luyện nghe theo Chủ đề</h1>
+              </div>
+            </div>
+            <div class="flex flex-col gap-3 sm:flex-row sm:items-center lg:shrink-0">
+              <div class="-mx-1 flex scroll-strip gap-2 px-1 sm:mx-0 sm:flex-wrap sm:justify-end sm:overflow-x-visible sm:px-0">
+                <div class="min-w-[6.75rem] rounded-xl border border-border/70 bg-card/70 px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2">
+                  <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+                    <span class="[&_svg]:size-3.5 text-skill-listening">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                    </span>Phần đã luyện
+                  </div>
+                  <div class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">1/4</div>
+                </div>
+                <div class="min-w-[6.75rem] rounded-xl border border-border/70 bg-card/70 px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2">
+                  <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+                    <span class="[&_svg]:size-3.5 text-skill-listening">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-timer"><line x1="10" x2="14" y1="2" y2="2"></line><line x1="12" x2="15" y1="14" y2="11"></line><circle cx="12" cy="14" r="8"></circle></svg>
+                    </span>Phút luyện
+                  </div>
+                  <div class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">0 phút</div>
+                </div>
+                <div class="min-w-[6.75rem] rounded-xl border border-border/70 bg-card/70 px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2">
+                  <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+                    <span class="[&_svg]:size-3.5 text-skill-listening">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-headphones"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>
+                    </span>Câu đã làm
+                  </div>
+                  <div class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">1/2100</div>
+                </div>
+                <div class="min-w-[6.75rem] rounded-xl border border-border/70 bg-card/70 px-2.5 py-1.5 shadow-sm backdrop-blur sm:min-w-[7.5rem] sm:px-3 sm:py-2">
+                  <div class="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-muted-foreground sm:text-xs">
+                    <span class="[&_svg]:size-3.5 text-skill-listening">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </span>Thời gian/câu
+                  </div>
+                  <div class="mt-0.5 truncate font-display text-[15px] font-bold leading-5 tracking-tight tabular-nums text-foreground sm:text-base">3s/câu</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <img src="~/assets/images/Listening/tart-listening-owl-3d.webp" asp-append-version="true" alt="Cú TART luyện nghe"
+            class="listening-hero-mascot">
+          <div class="relative mt-11 space-y-1 sm:pr-36 lg:pr-44 xl:pr-52"><div class="flex items-center justify-between text-xs"><span class="font-medium text-muted-foreground">Độ phủ ngân hàng câu nghe</span><span class="font-semibold text-skill-listening">0%</span></div><div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="relative h-2 w-full overflow-hidden rounded-full bg-muted-foreground/15"><div class="h-full rounded-full transition-all duration-500 bg-skill-listening" style="width: 0%;"></div></div></div>
+        </section>
+        <a id="basicListeningButton" class="glass-card group flex items-center justify-between gap-3 rounded-2xl px-4 py-2.5 sm:px-5 sm:py-3 border border-border/70 dark:border-slate-700/80 shadow-sm transition hover:shadow-md cursor-pointer mx-[75px]" href="/listening/basic" aria-label="Luyện nghe cơ bản">
+          <div class="flex min-w-0 items-center gap-2.5 sm:gap-3">
+            <span class="flex size-9 shrink-0 items-center justify-center rounded-full bg-cyan-100 text-cyan-600 dark:bg-cyan-500/15 dark:text-cyan-300">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-headphones size-4.5"><path d="M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3"></path></svg>
+            </span>
+            <div class="min-w-0">
+              <p class="text-[10px] font-extrabold uppercase tracking-wide text-skill-listening">Mới bắt đầu · A1-B1</p>
+              <h2 class="truncate text-xs sm:text-sm font-extrabold text-slate-800 dark:text-white">Luyện nghe cơ bản (Elllo A1 - B1)</h2>
+            </div>
+          </div>
+          <span class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-skill-listening px-4 py-2 text-xs font-extrabold text-white shadow-md transition hover:brightness-105 group-hover:translate-x-0.5">
+            Học ngay <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-right size-3.5"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </span>
+        </a>
+        <div id="topicModeControl" class="flex items-center justify-end gap-2 px-1"><label
+            id="topicModeLabel"
+            for="topicModeToggle"
+            class="cursor-pointer text-[11px] font-bold text-slate-600 dark:text-slate-300">Luyện nghe theo Chủ đề</label><button type="button" id="topicModeToggle"
+            role="switch" aria-checked="false"
+            aria-label="Chuyển chế độ luyện nghe theo Part hoặc Chủ đề"
+            class="relative h-7 w-12 rounded-full bg-slate-300 dark:bg-slate-700 p-1 transition"><span
+              class="block h-5 w-5 translate-x-0 rounded-full bg-white shadow transition-transform flex-shrink-0"></span></button></div>
+
+        <!-- Chế độ Luyện nghe theo Part (Lưới 2x2 rút gọn khi toggle TẮT) -->
+        <section id="partOverviewGrid" hidden class="grid-cols-1 gap-4 lg:grid-cols-2" aria-label="Luyện nghe theo Part">
+          <!-- Part 1 Overview -->
+          <section class="glass-card relative overflow-hidden rounded-3xl border-t-4 border-violet-500 p-4 sm:p-5 flex flex-col justify-between" aria-labelledby="part-grid-1-title">
+            <div>
+              <div class="relative flex items-start justify-between gap-3">
+                <div class="flex items-start gap-2.5 sm:gap-3 pr-24 sm:pr-28">
+                  <span class="flex size-9 shrink-0 items-center justify-center rounded-xl [&_svg]:size-[18px] sm:size-10 sm:[&_svg]:size-5 bg-skill-grammar text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>
+                  </span>
+                  <div class="min-w-0 flex-1 space-y-0.5 sm:space-y-1">
+                    <h3 id="part-grid-1-title" class="font-display text-[15px] font-semibold leading-snug sm:text-base text-skill-listening">Photographs</h3>
+                    <p class="line-clamp-1 text-[13px] text-muted-foreground sm:line-clamp-2 sm:text-sm">Quan sát chủ thể và bối cảnh để nhận diện mô tả chính xác nhất.</p>
+                    <div class="line-clamp-2 text-[11px] font-medium text-muted-foreground sm:hidden">
+                      <span class="flex flex-wrap items-center gap-x-2 gap-y-1 tabular-nums">
+                        <span class="inline-flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks size-3.5" aria-hidden="true"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>0/126 câu
+                        </span>
+                        <span aria-hidden="true">·</span>
+                        <span>126 bài</span>
+                        <span aria-hidden="true">·</span>
+                        <span>~8 phút</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span class="absolute top-0 right-0 rounded-full border border-violet-200 bg-violet-100 px-2.5 py-0.5 text-[10px] font-extrabold text-violet-700 dark:border-violet-500/30 dark:bg-violet-500/15 dark:text-violet-300">Part 1</span>
+              </div>
+              <div class="mt-4 flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                <span>Độ phủ câu hỏi</span>
+                <span class="font-extrabold text-slate-700 dark:text-slate-200">0%</span>
+              </div>
+              <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+                <div class="h-full w-0 rounded-full bg-violet-500"></div>
+              </div>
+            </div>
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800/80 pt-3 text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+              <div class="hidden sm:flex flex-wrap items-center gap-2">
+                <span><i class="fa-solid fa-list-check mr-1 text-violet-500" aria-hidden="true"></i>0/126 câu</span>
+                <span>·</span>
+                <span>126 bài</span>
+                <span>·</span>
+                <span>~8 phút</span>
+              </div>
+              <div class="flex items-center gap-2 ml-auto">
+                <button type="button" class="listen-theory inline-flex items-center gap-1.5 rounded-full border border-violet-200 bg-white px-3 py-1.5 text-xs font-bold text-violet-600 transition hover:bg-violet-50 dark:border-violet-500/30 dark:bg-slate-800 dark:text-violet-300" data-part="Part 1" data-title="Photographs" data-description="Quan sát chủ thể và bối cảnh để nhận diện mô tả chính xác nhất.">
+                  <i class="fa-solid fa-book-open" aria-hidden="true"></i> Học lý thuyết
+                </button>
+                <button type="button" class="listen-part-start inline-flex items-center gap-1.5 rounded-full border border-cyan-200 bg-white px-3.5 py-1.5 text-xs font-extrabold text-cyan-600 shadow-sm transition hover:bg-cyan-50 dark:border-cyan-500/30 dark:bg-slate-800 dark:text-cyan-300" data-part="Part 1" data-title="Tranh tả người">
+                  Vào luyện <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Part 2 Overview -->
+          <section class="glass-card relative overflow-hidden rounded-3xl border-t-4 border-fuchsia-500 p-4 sm:p-5 flex flex-col justify-between" aria-labelledby="part-grid-2-title">
+            <div>
+              <div class="relative flex items-start justify-between gap-3">
+                <div class="flex items-start gap-2.5 sm:gap-3 pr-24 sm:pr-28">
+                  <span class="flex size-9 shrink-0 items-center justify-center rounded-xl [&_svg]:size-[18px] sm:size-10 sm:[&_svg]:size-5 bg-skill-vocabulary text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
+                  </span>
+                  <div class="min-w-0 flex-1 space-y-0.5 sm:space-y-1">
+                    <h3 id="part-grid-2-title" class="font-display text-[15px] font-semibold leading-snug sm:text-base text-skill-listening">Question–Response</h3>
+                    <p class="line-clamp-1 text-[13px] text-muted-foreground sm:line-clamp-2 sm:text-sm">Bắt đúng dạng câu ngay từ đầu để dự đoán kiểu phản hồi phù hợp.</p>
+                    <div class="line-clamp-2 text-[11px] font-medium text-muted-foreground sm:hidden">
+                      <span class="flex flex-wrap items-center gap-x-2 gap-y-1 tabular-nums">
+                        <span class="inline-flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks size-3.5" aria-hidden="true"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>0/525 câu
+                        </span>
+                        <span aria-hidden="true">·</span>
+                        <span>525 bài</span>
+                        <span aria-hidden="true">·</span>
+                        <span>~12 phút</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span class="absolute top-0 right-0 rounded-full border border-fuchsia-200 bg-fuchsia-100 px-2.5 py-0.5 text-[10px] font-extrabold text-fuchsia-700 dark:border-fuchsia-500/30 dark:bg-fuchsia-500/15 dark:text-fuchsia-300">Part 2</span>
+              </div>
+              <div class="mt-4 flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                <span>Độ phủ câu hỏi</span>
+                <span class="font-extrabold text-slate-700 dark:text-slate-200">0%</span>
+              </div>
+              <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+                <div class="h-full w-0 rounded-full bg-fuchsia-500"></div>
+              </div>
+            </div>
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800/80 pt-3 text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+              <div class="hidden sm:flex flex-wrap items-center gap-2">
+                <span><i class="fa-solid fa-list-check mr-1 text-fuchsia-500" aria-hidden="true"></i>0/525 câu</span>
+                <span>·</span>
+                <span>525 bài</span>
+                <span>·</span>
+                <span>~12 phút</span>
+              </div>
+              <div class="flex items-center gap-2 ml-auto">
+                <button type="button" class="listen-theory inline-flex items-center gap-1.5 rounded-full border border-fuchsia-200 bg-white px-3 py-1.5 text-xs font-bold text-fuchsia-600 transition hover:bg-fuchsia-50 dark:border-fuchsia-500/30 dark:bg-slate-800 dark:text-fuchsia-300" data-part="Part 2" data-title="Question–Response" data-description="Bắt đúng dạng câu ngay từ đầu để dự đoán kiểu phản hồi phù hợp.">
+                  <i class="fa-solid fa-book-open" aria-hidden="true"></i> Học lý thuyết
+                </button>
+                <button type="button" class="listen-part-start inline-flex items-center gap-1.5 rounded-full border border-cyan-200 bg-white px-3.5 py-1.5 text-xs font-extrabold text-cyan-600 shadow-sm transition hover:bg-cyan-50 dark:border-cyan-500/30 dark:bg-slate-800 dark:text-cyan-300" data-part="Part 2" data-title="Câu hỏi Wh-">
+                  Vào luyện <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Part 3 Overview -->
+          <section class="glass-card relative overflow-hidden rounded-3xl border-t-4 border-emerald-500 p-4 sm:p-5 flex flex-col justify-between" aria-labelledby="part-grid-3-title">
+            <div>
+              <div class="relative flex items-start justify-between gap-3">
+                <div class="flex items-start gap-2.5 sm:gap-3 pr-24 sm:pr-28">
+                  <span class="flex size-9 shrink-0 items-center justify-center rounded-xl [&_svg]:size-[18px] sm:size-10 sm:[&_svg]:size-5 bg-skill-reading text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>
+                  </span>
+                  <div class="min-w-0 flex-1 space-y-0.5 sm:space-y-1">
+                    <h3 id="part-grid-3-title" class="font-display text-[15px] font-semibold leading-snug sm:text-base text-skill-listening">Conversations</h3>
+                    <p class="line-clamp-1 text-[13px] text-muted-foreground sm:line-clamp-2 sm:text-sm">Theo dõi mạch hội thoại, vai trò người nói và thông tin được thay đổi.</p>
+                    <div class="line-clamp-2 text-[11px] font-medium text-muted-foreground sm:hidden">
+                      <span class="flex flex-wrap items-center gap-x-2 gap-y-1 tabular-nums">
+                        <span class="inline-flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks size-3.5" aria-hidden="true"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>0/819 câu
+                        </span>
+                        <span aria-hidden="true">·</span>
+                        <span>273 bài</span>
+                        <span aria-hidden="true">·</span>
+                        <span>~18 phút</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span class="absolute top-0 right-0 rounded-full border border-emerald-200 bg-emerald-100 px-2.5 py-0.5 text-[10px] font-extrabold text-emerald-700 dark:border-emerald-500/30 dark:bg-emerald-500/15 dark:text-emerald-300">Part 3</span>
+              </div>
+              <div class="mt-4 flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                <span>Độ phủ câu hỏi</span>
+                <span class="font-extrabold text-slate-700 dark:text-slate-200">0%</span>
+              </div>
+              <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+                <div class="h-full w-0 rounded-full bg-emerald-500"></div>
+              </div>
+            </div>
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800/80 pt-3 text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+              <div class="hidden sm:flex flex-wrap items-center gap-2">
+                <span><i class="fa-solid fa-list-check mr-1 text-emerald-500" aria-hidden="true"></i>0/819 câu</span>
+                <span>·</span>
+                <span>273 bài</span>
+                <span>·</span>
+                <span>~18 phút</span>
+              </div>
+              <div class="flex items-center gap-2 ml-auto">
+                <button type="button" class="listen-theory inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-white px-3 py-1.5 text-xs font-bold text-emerald-600 transition hover:bg-emerald-50 dark:border-emerald-500/30 dark:bg-slate-800 dark:text-emerald-300" data-part="Part 3" data-title="Conversations" data-description="Theo dõi mạch hội thoại, vai trò người nói và thông tin được thay đổi.">
+                  <i class="fa-solid fa-book-open" aria-hidden="true"></i> Học lý thuyết
+                </button>
+                <button type="button" class="listen-part-start inline-flex items-center gap-1.5 rounded-full border border-cyan-200 bg-white px-3.5 py-1.5 text-xs font-extrabold text-cyan-600 shadow-sm transition hover:bg-cyan-50 dark:border-cyan-500/30 dark:bg-slate-800 dark:text-cyan-300" data-part="Part 3" data-title="Ý chính">
+                  Vào luyện <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Part 4 Overview -->
+          <section class="glass-card relative overflow-hidden rounded-3xl border-t-4 border-orange-500 p-4 sm:p-5 flex flex-col justify-between" aria-labelledby="part-grid-4-title">
+            <div>
+              <div class="relative flex items-start justify-between gap-3">
+                <div class="flex items-start gap-2.5 sm:gap-3 pr-24 sm:pr-28">
+                  <span class="flex size-9 shrink-0 items-center justify-center rounded-xl [&_svg]:size-[18px] sm:size-10 sm:[&_svg]:size-5 bg-skill-speaking text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-radio"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"></path><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"></path><circle cx="12" cy="12" r="2"></circle><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"></path><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"></path></svg>
+                  </span>
+                  <div class="min-w-0 flex-1 space-y-0.5 sm:space-y-1">
+                    <h3 id="part-grid-4-title" class="font-display text-[15px] font-semibold leading-snug sm:text-base text-skill-listening">Short Talks</h3>
+                    <p class="line-clamp-1 text-[13px] text-muted-foreground sm:line-clamp-2 sm:text-sm">Nắm cấu trúc bài nói để xác định mục đích, chi tiết và bước tiếp theo.</p>
+                    <div class="line-clamp-2 text-[11px] font-medium text-muted-foreground sm:hidden">
+                      <span class="flex flex-wrap items-center gap-x-2 gap-y-1 tabular-nums">
+                        <span class="inline-flex items-center gap-1">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks size-3.5" aria-hidden="true"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg>0/630 câu
+                        </span>
+                        <span aria-hidden="true">·</span>
+                        <span>210 bài</span>
+                        <span aria-hidden="true">·</span>
+                        <span>~16 phút</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <span class="absolute top-0 right-0 rounded-full border border-orange-200 bg-orange-100 px-2.5 py-0.5 text-[10px] font-extrabold text-orange-700 dark:border-orange-500/30 dark:bg-orange-500/15 dark:text-orange-300">Part 4</span>
+              </div>
+              <div class="mt-4 flex items-center justify-between text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+                <span>Độ phủ câu hỏi</span>
+                <span class="font-extrabold text-slate-700 dark:text-slate-200">0%</span>
+              </div>
+              <div class="mt-1.5 h-1.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
+                <div class="h-full w-0 rounded-full bg-orange-500"></div>
+              </div>
+            </div>
+            <div class="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 dark:border-slate-800/80 pt-3 text-[10px] font-semibold text-slate-500 dark:text-slate-400">
+              <div class="hidden sm:flex flex-wrap items-center gap-2">
+                <span><i class="fa-solid fa-list-check mr-1 text-orange-500" aria-hidden="true"></i>0/630 câu</span>
+                <span>·</span>
+                <span>210 bài</span>
+                <span>·</span>
+                <span>~16 phút</span>
+              </div>
+              <div class="flex items-center gap-2 ml-auto">
+                <button type="button" class="listen-theory inline-flex items-center gap-1.5 rounded-full border border-orange-200 bg-white px-3 py-1.5 text-xs font-bold text-orange-600 transition hover:bg-orange-50 dark:border-orange-500/30 dark:bg-slate-800 dark:text-orange-300" data-part="Part 4" data-title="Short Talks" data-description="Nắm cấu trúc bài nói để xác định mục đích, chi tiết và bước tiếp theo.">
+                  <i class="fa-solid fa-book-open" aria-hidden="true"></i> Học lý thuyết
+                </button>
+                <button type="button" class="listen-part-start inline-flex items-center gap-1.5 rounded-full border border-cyan-200 bg-white px-3.5 py-1.5 text-xs font-extrabold text-cyan-600 shadow-sm transition hover:bg-cyan-50 dark:border-cyan-500/30 dark:bg-slate-800 dark:text-cyan-300" data-part="Part 4" data-title="Tổng quan">
+                  Vào luyện <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <!-- Chế độ Luyện nghe theo Chủ đề (Lưới chi tiết 4 Part kèm chủ đề con khi BẬT toggle) -->
+        <div id="topicDetailContainer" class="flex-col gap-4">
+
+<section
+          class="listen-part glass-card relative overflow-hidden rounded-3xl border-t-4 border-violet-500 p-4 sm:p-5"
+          aria-labelledby="listening-part-1">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex min-w-0 items-start gap-3">
+              <span class="flex size-11 shrink-0 items-center justify-center rounded-2xl shadow-soft [&_svg]:size-5 bg-skill-grammar text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>
+              </span>
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-bold transition-colors [&_svg]:size-3 border-skill-grammar/30 bg-skill-grammar-soft text-foreground">Part 1</span>
+                  <h2 id="listening-part-1" class="text-balance font-display text-lg font-extrabold text-foreground sm:text-xl">Photographs</h2>
+                </div>
+                <p class="mt-1 line-clamp-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:line-clamp-1">Quan sát chủ thể và bối cảnh để nhận diện mô tả chính xác nhất.</p>
+              </div>
+            </div>
+            <button type="button" class="listen-theory inline-flex min-h-11 -translate-y-0.5 shrink-0 touch-manipulation items-center gap-1.5 rounded-xl border px-3 text-xs font-extrabold shadow-soft ring-1 transition-[transform,filter,box-shadow] hover:-translate-y-1 hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:translate-y-0 motion-reduce:transform-none border-transparent bg-skill-grammar text-white ring-skill-grammar/30"
+              data-part="Part 1" data-title="Photographs"
+              data-description="Quan sát chủ thể và bối cảnh để nhận diện mô tả chính xác nhất.">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open size-3.5" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+              <span>Học lý thuyết</span>
+            </button>
+          </div>
+          <div
+            class="mt-4 flex flex-wrap items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400"><div
+              class="coverage-block mr-auto min-w-[220px] flex-1"><span
+                class="mb-1.5 flex w-full items-center gap-2">Độ phủ câu hỏi
+                <span
+                  class="ml-auto text-slate-700 dark:text-slate-200">0%</span></span><span
+                class="block h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><span
+                  class="block h-full w-0 rounded-full bg-violet-500"></span></span></div><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-solid fa-list-check mr-1 text-violet-500"
+                aria-hidden="true"></i>0/126 câu</span><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-solid fa-layer-group mr-1 text-violet-500"
+                aria-hidden="true"></i>126 bài</span><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-regular fa-clock mr-1 text-violet-500"
+                aria-hidden="true"></i>~8 phút</span></div>
+          <div
+            class="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-violet-100 bg-violet-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:shadow-md dark:border-violet-500/20 dark:bg-violet-500/10"
+              data-part="Part 1" data-title="Tranh tả người"
+              data-description="Nhận diện hành động, tư thế và trang phục của nhân vật."
+              data-count="18">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-violet-100 text-violet-500 dark:bg-violet-500/20 dark:text-violet-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                  </span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/18
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Tranh
+                tả người</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Nhận
+                diện hành động, tư thế và trang phục của nhân vật.</span><span
+                class="mt-1 self-end text-xs text-violet-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-violet-100 bg-violet-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:shadow-md dark:border-violet-500/20 dark:bg-violet-500/10"
+              data-part="Part 1" data-title="Tranh tả vật"
+              data-description="Tập trung vào trạng thái, cách sắp xếp và vị trí của đồ vật."
+              data-count="38">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-violet-100 text-violet-500 dark:bg-violet-500/20 dark:text-violet-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layers" aria-hidden="true"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg>
+                  </span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/38
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Tranh
+                tả vật</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Tập
+                trung vào trạng thái, cách sắp xếp và vị trí của đồ
+                vật.</span><span class="mt-1 self-end text-xs text-violet-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-violet-100 bg-violet-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:shadow-md dark:border-violet-500/20 dark:bg-violet-500/10"
+              data-part="Part 1" data-title="Cảnh &amp; bối cảnh"
+              data-description="Xác định địa điểm, thời tiết và các chi tiết không gian nổi bật."
+              data-count="7">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-violet-100 text-violet-500 dark:bg-violet-500/20 dark:text-violet-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"></path></svg>
+                  </span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/7
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Cảnh
+                &amp; bối cảnh</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Xác
+                định địa điểm, thời tiết và các chi tiết không gian nổi
+                bật.</span><span class="mt-1 self-end text-xs text-violet-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-violet-100 bg-violet-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-violet-300 hover:shadow-md dark:border-violet-500/20 dark:bg-violet-500/10"
+              data-part="Part 1" data-title="Người &amp; vật"
+              data-description="Theo dõi cách con người sử dụng hoặc tương tác với đồ vật."
+              data-count="63">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-violet-100 text-violet-500 dark:bg-violet-500/20 dark:text-violet-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square-text" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M13 8H7"></path><path d="M17 12H7"></path></svg>
+                  </span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/63
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Người
+                &amp; vật</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Theo
+                dõi cách con người sử dụng hoặc tương tác với đồ
+                vật.</span><span class="mt-1 self-end text-xs text-violet-400"
+                aria-hidden="true">↗</span>
+            </button>
+          </div>
+        </section>
+        <section
+          class="listen-part glass-card relative overflow-hidden rounded-3xl border-t-4 border-fuchsia-500 p-4 sm:p-5"
+          aria-labelledby="listening-part-2">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex min-w-0 items-start gap-3">
+              <span class="flex size-11 shrink-0 items-center justify-center rounded-2xl shadow-soft [&_svg]:size-5 bg-skill-vocabulary text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
+              </span>
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-bold transition-colors [&_svg]:size-3 border-skill-vocabulary/30 bg-skill-vocabulary-soft text-foreground">Part 2</span>
+                  <h2 id="listening-part-2" class="text-balance font-display text-lg font-extrabold text-foreground sm:text-xl">Question–Response</h2>
+                </div>
+                <p class="mt-1 line-clamp-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:line-clamp-1">Bắt đúng dạng câu ngay từ đầu để dự đoán kiểu phản hồi phù hợp.</p>
+              </div>
+            </div>
+            <button type="button" class="listen-theory inline-flex min-h-11 -translate-y-0.5 shrink-0 touch-manipulation items-center gap-1.5 rounded-xl border px-3 text-xs font-extrabold shadow-soft ring-1 transition-[transform,filter,box-shadow] hover:-translate-y-1 hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:translate-y-0 motion-reduce:transform-none border-transparent bg-skill-vocabulary text-white ring-skill-vocabulary/30"
+              data-part="Part 2" data-title="Question–Response"
+              data-description="Bắt đúng dạng câu ngay từ đầu để dự đoán kiểu phản hồi phù hợp.">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open size-3.5" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+              <span>Học lý thuyết</span>
+            </button>
+          </div>
+          <div
+            class="mt-4 flex flex-wrap items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400"><div
+              class="coverage-block mr-auto min-w-[220px] flex-1"><span
+                class="mb-1.5 flex w-full items-center gap-2">Độ phủ câu hỏi
+                <span
+                  class="ml-auto text-slate-700 dark:text-slate-200">0%</span></span><span
+                class="block h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><span
+                  class="block h-full w-0 rounded-full bg-fuchsia-500"></span></span></div><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-solid fa-list-check mr-1 text-fuchsia-500"
+                aria-hidden="true"></i>0/525 câu</span><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-solid fa-layer-group mr-1 text-fuchsia-500"
+                aria-hidden="true"></i>525 bài</span><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-regular fa-clock mr-1 text-fuchsia-500"
+                aria-hidden="true"></i>~12 phút</span></div>
+          <div
+            class="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-fuchsia-100 bg-fuchsia-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-fuchsia-300 hover:shadow-md dark:border-fuchsia-500/20 dark:bg-fuchsia-500/10"
+              data-part="Part 2" data-title="Câu hỏi Wh-"
+              data-description="Phân biệt thông tin về người, nơi chốn, thời gian và lý do."
+              data-count="143">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-fuchsia-100 text-fuchsia-500 dark:bg-fuchsia-500/20 dark:text-fuchsia-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-circle" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"></path></svg>
+                  </span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/143
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Câu
+                hỏi Wh-</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Phân
+                biệt thông tin về người, nơi chốn, thời gian và lý
+                do.</span><span class="mt-1 self-end text-xs text-fuchsia-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-fuchsia-100 bg-fuchsia-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-fuchsia-300 hover:shadow-md dark:border-fuchsia-500/20 dark:bg-fuchsia-500/10"
+              data-part="Part 2" data-title="Câu hỏi Yes/No"
+              data-description="Nhận diện câu trả lời trực tiếp và phản hồi gián tiếp."
+              data-count="75">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-fuchsia-100 text-fuchsia-500 dark:bg-fuchsia-500/20 dark:text-fuchsia-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+                  </span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/75
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Câu
+                hỏi Yes/No</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Nhận
+                diện câu trả lời trực tiếp và phản hồi gián tiếp.</span><span
+                class="mt-1 self-end text-xs text-fuchsia-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-fuchsia-100 bg-fuchsia-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-fuchsia-300 hover:shadow-md dark:border-fuchsia-500/20 dark:bg-fuchsia-500/10"
+              data-part="Part 2" data-title="Câu trần thuật"
+              data-description="Hiểu hàm ý để chọn phản hồi tự nhiên và đúng ngữ cảnh."
+              data-count="219">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-fuchsia-100 text-fuchsia-500 dark:bg-fuchsia-500/20 dark:text-fuchsia-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square-text" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><path d="M13 8H7"></path><path d="M17 12H7"></path></svg>
+                  </span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/219
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Câu
+                trần thuật</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Hiểu
+                hàm ý để chọn phản hồi tự nhiên và đúng ngữ cảnh.</span><span
+                class="mt-1 self-end text-xs text-fuchsia-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-fuchsia-100 bg-fuchsia-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-fuchsia-300 hover:shadow-md dark:border-fuchsia-500/20 dark:bg-fuchsia-500/10"
+              data-part="Part 2" data-title="Câu hỏi đặc biệt"
+              data-description="Luyện câu lựa chọn, câu phủ định và câu hỏi đuôi."
+              data-count="88">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-fuchsia-100 text-fuchsia-500 dark:bg-fuchsia-500/20 dark:text-fuchsia-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layer-group" aria-hidden="true"><path d="M16 16v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><rect x="3" y="10" width="18" height="12" rx="2"></rect><circle cx="12" cy="8" r="2"></circle></svg>
+                  </span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/88
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Câu
+                hỏi đặc biệt</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Luyện
+                câu lựa chọn, câu phủ định và câu hỏi đuôi.</span><span
+                class="mt-1 self-end text-xs text-fuchsia-400"
+                aria-hidden="true">↗</span>
+            </button>
+          </div>
+        </section>
+        <section
+          class="listen-part glass-card relative overflow-hidden rounded-3xl border-t-4 border-emerald-500 p-4 sm:p-5"
+          aria-labelledby="listening-part-3">
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div class="flex min-w-0 items-start gap-3">
+              <span class="flex size-11 shrink-0 items-center justify-center rounded-2xl shadow-soft [&_svg]:size-5 bg-emerald-500 text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-messages-square" aria-hidden="true"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>
+              </span>
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-bold transition-colors [&_svg]:size-3 border-emerald-500/30 bg-emerald-50 dark:bg-emerald-500/15 text-foreground">Part 3</span>
+                  <h2 id="listening-part-3" class="text-balance font-display text-lg font-extrabold text-foreground sm:text-xl">Conversations</h2>
+                </div>
+                <p class="mt-1 line-clamp-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:line-clamp-1">Theo dõi mạch hội thoại, vai trò người nói và thông tin được thay đổi.</p>
+              </div>
+            </div>
+            <button type="button" class="listen-theory inline-flex min-h-11 -translate-y-0.5 shrink-0 touch-manipulation items-center gap-1.5 rounded-xl border px-3 text-xs font-extrabold shadow-soft ring-1 transition-[transform,filter,box-shadow] hover:-translate-y-1 hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:translate-y-0 motion-reduce:transform-none border-transparent bg-skill-reading text-white ring-skill-reading/30" data-part="Part 3" data-title="Conversations" data-description="Theo dõi mạch hội thoại, vai trò người nói và thông tin được thay đổi.">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open size-3.5" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+              <span>Học lý thuyết</span>
+            </button>
+          </div>
+          <div
+            class="mt-4 flex flex-wrap items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400"><div
+              class="coverage-block mr-auto min-w-[220px] flex-1"><span
+                class="mb-1.5 flex w-full items-center gap-2">Độ phủ câu hỏi
+                <span
+                  class="ml-auto text-slate-700 dark:text-slate-200">0%</span></span><span
+                class="block h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><span
+                  class="block h-full w-0 rounded-full bg-emerald-500"></span></span></div><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-solid fa-list-check mr-1 text-emerald-500"
+                aria-hidden="true"></i>0/819 câu</span><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-solid fa-layer-group mr-1 text-emerald-500"
+                aria-hidden="true"></i>273 bài</span><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-regular fa-clock mr-1 text-emerald-500"
+                aria-hidden="true"></i>~18 phút</span></div>
+          <div
+            class="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-emerald-100 bg-emerald-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md dark:border-emerald-500/20 dark:bg-emerald-500/10"
+              data-part="Part 3" data-title="Ý chính"
+              data-description="Nắm bối cảnh, chủ đề và mục đích chung của bài nghe."
+              data-count="159">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-emerald-100 text-emerald-500 dark:bg-emerald-500/20 dark:text-emerald-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/159
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Ý
+                chính</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Nắm
+                bối cảnh, chủ đề và mục đích chung của bài nghe.</span><span
+                class="mt-1 self-end text-xs text-emerald-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-emerald-100 bg-emerald-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md dark:border-emerald-500/20 dark:bg-emerald-500/10"
+              data-part="Part 3" data-title="Thông tin chi tiết"
+              data-description="Bắt chính xác người, thời gian, địa điểm và vấn đề được nhắc đến."
+              data-count="441">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-emerald-100 text-emerald-500 dark:bg-emerald-500/20 dark:text-emerald-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks" aria-hidden="true"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg></span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/441
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Thông
+                tin chi tiết</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Bắt
+                chính xác người, thời gian, địa điểm và vấn đề được nhắc
+                đến.</span><span class="mt-1 self-end text-xs text-emerald-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-emerald-100 bg-emerald-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md dark:border-emerald-500/20 dark:bg-emerald-500/10"
+              data-part="Part 3" data-title="Suy luận &amp; hành động tiếp theo"
+              data-description="Suy ra hàm ý, vai trò hoặc hành động có khả năng xảy ra tiếp theo."
+              data-count="207">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-emerald-100 text-emerald-500 dark:bg-emerald-500/20 dark:text-emerald-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/207
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Suy
+                luận &amp; hành động tiếp theo</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Suy
+                ra hàm ý, vai trò hoặc hành động có khả năng xảy ra tiếp
+                theo.</span><span class="mt-1 self-end text-xs text-emerald-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-emerald-100 bg-emerald-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-emerald-300 hover:shadow-md dark:border-emerald-500/20 dark:bg-emerald-500/10"
+              data-part="Part 3" data-title="Biểu đồ &amp; hình ảnh"
+              data-description="Kết hợp audio với bảng biểu, lịch trình hoặc hình minh họa."
+              data-count="12">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-emerald-100 text-emerald-500 dark:bg-emerald-500/20 dark:text-emerald-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/12
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Biểu
+                đồ &amp; hình ảnh</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Kết
+                hợp audio với bảng biểu, lịch trình hoặc hình minh
+                họa.</span><span class="mt-1 self-end text-xs text-emerald-400"
+                aria-hidden="true">↗</span>
+            </button>
+          </div>
+        </section>
+        <section
+          class="listen-part glass-card relative overflow-hidden rounded-3xl border-t-4 border-orange-500 p-4 sm:p-5"
+          aria-labelledby="listening-part-4">
+          <div class="flex items-start justify-between gap-3">
+            <div class="flex min-w-0 items-start gap-3">
+              <span class="flex size-11 shrink-0 items-center justify-center rounded-2xl shadow-soft [&_svg]:size-5 bg-skill-speaking text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-radio" aria-hidden="true"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"></path><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"></path><circle cx="12" cy="12" r="2"></circle><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"></path><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"></path></svg>
+              </span>
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-bold transition-colors [&_svg]:size-3 border-skill-speaking/30 bg-skill-speaking-soft text-foreground">Part 4</span>
+                  <h2 id="listening-part-4" class="text-balance font-display text-lg font-extrabold text-foreground sm:text-xl">Short Talks</h2>
+                </div>
+                <p class="mt-1 line-clamp-2 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:line-clamp-1">Nắm cấu trúc bài nói để xác định mục đích, chi tiết và bước tiếp theo.</p>
+              </div>
+            </div>
+            <button type="button" class="listen-theory inline-flex min-h-11 -translate-y-0.5 shrink-0 touch-manipulation items-center gap-1.5 rounded-xl border px-3 text-xs font-extrabold shadow-soft ring-1 transition-[transform,filter,box-shadow] hover:-translate-y-1 hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:translate-y-0 motion-reduce:transform-none border-transparent bg-skill-speaking text-white ring-skill-speaking/30"
+              data-part="Part 4" data-title="Short Talks"
+              data-description="Nắm cấu trúc bài nói để xác định mục đích, chi tiết và bước tiếp theo.">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open size-3.5" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+              <span>Học lý thuyết</span>
+            </button>
+          </div>
+          <div
+            class="mt-4 flex flex-wrap items-center gap-2 text-[10px] font-bold text-slate-500 dark:text-slate-400"><div
+              class="coverage-block mr-auto min-w-[220px] flex-1"><span
+                class="mb-1.5 flex w-full items-center gap-2">Độ phủ câu hỏi
+                <span
+                  class="ml-auto text-slate-700 dark:text-slate-200">0%</span></span><span
+                class="block h-1.5 w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700"><span
+                  class="block h-full w-0 rounded-full bg-orange-500"></span></span></div><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-solid fa-list-check mr-1 text-orange-500"
+                aria-hidden="true"></i>0/630 câu</span><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-solid fa-layer-group mr-1 text-orange-500"
+                aria-hidden="true"></i>210 bài</span><span
+              class="rounded-full border border-slate-200 bg-white/80 px-2.5 py-1.5 dark:border-slate-700 dark:bg-slate-800/80"><i
+                class="fa-regular fa-clock mr-1 text-orange-500"
+                aria-hidden="true"></i>~16 phút</span></div>
+          <div
+            class="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-orange-100 bg-orange-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-orange-300 hover:shadow-md dark:border-orange-500/20 dark:bg-orange-500/10"
+              data-part="Part 4" data-title="Tổng quan"
+              data-description="Xác định người nói, người nghe, bối cảnh và mục đích bài nói."
+              data-count="405">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-orange-100 text-orange-500 dark:bg-orange-500/20 dark:text-orange-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg></span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/405
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Tổng
+                quan</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Xác
+                định người nói, người nghe, bối cảnh và mục đích bài
+                nói.</span><span class="mt-1 self-end text-xs text-orange-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-orange-100 bg-orange-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-orange-300 hover:shadow-md dark:border-orange-500/20 dark:bg-orange-500/10"
+              data-part="Part 4" data-title="Thông tin chi tiết"
+              data-description="Nắm bắt sự việc, lý do, thời gian, số liệu và dịch vụ được đề cập."
+              data-count="144">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-orange-100 text-orange-500 dark:bg-orange-500/20 dark:text-orange-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-list-checks" aria-hidden="true"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg></span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/144
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Thông
+                tin chi tiết</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Nắm
+                bắt sự việc, lý do, thời gian, số liệu và dịch vụ được đề
+                cập.</span><span class="mt-1 self-end text-xs text-orange-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-orange-100 bg-orange-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-orange-300 hover:shadow-md dark:border-orange-500/20 dark:bg-orange-500/10"
+              data-part="Part 4"
+              data-title="Hành động tiếp theo &amp; lời khuyên"
+              data-description="Hiểu bước tiếp theo, yêu cầu, hướng dẫn và lời khuyên dành cho người nghe."
+              data-count="39">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-orange-100 text-orange-500 dark:bg-orange-500/20 dark:text-orange-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lightbulb" aria-hidden="true"><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="M6.45 6.45l1.41 1.41"></path><path d="M16.95 16.95l1.41 1.41"></path><path d="M6.45 17.55l1.41-1.41"></path><path d="M16.95 7.05l1.41-1.41"></path></svg></span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/39
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Hành
+                động tiếp theo &amp; lời khuyên</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Hiểu
+                bước tiếp theo, yêu cầu, hướng dẫn và lời khuyên dành cho người
+                nghe.</span><span class="mt-1 self-end text-xs text-orange-400"
+                aria-hidden="true">↗</span>
+            </button>
+            <button type="button"
+              class="listen-category group flex min-h-[118px] flex-col rounded-2xl border border-orange-100 bg-orange-50/80 p-3 text-left transition hover:-translate-y-0.5 hover:border-orange-300 hover:shadow-md dark:border-orange-500/20 dark:bg-orange-500/10"
+              data-part="Part 4" data-title="Ngữ ý &amp; bảng biểu"
+              data-description="Hiểu ngụ ý và câu hỏi kết hợp bài nghe với hình ảnh, bảng biểu."
+              data-count="42">
+              <span class="mb-2 flex items-center justify-between gap-2"><span
+                  class="grid h-8 w-8 place-items-center rounded-full bg-orange-100 text-orange-500 dark:bg-orange-500/20 dark:text-orange-300"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-image" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg></span><span
+                  class="rounded-full bg-white/85 px-2 py-1 text-[10px] font-bold text-slate-600 dark:bg-slate-800/80 dark:text-slate-300">0/42
+                  câu</span></span>
+              <span
+                class="text-xs font-extrabold text-slate-800 dark:text-slate-100">Ngữ
+                ý &amp; bảng biểu</span><span
+                class="mt-1 flex-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">Hiểu
+                ngụ ý và câu hỏi kết hợp bài nghe với hình ảnh, bảng
+                biểu.</span><span class="mt-1 self-end text-xs text-orange-400"
+                aria-hidden="true">↗</span>
+            </button>
+          </div>
+        </section>
+        </div>
+        <section id="listeningInfoModal"
+          class="fixed inset-0 z-50 hidden items-center justify-center bg-slate-950/50 p-4 backdrop-blur-sm"
+          role="dialog" aria-modal="true"
+          aria-labelledby="listeningModalTitle"><div
+            class="glass-card w-full max-w-lg rounded-3xl bg-white p-5 shadow-2xl dark:bg-slate-900 sm:p-6"><div
+              class="flex items-start justify-between gap-4"><div><p
+                  id="listeningModalPart"
+                  class="text-[11px] font-extrabold uppercase tracking-wide text-cyan-600 dark:text-cyan-300"></p><h2
+                  id="listeningModalTitle"
+                  class="mt-1 text-xl font-extrabold text-slate-900 dark:text-white"></h2></div><button
+                type="button" id="closeListeningModal"
+                class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-200"
+                aria-label="Đóng"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div><p
+              id="listeningModalDescription"
+              class="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-300"></p><div
+              id="listeningModalMeta"
+              class="mt-4 rounded-2xl bg-cyan-50 p-4 text-xs leading-relaxed text-slate-600 dark:bg-cyan-500/10 dark:text-slate-300"></div><div
+              class="mt-5 flex justify-end"><button type="button"
+                id="listeningModalDone"
+                class="rounded-xl bg-cyan-600 px-4 py-2.5 text-xs font-extrabold text-white">Đã
+                hiểu</button></div></div></section>
+        <div hidden aria-hidden="true"><button id="goalSettingsButton"
+            type="button"></button><span id="goalSummaryTitle"></span><span
+            id="goalSummaryDetails"></span><span
+            id="taskCounterText"></span><button id="profileMenuTrigger"
+            type="button" aria-expanded="false"></button><div id="profileMenu"
+            role="menu" hidden><a role="menuitem" href="taikhoan.html">Tài
+              khoản</a></div><button id="profileFeedbackButton"
+            type="button"></button></div>
+        
+      </main>
+
+@section Modals {
+    <!-- Background Decorative Blobs -->
+    <div
+      class="blob bg-blue-300 dark:bg-blue-900 w-96 h-96 top-0 left-10"></div>
+    <div
+      class="blob bg-purple-300 dark:bg-purple-900 w-80 h-80 top-1/3 right-10"
+      style="animation-delay: -4s;"></div>
+    <div class="blob bg-pink-300 dark:bg-pink-900 w-96 h-96 bottom-10 left-1/3"
+      style="animation-delay: -8s;"></div>
+
+    <section id="listeningPracticeScreen" hidden aria-modal="true" role="dialog" aria-labelledby="listeningPracticeHeading">
+      <header class="listening-practice-topbar">
+        <div class="listening-practice-title"><button id="closeListeningPractice" type="button" aria-label="Quay lại danh sách"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left" aria-hidden="true"><line x1="12" y1="19" x2="5" y2="12"></line><line x1="19" y1="5" x2="12" y2="12"></line></svg></button><div><strong id="listeningPracticeHeading">Part 2 - Question-Response (Câu hỏi Wh-)</strong><small id="listeningPracticeSubheading">ETS 2019 - Test 2 - Câu 7</small></div></div>
+        <strong id="listeningPracticeTestBadge" class="listening-practice-test">ETS 2019 - Test 2</strong>
+        <div class="listening-practice-tools">
+          <button type="button" data-practice-tool="translation"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-languages" aria-hidden="true"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg> Song ngữ</button>
+          <button type="button" data-practice-tool="dictation" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pen" aria-hidden="true"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"></path></svg> Chép chính tả</button>
+          <button type="button" data-practice-tool="vocabulary" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg> Từ vựng</button>
+          <button type="button" data-practice-tool="notes" aria-pressed="false"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-notebook-pen" aria-hidden="true"><path d="M13.4 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7.4"></path><path d="M2 6h4"></path><path d="M2 10h4"></path><path d="M2 14h4"></path><path d="M2 18h4"></path><path d="M21.378 5.626a1 1 0 1 0-3.004-3.004l-5.01 5.012a2 2 0 0 0-.506.854l-.837 2.87a.5.5 0 0 0 .62.62l2.87-.837a2 2 0 0 0 .854-.506z"></path></svg> Ghi chú</button>
+        </div>
+      </header>
+      <main class="listening-practice-main">
+        <section class="listening-practice-question-pane" aria-label="Nội dung câu hỏi">
+          <h2 id="listeningPracticePrompt" class="listening-practice-prompt">Select the best response to the question.</h2>
+          <div class="listening-practice-audio">
+            <div class="listening-practice-wave-row">
+              <button id="listeningQuestionPlay" class="listening-practice-play" type="button" aria-label="Phát bài nghe"><i class="fa-solid fa-play" aria-hidden="true"></i></button>
+              <div style="flex:1;min-width:0;">
+                <div id="listeningQuestionWave" class="listening-practice-wave" aria-hidden="true"></div>
+                <div class="listening-practice-times">
+                  <span id="listeningQuestionCurrent">00:00</span>
+                  <span id="listeningQuestionDuration">00:18</span>
+                </div>
+              </div>
+            </div>
+            <div class="listening-practice-audio-controls">
+              <button type="button" data-question-seek="-5" aria-label="Tua lùi 5 giây"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> 5s</button>
+              <button type="button" data-question-seek="5" aria-label="Tua tới 5 giây"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> 5s</button>
+              <button type="button" data-question-speed="0.75">0.75x</button>
+              <button type="button" data-question-speed="0.9">0.9x</button>
+              <button type="button" data-question-speed="1" style="color:#076af1;border-color:#076af1;">1x</button>
+              <button type="button" data-question-speed="1.1">1.1x</button>
+              <button type="button" data-question-speed="1.25">1.25x</button>
+              <button type="button" id="questionReplay" aria-label="Phát lại từ đầu"><i class="fa-solid fa-repeat" aria-hidden="true"></i></button>
+              <div class="listening-practice-volume-wrap">
+                <button type="button" id="listeningQuestionMute" style="border:0;background:transparent;padding:0 2px;cursor:pointer;" aria-label="Âm lượng"><i class="fa-solid fa-volume-high text-slate-600"></i></button>
+                <input type="range" id="listeningQuestionVolume" min="0" max="100" value="75" aria-label="Điều chỉnh âm lượng">
+              </div>
+            </div>
+            <p class="listening-practice-hint">Space: phát / tạm dừng · ←/→: tua 5 giây · ↑/↓: âm lượng 5% · Shift + ←/→: tốc độ · Shift + Space: phát lại từ đầu. Phím tắt tạm ngừng khi chép chính tả.</p>
+          </div>
+          <img id="listeningPracticePicture" class="listening-practice-picture" src="~/assets/images/Listening/listening-part1-people.jpg" asp-append-version="true" alt="Hành khách đang ngồi chờ tại nhà ga" style="display:none;">
+        </section>
+        <section class="listening-practice-answer-pane" aria-label="Câu hỏi và đáp án">
+          <div id="listeningQuestionView">
+            <h2>Question</h2>
+            <div class="listening-practice-question-card">
+              <h3 id="listeningQuestionNumber">7.</h3>
+              <div id="listeningQuestionTranscript" class="listening-question-transcript mb-3 p-3 rounded-xl bg-blue-50/80 dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-200 leading-relaxed font-medium" hidden></div>
+              <div id="listeningPracticeOptions" class="listening-practice-options" role="radiogroup" aria-label="Chọn đáp án">
+                <button class="listening-practice-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-answer="A"><span class="listening-practice-option-mark"></span><span>(A)</span></button>
+                <button class="listening-practice-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-answer="B"><span class="listening-practice-option-mark"></span><span>(B)</span></button>
+                <button class="listening-practice-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-answer="C"><span class="listening-practice-option-mark"></span><span>(C)</span></button>
+                <button class="listening-practice-option" type="button" role="radio" aria-checked="false" aria-pressed="false" data-answer="D" style="display:none;"><span class="listening-practice-option-mark"></span><span>(D)</span></button>
+              </div>
+              <div id="listeningPracticeExplanation" class="listening-practice-explanation" hidden></div>
+            </div>
+          </div>
+          <section id="listeningDictationPanel" class="listening-dictation" aria-label="Bài chép chính tả" hidden>
+            <div class="listening-dictation-head"><div><strong class="listening-dictation-title"><i class="fa-solid fa-spell-check" aria-hidden="true"></i> Chép chính tả</strong><div id="dictationCount" class="listening-dictation-count" aria-live="polite">Đã xong 0/6 từ</div></div>
+              <div class="listening-dictation-modes" role="group" aria-label="Mức gợi ý"><button type="button" data-dictation-mode="30" aria-pressed="true">30%</button><button type="button" data-dictation-mode="50" aria-pressed="false">50%</button><button type="button" data-dictation-mode="keywords" aria-pressed="false">Từ khóa</button><button type="button" data-dictation-mode="full" aria-pressed="false">Full</button><button type="button" id="dictationReset"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Reset</button></div>
+            </div>
+            <div class="listening-dictation-progress" role="progressbar" aria-label="Tiến độ chép chính tả" aria-valuemin="0" aria-valuemax="6" aria-valuenow="0"><span id="dictationProgressBar"></span></div>
+            <div class="listening-dictation-actions"><button type="button" data-reveal-count="1"><i class="fa-regular fa-eye" aria-hidden="true"></i> Mở 1 từ</button><button type="button" data-reveal-count="3"><i class="fa-solid fa-list-check" aria-hidden="true"></i> Mở 3 từ</button><button type="button" data-reveal-count="all"><i class="fa-solid fa-lock-open" aria-hidden="true"></i> Mở tất cả</button><button type="button" id="dictationCheck"><i class="fa-solid fa-check" aria-hidden="true"></i> Check</button></div>
+            <div class="listening-dictation-lines">
+              <div class="listening-dictation-line"><span class="listening-dictation-number">01</span><span class="listening-dictation-text">Some <input class="listening-dictation-blank" data-dictation-answer="travelers" aria-label="Từ còn thiếu số 1" autocomplete="off" spellcheck="false"> are seated in a <input class="listening-dictation-blank" data-dictation-answer="waiting" aria-label="Từ còn thiếu số 2" autocomplete="off" spellcheck="false"> area.</span></div>
+              <div class="listening-dictation-line"><span class="listening-dictation-number">02</span><span class="listening-dictation-text">Some <input class="listening-dictation-blank" data-dictation-answer="passengers" aria-label="Từ còn thiếu số 3" autocomplete="off" spellcheck="false"> are <input class="listening-dictation-blank" data-dictation-answer="standing" aria-label="Từ còn thiếu số 4" autocomplete="off" spellcheck="false"> up <input class="listening-dictation-blank" data-dictation-answer="nearby" aria-label="Từ còn thiếu số 5" autocomplete="off" spellcheck="false">.</span></div>
+              <div class="listening-dictation-line"><span class="listening-dictation-number">03</span><span class="listening-dictation-text">One of the women is handing out tickets.</span></div>
+              <div class="listening-dictation-line"><span class="listening-dictation-number">04</span><span class="listening-dictation-text">One of the men is <input class="listening-dictation-blank" data-dictation-answer="standing at" aria-label="Từ còn thiếu số 6" autocomplete="off" spellcheck="false"> a counter.</span></div>
+            </div>
+            <p id="dictationFeedback" class="listening-dictation-feedback" aria-live="polite"></p>
+          </section>
+          <section id="listeningVocabularyPanel" class="listening-vocabulary" aria-label="Từ vựng trong bài" hidden>
+            <header class="listening-vocabulary-head"><span class="listening-vocabulary-icon"><i class="fa-solid fa-book-bookmark" aria-hidden="true"></i></span><div class="listening-vocabulary-head-copy"><strong>Từ vựng bài này</strong><small>7 từ/cụm TOEIC liên quan trực tiếp đến bài này.</small></div><button id="vocabularyExpand" class="listening-vocabulary-toggle" type="button" aria-expanded="false"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i> Xem đầy đủ</button></header>
+            <div class="listening-vocabulary-list">
+              <article class="listening-vocabulary-item" data-vocabulary-item="be-seated"><div class="listening-vocabulary-term"><span class="listening-vocabulary-number">1</span><strong>Be seated</strong><span class="listening-vocabulary-meta"><span>/biː ˈsiːtɪd/</span><span>phrase</span><span>B1</span></span><span class="listening-vocabulary-pronounce"><button type="button" data-pronounce="be seated" data-accent="en-US"><i class="fa-solid fa-volume-high" aria-label="Phát âm Mỹ"></i> US</button><button type="button" data-pronounce="be seated" data-accent="en-GB"><i class="fa-solid fa-volume-high" aria-label="Phát âm Anh"></i> UK</button></span></div><button class="listening-vocabulary-save" type="button" data-vocabulary-save="be-seated" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="listening-vocabulary-meaning">đang ngồi</span><span class="listening-vocabulary-example">Trong bài: “Some travelers are seated in a waiting area.”</span></article>
+              <article class="listening-vocabulary-item" data-vocabulary-item="waiting-area"><div class="listening-vocabulary-term"><span class="listening-vocabulary-number">2</span><strong>Waiting area</strong><span class="listening-vocabulary-meta"><span>/ˈweɪtɪŋ ˌeriə/</span><span>noun phrase</span><span>A2</span></span><span class="listening-vocabulary-pronounce"><button type="button" data-pronounce="waiting area" data-accent="en-US"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> US</button><button type="button" data-pronounce="waiting area" data-accent="en-GB"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> UK</button></span></div><button class="listening-vocabulary-save" type="button" data-vocabulary-save="waiting-area" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="listening-vocabulary-meaning">khu vực chờ</span><span class="listening-vocabulary-example">Trong bài: “...in a waiting area.”</span></article>
+              <article class="listening-vocabulary-item" data-vocabulary-item="partition"><div class="listening-vocabulary-term"><span class="listening-vocabulary-number">3</span><strong>Partition</strong><span class="listening-vocabulary-meta"><span>/pɑːˈtɪʃ(ə)n/</span><span>noun</span><span>B2</span></span><span class="listening-vocabulary-pronounce"><button type="button" data-pronounce="partition" data-accent="en-US"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> US</button><button type="button" data-pronounce="partition" data-accent="en-GB"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> UK</button></span></div><button class="listening-vocabulary-save" type="button" data-vocabulary-save="partition" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="listening-vocabulary-meaning">vách ngăn</span><span class="listening-vocabulary-example">Trong bài: “A partition separates part of the waiting area.”</span></article>
+              <article class="listening-vocabulary-item" data-vocabulary-item="passenger"><div class="listening-vocabulary-term"><span class="listening-vocabulary-number">4</span><strong>Passenger</strong><span class="listening-vocabulary-meta"><span>/ˈpæsɪndʒər/</span><span>noun</span><span>A2</span></span><span class="listening-vocabulary-pronounce"><button type="button" data-pronounce="passenger" data-accent="en-US"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> US</button><button type="button" data-pronounce="passenger" data-accent="en-GB"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> UK</button></span></div><button class="listening-vocabulary-save" type="button" data-vocabulary-save="passenger" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="listening-vocabulary-meaning">hành khách</span><span class="listening-vocabulary-example">Trong bài: “Some passengers are standing nearby.”</span></article>
+              <article class="listening-vocabulary-item" data-vocabulary-item="luggage"><div class="listening-vocabulary-term"><span class="listening-vocabulary-number">5</span><strong>Luggage</strong><span class="listening-vocabulary-meta"><span>/ˈlʌɡɪdʒ/</span><span>noun</span><span>A2</span></span><span class="listening-vocabulary-pronounce"><button type="button" data-pronounce="luggage" data-accent="en-US"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> US</button><button type="button" data-pronounce="luggage" data-accent="en-GB"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> UK</button></span></div><button class="listening-vocabulary-save" type="button" data-vocabulary-save="luggage" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="listening-vocabulary-meaning">hành lý</span><span class="listening-vocabulary-example">Trong bài: “Travelers have placed their luggage beside the seats.”</span></article>
+              <article class="listening-vocabulary-item" data-vocabulary-item="terminal"><div class="listening-vocabulary-term"><span class="listening-vocabulary-number">6</span><strong>Terminal</strong><span class="listening-vocabulary-meta"><span>/ˈtɜːrmɪnəl/</span><span>noun</span><span>B1</span></span><span class="listening-vocabulary-pronounce"><button type="button" data-pronounce="terminal" data-accent="en-US"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> US</button><button type="button" data-pronounce="terminal" data-accent="en-GB"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> UK</button></span></div><button class="listening-vocabulary-save" type="button" data-vocabulary-save="terminal" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="listening-vocabulary-meaning">nhà ga, nhà ga hàng không</span><span class="listening-vocabulary-example">Trong bài: “Passengers are waiting in the terminal.”</span></article>
+              <article class="listening-vocabulary-item" data-vocabulary-item="row-of-seats"><div class="listening-vocabulary-term"><span class="listening-vocabulary-number">7</span><strong>Row of seats</strong><span class="listening-vocabulary-meta"><span>/roʊ əv siːts/</span><span>noun phrase</span><span>A2</span></span><span class="listening-vocabulary-pronounce"><button type="button" data-pronounce="row of seats" data-accent="en-US"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> US</button><button type="button" data-pronounce="row of seats" data-accent="en-GB"><i class="fa-solid fa-volume-high" aria-hidden="true"></i> UK</button></span></div><button class="listening-vocabulary-save" type="button" data-vocabulary-save="row-of-seats" aria-pressed="false"><i class="fa-regular fa-bookmark" aria-hidden="true"></i> Lưu</button><span class="listening-vocabulary-meaning">hàng ghế</span><span class="listening-vocabulary-example">Trong bài: “Several people are seated in a row of seats.”</span></article>
+            </div>
+          </section>
+        </section>
+      </main>
+      <footer class="listening-practice-footer"><div class="listening-practice-feedback"><button type="button" data-practice-tool="report"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Báo lỗi</button><button type="button" data-practice-tool="feedback"><i class="fa-regular fa-message" aria-hidden="true"></i> Góp ý</button></div><div class="listening-practice-nav"><button id="listeningPracticePrevBtn" class="listening-practice-prev-btn" type="button" disabled aria-label="Câu trước"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></button><strong id="listeningPracticeCounter" class="listening-practice-counter-pill"><i class="fa-solid fa-table-cells" aria-hidden="true"></i> <span id="listeningPracticeCounterText">1/143</span></strong><button id="listeningPracticeNextBtn" class="listening-practice-next-btn" type="button" aria-label="Câu tiếp theo"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div></footer>
+      <aside id="listeningNotesDrawer" class="listening-notes-drawer" aria-label="Ghi chú bài nghe" hidden>
+        <header class="listening-notes-head"><div><i class="fa-solid fa-pen" aria-hidden="true"></i> <strong>Ghi chú</strong><small>ETS 2019 - Test 2</small></div><button id="closeListeningNotes" class="listening-notes-close" type="button" aria-label="Đóng ghi chú"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></header>
+        <div class="listening-notes-toolbar" role="toolbar" aria-label="Định dạng ghi chú">
+          <button type="button" data-note-command="bold" aria-label="In đậm"><i class="fa-solid fa-bold"></i></button><button type="button" data-note-command="italic" aria-label="In nghiêng"><i class="fa-solid fa-italic"></i></button><button type="button" data-note-command="underline" aria-label="Gạch chân"><i class="fa-solid fa-underline"></i></button><span aria-hidden="true" style="height:22px;border-left:1px solid #d4deeb;margin:0 5px"></span><button type="button" data-note-command="insertUnorderedList" aria-label="Danh sách dấu đầu dòng"><i class="fa-solid fa-list-ul"></i></button><button type="button" data-note-command="insertOrderedList" aria-label="Danh sách đánh số"><i class="fa-solid fa-list-ol"></i></button><button type="button" data-note-command="formatBlock" data-note-value="blockquote" aria-label="Trích dẫn"><i class="fa-solid fa-quote-right"></i></button><button type="button" data-note-command="removeFormat" aria-label="Xóa định dạng"><i class="fa-solid fa-eraser"></i></button>
+        </div>
+        <div id="listeningNotesEditor" class="listening-notes-editor" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="Viết ghi chú khi luyện tập..."></div>
+        <span id="listeningNotesStatus" class="listening-notes-status" aria-live="polite">Đã lưu</span>
+      </aside>
+      <div id="listeningFeedbackModal" class="listening-feedback-overlay" hidden>
+        <form id="listeningFeedbackForm" class="listening-feedback-modal report" role="dialog" aria-modal="true" aria-labelledby="listeningFeedbackTitle" novalidate>
+          <header class="listening-feedback-head"><span id="listeningFeedbackIcon" class="listening-feedback-icon"><i class="fa-regular fa-flag" aria-hidden="true"></i></span><div class="listening-feedback-title"><strong id="listeningFeedbackTitle">Báo lỗi nội dung</strong><small id="listeningFeedbackSubtitle">Phản hồi giúp đội ngũ rà soát lại câu hỏi.</small></div><button id="closeListeningFeedback" class="listening-feedback-close" type="button" aria-label="Đóng"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></header>
+          <div class="listening-feedback-form">
+            <span class="listening-feedback-label">LOẠI <span id="listeningFeedbackCategoryLabel">LỖI</span></span>
+            <div class="listening-feedback-options" data-feedback-options="report" role="radiogroup" aria-label="Loại lỗi"><button type="button" data-feedback-category="Sai đáp án" aria-pressed="true">Sai đáp án</button><button type="button" data-feedback-category="Lỗi chính tả / diễn đạt" aria-pressed="false">Lỗi chính tả / diễn đạt</button><button type="button" data-feedback-category="Lỗi khác" aria-pressed="false">Lỗi khác</button></div>
+            <div class="listening-feedback-options" data-feedback-options="feedback" role="radiogroup" aria-label="Loại góp ý" hidden><button type="button" data-feedback-category="Đề xuất tính năng mới" aria-pressed="true">Đề xuất tính năng mới</button><button type="button" data-feedback-category="Giao diện khó dùng" aria-pressed="false">Giao diện khó dùng</button><button type="button" data-feedback-category="Nội dung học" aria-pressed="false">Nội dung học</button><button type="button" data-feedback-category="Khác" aria-pressed="false">Khác</button></div>
+            <label id="listeningFeedbackDescriptionLabel" class="listening-feedback-label" for="listeningFeedbackDescription">MÔ TẢ THÊM <span>(không bắt buộc)</span></label>
+            <textarea id="listeningFeedbackDescription" class="listening-feedback-description" maxlength="1000" placeholder="Ví dụ: đáp án C mới đúng vì..."></textarea>
+            <div id="listeningFeedbackCount" class="listening-feedback-count" hidden>0/1000</div>
+            <p id="listeningFeedbackError" class="listening-feedback-error" role="alert"></p>
+          </div>
+          <footer class="listening-feedback-actions"><button id="cancelListeningFeedback" type="button">Hủy</button><button id="submitListeningFeedback" type="submit">Gửi báo lỗi</button></footer>
+        </form>
+      </div>
+      <div id="listeningFeedbackToast" class="listening-feedback-toast" role="status" aria-live="polite" hidden></div>
+    </section>
+
+    <section id="listeningTheoryScreen" hidden aria-modal="true" role="dialog" aria-labelledby="listeningTheoryTitle">
+      <header class="listening-theory-header">
+        <span class="listening-theory-header-icon"><i class="fa-solid fa-headphones" aria-hidden="true"></i></span>
+        <strong id="listeningTheoryTitle">Lý thuyết nghe</strong>
+        <button id="closeListeningTheory" class="listening-theory-close" type="button" aria-label="Đóng lý thuyết"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      </header>
+      <div id="listeningTheoryScroll" class="listening-theory-scroll"><div id="listeningTheoryContent" class="listening-theory-content"></div></div>
+      <footer class="listening-theory-footer"><button id="listeningTheoryPractice" class="listening-theory-start" type="button"><i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i> Luyện tập ngay <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></footer>
+    </section>
+
+    <div id="goalModal" class="goal-modal-overlay" hidden>
+      <section class="goal-modal" role="dialog" aria-modal="true"
+        aria-labelledby="goalModalTitle"
+        aria-describedby="goalModalDescription">
+        <header class="goal-modal-header">
+          <span class="goal-modal-icon" aria-hidden="true">
+            <i class="fa-solid fa-trophy"></i>
+          </span>
+          <h2 class="goal-modal-title" id="goalModalTitle">Mục tiêu kỳ thi</h2>
+          <button class="goal-modal-close" id="goalModalClose" type="button"
+            aria-label="Đóng">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </header>
+        <form class="goal-modal-form" id="goalForm">
+          <p id="goalModalDescription" class="sr-only">Chọn kỳ thi, điểm TOEIC
+            mục tiêu và ngày thi dự kiến.</p>
+          <div class="goal-field">
+            <span class="goal-field-label">Kỳ thi</span>
+            <div class="goal-exam-options" role="group"
+              aria-label="Chọn kỳ thi">
+              <button class="goal-exam-option" type="button"
+                aria-pressed="true">TOEIC</button>
+              <button class="goal-exam-option" type="button" disabled>VSTEP ·
+                Chưa hỗ trợ</button>
+            </div>
+          </div>
+          <label class="goal-field" for="goalScoreInput">
+            <span class="goal-field-label">Điểm mục tiêu TOEIC</span>
+            <input class="goal-input" id="goalScoreInput" name="score"
+              type="number" min="10" max="990" step="5" value="650" required>
+          </label>
+          <label class="goal-field" for="goalDateInput">
+            <span class="goal-field-label">Ngày thi dự kiến</span>
+            <input class="goal-input" id="goalDateInput" name="date"
+              type="date" required>
+          </label>
+          <div class="goal-modal-actions">
+            <button class="goal-cancel" id="goalCancelButton"
+              type="button">Hủy</button>
+            <button class="goal-save" id="goalSaveButton" type="submit"
+              disabled>Lưu mục tiêu</button>
+          </div>
+        </form>
+      </section>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/assets/js/Listening/listening-main.js" asp-append-version="true"></script>
+}

@@ -1,0 +1,1048 @@
+@model StudyEnglish.Models.ViewModels.StudentDashboardViewModel
+
+@{
+    ViewData["Title"] = "Hôm nay - Dashboard";
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml";
+    var fullName = Model.FullName;
+    var email = Model.Email;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/assets/css/Dashboard/dashboard-main.css" asp-append-version="true" />
+}
+
+<!-- MAIN CONTENT AREA -->
+<main id="dashboardMain"
+  class="mx-auto w-full px-4 sm:px-6 pb-safe pt-0 pb-4 lg:px-6 [--pad-safe:2rem] max-w-[1420px] flex-1 flex min-w-0 flex-col gap-5 lg:pt-0 lg:pb-6">
+
+  <!-- HEADER BAR -->
+  <header
+    class="glass-card relative z-30 rounded-3xl p-4 sm:px-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+    <div class="min-w-0 flex-1 space-y-0.5">
+      <h1
+        class="dashboard-greeting flex flex-wrap items-center gap-x-2 text-xl tracking-tight sm:text-[1.45rem] lg:text-[1.7rem]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          aria-hidden="true"><path
+            d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path
+            d="M20 3v4"></path><path d="M22 5h-4"></path><path
+            d="M4 17v2"></path><path d="M5 18H3"></path></svg>
+        <span>Tập trung phần đang yếu nhé, <span
+            class="dashboard-greeting-name">@fullName</span>!👋</span>
+      </h1>
+      <div class="dashboard-mobile-actions">
+        <a class="dashboard-continue-link" asp-controller="Vocabulary" asp-action="Index">Tiếp tục học
+          · Ôn tập từ vựng
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><path
+              d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </a>
+        <span class="dashboard-mobile-xp"><svg
+            xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true"><path
+              d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path
+              d="M20 3v4"></path><path d="M22 5h-4"></path><path
+              d="M4 17v2"></path><path d="M5 18H3"></path></svg> +0 XP hôm
+          nay</span>
+      </div>
+    </div>
+
+    <!-- Right Stats Pills & Profile -->
+    <div id="headerActions"
+      class="header-actions flex items-center flex-wrap justify-end w-full md:w-auto">
+      <!-- Streak Pill -->
+      <div
+        class="header-stat-pill text-amber-600 dark:text-amber-400">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="size-4 animate-flame-pulse fill-current"
+          aria-hidden="true"><path
+            d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+        <span id="streakCountHeader">0 ngày</span>
+      </div>
+
+      <!-- XP Pill -->
+      <div
+        class="header-stat-pill text-violet-600 dark:text-violet-400">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="size-4 fill-current" aria-hidden="true"><path
+            d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path
+            d="M20 3v4"></path><path d="M22 5h-4"></path><path
+            d="M4 17v2"></path><path d="M5 18H3"></path></svg>
+        <span id="xpCountHeader">+0 XP</span>
+      </div>
+
+      <!-- Notification Bell -->
+      <div class="notification-wrap relative">
+        <button id="notificationButton" type="button" aria-label="Thông báo"
+          aria-haspopup="true" aria-expanded="false"
+          class="header-icon-button">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="size-5" aria-hidden="true"><path
+              d="M10.268 21a2 2 0 0 0 3.464 0"></path><path
+              d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"></path></svg>
+          <span id="notificationBadge"
+            class="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500"></span>
+        </button>
+
+        <!-- Notification Dropdown -->
+        <div id="notificationDropdown" class="notification-dropdown" hidden>
+          <div class="notification-header">
+            <h3 class="notification-title">Thông báo</h3>
+            <div class="notification-actions">
+              <button type="button" id="markAllReadBtn" class="notification-read-all-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 6 9 17l-5-5"></path>
+                </svg>
+                <span>Đã đọc tất cả</span>
+              </button>
+              <button type="button" id="notificationCloseBtn" class="notification-close-btn" aria-label="Đóng thông báo">
+                <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+          <div class="notification-body">
+            <p class="notification-empty">Bạn chưa có thông báo nào.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Profile Pill -->
+      <div class="profile-menu-wrap">
+        <button id="profileMenuTrigger" class="profile-trigger"
+          type="button"
+          aria-label="Tài khoản"
+          aria-haspopup="true" aria-expanded="false"
+          aria-controls="profileMenu">
+          <span class="profile-avatar">
+            <img src="~/assets/images/Dashboard/study-buddy-owl.webp" asp-append-version="true" alt>
+          </span>
+          <span class="profile-trigger-copy">
+            <span class="profile-trigger-name">@fullName</span>
+            <span class="profile-trigger-caption">Xem hồ sơ</span>
+          </span>
+        </button>
+        <div id="profileMenu" class="profile-menu" role="menu" hidden>
+          <div class="profile-menu-account">
+            <div class="profile-menu-name">@fullName</div>
+            <div class="profile-menu-email">@email</div>
+          </div>
+          <div class="profile-menu-divider" role="separator"></div>
+          <a class="profile-menu-item" href="#"
+            role="menuitem">
+            <i class="fa-regular fa-user" aria-hidden="true"></i>
+            <span>Tài khoản</span>
+          </a>
+          <a class="profile-menu-item" href="#settings"
+            role="menuitem">
+            <i class="fa-solid fa-gear" aria-hidden="true"></i>
+            <span>Cài đặt</span>
+          </a>
+          <button class="profile-menu-item" id="profileFeedbackButton"
+            type="button" role="menuitem">
+            <i class="fa-regular fa-square-plus" aria-hidden="true"></i>
+            <span>Góp ý cho TART</span>
+          </button>
+          <a class="profile-menu-item logout" asp-controller="Login" asp-action="Logout"
+            role="menuitem">
+            <i class="fa-solid fa-arrow-right-from-bracket"
+              aria-hidden="true"></i>
+            <span>Đăng xuất</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- TOP METRIC CARDS & STREAK ROW -->
+  <div id="metricsGrid"
+    class="grid grid-cols-2 gap-2.5 lg:grid-cols-12">
+
+    <!-- Daily learning metrics -->
+    <article class="metric-stat-card metric-stat-card--goal">
+      <svg
+        class="metric-sparkle pointer-events-none absolute right-3 top-2.5 size-4 text-white/95 dark:hidden"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24" aria-hidden="true"><path
+          d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path
+          d="M20 3v4M22 5h-4M4 17v2M5 18H3"></path></svg>
+      <div class="metric-stat-head metric-goal-head">
+        <span class="metric-stat-icon metric-goal-icon"><svg
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+            aria-hidden="true"><path
+              d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg></span>
+        <div class="metric-stat-label">Mục tiêu</div>
+        <button id="goalSettingsButton" type="button"
+          aria-label="Cài đặt mục tiêu"
+          class="metric-settings-button"><svg
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+            aria-hidden="true"><path
+              d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle
+              cx="12" cy="12" r="3"></circle></svg></button>
+      </div>
+      <div class="metric-goal-summary"><button type="button"
+          class="metric-goal-link"
+          onclick="document.getElementById('goalSettingsButton').click()"
+          id="goalSummaryTitle">Thiết lập mục tiêu</button><p
+          id="goalSummaryDetails">Chọn điểm và ngày thi dự kiến</p></div>
+    </article>
+
+    <article class="metric-stat-card metric-stat-card--vocabulary">
+      <svg class="metric-sparkle" xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24" aria-hidden="true"><path
+          d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path
+          d="M20 3v4M22 5h-4M4 17v2M5 18H3"></path></svg>
+      <div class="metric-stat-head"><span class="metric-stat-icon"><svg
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+            aria-hidden="true"><path
+              d="M12 21V7M22 6V4a1 1 0 0 0-1-1h-5a4 4 0 0 0-4 4 4 4 0 0 0-4-4H3a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h6a3 3 0 0 1 3 3 3 3 0 0 1 3-3h6a1 1 0 0 0 1-1v-1.3"></path><path
+              d="m16 12 2 2 4-4"></path></svg></span><div
+          class="metric-stat-label">Từ vựng đã học</div></div>
+      <div class="metric-stat-value">17<span>từ</span></div>
+      <p class="metric-stat-note">Chưa học từ mới tuần này</p>
+    </article>
+
+    <article id="metricAccuracyCard"
+      class="metric-stat-card metric-stat-card--accuracy animate-card-up group relative min-h-[7.75rem] overflow-hidden rounded-[1.25rem] border border-fuchsia-200/90 bg-gradient-to-br from-white via-fuchsia-50 to-purple-100 px-4 py-3 shadow-soft transition hover:-translate-y-0.5 hover:shadow-playful dark:border-fuchsia-500/25 dark:from-card dark:via-card dark:to-card">
+      <svg class="metric-sparkle" xmlns="http://www.w3.org/2000/svg"
+        width="24" height="24" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" aria-hidden="true"><path
+          d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path
+          d="M20 3v4M22 5h-4M4 17v2M5 18H3"></path></svg>
+      <div class="metric-stat-head relative flex items-start gap-3"><span
+          class="metric-stat-icon flex size-12 shrink-0 items-center justify-center rounded-[1.1rem] border border-fuchsia-200 bg-card/90 text-violet-500 shadow-sm dark:border-fuchsia-500/25 dark:bg-fuchsia-500/10 dark:text-fuchsia-400"><svg
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            aria-hidden="true"><circle cx="12" cy="12"
+              r="10"></circle><circle cx="12" cy="12"
+              r="6"></circle><circle cx="12" cy="12"
+              r="2"></circle></svg></span><div
+          class="min-w-0 flex-1 pt-0.5"><div class="metric-stat-label">Độ
+            chính xác</div>
+          <div
+            class="metric-stat-value font-display text-3xl font-extrabold leading-none tabular-nums">19<span>%</span></div></div></div>
+      <div class="metric-progress-wrap relative mt-2.5"><div
+          class="metric-progress mt-3 h-2 overflow-hidden rounded-full"><span
+            style="width:19%"></span></div></div>
+      <p class="metric-stat-note">4/21 câu đúng</p>
+    </article>
+
+    <article class="metric-stat-card metric-stat-card--time">
+      <svg class="metric-sparkle" xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24" aria-hidden="true"><path
+          d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path
+          d="M20 3v4M22 5h-4M4 17v2M5 18H3"></path></svg>
+      <div class="metric-stat-head"><span
+          class="metric-stat-icon metric-stat-icon--time"><svg
+            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+            aria-hidden="true"><circle cx="12" cy="12"
+              r="10"></circle><polyline
+              points="12 6 12 12 16.5 12"></polyline></svg></span><div
+          class="metric-stat-label">Thời gian học</div></div>
+      <div class="metric-stat-value">1h 43m</div>
+      <p class="metric-stat-note">Hôm nay: chưa học</p>
+    </article>
+
+    <!-- Weekly streak -->
+    <div id="streakCard"
+      class="text-card-foreground card-tinted card-warm order-2 min-h-0 overflow-hidden rounded-[1.4rem] border-border bg-card shadow-soft xl:order-none xl:col-span-4 xl:h-full xl:min-h-[6.6rem]">
+      <div
+        class="streak-card-heading space-y-1.5 p-6 flex flex-row items-center justify-between px-5 pb-1.5 pt-3.5">
+        <h3
+          class="tracking-tight flex items-center gap-1.5 text-base font-extrabold text-foreground">Streak
+          0 ngày
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-5 fill-current text-amber-500 animate-flame-pulse"
+            aria-hidden="true"><path
+              d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"></path></svg>
+        </h3>
+      </div>
+      <div class="p-6 pt-0 px-5 pb-3.5">
+        <div class="space-y-2.5">
+          <div
+            class="streak-week flex items-center justify-between gap-2">
+            <div
+              class="streak-day-column flex flex-1 flex-col items-center gap-1.5"><span
+                class="streak-day"></span><span
+                class="streak-day-label">T2</span></div>
+            <div
+              class="streak-day-column flex flex-1 flex-col items-center gap-1.5"><span
+                class="streak-day"></span><span
+                class="streak-day-label">T3</span></div>
+            <div
+              class="streak-day-column flex flex-1 flex-col items-center gap-1.5"><span
+                class="streak-day"></span><span
+                class="streak-day-label">T4</span></div>
+            <div
+              class="streak-day-column flex flex-1 flex-col items-center gap-1.5"><span
+                class="streak-day streak-active">✓</span><span
+                class="streak-day-label">T5</span></div>
+            <div
+              class="streak-day-column flex flex-1 flex-col items-center gap-1.5"><span
+                class="streak-day"></span><span
+                class="streak-day-label">T6</span></div>
+            <div
+              class="streak-day-column flex flex-1 flex-col items-center gap-1.5"><span
+                class="streak-day"></span><span
+                class="streak-day-label">T7</span></div>
+            <div
+              class="streak-day-column flex flex-1 flex-col items-center gap-1.5"><span
+                class="streak-day"></span><span
+                class="streak-day-label">CN</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MIDDLE BENTO GRID: TASKS & SKILL ACCURACY -->
+  <div id="middleGrid" class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+    <!-- LEFT MAIN COLUMN: Nhiệm vụ hôm nay -->
+    <div id="taskCard"
+      class="task-arena-card lg:col-span-7 glass-card rounded-3xl flex flex-col justify-between">
+      <div class="task-card-content">
+        <!-- Tasks Header -->
+        <div
+          class="task-card-header flex flex-row items-center justify-between gap-3 space-y-0">
+          <div class="min-w-0">
+            <h3
+              class="tracking-tight text-lg font-extrabold text-skill-speaking dark:text-skill-speaking">
+              Nhiệm vụ hôm nay
+            </h3>
+            <p class="text-xs font-bold text-muted-foreground"
+              id="taskCounterText">0/5 nhiệm vụ đã xong</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <span
+              class="task-card-xp inline-flex items-center gap-1 border border-transparent text-reward-xp rounded-full bg-card/76 shadow-sm px-2.5 py-0.5 text-xs font-bold transition-colors">
+              +50 XP
+            </span>
+            <button type="button" aria-label="Cài đặt mục tiêu hằng ngày"
+              title="Cài đặt mục tiêu hằng ngày" id="dailyGoalSettingsButton"
+              class="task-settings-button inline-flex items-center justify-center size-11 rounded-full bg-card/70 hover:bg-accent hover:text-accent-foreground lg:size-9">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"
+                class="size-4" aria-hidden="true">
+                <path
+                  d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Task Items List -->
+        <div class="space-y-3.5" id="taskList">
+
+          <!-- Task 1: Luyện ngữ pháp -->
+          <div
+            id="taskGrammar"
+            class="task-item task-row rounded-2xl flex items-center justify-between cursor-pointer transition-all"
+            data-total="20"
+            onclick="toggleTask(this, 10)">
+            <div class="task-row-main">
+              <span class="task-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24">
+                  <path d="M12 7v14"></path>
+                  <path
+                    d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path>
+                </svg>
+              </span>
+              <div class="task-row-content">
+                <div class="task-title">Luyện ngữ pháp</div>
+                <div class="task-progress-row">
+                  <div class="task-progress-track">
+                    <div class="task-progress-bar"
+                      style="width: 0%"></div>
+                  </div>
+                  <span class="task-progress-text">0/20</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex shrink-0 items-center gap-2">
+              <span class="task-badge">+10 XP</span>
+            </div>
+          </div>
+
+          <!-- Task 2: Ôn tập từ vựng -->
+          <div
+            id="taskReviewVocab"
+            class="task-item task-row rounded-2xl flex items-center justify-between cursor-pointer transition-all"
+            data-total="10" data-xp="10"
+            onclick="toggleTask(this, 10)">
+            <div class="task-row-main">
+              <span class="task-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z"></path>
+                  <path d="M22 10v6"></path>
+                  <path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5"></path>
+                </svg>
+              </span>
+              <div class="task-row-content">
+                <div class="task-title">Ôn tập từ vựng</div>
+                <div class="task-progress-row">
+                  <div class="task-progress-track">
+                    <div class="task-progress-bar"
+                      style="width: 0%"></div>
+                  </div>
+                  <span class="task-progress-text">0/10</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex shrink-0 items-center gap-2">
+              <span class="task-badge">+10 XP</span>
+            </div>
+          </div>
+
+          <!-- Task 3: Học từ vựng mới -->
+          <div
+            id="taskNewVocab"
+            class="task-item task-row rounded-2xl flex items-center justify-between cursor-pointer transition-all"
+            data-total="10" data-xp="10"
+            onclick="toggleTask(this, 10)">
+            <div class="task-row-main">
+              <span class="task-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M6 3h11a2 2 0 0 1 2 2v16H8a2 2 0 0 1-2-2z"></path>
+                  <path d="M6 3v16a2 2 0 0 0 2 2"></path>
+                  <path d="m10 15 2-5 2 5"></path>
+                  <path d="M10.7 13h2.6"></path>
+                </svg>
+              </span>
+              <div class="task-row-content">
+                <div class="task-title">Học từ vựng mới</div>
+                <div class="task-progress-row">
+                  <div class="task-progress-track">
+                    <div class="task-progress-bar"
+                      style="width: 0%"></div>
+                  </div>
+                  <span class="task-progress-text">0/10</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex shrink-0 items-center gap-2">
+              <span class="task-badge">+10 XP</span>
+            </div>
+          </div>
+
+          <!-- Task 4: Luyện nghe -->
+          <div
+            id="taskListening"
+            class="task-item task-row rounded-2xl flex items-center justify-between cursor-pointer transition-all"
+            data-total="10" data-xp="10"
+            onclick="toggleTask(this, 10)">
+            <div class="task-row-main">
+              <span class="task-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24">
+                  <path d="M3 14v-3a9 9 0 0 1 18 0v3"></path>
+                  <path
+                    d="M5 14h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2Z"></path>
+                  <path
+                    d="M17 14h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2Z"></path>
+                </svg>
+              </span>
+              <div class="task-row-content">
+                <div class="task-title">Luyện nghe</div>
+                <div class="task-progress-row">
+                  <div class="task-progress-track">
+                    <div class="task-progress-bar"
+                      style="width: 0%"></div>
+                  </div>
+                  <span class="task-progress-text">0/10</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex shrink-0 items-center gap-2">
+              <span class="task-badge">+10 XP</span>
+            </div>
+          </div>
+
+          <!-- Task 5: Luyện đọc -->
+          <div
+            id="taskReading"
+            class="task-item task-row rounded-2xl flex items-center justify-between cursor-pointer transition-all"
+            data-total="10" data-xp="10"
+            onclick="toggleTask(this, 10)">
+            <div class="task-row-main">
+              <span class="task-icon" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24">
+                  <path
+                    d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                  <path d="M14 2v6h6"></path>
+                  <path d="M8 13h8"></path>
+                  <path d="M8 17h8"></path>
+                </svg>
+              </span>
+              <div class="task-row-content">
+                <div class="task-title">Luyện đọc</div>
+                <div class="task-progress-row">
+                  <div class="task-progress-track">
+                    <div class="task-progress-bar"
+                      style="width: 0%"></div>
+                  </div>
+                  <span class="task-progress-text">0/10</span>
+                </div>
+              </div>
+            </div>
+            <div class="flex shrink-0 items-center gap-2">
+              <span class="task-badge">+10 XP</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: Độ chính xác kỹ năng -->
+    <div id="skillCard" class="lg:col-span-5 flex flex-col gap-5">
+
+      <!-- Skill Accuracy Matrix Card -->
+      <div
+        class="glass-card rounded-3xl p-5 flex-1 flex flex-col justify-between">
+        <div class="flex items-center justify-between mb-4">
+          <h3
+            class="font-extrabold text-base text-slate-900 dark:text-white">Độ
+            chính xác kỹ năng</h3>
+          <button type="button" id="skillDetailButton"
+            class="text-xs font-bold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer bg-transparent border-0 p-0 focus:outline-none">Xem
+            chi tiết</button>
+        </div>
+
+        <!-- Skills Grid -->
+        <div id="skillMatrix"
+          class="grid grid-cols-2 gap-3 my-auto py-2 text-center lg:grid-cols-3">
+          <!-- Ngữ pháp -->
+          <div
+            class="flex flex-col items-center p-3 rounded-2xl bg-slate-50/60 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800">
+            <div class="skill-gauge relative mx-auto size-24 sm:size-28">
+              <svg viewBox="0 0 112 112"
+                class="size-24 -rotate-90 sm:size-28" aria-hidden="true">
+                <circle cx="56" cy="56" r="42" fill="none"
+                  stroke="rgba(226, 235, 244, 0.66)"
+                  stroke-width="4.5"></circle>
+                <circle cx="56" cy="56" r="42" fill="none"
+                  stroke="#765bff" stroke-width="4.5"
+                  stroke-linecap="round"
+                  stroke-dasharray="263.89378290154264"
+                  stroke-dashoffset="207.34134522574206"
+                  class="transition-all duration-700"></circle>
+              </svg>
+              <span
+                class="skill-gauge-value absolute left-1/2 top-[43%] font-black leading-none tabular-nums text-skill-grammar">21%</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"
+                class="skill-gauge-icon lucide lucide-book-open absolute bottom-6 left-1/2 size-4 -translate-x-1/2 opacity-70 sm:bottom-7 text-skill-grammar"
+                aria-hidden="true">
+                <path d="M12 7v14"></path>
+                <path
+                  d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path>
+              </svg>
+            </div>
+            <div
+              class="text-xs font-extrabold text-purple-600 dark:text-purple-400">Ngữ
+              pháp</div>
+            <div
+              class="text-[10px] text-slate-400 font-semibold mt-0.5">14/1500</div>
+          </div>
+
+          <!-- Từ vựng -->
+          <div
+            class="flex flex-col items-center p-3 rounded-2xl bg-slate-50/60 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800">
+            <div class="skill-gauge relative mx-auto size-24 sm:size-28">
+              <svg viewBox="0 0 112 112"
+                class="size-24 -rotate-90 sm:size-28" aria-hidden="true">
+                <circle cx="56" cy="56" r="42" fill="none"
+                  stroke="rgba(226, 235, 244, 0.66)"
+                  stroke-width="4.5"></circle>
+                <circle cx="56" cy="56" r="42" fill="none"
+                  stroke="#c63fe5" stroke-width="4.5"
+                  stroke-linecap="round"
+                  stroke-dasharray="263.89378290154264"
+                  stroke-dashoffset="116.11326447667875"
+                  class="transition-all duration-700"></circle>
+              </svg>
+              <span
+                class="skill-gauge-value absolute left-1/2 top-[43%] font-black leading-none tabular-nums text-skill-vocabulary">56%</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24"
+                height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"
+                class="skill-gauge-icon lucide lucide-book-a absolute bottom-6 left-1/2 size-4 -translate-x-1/2 opacity-70 sm:bottom-7 text-skill-vocabulary"
+                aria-hidden="true">
+                <path
+                  d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path>
+                <path d="m8 13 4-7 4 7"></path>
+                <path d="M9.1 11h5.7"></path>
+              </svg>
+            </div>
+            <div
+              class="text-xs font-extrabold text-pink-600 dark:text-pink-400">Từ
+              vựng</div>
+            <div
+              class="text-[10px] text-slate-400 font-semibold mt-0.5">9/4514</div>
+          </div>
+
+          <!-- Nghe -->
+          <div
+            class="flex flex-col items-center p-3 rounded-2xl bg-slate-50/60 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800">
+            <div class="skill-score-circle">
+              <div class="text-xs font-extrabold">—</div>
+              <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg"
+                width="16" height="16" viewBox="0 0 24 24"
+                aria-hidden="true"><path
+                  d="M3 14v-3a9 9 0 0 1 18 0v3"></path><path
+                  d="M5 14h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2Z"></path><path
+                  d="M17 14h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2Z"></path></svg>
+            </div>
+            <div
+              class="text-xs font-extrabold text-sky-600 dark:text-sky-400">Nghe</div>
+            <div
+              class="text-[10px] text-slate-400 font-semibold mt-0.5">0/2100</div>
+          </div>
+
+          <!-- Đọc -->
+          <div
+            class="flex flex-col items-center p-3 rounded-2xl bg-slate-50/60 dark:bg-slate-800/30 border border-slate-100 dark:border-slate-800">
+            <div class="skill-score-circle">
+              <div class="text-xs font-extrabold">14%</div>
+              <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg"
+                width="16" height="16" viewBox="0 0 24 24"
+                aria-hidden="true"><path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><path
+                  d="M14 2v6h6"></path><path d="M8 13h8"></path><path
+                  d="M8 17h8"></path><path d="M8 9h2"></path></svg>
+            </div>
+            <div
+              class="text-xs font-extrabold text-teal-600 dark:text-teal-400">Đọc</div>
+            <div
+              class="text-[10px] text-slate-400 font-semibold mt-0.5">7/2100</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- BOTTOM SECTION: ARENA BANNER & WEEKLY GOAL -->
+  <div id="bottomGrid"
+    class="grid grid-cols-1 lg:grid-cols-12 gap-5 mt-1">
+
+    <!-- Left Arena Card -->
+    <div id="arenaCard"
+      class="task-arena-card lg:col-span-8 glass-card rounded-3xl p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden">
+
+      <!-- Top Title & Buttons Row -->
+      <div
+        class="arena-heading-row flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+        <div>
+          <div
+            class="flex items-center gap-2 text-xs font-bold text-blue-600 dark:text-blue-400 mb-1">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Đấu trường thi thử</span>
+          </div>
+          <h3
+            class="text-base sm:text-lg font-extrabold text-slate-900 dark:text-white">
+            Sẵn sàng vào phòng thi?
+          </h3>
+        </div>
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button onclick="startArena()"
+            class="flex-1 sm:flex-initial py-2.5 px-5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-2xl shadow-lg shadow-blue-500/30 transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-bolt"></i>
+            Vào đấu trường
+          </button>
+          <button
+            class="flex-1 sm:flex-initial py-2.5 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold text-xs rounded-2xl border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center gap-2">
+            <i class="fa-solid fa-file-signature"></i>
+            Luyện đề
+          </button>
+        </div>
+      </div>
+
+      <!-- Bottom Stat Badges -->
+      <div class="arena-stats grid grid-cols-1 sm:grid-cols-3 gap-3">
+
+        <!-- Kỷ lục -->
+        <div
+          class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/50 dark:border-slate-700/50">
+          <div
+            class="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <div class="min-w-0">
+            <div
+              class="truncate text-[11px] font-bold leading-none text-muted-foreground">Kỷ
+              lục</div>
+            <div
+              class="font-display text-lg font-extrabold leading-none text-current">Mới
+              <span
+                class="truncate text-[12px] font-semibold text-current">Chưa
+                đặt mục
+                tiêu</span></div>
+          </div>
+        </div>
+
+        <!-- Đã thi -->
+        <div
+          class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50/70 dark:bg-slate-800/40 border border-slate-200/50 dark:border-slate-700/50">
+          <div
+            class="w-9 h-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center font-bold shrink-0">
+            <i class="fa-solid fa-circle-check"></i>
+          </div>
+          <div class="min-w-0">
+            <div
+              class="truncate text-[11px] font-bold leading-none text-muted-foreground">Đã
+              thi</div>
+            <div
+              class="truncate text-[11px] font-semibold text-current"><span
+                class="text-emerald-600 dark:text-emerald-400">0</span>
+              lượt thi thử</div>
+          </div>
+        </div>
+
+        <!-- Nhịp hôm nay -->
+        <div
+          class="flex items-center gap-3 p-3 rounded-2xl bg-amber-500/10 border border-amber-500/20">
+          <div
+            class="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold shrink-0">
+            <i class="fa-solid fa-fire"></i>
+          </div>
+          <div class="min-w-0">
+            <div
+              class="truncate text-[11px] font-bold leading-none text-muted-foreground">Nhịp
+              hôm nay</div>
+            <div
+              class="font-display text-lg font-extrabold leading-none text-current">0%
+              <span
+                class="truncate text-[11px] font-semibold text-current">+0
+                XP</span></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Right Weekly Goal & Mascot Card -->
+    <div id="weeklyCard"
+      class="lg:col-span-4 glass-card p-5 flex items-center justify-between relative overflow-hidden">
+      <div class="weekly-copy flex-1 pr-2">
+        <h4
+          class="font-extrabold text-sm text-slate-900 dark:text-white leading-snug mb-1">
+          Bạn đang làm rất tốt!
+        </h4>
+        <p
+          class="max-w-[270px] text-sm font-medium leading-5 text-muted-foreground mb-4">
+          Cố thêm một chút nữa để đạt mục tiêu tuần nhé!
+        </p>
+        <div class="flex items-center justify-between text-xs font-bold">
+          <span
+            class="flex items-center justify-between pb-1.5 text-xs font-bold text-muted-foreground">Mục
+            tiêu tuần</span>
+          <span class="text-blue-600 dark:text-blue-400">1/7 ngày</span>
+        </div>
+        <div
+          class="weekly-progress-track mt-1.5 h-2 w-full overflow-hidden rounded-full bg-slate-200/70 dark:bg-slate-700/70"
+          role="progressbar" aria-label="Tiến độ mục tiêu tuần"
+          aria-valuemin="0" aria-valuemax="7" aria-valuenow="1">
+          <div class="weekly-progress-fill h-full rounded-full"
+            style="width: 14%"></div>
+        </div>
+      </div>
+
+      <div
+        class="weekly-mascot-shell absolute right-0 top-0 z-20 size-32 xs:size-40 sm:size-56 lg:size-72 xl:-right-14 xl:size-80"
+        aria-hidden="true">
+        <span
+          class="hidden size-full items-center justify-center rounded-full bg-brand-soft text-6xl shadow-soft">🦉</span>
+        <img
+          class="weekly-mascot h-full w-full object-contain drop-shadow-[0_12px_18px_hsl(220_30%_4%/0.42)]"
+          src="~/assets/images/Dashboard/study-buddy-owl.webp" asp-append-version="true" alt>
+      </div>
+    </div>
+  </div>
+</main>
+
+@section Modals {
+    <!-- GOAL MODAL -->
+    <div id="goalModal" class="goal-modal-overlay" hidden>
+      <section class="goal-modal" role="dialog" aria-modal="true"
+        aria-labelledby="goalModalTitle"
+        aria-describedby="goalModalDescription">
+        <header class="goal-modal-header">
+          <span class="goal-modal-icon" aria-hidden="true">
+            <i class="fa-solid fa-trophy"></i>
+          </span>
+          <h2 class="goal-modal-title" id="goalModalTitle">Mục tiêu kỳ thi</h2>
+          <button class="goal-modal-close" id="goalModalClose" type="button"
+            aria-label="Đóng">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </header>
+        <form class="goal-modal-form" id="goalForm">
+          <p id="goalModalDescription" class="sr-only">Chọn kỳ thi, điểm TOEIC
+            mục tiêu và ngày thi dự kiến.</p>
+          <div class="goal-field">
+            <span class="goal-field-label">Kỳ thi</span>
+            <div class="goal-exam-options" role="group"
+              aria-label="Chọn kỳ thi">
+              <button class="goal-exam-option" type="button"
+                aria-pressed="true">TOEIC</button>
+              <button class="goal-exam-option" type="button" disabled>VSTEP ·
+                Chưa hỗ trợ</button>
+            </div>
+          </div>
+          <label class="goal-field" for="goalScoreInput">
+            <span class="goal-field-label">Điểm mục tiêu TOEIC</span>
+            <input class="goal-input" id="goalScoreInput" name="score"
+              type="number" min="10" max="990" step="5" value="650" required>
+          </label>
+          <label class="goal-field" for="goalDateInput">
+            <span class="goal-field-label">Ngày thi dự kiến</span>
+            <input class="goal-input" id="goalDateInput" name="date"
+              type="date" required>
+          </label>
+          <div class="goal-modal-actions">
+            <button class="goal-cancel" id="goalCancelButton"
+              type="button">Hủy</button>
+            <button class="goal-save" id="goalSaveButton" type="submit"
+              disabled>Lưu mục tiêu</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <!-- DAILY GOAL MODAL -->
+    <div id="dailyGoalModal" class="daily-goal-modal-overlay" hidden>
+      <section class="daily-goal-modal" role="dialog" aria-modal="true"
+        aria-labelledby="dailyGoalModalTitle"
+        aria-describedby="dailyGoalModalDescription">
+        <header class="daily-goal-modal-header">
+          <h2 class="daily-goal-modal-title" id="dailyGoalModalTitle">Mục tiêu hằng ngày</h2>
+          <button class="daily-goal-modal-close" id="dailyGoalModalClose" type="button" aria-label="Đóng">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </header>
+        <p id="dailyGoalModalDescription" class="sr-only">Chỉnh sửa số câu và từ vựng mục tiêu cần hoàn thành mỗi ngày.</p>
+        <form id="dailyGoalForm" class="daily-goal-form">
+          <div class="daily-goal-rows">
+            <!-- Row 1: Ngữ pháp -->
+            <div class="daily-goal-row">
+              <label for="dailyGoalGrammar" class="daily-goal-label">Ngữ pháp</label>
+              <div class="daily-goal-input-wrap">
+                <input type="number" id="dailyGoalGrammar" name="grammar" class="daily-goal-input" min="1" max="100" value="20" required>
+                <span class="daily-goal-unit">câu</span>
+              </div>
+            </div>
+
+            <!-- Row 2: Từ vựng mới -->
+            <div class="daily-goal-row">
+              <label for="dailyGoalVocab" class="daily-goal-label">Từ vựng mới</label>
+              <div class="daily-goal-input-wrap">
+                <input type="number" id="dailyGoalVocab" name="vocab" class="daily-goal-input" min="1" max="100" value="10" required>
+                <span class="daily-goal-unit">từ</span>
+              </div>
+            </div>
+
+            <!-- Row 3: Nghe -->
+            <div class="daily-goal-row">
+              <label for="dailyGoalListening" class="daily-goal-label">Nghe</label>
+              <div class="daily-goal-input-wrap">
+                <input type="number" id="dailyGoalListening" name="listening" class="daily-goal-input" min="1" max="100" value="10" required>
+                <span class="daily-goal-unit">câu</span>
+              </div>
+            </div>
+
+            <!-- Row 4: Đọc -->
+            <div class="daily-goal-row">
+              <label for="dailyGoalReading" class="daily-goal-label">Đọc</label>
+              <div class="daily-goal-input-wrap">
+                <input type="number" id="dailyGoalReading" name="reading" class="daily-goal-input" min="1" max="100" value="10" required>
+                <span class="daily-goal-unit">câu</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="daily-goal-actions">
+            <button type="button" id="dailyGoalCancelBtn" class="daily-goal-btn-cancel">Hủy</button>
+            <button type="submit" id="dailyGoalSaveBtn" class="daily-goal-btn-save">Lưu thay đổi</button>
+          </div>
+        </form>
+      </section>
+    </div>
+
+    <!-- SKILL DETAIL MODAL -->
+    <div id="skillDetailModal" class="skill-modal-overlay" hidden>
+      <section class="skill-modal" role="dialog" aria-modal="true"
+        aria-labelledby="skillDetailModalTitle"
+        aria-describedby="skillDetailModalDescription">
+        <header class="skill-modal-header">
+          <span class="skill-modal-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M12 2a10 10 0 0 1 10 10"></path>
+              <circle cx="12" cy="12" r="4"></circle>
+            </svg>
+          </span>
+          <h2 class="skill-modal-title" id="skillDetailModalTitle">Chi tiết tiến độ kỹ năng</h2>
+          <button class="skill-modal-close" id="skillDetailModalClose" type="button"
+            aria-label="Đóng">
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </header>
+
+        <div class="skill-modal-body" id="skillDetailModalDescription">
+          <div class="skill-detail-grid">
+            
+            <!-- Ngữ pháp -->
+            <div class="skill-detail-card skill-detail-card--grammar">
+              <div class="skill-detail-head">
+                <span class="skill-detail-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 7v14"></path>
+                    <path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path>
+                  </svg>
+                </span>
+                <div class="skill-detail-info">
+                  <div class="skill-detail-title">Ngữ pháp</div>
+                  <div class="skill-detail-subtitle">Đã học 3/1500</div>
+                </div>
+              </div>
+              <div class="skill-detail-metrics">
+                <div class="skill-metric-box">
+                  <span class="skill-metric-label">Tiến độ học</span>
+                  <span class="skill-metric-val">0%</span>
+                </div>
+                <div class="skill-metric-box">
+                  <span class="skill-metric-label">Độ chính xác</span>
+                  <span class="skill-metric-val">0%</span>
+                  <span class="skill-metric-sub">Đúng 0/3</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Từ vựng -->
+            <div class="skill-detail-card skill-detail-card--vocab">
+              <div class="skill-detail-head">
+                <span class="skill-detail-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path>
+                    <path d="m8 13 4-7 4 7"></path>
+                    <path d="M9.1 11h5.7"></path>
+                  </svg>
+                </span>
+                <div class="skill-detail-info">
+                  <div class="skill-detail-title">Từ vựng</div>
+                  <div class="skill-detail-subtitle">Đã học 55/4514</div>
+                </div>
+              </div>
+              <div class="skill-detail-metrics">
+                <div class="skill-metric-box">
+                  <span class="skill-metric-label">Tiến độ học</span>
+                  <span class="skill-metric-val">1%</span>
+                </div>
+                <div class="skill-metric-box">
+                  <span class="skill-metric-label">Độ chính xác</span>
+                  <span class="skill-metric-val">32%</span>
+                  <span class="skill-metric-sub">Đúng 7/22</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nghe -->
+            <div class="skill-detail-card skill-detail-card--listening">
+              <div class="skill-detail-head">
+                <span class="skill-detail-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 14v-3a9 9 0 0 1 18 0v3"></path>
+                    <path d="M5 14h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2Z"></path>
+                    <path d="M17 14h2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2Z"></path>
+                  </svg>
+                </span>
+                <div class="skill-detail-info">
+                  <div class="skill-detail-title">Nghe</div>
+                  <div class="skill-detail-subtitle">Đã học 1/2100</div>
+                </div>
+              </div>
+              <div class="skill-detail-metrics">
+                <div class="skill-metric-box">
+                  <span class="skill-metric-label">Tiến độ học</span>
+                  <span class="skill-metric-val">0%</span>
+                </div>
+                <div class="skill-metric-box">
+                  <span class="skill-metric-label">Độ chính xác</span>
+                  <span class="skill-metric-val">100%</span>
+                  <span class="skill-metric-sub">Đúng 1/1</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Đọc -->
+            <div class="skill-detail-card skill-detail-card--reading">
+              <div class="skill-detail-head">
+                <span class="skill-detail-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <path d="M14 2v6h6"></path>
+                    <path d="M8 13h8"></path>
+                    <path d="M8 17h8"></path>
+                    <path d="M8 9h2"></path>
+                  </svg>
+                </span>
+                <div class="skill-detail-info">
+                  <div class="skill-detail-title">Đọc</div>
+                  <div class="skill-detail-subtitle">Đã học 10/2100</div>
+                </div>
+              </div>
+              <div class="skill-detail-metrics">
+                <div class="skill-metric-box">
+                  <span class="skill-metric-label">Tiến độ học</span>
+                  <span class="skill-metric-val">0%</span>
+                </div>
+                <div class="skill-metric-box">
+                  <span class="skill-metric-label">Độ chính xác</span>
+                  <span class="skill-metric-val">20%</span>
+                  <span class="skill-metric-sub">Đúng 2/10</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+    </div>
+}
+
+@section Scripts {
+    <script src="~/assets/js/Dashboard/dashboard-main.js" asp-append-version="true"></script>
+}

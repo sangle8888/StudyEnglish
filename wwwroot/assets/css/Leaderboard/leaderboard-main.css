@@ -1,0 +1,139 @@
+/* Leaderboard Custom Styling */
+:root {
+  --brand-from: 217 91% 60%;
+  --brand-to: 239 84% 67%;
+  --primary: 217 91% 60%;
+  --medal-highlight: 48 96% 89%;
+  --medal-crown: 38 92% 50%;
+}
+
+.leaderboard-podium {
+  padding-top: 20px;
+}
+
+.leaderboard-podium-card {
+  padding-top: 2rem;
+  padding-bottom: 1.25rem;
+}
+
+.leaderboard-laurel {
+  height: 7rem;
+}
+
+.leaderboard-medal-label {
+  color: #ffffff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.ring-medal-gold\/70 {
+  --tw-ring-color: rgba(217, 119, 6, 0.7);
+}
+
+.ring-medal-silver\/60 {
+  --tw-ring-color: rgba(100, 116, 139, 0.6);
+}
+
+.ring-medal-bronze\/60 {
+  --tw-ring-color: rgba(194, 65, 12, 0.6);
+}
+
+.bg-background {
+  background-color: #ffffff;
+}
+
+html.dark .bg-background {
+  background-color: #0f172a;
+}
+
+html.dark .text-foreground {
+  color: #f8fafc;
+}
+
+html.dark .text-muted-foreground {
+  color: #94a3b8;
+}
+
+html.dark .divide-border\/60 > :not([hidden]) ~ :not([hidden]),
+html.dark .border-border\/70 {
+  border-color: rgba(51, 65, 85, 0.7);
+}
+
+.leaderboard-avatar-spacer {
+  width: 36px;
+}
+
+.text-medal-gold {
+  color: #d97706;
+}
+
+.text-medal-silver {
+  color: #64748b;
+}
+
+.text-medal-bronze {
+  color: #c2410c;
+}
+
+.leaderboard-crown {
+  top: -24px;
+}
+
+.leaderboard-podium-avatar {
+  width: 68px;
+  height: 68px;
+}
+
+.leaderboard-row-avatar {
+  width: 36px;
+  height: 36px;
+}
+
+.podium-card-gold {
+  background: linear-gradient(180deg, #fffef5 0%, #fff7d6 100%);
+  border: 1.5px solid #fde047;
+  box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.2);
+}
+
+.podium-card-silver {
+  background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+  border: 1.5px solid #cbd5e1;
+}
+
+.podium-card-bronze {
+  background: linear-gradient(180deg, #fff7ed 0%, #ffedd5 100%);
+  border: 1.5px solid #fdba74;
+}
+
+.learning-sheet {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(226, 232, 240, 0.85);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+}
+
+html.dark .podium-card-gold {
+  background: linear-gradient(180deg, rgba(113, 63, 18, 0.25) 0%, rgba(69, 26, 3, 0.4) 100%);
+  border-color: rgba(234, 179, 8, 0.4);
+}
+
+html.dark .podium-card-silver {
+  background: linear-gradient(180deg, rgba(51, 65, 85, 0.3) 0%, rgba(30, 41, 59, 0.5) 100%);
+  border-color: rgba(148, 163, 184, 0.3);
+}
+
+html.dark .podium-card-bronze {
+  background: linear-gradient(180deg, rgba(124, 45, 18, 0.25) 0%, rgba(67, 20, 7, 0.4) 100%);
+  border-color: rgba(249, 115, 22, 0.35);
+}
+
+html.dark .learning-sheet {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(51, 65, 85, 0.8);
+}
+
+.leaderboard-table-header {
+  min-height: 44px;
+}
+
+.leaderboard-row {
+  min-height: 52px;
+}

@@ -1,0 +1,284 @@
+@{
+    ViewData["Title"] = "Bảng Xếp Hạng - Leaderboard";
+    Layout = "~/Views/Shared/_LayoutSidebar.cshtml"; 
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/assets/css/Leaderboard/Leaderboard-main.css" asp-append-version="true" />
+}
+
+<!-- MAIN CONTENT AREA -->
+<main id="dashboardMain" class="mx-auto w-full px-4 sm:px-6 pb-safe leaderboard-main max-w-[1280px] min-w-0 flex-1">
+  <div class="leaderboard-page space-y-4">
+    <header class="leaderboard-header flex flex-wrap items-center justify-between gap-3">
+      <h1 class="font-display text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-3xl lg:text-4xl">Bảng xếp hạng</h1>
+      <span class="inline-flex items-center gap-2 rounded-full border border-slate-200/80 dark:border-slate-700 bg-white/80 dark:bg-slate-800/80 px-3 py-1.5 text-xs font-bold text-slate-600 dark:text-slate-300 shadow-sm backdrop-blur mt-1">
+        <span class="size-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true"></span>
+        Cập nhật 1 phút trước
+      </span>
+    </header>
+
+    <div class="leaderboard-filters flex flex-col gap-3">
+      <!-- Mobile Filters -->
+      <div class="flex w-full gap-2 lg:hidden">
+        <div class="relative min-w-0 flex-1">
+          <button id="mobileMetricBtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Chọn tiêu chí xếp hạng" class="min-h-touch flex w-full items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 px-3.5 py-2 text-sm font-bold text-slate-800 dark:text-slate-100 shadow-sm transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock3 size-4 shrink-0 text-slate-500 dark:text-slate-400" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16.5 12"></polyline></svg>
+            <span id="mobileMetricLabel" class="min-w-0 flex-1 truncate text-left">Thời gian học</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-4 shrink-0 text-slate-500 dark:text-slate-400" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+        </div>
+        <div class="relative min-w-0 flex-1">
+          <button id="mobilePeriodBtn" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="Chọn khoảng thời gian" class="min-h-touch flex w-full items-center gap-2 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 px-3.5 py-2 text-sm font-bold text-slate-800 dark:text-slate-100 shadow-sm transition-colors">
+            <span id="mobilePeriodLabel" class="min-w-0 flex-1 truncate text-left">Mọi thời điểm</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-down size-4 shrink-0 text-slate-500 dark:text-slate-400" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Desktop Filters -->
+      <div class="hidden lg:flex lg:items-center lg:justify-between lg:gap-3">
+        <div class="flex flex-wrap gap-2" role="tablist" aria-label="Bảng xếp hạng">
+          <button type="button" role="tab" data-metric="studyTime" aria-selected="true" class="leaderboard-tab min-h-touch inline-flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold transition-all bg-blue-600 text-white shadow-soft">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clock3 size-4 shrink-0" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16.5 12"></polyline></svg>
+            Thời gian học
+          </button>
+          <button type="button" role="tab" data-metric="correctAnswers" aria-selected="false" class="leaderboard-tab min-h-touch inline-flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold transition-all border border-slate-200/90 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check size-4 shrink-0" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
+            Số câu đúng
+          </button>
+          <button type="button" role="tab" data-metric="studyDays" aria-selected="false" class="leaderboard-tab min-h-touch inline-flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold transition-all border border-slate-200/90 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days size-4 shrink-0" aria-hidden="true"><path d="M8 2v4"></path><path d="M16 2v4"></path><rect width="18" height="18" x="3" y="4" rx="2"></rect><path d="M3 10h18"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path></svg>
+            Số ngày học
+          </button>
+          <button type="button" role="tab" data-metric="learnedWords" aria-selected="false" class="leaderboard-tab min-h-touch inline-flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold transition-all border border-slate-200/90 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open size-4 shrink-0" aria-hidden="true"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+            Từ vựng đã ôn
+          </button>
+          <button type="button" role="tab" data-metric="mockTests" aria-selected="false" class="leaderboard-tab min-h-touch inline-flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold transition-all border border-slate-200/90 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chart-column size-4 shrink-0" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+            Điểm thi thử
+          </button>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+          <button type="button" data-period="week" aria-pressed="false" class="leaderboard-period-btn min-h-touch whitespace-nowrap rounded-full border px-4 py-2 text-sm font-bold shadow-sm transition-all border-slate-200/90 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 hover:border-amber-400 hover:bg-amber-50">
+            Tuần này
+          </button>
+          <button type="button" data-period="month" aria-pressed="false" class="leaderboard-period-btn min-h-touch whitespace-nowrap rounded-full border px-4 py-2 text-sm font-bold shadow-sm transition-all border-slate-200/90 dark:border-slate-700 bg-white/90 dark:bg-slate-800/90 text-slate-700 dark:text-slate-200 hover:border-amber-400 hover:bg-amber-50">
+            Tháng này
+          </button>
+          <button type="button" data-period="all" aria-pressed="true" class="leaderboard-period-btn min-h-touch whitespace-nowrap rounded-full border px-4 py-2 text-sm font-bold shadow-sm transition-all border-amber-300 dark:border-amber-500/50 bg-[#fef0cd] dark:bg-amber-500/20 text-[#8a5b17] dark:text-amber-300">
+            Mọi thời điểm
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="leaderboard-results space-y-4">
+      <!-- PODIUM SECTION (TOP 3) -->
+      <div class="leaderboard-podium grid grid-cols-1 gap-3 sm:gap-4 sm:grid-cols-3">
+        <!-- TOP 1 (Nam Phùng) -->
+        <div class="leaderboard-podium-card relative min-w-0 flex flex-col items-center justify-center rounded-3xl border px-4 text-center podium-card-gold sm:order-2 leaderboard-podium-winner">
+          <svg viewBox="0 0 64 120" fill="none" aria-hidden="true" class="w-auto leaderboard-laurel pointer-events-none absolute left-[2%] top-1/2 -translate-y-1/2 opacity-80 text-medal-gold"><g><path d="M51 115C12 90 6 49 40 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><g transform="translate(39 102) rotate(-42)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(28 88) rotate(-25)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(21 72) rotate(-8)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(19 55) rotate(10)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(23 38) rotate(30)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(31 23) rotate(48)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g></g></svg>
+          <svg viewBox="0 0 64 120" fill="none" aria-hidden="true" class="w-auto leaderboard-laurel pointer-events-none absolute right-[2%] top-1/2 -translate-y-1/2 opacity-80 text-medal-gold"><g transform="translate(64 0) scale(-1 1)"><path d="M51 115C12 90 6 49 40 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><g transform="translate(39 102) rotate(-42)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(28 88) rotate(-25)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(21 72) rotate(-8)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(19 55) rotate(10)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(23 38) rotate(30)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(31 23) rotate(48)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g></g></svg>
+          <svg viewBox="0 0 52 40" fill="none" aria-hidden="true" class="h-10 w-12 leaderboard-crown absolute left-1/2 -translate-x-1/2 drop-shadow-sm text-medal-gold"><defs><linearGradient id="_r_0_" x1="0" y1="0" x2="0.7" y2="1"><stop stop-color="hsl(var(--medal-highlight))"></stop><stop offset="0.45" stop-color="hsl(var(--medal-crown))"></stop><stop offset="1" stop-color="currentColor"></stop></linearGradient></defs><path d="M8 30L4 10L16 20L26 4L36 20L48 10L44 30Z" fill="url(#_r_0_)" stroke="hsl(var(--medal-crown))" stroke-width="2" stroke-linejoin="round"></path><rect x="8" y="30" width="36" height="6" rx="3" fill="url(#_r_0_)"></rect><g fill="hsl(var(--medal-crown))" stroke="hsl(var(--medal-highlight))"><circle cx="4" cy="8" r="3"></circle><circle cx="26" cy="4" r="3"></circle><circle cx="48" cy="8" r="3"></circle></g><path d="M26 16L29 22L26 27L23 22Z" fill="hsl(var(--medal-highlight))"></path></svg>
+          <div class="relative">
+            <div class="relative p-[2px] rounded-full bg-gradient-to-br from-[hsl(var(--brand-from))] to-[hsl(var(--brand-to))] shadow-[0_0_10px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_16px_hsl(var(--primary)/0.45)] hover:scale-105 transition-all duration-300 ring-2 leaderboard-podium-avatar ring-medal-gold/70">
+              <div class="h-full w-full rounded-full bg-background p-[1.5px] flex items-center justify-center">
+                <div class="relative flex h-full w-full items-center justify-center rounded-full bg-spectrum text-white font-bold overflow-hidden">
+                  <img alt="Nam Phùng" class="h-full w-full object-cover" referrerpolicy="no-referrer" loading="lazy" decoding="async" src="https://lh3.googleusercontent.com/a/ACg8ocJmJXf21vKp6pXx9vW1lEMPyleJoNwQrMiycT39UsRNKqhDox34=s96-c">
+                </div>
+              </div>
+            </div>
+            <span aria-hidden="true" class="inline-flex h-14 w-12 shrink-0 absolute -left-16 top-1/2 -translate-y-1/2 drop-shadow-sm text-medal-gold">
+              <svg viewBox="0 0 48 56" class="size-full" aria-hidden="true"><defs><linearGradient id="_r_1_" x1="0" y1="0" x2="1" y2="1"><stop stop-color="hsl(var(--medal-highlight))"></stop><stop offset="0.45" stop-color="currentColor"></stop><stop offset="1" stop-color="currentColor" stop-opacity="0.65"></stop></linearGradient></defs><path d="M11 36L8 55L17 50L22 55L25 37M25 37L29 55L35 50L43 53L37 34" fill="currentColor" opacity="0.8"></path><polygon points="24,2 26.545260748291007,4.666825203210699 29.694018992255458,2.7496318216404987 31.46232693111925,5.984349116029907 35,4.947441116742347 35.87084786567005,8.529609864320914 39.55634918610404,8.443650813895957 39.47039013567908,12.129152134329948 43.052558883257646,13 42.015650883970096,16.53767306888075 45.2503681783595,18.305981007744546 43.3331747967893,21.454739251708993 46,24 43.3331747967893,26.545260748291007 45.2503681783595,29.694018992255454 42.015650883970096,31.462326931119247 43.05255888325765,35 39.47039013567908,35.87084786567006 39.55634918610404,39.55634918610404 35.87084786567006,39.47039013567908 35,43.05255888325765 31.46232693111925,42.015650883970096 29.69401899225546,45.2503681783595 26.545260748291014,43.3331747967893 24,46 21.45473925170899,43.3331747967893 18.305981007744542,45.2503681783595 16.53767306888075,42.015650883970096 13.000000000000005,43.05255888325765 12.129152134329948,39.47039013567908 8.443650813895964,39.55634918610406 8.529609864320916,35.87084786567006 4.947441116742354,35.00000000000001 5.984349116029907,31.462326931119243 2.7496318216404987,29.69401899225545 4.666825203210699,26.545260748291007 2,24.000000000000004 4.666825203210696,21.454739251709 2.749631821640495,18.305981007744553 5.984349116029904,16.53767306888076 4.94744111674235,12.999999999999998 8.529609864320904,12.12915213432996 8.443650813895951,8.443650813895957 12.129152134329942,8.529609864320918 12.99999999999999,4.947441116742354 16.537673068880753,5.984349116029907 18.305981007744528,2.7496318216405022 21.454739251708993,4.666825203210699" fill="url(#_r_1_)"></polygon><circle cx="24" cy="24" r="16" fill="currentColor" stroke="hsl(var(--medal-highlight))" stroke-width="1.5"></circle><circle cx="24" cy="24" r="13.5" fill="none" stroke="hsl(var(--medal-highlight))" stroke-opacity="0.4"></circle></svg>
+              <span class="leaderboard-medal-label absolute inset-x-0 top-0 flex h-12 items-center justify-center font-display text-xl font-extrabold">1</span>
+            </span>
+          </div>
+          <p class="sr-only">Hạng 1</p>
+          <p id="podiumName1" class="leaderboard-podium-name relative mt-2 line-clamp-2 max-w-[65%] px-2 font-display text-sm font-extrabold text-foreground sm:text-base">Nam Phùng</p>
+          <p id="podiumValue1" class="leaderboard-podium-value relative mt-0.5 font-display font-extrabold tabular-nums text-2xl sm:text-3xl text-medal-gold">99h 36p</p>
+          <p id="podiumSlogan1" class="leaderboard-podium-quote relative mt-1 max-w-[85%] px-3 text-xs text-muted-foreground">Học nhiều hơn, tiến xa hơn</p>
+        </div>
+
+        <!-- TOP 2 (Chanmi) -->
+        <div class="leaderboard-podium-card relative min-w-0 flex flex-col items-center justify-center rounded-3xl border px-4 text-center podium-card-silver sm:order-1">
+          <svg viewBox="0 0 64 120" fill="none" aria-hidden="true" class="w-auto leaderboard-laurel pointer-events-none absolute left-[2%] top-1/2 -translate-y-1/2 opacity-80 text-medal-silver"><g><path d="M51 115C12 90 6 49 40 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><g transform="translate(39 102) rotate(-42)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(28 88) rotate(-25)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(21 72) rotate(-8)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(19 55) rotate(10)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(23 38) rotate(30)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(31 23) rotate(48)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g></g></svg>
+          <svg viewBox="0 0 64 120" fill="none" aria-hidden="true" class="w-auto leaderboard-laurel pointer-events-none absolute right-[2%] top-1/2 -translate-y-1/2 opacity-80 text-medal-silver"><g transform="translate(64 0) scale(-1 1)"><path d="M51 115C12 90 6 49 40 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><g transform="translate(39 102) rotate(-42)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(28 88) rotate(-25)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(21 72) rotate(-8)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(19 55) rotate(10)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(23 38) rotate(30)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(31 23) rotate(48)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g></g></svg>
+          <div class="relative">
+            <div class="relative p-[2px] rounded-full bg-gradient-to-br from-[hsl(var(--brand-from))] to-[hsl(var(--brand-to))] shadow-[0_0_10px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_16px_hsl(var(--primary)/0.45)] hover:scale-105 transition-all duration-300 ring-2 leaderboard-podium-avatar ring-medal-silver/60">
+              <div class="h-full w-full rounded-full bg-background p-[1.5px] flex items-center justify-center">
+                <div class="relative flex h-full w-full items-center justify-center rounded-full bg-spectrum text-white font-bold overflow-hidden">
+                  <img alt="Chanmi" class="h-full w-full object-cover" referrerpolicy="no-referrer" loading="lazy" decoding="async" src="https://lh3.googleusercontent.com/a/ACg8ocLIBUkf5dP19bkXU3c10QxyEvMuApTG7W-qnVivbGc3wIrnIAM=s96-c">
+                </div>
+              </div>
+            </div>
+            <span aria-hidden="true" class="inline-flex h-14 w-12 shrink-0 absolute -left-16 top-1/2 -translate-y-1/2 drop-shadow-sm text-medal-silver">
+              <svg viewBox="0 0 48 56" class="size-full" aria-hidden="true"><defs><linearGradient id="_r_2_" x1="0" y1="0" x2="1" y2="1"><stop stop-color="hsl(var(--medal-highlight))"></stop><stop offset="0.45" stop-color="currentColor"></stop><stop offset="1" stop-color="currentColor" stop-opacity="0.65"></stop></linearGradient></defs><path d="M11 36L8 55L17 50L22 55L25 37M25 37L29 55L35 50L43 53L37 34" fill="currentColor" opacity="0.8"></path><polygon points="24,2 26.545260748291007,4.666825203210699 29.694018992255458,2.7496318216404987 31.46232693111925,5.984349116029907 35,4.947441116742347 35.87084786567005,8.529609864320914 39.55634918610404,8.443650813895957 39.47039013567908,12.129152134329948 43.052558883257646,13 42.015650883970096,16.53767306888075 45.2503681783595,18.305981007744546 43.3331747967893,21.454739251708993 46,24 43.3331747967893,26.545260748291007 45.2503681783595,29.694018992255454 42.015650883970096,31.462326931119247 43.05255888325765,35 39.47039013567908,35.87084786567006 39.55634918610404,39.55634918610404 35.87084786567006,39.47039013567908 35,43.05255888325765 31.46232693111925,42.015650883970096 29.69401899225546,45.2503681783595 26.545260748291014,43.3331747967893 24,46 21.45473925170899,43.3331747967893 18.305981007744542,45.2503681783595 16.53767306888075,42.015650883970096 13.000000000000005,43.05255888325765 12.129152134329948,39.47039013567908 8.443650813895964,39.55634918610406 8.529609864320916,35.87084786567006 4.947441116742354,35.00000000000001 5.984349116029907,31.462326931119243 2.7496318216404987,29.69401899225545 4.666825203210699,26.545260748291007 2,24.000000000000004 4.666825203210696,21.454739251709 2.749631821640495,18.305981007744553 5.984349116029904,16.53767306888076 4.94744111674235,12.999999999999998 8.529609864320904,12.12915213432996 8.443650813895951,8.443650813895957 12.129152134329942,8.529609864320918 12.99999999999999,4.947441116742354 16.537673068880753,5.984349116029907 18.305981007744528,2.7496318216405022 21.454739251708993,4.666825203210699" fill="url(#_r_2_)"></polygon><circle cx="24" cy="24" r="16" fill="currentColor" stroke="hsl(var(--medal-highlight))" stroke-width="1.5"></circle><circle cx="24" cy="24" r="13.5" fill="none" stroke="hsl(var(--medal-highlight))" stroke-opacity="0.4"></circle></svg>
+              <span class="leaderboard-medal-label absolute inset-x-0 top-0 flex h-12 items-center justify-center font-display text-xl font-extrabold">2</span>
+            </span>
+          </div>
+          <p class="sr-only">Hạng 2</p>
+          <p id="podiumName2" class="leaderboard-podium-name relative mt-2 line-clamp-2 max-w-[65%] px-2 font-display text-sm font-extrabold text-foreground sm:text-base">Chanmi</p>
+          <p id="podiumValue2" class="leaderboard-podium-value relative mt-0.5 font-display font-extrabold tabular-nums text-xl sm:text-2xl text-medal-silver">73h 2p</p>
+          <p id="podiumSlogan2" class="leaderboard-podium-quote relative mt-1 max-w-[85%] px-3 text-xs text-muted-foreground">Kiên trì tạo nên khác biệt</p>
+        </div>
+
+        <!-- TOP 3 (Ziip riview phim) -->
+        <div class="leaderboard-podium-card relative min-w-0 flex flex-col items-center justify-center rounded-3xl border px-4 text-center podium-card-bronze sm:order-3">
+          <svg viewBox="0 0 64 120" fill="none" aria-hidden="true" class="w-auto leaderboard-laurel pointer-events-none absolute left-[2%] top-1/2 -translate-y-1/2 opacity-80 text-medal-bronze"><g><path d="M51 115C12 90 6 49 40 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><g transform="translate(39 102) rotate(-42)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(28 88) rotate(-25)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(21 72) rotate(-8)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(19 55) rotate(10)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(23 38) rotate(30)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(31 23) rotate(48)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g></g></svg>
+          <svg viewBox="0 0 64 120" fill="none" aria-hidden="true" class="w-auto leaderboard-laurel pointer-events-none absolute right-[2%] top-1/2 -translate-y-1/2 opacity-80 text-medal-bronze"><g transform="translate(64 0) scale(-1 1)"><path d="M51 115C12 90 6 49 40 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path><g transform="translate(39 102) rotate(-42)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(28 88) rotate(-25)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(21 72) rotate(-8)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(19 55) rotate(10)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(23 38) rotate(30)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g><g transform="translate(31 23) rotate(48)" fill="currentColor"><path d="M0 0C-17-1-22-12-19-20C-7-16 0-9 0 0Z" opacity="0.85"></path><path d="M0 0C2-15 10-21 17-22C20-11 10-2 0 0Z" opacity="0.6"></path><path d="M-2-2L-16-16M2-3L13-18" stroke="hsl(var(--medal-highlight))" stroke-width="0.7" opacity="0.65"></path></g></g></svg>
+          <div class="relative">
+            <div class="relative p-[2px] rounded-full bg-gradient-to-br from-[hsl(var(--brand-from))] to-[hsl(var(--brand-to))] shadow-[0_0_10px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_16px_hsl(var(--primary)/0.45)] hover:scale-105 transition-all duration-300 ring-2 leaderboard-podium-avatar ring-medal-bronze/60">
+              <div class="h-full w-full rounded-full bg-background p-[1.5px] flex items-center justify-center">
+                <div class="relative flex h-full w-full items-center justify-center rounded-full bg-spectrum text-white font-bold overflow-hidden">
+                  <img alt="Ziip riview phim" class="h-full w-full object-cover" referrerpolicy="no-referrer" loading="lazy" decoding="async" src="https://lh3.googleusercontent.com/a/ACg8ocJCVduf396n_t9bmnXrCvwCdKbE8vStGtfZDrIUI19QJurVxg=s96-c">
+                </div>
+              </div>
+            </div>
+            <span aria-hidden="true" class="inline-flex h-14 w-12 shrink-0 absolute -left-16 top-1/2 -translate-y-1/2 drop-shadow-sm text-medal-bronze">
+              <svg viewBox="0 0 48 56" class="size-full" aria-hidden="true"><defs><linearGradient id="_r_3_" x1="0" y1="0" x2="1" y2="1"><stop stop-color="hsl(var(--medal-highlight))"></stop><stop offset="0.45" stop-color="currentColor"></stop><stop offset="1" stop-color="currentColor" stop-opacity="0.65"></stop></linearGradient></defs><path d="M11 36L8 55L17 50L22 55L25 37M25 37L29 55L35 50L43 53L37 34" fill="currentColor" opacity="0.8"></path><polygon points="24,2 26.545260748291007,4.666825203210699 29.694018992255458,2.7496318216404987 31.46232693111925,5.984349116029907 35,4.947441116742347 35.87084786567005,8.529609864320914 39.55634918610404,8.443650813895957 39.47039013567908,12.129152134329948 43.052558883257646,13 42.015650883970096,16.53767306888075 45.2503681783595,18.305981007744546 43.3331747967893,21.454739251708993 46,24 43.3331747967893,26.545260748291007 45.2503681783595,29.694018992255454 42.015650883970096,31.462326931119247 43.05255888325765,35 39.47039013567908,35.87084786567006 39.55634918610404,39.55634918610404 35.87084786567006,39.47039013567908 35,43.05255888325765 31.46232693111925,42.015650883970096 29.69401899225546,45.2503681783595 26.545260748291014,43.3331747967893 24,46 21.45473925170899,43.3331747967893 18.305981007744542,45.2503681783595 16.53767306888075,42.015650883970096 13.000000000000005,43.05255888325765 12.129152134329948,39.47039013567908 8.443650813895964,39.55634918610406 8.529609864320916,35.87084786567006 4.947441116742354,35.00000000000001 5.984349116029907,31.462326931119243 2.7496318216404987,29.69401899225545 4.666825203210699,26.545260748291007 2,24.000000000000004 4.666825203210696,21.454739251709 2.749631821640495,18.305981007744553 5.984349116029904,16.53767306888076 4.94744111674235,12.999999999999998 8.529609864320904,12.12915213432996 8.443650813895951,8.443650813895957 12.129152134329942,8.529609864320918 12.99999999999999,4.947441116742354 16.537673068880753,5.984349116029907 18.305981007744528,2.7496318216405022 21.454739251708993,4.666825203210699" fill="url(#_r_3_)"></polygon><circle cx="24" cy="24" r="16" fill="currentColor" stroke="hsl(var(--medal-highlight))" stroke-width="1.5"></circle><circle cx="24" cy="24" r="13.5" fill="none" stroke="hsl(var(--medal-highlight))" stroke-opacity="0.4"></circle></svg>
+              <span class="leaderboard-medal-label absolute inset-x-0 top-0 flex h-12 items-center justify-center font-display text-xl font-extrabold">3</span>
+            </span>
+          </div>
+          <p class="sr-only">Hạng 3</p>
+          <p id="podiumName3" class="leaderboard-podium-name relative mt-2 line-clamp-2 max-w-[65%] px-2 font-display text-sm font-extrabold text-foreground sm:text-base">Ziip riview phim</p>
+          <p id="podiumValue3" class="leaderboard-podium-value relative mt-0.5 font-display font-extrabold tabular-nums text-xl sm:text-2xl text-medal-bronze">72h 7p</p>
+          <p id="podiumSlogan3" class="leaderboard-podium-quote relative mt-1 max-w-[85%] px-3 text-xs text-muted-foreground">Mỗi ngày là một bước tiến</p>
+        </div>
+      </div>
+
+      <!-- TABLE SECTION (4 - 10) -->
+      <div class="leaderboard-table learning-sheet overflow-hidden rounded-3xl">
+        <div class="leaderboard-table-header flex items-center gap-3 border-b border-border/70 px-3 text-xs font-bold text-muted-foreground sm:px-5">
+          <span class="w-6 shrink-0 text-center sm:w-9">#</span>
+          <span class="leaderboard-avatar-spacer shrink-0" aria-hidden="true"></span>
+          <span class="min-w-0 flex-1">Người dùng</span>
+          <span id="leaderboardValueHeading" class="shrink-0">Thời gian học</span>
+        </div>
+        <div role="region" aria-label="Bảng xếp hạng" tabindex="0" class="leaderboard-scroll premium-scrollbar focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring">
+          <div id="leaderboardRowsContainer" role="list" class="divide-y divide-border/60">
+            <div role="listitem" class="leaderboard-row flex items-center gap-3 px-3 transition-colors sm:px-5">
+              <span class="w-6 shrink-0 text-center font-display text-sm font-extrabold tabular-nums text-muted-foreground sm:w-9 sm:text-base" aria-label="Hạng 4">4</span>
+              <div class="relative p-[2px] rounded-full bg-gradient-to-br from-[hsl(var(--brand-from))] to-[hsl(var(--brand-to))] shadow-[0_0_10px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_16px_hsl(var(--primary)/0.45)] hover:scale-105 transition-all duration-300 leaderboard-row-avatar shrink-0 text-xs">
+                <div class="h-full w-full rounded-full bg-background p-[1.5px] flex items-center justify-center">
+                  <div class="relative flex h-full w-full items-center justify-center rounded-full bg-spectrum text-white font-bold overflow-hidden">
+                    <img alt="Huyền Thanh" class="h-full w-full object-cover" referrerpolicy="no-referrer" loading="lazy" decoding="async" src="https://lh3.googleusercontent.com/a/ACg8ocIV-FoCEkMiOXywwHLS6hHLUJ1C4oR46gmw5lH8lAL846u5oLu6=s96-c">
+                  </div>
+                </div>
+              </div>
+              <p class="min-w-0 flex-1 truncate text-sm font-semibold text-foreground sm:text-[0.9375rem]">Huyền Thanh</p>
+              <span class="shrink-0 font-display text-sm font-extrabold tabular-nums text-foreground sm:text-base">66h 50p</span>
+            </div>
+            <div role="listitem" class="leaderboard-row flex items-center gap-3 px-3 transition-colors sm:px-5">
+              <span class="w-6 shrink-0 text-center font-display text-sm font-extrabold tabular-nums text-muted-foreground sm:w-9 sm:text-base" aria-label="Hạng 5">5</span>
+              <div class="relative p-[2px] rounded-full bg-gradient-to-br from-[hsl(var(--brand-from))] to-[hsl(var(--brand-to))] shadow-[0_0_10px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_16px_hsl(var(--primary)/0.45)] hover:scale-105 transition-all duration-300 leaderboard-row-avatar shrink-0 text-xs">
+                <div class="h-full w-full rounded-full bg-background p-[1.5px] flex items-center justify-center">
+                  <div class="relative flex h-full w-full items-center justify-center rounded-full bg-spectrum text-white font-bold overflow-hidden">
+                    <img alt="Minh Triển Nguyễn" class="h-full w-full object-cover" referrerpolicy="no-referrer" loading="lazy" decoding="async" src="https://lh3.googleusercontent.com/a/ACg8ocKdmQDTSB6qypaVwFpUTLrx7q8ERkboDSzwe8YsjSA0FjWmLA=s96-c">
+                  </div>
+                </div>
+              </div>
+              <p class="min-w-0 flex-1 truncate text-sm font-semibold text-foreground sm:text-[0.9375rem]">Minh Triển Nguyễn</p>
+              <span class="shrink-0 font-display text-sm font-extrabold tabular-nums text-foreground sm:text-base">54h 59p</span>
+            </div>
+            <div role="listitem" class="leaderboard-row flex items-center gap-3 px-3 transition-colors sm:px-5">
+              <span class="w-6 shrink-0 text-center font-display text-sm font-extrabold tabular-nums text-muted-foreground sm:w-9 sm:text-base" aria-label="Hạng 6">6</span>
+              <div class="relative p-[2px] rounded-full bg-gradient-to-br from-[hsl(var(--brand-from))] to-[hsl(var(--brand-to))] shadow-[0_0_10px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_16px_hsl(var(--primary)/0.45)] hover:scale-105 transition-all duration-300 leaderboard-row-avatar shrink-0 text-xs">
+                <div class="h-full w-full rounded-full bg-background p-[1.5px] flex items-center justify-center">
+                  <div class="relative flex h-full w-full items-center justify-center rounded-full bg-spectrum text-white font-bold overflow-hidden">
+                    <img alt="Cường Nguyễn Văn" class="h-full w-full object-cover" referrerpolicy="no-referrer" loading="lazy" decoding="async" src="https://lh3.googleusercontent.com/a/ACg8ocK83O5WfW7I-WyqQuYbjZ5XuyQCBQlFGmTyL9A6BTaKqeNRxzI=s96-c">
+                  </div>
+                </div>
+              </div>
+              <p class="min-w-0 flex-1 truncate text-sm font-semibold text-foreground sm:text-[0.9375rem]">Cường Nguyễn Văn</p>
+              <span class="shrink-0 font-display text-sm font-extrabold tabular-nums text-foreground sm:text-base">47h 8p</span>
+            </div>
+            <div role="listitem" class="leaderboard-row flex items-center gap-3 px-3 transition-colors sm:px-5">
+              <span class="w-6 shrink-0 text-center font-display text-sm font-extrabold tabular-nums text-muted-foreground sm:w-9 sm:text-base" aria-label="Hạng 7">7</span>
+              <div class="relative p-[2px] rounded-full bg-gradient-to-br from-[hsl(var(--brand-from))] to-[hsl(var(--brand-to))] shadow-[0_0_10px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_16px_hsl(var(--primary)/0.45)] hover:scale-105 transition-all duration-300 leaderboard-row-avatar shrink-0 text-xs">
+                <div class="h-full w-full rounded-full bg-background p-[1.5px] flex items-center justify-center">
+                  <div class="relative flex h-full w-full items-center justify-center rounded-full bg-spectrum text-white font-bold overflow-hidden">
+                    <img alt="Khiêm Khiêm" class="h-full w-full object-cover" referrerpolicy="no-referrer" loading="lazy" decoding="async" src="https://lh3.googleusercontent.com/a/ACg8ocKCgihBqapi0AiyQTpE65vQ6XpNK8pcFqMFB-GWXQGi6HowE0NN=s96-c">
+                  </div>
+                </div>
+              </div>
+              <p class="min-w-0 flex-1 truncate text-sm font-semibold text-foreground sm:text-[0.9375rem]">Khiêm Khiêm</p>
+              <span class="shrink-0 font-display text-sm font-extrabold tabular-nums text-foreground sm:text-base">41h 12p</span>
+            </div>
+            <div role="listitem" class="leaderboard-row flex items-center gap-3 px-3 transition-colors sm:px-5">
+              <span class="w-6 shrink-0 text-center font-display text-sm font-extrabold tabular-nums text-muted-foreground sm:w-9 sm:text-base" aria-label="Hạng 8">8</span>
+              <div class="relative p-[2px] rounded-full bg-gradient-to-br from-[hsl(var(--brand-from))] to-[hsl(var(--brand-to))] shadow-[0_0_10px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_16px_hsl(var(--primary)/0.45)] hover:scale-105 transition-all duration-300 leaderboard-row-avatar shrink-0 text-xs">
+                <div class="h-full w-full rounded-full bg-background p-[1.5px] flex items-center justify-center">
+                  <div class="relative flex h-full w-full items-center justify-center rounded-full bg-spectrum text-white font-bold overflow-hidden">
+                    <img alt="Trần Anh Tú" class="h-full w-full object-cover" referrerpolicy="no-referrer" loading="lazy" decoding="async" src="https://lh3.googleusercontent.com/a/ACg8ocIFH3zX5FYcrIr1uhQeTb8DQwQ1XIiinhDURDkvOrpgQPPsnvG5=s96-c">
+                  </div>
+                </div>
+              </div>
+              <p class="min-w-0 flex-1 truncate text-sm font-semibold text-foreground sm:text-[0.9375rem]">Trần Anh Tú</p>
+              <span class="shrink-0 font-display text-sm font-extrabold tabular-nums text-foreground sm:text-base">40h 17p</span>
+            </div>
+            <div role="listitem" class="leaderboard-row flex items-center gap-3 px-3 transition-colors sm:px-5">
+              <span class="w-6 shrink-0 text-center font-display text-sm font-extrabold tabular-nums text-muted-foreground sm:w-9 sm:text-base" aria-label="Hạng 9">9</span>
+              <div class="relative p-[2px] rounded-full bg-gradient-to-br from-[hsl(var(--brand-from))] to-[hsl(var(--brand-to))] shadow-[0_0_10px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_16px_hsl(var(--primary)/0.45)] hover:scale-105 transition-all duration-300 leaderboard-row-avatar shrink-0 text-xs">
+                <div class="h-full w-full rounded-full bg-background p-[1.5px] flex items-center justify-center">
+                  <div class="relative flex h-full w-full items-center justify-center rounded-full bg-spectrum text-white font-bold overflow-hidden">
+                    <img alt="The Dep" class="h-full w-full object-cover" referrerpolicy="no-referrer" loading="lazy" decoding="async" src="https://lh3.googleusercontent.com/a/ACg8ocL-wrcszu8Dg42Qp5qGH5unN7hj48tkuHui1QVhCA2n-FGuuw=s96-c">
+                  </div>
+                </div>
+              </div>
+              <p class="min-w-0 flex-1 truncate text-sm font-semibold text-foreground sm:text-[0.9375rem]">The Dep</p>
+              <span class="shrink-0 font-display text-sm font-extrabold tabular-nums text-foreground sm:text-base">39h 48p</span>
+            </div>
+            <div role="listitem" class="leaderboard-row flex items-center gap-3 px-3 transition-colors sm:px-5">
+              <span class="w-6 shrink-0 text-center font-display text-sm font-extrabold tabular-nums text-muted-foreground sm:w-9 sm:text-base" aria-label="Hạng 10">10</span>
+              <div class="relative p-[2px] rounded-full bg-gradient-to-br from-[hsl(var(--brand-from))] to-[hsl(var(--brand-to))] shadow-[0_0_10px_hsl(var(--primary)/0.2)] hover:shadow-[0_0_16px_hsl(var(--primary)/0.45)] hover:scale-105 transition-all duration-300 leaderboard-row-avatar shrink-0 text-xs">
+                <div class="h-full w-full rounded-full bg-background p-[1.5px] flex items-center justify-center">
+                  <div class="relative flex h-full w-full items-center justify-center rounded-full bg-spectrum text-white font-bold overflow-hidden">
+                    <img alt="Nhi Quynh" class="h-full w-full object-cover" referrerpolicy="no-referrer" loading="lazy" decoding="async" src="https://lh3.googleusercontent.com/a/ACg8ocJZjrAAg49HXaFKejlHI9ZOCgS4BWf9pZ0_N_swsOtdjRC52w=s96-c">
+                  </div>
+                </div>
+              </div>
+              <p class="min-w-0 flex-1 truncate text-sm font-semibold text-foreground sm:text-[0.9375rem]">Nhi Quynh</p>
+              <span class="shrink-0 font-display text-sm font-extrabold tabular-nums text-foreground sm:text-base">37h 22p</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CURRENT USER SECTION -->
+      <div class="leaderboard-me learning-sheet flex flex-col gap-2 rounded-3xl px-4 py-3 sm:flex-row sm:items-center sm:gap-4">
+        <div class="flex items-center gap-3">
+          <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round size-5"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>
+          </span>
+          <p class="text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400">Thứ hạng của bạn</p>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div role="list" class="overflow-hidden rounded-2xl border border-blue-200/70 dark:border-blue-900/60 bg-blue-50/40 dark:bg-blue-950/20">
+            <div role="listitem" class="leaderboard-row flex items-center gap-3 px-3 py-2.5 transition-colors sm:px-5">
+              <span id="myLeaderboardRank" class="w-6 shrink-0 text-center font-display text-sm font-extrabold tabular-nums text-slate-700 dark:text-slate-300 sm:w-9 sm:text-base" aria-label="Hạng 326">326</span>
+              <div class="relative p-[2px] rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 shadow-[0_0_10px_rgba(59,130,246,0.2)] hover:shadow-[0_0_16px_rgba(59,130,246,0.45)] hover:scale-105 transition-all duration-300 leaderboard-row-avatar shrink-0 text-xs">
+                <div class="h-full w-full rounded-full bg-white dark:bg-slate-900 p-[1.5px] flex items-center justify-center">
+                  <div class="relative flex h-full w-full items-center justify-center rounded-full bg-slate-100 text-white font-bold overflow-hidden">
+                    <img alt="Sáng Lê" class="h-full w-full object-cover" referrerpolicy="no-referrer" loading="lazy" decoding="async" src="https://lh3.googleusercontent.com/a/ACg8ocK-nP1k_SeIlx2e0s3puIPThXAAz7TlPDW-0FmcXll1pHEnCYgK=s96-c">
+                  </div>
+                </div>
+              </div>
+              <p class="min-w-0 flex-1 truncate text-sm font-semibold text-slate-800 dark:text-slate-100 sm:text-[0.9375rem]">
+                Sáng Lê
+                <span class="ml-1.5 text-xs font-bold text-blue-600 dark:text-blue-400">(bạn)</span>
+              </p>
+              <span id="myLeaderboardValue" class="shrink-0 font-display text-sm font-extrabold tabular-nums text-slate-900 dark:text-white sm:text-base">2h 13p</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+@section Scripts {
+    <script src="~/assets/js/Leaderboard/Leaderboard-main.js" asp-append-version="true"></script>
+}

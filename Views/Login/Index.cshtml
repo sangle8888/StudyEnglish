@@ -1,0 +1,237 @@
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Tiếng Anh Ra Trường</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="~/assets/js/Login/tailwind.js" asp-append-version="true"></script>
+    <!-- Font Be Vietnam Pro & Font Awesome Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/assets/css/Login/login.css" asp-append-version="true">
+</head>
+<body class="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen transition-colors duration-200">
+
+    <div class="auth-layout grid grid-cols-1 lg:grid-cols-2 min-h-screen">
+
+        <!-- ================= BÊN TRÁI: BANNER GIỚI THIỆU ================= -->
+        <aside class="auth-sidebar p-8 lg:p-12 relative overflow-hidden">
+            <!-- Badge trên cùng -->
+            <div>
+                <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase tracking-[.16em] bg-white/80 dark:bg-slate-800/70 text-blue-700 dark:text-sky-300 backdrop-blur-md shadow-sm border border-white/80 dark:border-white/10">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-3.5 text-blue-600 dark:text-sky-300" aria-hidden="true"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"></path><path d="M20 3v4"></path><path d="M22 5h-4"></path><path d="M4 17v2"></path><path d="M5 18H3"></path></svg> KHÔNG GIAN HỌC TẬP CHUYÊN NGHIỆP
+                </span>
+            </div>
+
+            <!-- Tiêu đề & Sub-badges -->
+            <div class="auth-sidebar-intro mt-6">
+                <span class="auth-kicker text-xs font-extrabold tracking-[.2em] uppercase">Chào bạn</span>
+                <h1 class="auth-aside-title">
+                    Trở lại với <span>Tiếng Anh Ra Trường</span>
+                </h1>
+            </div>
+
+            <!-- Tag tính năng -->
+            <div class="auth-feature-list relative z-10 mt-6 flex flex-wrap gap-2">
+                <span class="auth-feature inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold shadow-sm">
+                    <span class="auth-feature-icon auth-icon-brand flex size-7 items-center justify-center rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-3.5" aria-hidden="true"><path d="m3 17 2 2 4-4"></path><path d="m3 7 2 2 4-4"></path><path d="M13 6h8"></path><path d="M13 12h8"></path><path d="M13 18h8"></path></svg></span> Đủ 7 Part TOEIC
+                </span>
+                <span class="auth-feature inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold shadow-sm">
+                    <span class="auth-feature-icon auth-icon-vocabulary flex size-7 items-center justify-center rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-3.5" aria-hidden="true"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg></span> Câu nào cũng có lời giải
+                </span>
+                <span class="auth-feature inline-flex items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold shadow-sm">
+                    <span class="auth-feature-icon auth-icon-reading flex size-7 items-center justify-center rounded-full"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="size-3.5" aria-hidden="true"><path d="M12 21V7"></path><path d="m16 12 2 2 4-4"></path><path d="M22 6V4a1 1 0 0 0-1-1h-5a4 4 0 0 0-4 4 4 4 0 0 0-4-4H3a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h6a3 3 0 0 1 3 3 3 3 0 0 1 3-3h6a1 1 0 0 0 1-1v-1.3"></path></svg></span> Đề thi thử đa dạng
+                </span>
+            </div>
+
+            <!-- Linh vật cú mèo -->
+            <div class="auth-owl-stage relative z-0 mt-6 min-h-0 w-full">
+                <img src="~/assets/images/Login/auth-hero-buddy-owl.webp" alt="Mascot"
+                     class="absolute inset-0 mx-auto h-full w-full max-w-[540px] object-contain object-bottom drop-shadow-[0_24px_34px_rgba(30,58,138,.22)] animate-float" />
+            </div>
+
+            <!-- Footer trái -->
+            <div class="text-xs text-slate-400 dark:text-slate-500">
+                © 2026 Tiếng Anh Ra Trường. Copyright Lê Xuân Sáng
+            </div>
+        </aside>
+
+        <!-- ================= BÊN PHẢI: FORM ĐĂNG NHẬP / ĐĂNG KÝ ================= -->
+        <main class="auth-main p-8 lg:p-16 flex flex-col justify-between">
+
+            <!-- Header bên phải (Logo + Dark Mode Toggle) -->
+            <header class="auth-header flex items-center justify-between">
+                <!-- Logo trỏ về trang chủ chuẩn MVC -->
+                <a href="/" aria-label="Tiếng Anh Ra Trường - Trang chủ" class="flex items-center gap-2.5 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-md">
+                        R
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider leading-none">Tiếng Anh</div>
+                        <div class="text-lg font-extrabold text-slate-900 dark:text-white leading-tight">Ra Trường</div>
+                    </div>
+                </a>
+
+                <!-- Nút chuyển Dark/Light Mode -->
+                <button id="themeToggleBtn" type="button" onclick="toggleTheme()" aria-label="Đổi giao diện sáng hoặc tối" title="Đổi giao diện sáng hoặc tối"
+                    class="w-10 h-10 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <i id="themeIcon" class="fa-solid fa-sun"></i>
+                </button>
+            </header>
+
+            <!-- Container Form -->
+            <div class="w-full max-w-md mx-auto my-auto py-8">
+
+                <div class="auth-mobile-banner mb-6 px-5 py-4 lg:hidden">
+                    <p class="relative z-10 max-w-[60%] text-[10px] font-extrabold uppercase tracking-[.16em] text-blue-700 dark:text-sky-300">Không gian học tập chuyên nghiệp</p>
+                    <p class="relative z-10 mt-2 max-w-[60%] text-sm font-extrabold leading-5 text-slate-900 dark:text-white">Học tiếp chỗ hôm trước nhé!</p>
+                    <img src="~/assets/images/Login/auth-hero-buddy-owl.webp" alt="Mascot" class="absolute -bottom-7 -right-2 h-40 w-40 object-contain drop-shadow-lg" />
+                </div>
+
+                <!-- Tab chuyển đổi Đăng nhập / Đăng ký -->
+                <div class="bg-slate-200/60 dark:bg-slate-800 p-1 rounded-2xl flex mb-8">
+                    <button id="tabLogin" onclick="switchTab('login')"
+                        class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm">
+                        Đăng nhập
+                    </button>
+                    <button id="tabRegister" onclick="switchTab('register')"
+                        class="flex-1 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white">
+                        Đăng ký
+                    </button>
+                </div>
+
+                <!-- FORM ĐĂNG NHẬP (Đã gỡ bỏ onsubmit tĩnh) -->
+                <form id="loginForm" class="space-y-4">
+                    <div class="text-xs font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase mb-1">
+                        ĐĂNG NHẬP
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Email</label>
+                        <input id="loginEmail" type="email" placeholder="Nhập email của bạn" required autocomplete="email"
+                            class="auth-input w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+
+                    <!-- Mật khẩu -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Mật khẩu</label>
+                        <div class="relative">
+                            <input id="loginPassword" type="password" placeholder="Nhập mật khẩu" required
+                                class="auth-input w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition pr-10">
+                            <button type="button" onclick="togglePassword('loginPassword', 'passIcon1')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                <i id="passIcon1" class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quên mật khẩu -->
+                    <div class="text-right">
+                        <a href="javascript:void(0)" class="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline">Quên mật khẩu?</a>
+                    </div>
+
+                    <!-- Nút Đăng nhập -->
+                    <button id="btnLoginSubmit" type="submit"
+                        class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition duration-200 flex items-center justify-center gap-2">
+                        Đăng nhập
+                    </button>
+
+                    <!-- Vùng thông báo phản hồi từ Controller -->
+                    <p id="loginMessage" class="auth-message text-xs text-red-500 font-medium min-h-[1.25rem] mt-2" aria-live="polite"></p>
+                </form>
+
+                <!-- FORM ĐĂNG KÝ (Đã bổ sung class space-y-4 hidden và id cho các ô input) -->
+                <form id="registerForm" class="space-y-4 hidden">
+                    <div class="text-xs font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase mb-1">
+                        TẠO TÀI KHOẢN MỚI
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Họ và tên</label>
+                        <input id="regFullName" type="text" placeholder="Học và tên của bạn" required
+                            class="auth-input w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Email</label>
+                        <input id="regEmail" type="email" placeholder="example@gmail.com" required
+                            class="auth-input w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Năm sinh</label>
+                            <input id="regBirthYear" type="number" min="1950" max="2030" placeholder="VD: 2000, 2001, 2002,..."
+                                   class="auth-input w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Quê quán</label>
+                            <input id="regHometown" type="text" placeholder="VD: Hà Nội, TP.HCM, Đà Nẵng,..."
+                                   class="auth-input w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">Mật khẩu</label>
+                        <div class="relative">
+                            <input id="regPassword" type="password" placeholder="Tạo mật khẩu" required
+                                class="auth-input w-full px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition pr-10">
+                            <button type="button" onclick="togglePassword('regPassword', 'passIcon2')" class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
+                                <i id="passIcon2" class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Nút Đăng ký ngay -->
+                    <button id="btnRegisterSubmit" type="submit"
+                        class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed text-white font-semibold rounded-xl shadow-lg shadow-blue-500/25 focus:outline-none focus:ring-2 focus:ring-blue-500/40 transition duration-200 flex items-center justify-center gap-2">
+                        Đăng ký ngay
+                    </button>
+
+                    <!-- Vùng thông báo phản hồi từ Controller -->
+                    <p id="registerMessage" class="auth-message text-xs text-red-500 font-medium min-h-[1.25rem] mt-2" aria-live="polite"></p>
+                </form>
+
+                <!-- Đường phân cách Đăng nhập Google -->
+                <div class="relative my-6 text-center">
+                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200 dark:border-slate-800"></div></div>
+                    <span class="relative bg-slate-50 dark:bg-slate-900 px-3 text-xs font-bold text-slate-400 tracking-wider">HOẶC</span>
+                </div>
+
+                <!-- Nút Google -->
+                <button id="googleSignInButton" type="button" onclick="beginGoogleSignIn()"
+                    class="w-full py-3 px-4 border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700/50 rounded-xl text-slate-700 dark:text-slate-200 text-sm font-semibold flex items-center justify-center gap-2.5 transition">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                    </svg>
+                    Tiếp tục với Google
+                </button>
+
+                <!-- Link chuyển đổi dưới cùng -->
+                <div class="text-center mt-6 text-xs text-slate-500 dark:text-slate-400">
+                    <span id="authSwitchPrompt">Chưa có tài khoản?</span>
+                    <a href="javascript:void(0)" id="authSwitchLink" onclick="toggleAuthTab()"
+                        class="text-blue-600 dark:text-blue-400 font-bold hover:underline ml-1">
+                        Bắt đầu miễn phí
+                    </a>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+    <!-- JavaScript Xử lý Tương tác (Đã thêm ~/ để nhận đúng thư mục wwwroot) -->
+    <script src="~/assets/js/Login/Login.js" asp-append-version="true"></script>
+</body>
+</html>
