@@ -1,0 +1,133 @@
+@model GrammarTheoryFormViewModel
+
+<div class="mb-4">
+    <a asp-action="Index" class="text-decoration-none">&larr; Quay lại danh sách chủ đề</a>
+    <h1 class="h3 mt-2">Lý thuyết: @Model.TopicTitle</h1>
+    <p class="text-muted mb-0">Lý thuyết hiển thị khi học viên bấm "Lý thuyết" trong lúc luyện tập. Mỗi dòng là một mục; các phần trong một mục ngăn cách bằng dấu <code>|</code>.</p>
+</div>
+
+@if (TempData["Success"] is not null)
+{
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["Error"] is not null)
+{
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="bi bi-exclamation-octagon-fill me-2"></i> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (ViewBag.RepairedFromSeed == true)
+{
+    <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center justify-content-between p-3 mb-4 rounded-3" role="alert">
+        <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle bg-warning text-dark p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px;">
+                <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+            </div>
+            <div>
+                <h6 class="mb-1 fw-bold text-dark">Hệ thống đã tự động khôi phục nội dung tiếng Việt chuẩn</h6>
+                <div class="text-muted small">Dữ liệu lý thuyết trước đó trong cơ sở dữ liệu bị lỗi bảng mã ký tự (mojibake). Hệ thống đã tự động nạp lại tiếng Việt chuẩn từ dữ liệu mẫu. Hãy kiểm tra các mục và bấm <strong>"Lưu lý thuyết"</strong> bên dưới để cập nhật vĩnh viễn vào cơ sở dữ liệu.</div>
+            </div>
+        </div>
+    </div>
+}
+
+<form method="post" asp-action="EditTheory">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="TopicId" />
+    <input type="hidden" asp-for="TopicTitle" />
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="GoldenRules" class="form-label"></label>
+                    <textarea asp-for="GoldenRules" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Summary" class="form-label"></label>
+                    <textarea asp-for="Summary" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="QuickIntro" class="form-label"></label>
+                    <input asp-for="QuickIntro" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="QuickItems" class="form-label"></label>
+                    <textarea asp-for="QuickItems" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="ModelLeft" class="form-label"></label>
+                    <input asp-for="ModelLeft" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="ModelRight" class="form-label"></label>
+                    <input asp-for="ModelRight" class="form-control" />
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="MentalDescription" class="form-label"></label>
+                    <textarea asp-for="MentalDescription" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Formulas" class="form-label"></label>
+                    <textarea asp-for="Formulas" class="form-control" rows="4"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Usage" class="form-label"></label>
+                    <textarea asp-for="Usage" class="form-control" rows="4"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Mistakes" class="form-label"></label>
+                    <textarea asp-for="Mistakes" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Examples" class="form-label"></label>
+                    <textarea asp-for="Examples" class="form-control" rows="5"></textarea>
+                </div>
+            </div>
+            <div class="mt-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary px-4 fw-medium">
+                        <i class="bi bi-check-lg me-1"></i> Lưu lý thuyết
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary px-3">Huỷ</a>
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#restoreSeedModal">
+                        <i class="bi bi-arrow-counterclockwise me-1"></i> Khôi phục chuẩn tiếng Việt
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!-- Modal xác nhận khôi phục lý thuyết chuẩn -->
+<div class="modal fade" id="restoreSeedModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold">Khôi phục lý thuyết chuẩn</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body py-3">
+                <p class="text-muted mb-0">
+                    Toàn bộ nội dung lý thuyết của chủ đề này sẽ được thay thế bằng văn bản tiếng Việt chuẩn từ dữ liệu mẫu và cập nhật ngay vào cơ sở dữ liệu. Bạn có muốn tiếp tục?
+                </p>
+            </div>
+            <div class="modal-footer border-top-0 pt-0">
+                <button type="button" class="btn btn-secondary rounded-pill px-3" data-bs-dismiss="modal">Đóng</button>
+                <form asp-action="RestoreTheorySeed" asp-route-topicId="@Model.TopicId" method="post" class="d-inline">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-warning rounded-pill px-4 fw-bold">
+                        Đồng ý khôi phục
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

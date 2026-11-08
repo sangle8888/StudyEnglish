@@ -1,0 +1,49 @@
+@model GrammarTopicFormViewModel
+
+<div class="mb-4">
+    <a asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="text-decoration-none">&larr; Quay lại</a>
+    <h1 class="h3 mt-2">@ViewData["Title"]</h1>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label asp-for="CategoryId" class="form-label"></label>
+                    <select asp-for="CategoryId" class="form-select" asp-items="@(new SelectList(Model.Categories, "CategoryId", "Title", Model.CategoryId))"></select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="ExamLabel" class="form-label"></label>
+                    <select asp-for="ExamLabel" class="form-select">
+                        <option value="TOEIC · VSTEP">TOEIC · VSTEP</option>
+                        <option value="TOEIC">TOEIC</option>
+                        <option value="VSTEP">VSTEP</option>
+                    </select>
+                    <span asp-validation-for="ExamLabel" class="text-danger"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="SortOrder" class="form-label"></label>
+                    <input asp-for="SortOrder" class="form-control" />
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <div class="form-check">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label asp-for="IsActive" class="form-check-label"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Lưu</button>
+                <a asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="btn btn-outline-secondary">Huỷ</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,473 @@
+@model GrammarQuestionFormViewModel
+
+<div class="mb-4">
+    <a asp-action="Questions" asp-route-topicId="@Model.TopicId" class="text-decoration-none">&larr; Quay lại: @Model.TopicTitle</a>
+    <h1 class="h3 mt-2">@ViewData["Title"]</h1>
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="TopicId" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-header fw-semibold">Nội dung câu hỏi</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-12">
+                    <label asp-for="Content" class="form-label"></label>
+                    <input asp-for="Content" class="form-control" />
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+                <div class="col-12">
+                    <label asp-for="ContentVi" class="form-label"></label>
+                    <input asp-for="ContentVi" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-header fw-semibold">Đáp án</div>
+        <div class="card-body">
+            @for (var i = 0; i < 4; i++)
+            {
+                var letter = (char)('A' + i);
+                <div class="row g-2 align-items-start mb-3 pb-3 border-bottom">
+                    <div class="col-md-1 pt-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="CorrectPosition" value="@i" id="correct@(i)" @(Model.CorrectPosition == i ? "checked" : "") />
+                            <label class="form-check-label fw-semibold" for="correct@(i)">@letter</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <input name="OptionTexts[@i]" value="@Model.OptionTexts[i]" class="form-control" placeholder="Đáp án @letter" />
+                        <span asp-validation-for="OptionTexts[i]" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-3">
+                        <input name="OptionTextsVi[@i]" value="@Model.OptionTextsVi[i]" class="form-control" placeholder="Nghĩa tiếng Việt" />
+                    </div>
+                    <div class="col-md-4">
+                        <input name="OptionReasons[@i]" value="@Model.OptionReasons[i]" class="form-control" placeholder="Lý do loại (nếu là đáp án sai)" />
+                    </div>
+                </div>
+            }
+            <div class="form-text">Chọn nút tròn ở cột bên trái để đánh dấu đáp án đúng.</div>
+        </div>
+    </div>
+
+    <datalist id="reasoningSuggestions">
+        <option value="Vị trí chỗ trống"></option>
+        <option value="Dạng từ (Word Form)"></option>
+        <option value="Hoà hợp S-V (Subject-Verb)"></option>
+        <option value="Xét thì (Tense)"></option>
+        <option value="Nghĩa của câu & Ngữ cảnh"></option>
+        <option value="Cụm từ cố định (Collocation)"></option>
+        <option value="Giới từ đi kèm (Preposition)"></option>
+        <option value="Mệnh đề quan hệ (Relative Clause)"></option>
+        <option value="Liên từ nối (Conjunction)"></option>
+        <option value="Câu bị động (Passive Voice)"></option>
+        <option value="Câu điều kiện (Conditionals)"></option>
+        <option value="Đại từ & Tính từ sở hữu"></option>
+        <option value="Đảo ngữ (Inversion)"></option>
+        <option value="Cấu trúc song hành (Parallelism)"></option>
+    </datalist>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-header bg-light d-flex align-items-center justify-content-between flex-wrap gap-2">
+            <div>
+                <span class="fw-bold text-primary">
+                    <i class="fa-solid fa-layer-group me-2"></i>CÁCH SUY LUẬN (TÙY CHỈNH TIÊU CHÍ)
+                </span>
+                <span class="badge bg-primary-subtle text-primary ms-2" id="stepCountBadge">@(Model.ReasoningSteps.Count) bước</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-success" id="btnAddReasoningStep">
+                <i class="fa-solid fa-plus me-1"></i>Thêm bước suy luận
+            </button>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-info py-2 px-3 small mb-3">
+                <i class="fa-solid fa-circle-info me-1"></i> Bạn có thể <strong>chỉnh sửa tiêu đề tiêu chí</strong> theo bất kỳ cấu trúc nào (Vị trí, Dạng từ, Hoà hợp S-V, Xét thì, Nghĩa câu, Cụm từ...), bấm thêm/xoá bước, sắp xếp lại thứ tự và tích chọn các đáp án cần loại ở từng bước.
+            </div>
+
+            <div id="reasoningStepsContainer">
+                @for (int i = 0; i < Model.ReasoningSteps.Count; i++)
+                {
+                    <div class="reasoning-step-item p-3 mb-3 border rounded bg-light-subtle shadow-xs" data-step-index="@i">
+                        <input type="hidden" name="ReasoningSteps.Index" value="@i" />
+                        <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2 pb-2 border-bottom">
+                            <div class="d-flex align-items-center gap-2 flex-grow-1 flex-wrap">
+                                <span class="badge bg-primary step-badge rounded-pill" style="min-width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;">@(i + 1)</span>
+                                <div class="input-group input-group-sm" style="max-width: 320px;">
+                                    <span class="input-group-text bg-white fw-semibold text-secondary">Tiêu chí:</span>
+                                    <input type="text" name="ReasoningSteps[@i].Title" value="@Model.ReasoningSteps[i].Title" list="reasoningSuggestions" class="form-control fw-bold text-dark step-title-input" placeholder="Nhập hoặc chọn tiêu đề..." required />
+                                </div>
+                                <div class="d-flex align-items-center gap-1 flex-wrap">
+                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 quick-title-btn" style="font-size: 11px;">Vị trí chỗ trống</button>
+                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 quick-title-btn" style="font-size: 11px;">Dạng từ</button>
+                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 quick-title-btn" style="font-size: 11px;">Hoà hợp S-V</button>
+                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 quick-title-btn" style="font-size: 11px;">Xét thì</button>
+                                    <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 quick-title-btn" style="font-size: 11px;">Nghĩa của câu</button>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center gap-1">
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-move-up" title="Chuyển lên"><i class="fa-solid fa-arrow-up"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-move-down" title="Chuyển xuống"><i class="fa-solid fa-arrow-down"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-danger btn-delete-step" title="Xoá bước"><i class="fa-solid fa-trash-can"></i></button>
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <textarea name="ReasoningSteps[@i].Text" class="form-control step-text-input" rows="2" placeholder="Nhập nội dung phân tích cho tiêu chí này...">@Model.ReasoningSteps[i].Text</textarea>
+                        </div>
+                        @{
+                            var isBlankStep = string.Equals(Model.ReasoningSteps[i].Title?.Trim(), "Vị trí chỗ trống", StringComparison.OrdinalIgnoreCase);
+                        }
+                        <div class="step-elim-wrapper @(isBlankStep ? "d-none" : "d-flex") align-items-center flex-wrap gap-2">
+                            <span class="small fw-semibold text-secondary me-2">Tích chọn đáp án loại:</span>
+                            @foreach (var opt in new[] { "A", "B", "C", "D" })
+                            {
+                                var isChecked = !isBlankStep && Model.ReasoningSteps[i].Eliminated != null && Model.ReasoningSteps[i].Eliminated.Contains(opt);
+                                <div class="form-check form-check-inline m-0">
+                                    <input class="form-check-input step-elim-checkbox" type="checkbox" name="ReasoningSteps[@i].Eliminated" id="step_@(i)_@opt" value="@opt" @(isChecked ? "checked" : "") />
+                                    <label class="form-check-label badge bg-danger-subtle text-danger border border-danger-subtle" for="step_@(i)_@opt">Loại @opt</label>
+                                </div>
+                            }
+                        </div>
+                        <div class="step-blank-hint @(isBlankStep ? "" : "d-none") text-muted small fst-italic">
+                            <i class="fa-solid fa-circle-info me-1 text-primary"></i> Tiêu chí "Vị trí chỗ trống" dùng để xác định thành phần câu cần điền, không cần loại đáp án.
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="row g-3 mt-2">
+                <div class="col-md-6">
+                    <label asp-for="Rule" class="form-label fw-semibold"><i class="fa-solid fa-graduation-cap me-1 text-primary"></i>Ngữ pháp cần nhớ</label>
+                    <textarea asp-for="Rule" class="form-control" rows="3" placeholder="Ví dụ: Hiện tại đơn (S + V-s/es) dùng cho lịch trình, thời gian biểu, sự kiện cố định..."></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label asp-for="Explanation" class="form-label fw-semibold"><i class="fa-regular fa-comment-dots me-1 text-primary"></i>Giải thích tổng quát / Tóm tắt đáp án</label>
+                    <textarea asp-for="Explanation" class="form-control" rows="3" placeholder="Tóm tắt ngắn gọn lý do chọn đáp án đúng"></textarea>
+                    <span asp-validation-for="Explanation" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-3">
+        <div class="card-header fw-semibold">Cài đặt câu hỏi</div>
+        <div class="card-body">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label asp-for="Difficulty" class="form-label"></label>
+                    <select asp-for="Difficulty" class="form-select">
+                        <option value="1">1 - Cơ bản (Easy)</option>
+                        <option value="2">2 - Trung bình (Medium)</option>
+                        <option value="3">3 - Nâng cao (Hard)</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="SortOrder" class="form-label"></label>
+                    <input asp-for="SortOrder" class="form-control" type="number" min="1" />
+                    <span asp-validation-for="SortOrder" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 d-flex align-items-end">
+                    <div class="form-check">
+                        <input asp-for="IsActive" class="form-check-input" />
+                        <label asp-for="IsActive" class="form-check-label"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <a asp-action="Questions" asp-route-topicId="@Model.TopicId" class="btn btn-outline-secondary">Huỷ</a>
+    </div>
+</form>
+
+@section Scripts {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById("reasoningStepsContainer");
+        const btnAdd = document.getElementById("btnAddReasoningStep");
+        const stepCountBadge = document.getElementById("stepCountBadge");
+
+        function getCorrectOptionLetter() {
+            const checkedRadio = document.querySelector("input[name='CorrectPosition']:checked");
+            if (!checkedRadio) return null;
+            const idx = parseInt(checkedRadio.value, 10);
+            return isNaN(idx) ? null : String.fromCharCode(65 + idx);
+        }
+
+        function refreshEliminationConstraints() {
+            const items = container.querySelectorAll(".reasoning-step-item");
+            const correctLetter = getCorrectOptionLetter();
+            const eliminatedSoFar = new Map(); // letter -> step number (1-based)
+
+            items.forEach((item, index) => {
+                const stepNum = index + 1;
+                const titleInput = item.querySelector(".step-title-input");
+                const isBlank = titleInput && titleInput.value.trim().toLowerCase().includes("vị trí chỗ trống");
+
+                ['A', 'B', 'C', 'D'].forEach((opt) => {
+                    const cb = item.querySelector(`.step-elim-checkbox[value='${opt}']`);
+                    if (!cb) return;
+                    const lbl = cb.nextElementSibling;
+
+                    if (isBlank) {
+                        cb.checked = false;
+                        cb.disabled = true;
+                        return;
+                    }
+
+                    // Rule 1: Đáp án đúng tuyệt đối không được loại
+                    if (opt === correctLetter) {
+                        cb.checked = false;
+                        cb.disabled = true;
+                        if (lbl) {
+                            lbl.className = "form-check-label badge bg-light text-muted border border-secondary-subtle opacity-50 text-decoration-line-through";
+                            lbl.style.cursor = "not-allowed";
+                            lbl.title = `Đáp án ${opt} là đáp án đúng, không thể loại`;
+                        }
+                        return;
+                    }
+
+                    // Rule 2: Nếu đã được loại ở một bước trước đó
+                    if (eliminatedSoFar.has(opt)) {
+                        const previousStepNum = eliminatedSoFar.get(opt);
+                        cb.checked = false;
+                        cb.disabled = true;
+                        if (lbl) {
+                            lbl.className = "form-check-label badge bg-light text-muted border border-secondary-subtle opacity-50 text-decoration-line-through";
+                            lbl.style.cursor = "not-allowed";
+                            lbl.title = `Đáp án ${opt} đã được loại ở bước ${previousStepNum}`;
+                        }
+                        return;
+                    }
+
+                    // Rule 3: Chưa bị loại và không phải đáp án đúng
+                    cb.disabled = false;
+                    if (cb.checked) {
+                        eliminatedSoFar.set(opt, stepNum);
+                        if (lbl) {
+                            lbl.className = "form-check-label badge bg-danger text-white border border-danger shadow-xs";
+                            lbl.style.cursor = "pointer";
+                            lbl.title = `Đã chọn loại ${opt} ở bước này (bấm để bỏ chọn)`;
+                        }
+                    } else {
+                        if (lbl) {
+                            lbl.className = "form-check-label badge bg-danger-subtle text-danger border border-danger-subtle";
+                            lbl.style.cursor = "pointer";
+                            lbl.title = `Bấm để loại ${opt} ở bước này`;
+                        }
+                    }
+                });
+            });
+        }
+
+        function toggleEliminationVisibility(item) {
+            const titleInput = item.querySelector(".step-title-input");
+            const elimWrapper = item.querySelector(".step-elim-wrapper");
+            const blankHint = item.querySelector(".step-blank-hint");
+            if (!titleInput || !elimWrapper) return;
+
+            const isBlank = titleInput.value.trim().toLowerCase().includes("vị trí chỗ trống");
+            if (isBlank) {
+                elimWrapper.classList.add("d-none");
+                elimWrapper.classList.remove("d-flex");
+                if (blankHint) blankHint.classList.remove("d-none");
+                item.querySelectorAll(".step-elim-checkbox").forEach(cb => cb.checked = false);
+            } else {
+                elimWrapper.classList.remove("d-none");
+                elimWrapper.classList.add("d-flex");
+                if (blankHint) blankHint.classList.add("d-none");
+            }
+        }
+
+        function updateStepIndexes() {
+            const items = container.querySelectorAll(".reasoning-step-item");
+            if (stepCountBadge) stepCountBadge.textContent = `${items.length} bước`;
+
+            items.forEach((item, index) => {
+                item.dataset.stepIndex = index;
+
+                // Update badge
+                const badge = item.querySelector(".step-badge");
+                if (badge) badge.textContent = index + 1;
+
+                // Update hidden index
+                const hiddenIndex = item.querySelector("input[name='ReasoningSteps.Index']");
+                if (hiddenIndex) hiddenIndex.value = index;
+
+                // Update title input
+                const titleInput = item.querySelector(".step-title-input");
+                if (titleInput) titleInput.name = `ReasoningSteps[${index}].Title`;
+
+                // Update text input
+                const textInput = item.querySelector(".step-text-input");
+                if (textInput) textInput.name = `ReasoningSteps[${index}].Text`;
+
+                // Update checkboxes
+                item.querySelectorAll(".step-elim-checkbox").forEach((cb) => {
+                    cb.name = `ReasoningSteps[${index}].Eliminated`;
+                    const optVal = cb.value;
+                    const newId = `step_${index}_${optVal}`;
+                    cb.id = newId;
+                    const lbl = cb.nextElementSibling;
+                    if (lbl && lbl.tagName === "LABEL") {
+                        lbl.setAttribute("for", newId);
+                    }
+                });
+
+                toggleEliminationVisibility(item);
+            });
+
+            refreshEliminationConstraints();
+        }
+
+        // Lắng nghe sự kiện click/change checkbox loại đáp án
+        container.addEventListener("change", function (e) {
+            if (e.target.classList.contains("step-elim-checkbox")) {
+                refreshEliminationConstraints();
+            }
+        });
+
+        // Lắng nghe thay đổi đáp án đúng (radio CorrectPosition)
+        document.querySelectorAll("input[name='CorrectPosition']").forEach((radio) => {
+            radio.addEventListener("change", function () {
+                refreshEliminationConstraints();
+            });
+        });
+
+        // Lắng nghe gõ tiêu đề để ẩn/hiện Vị trí chỗ trống
+        container.addEventListener("input", function (e) {
+            if (e.target.classList.contains("step-title-input")) {
+                const item = e.target.closest(".reasoning-step-item");
+                if (item) {
+                    toggleEliminationVisibility(item);
+                    refreshEliminationConstraints();
+                }
+            }
+        });
+
+        // Delegate clicks for quick title buttons, move up/down, delete
+        container.addEventListener("click", function (e) {
+            const quickBtn = e.target.closest(".quick-title-btn");
+            if (quickBtn) {
+                const item = quickBtn.closest(".reasoning-step-item");
+                const input = item.querySelector(".step-title-input");
+                if (input) {
+                    input.value = quickBtn.textContent.trim();
+                    toggleEliminationVisibility(item);
+                    refreshEliminationConstraints();
+                    input.focus();
+                }
+                return;
+            }
+
+            const delBtn = e.target.closest(".btn-delete-step");
+            if (delBtn) {
+                const item = delBtn.closest(".reasoning-step-item");
+                if (item) {
+                    item.remove();
+                    updateStepIndexes();
+                }
+                return;
+            }
+
+            const upBtn = e.target.closest(".btn-move-up");
+            if (upBtn) {
+                const item = upBtn.closest(".reasoning-step-item");
+                const prev = item.previousElementSibling;
+                if (prev && prev.classList.contains("reasoning-step-item")) {
+                    container.insertBefore(item, prev);
+                    updateStepIndexes();
+                }
+                return;
+            }
+
+            const downBtn = e.target.closest(".btn-move-down");
+            if (downBtn) {
+                const item = downBtn.closest(".reasoning-step-item");
+                const next = item.nextElementSibling;
+                if (next && next.classList.contains("reasoning-step-item")) {
+                    container.insertBefore(next, item);
+                    updateStepIndexes();
+                }
+                return;
+            }
+        });
+
+        // Thêm bước mới
+        if (btnAdd) {
+            btnAdd.addEventListener("click", function () {
+                const currentIndex = container.querySelectorAll(".reasoning-step-item").length;
+                const newCard = document.createElement("div");
+                newCard.className = "reasoning-step-item p-3 mb-3 border rounded bg-light-subtle shadow-xs";
+                newCard.dataset.stepIndex = currentIndex;
+                newCard.innerHTML = `
+                    <input type="hidden" name="ReasoningSteps.Index" value="${currentIndex}" />
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2 pb-2 border-bottom">
+                        <div class="d-flex align-items-center gap-2 flex-grow-1 flex-wrap">
+                            <span class="badge bg-primary step-badge rounded-pill" style="min-width: 26px; height: 26px; display: inline-flex; align-items: center; justify-content: center;">${currentIndex + 1}</span>
+                            <div class="input-group input-group-sm" style="max-width: 320px;">
+                                <span class="input-group-text bg-white fw-semibold text-secondary">Tiêu chí:</span>
+                                <input type="text" name="ReasoningSteps[${currentIndex}].Title" value="Tiêu chí mới" list="reasoningSuggestions" class="form-control fw-bold text-dark step-title-input" placeholder="Nhập hoặc chọn tiêu đề..." required />
+                            </div>
+                            <div class="d-flex align-items-center gap-1 flex-wrap">
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 quick-title-btn" style="font-size: 11px;">Vị trí chỗ trống</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 quick-title-btn" style="font-size: 11px;">Dạng từ</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 quick-title-btn" style="font-size: 11px;">Hoà hợp S-V</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 quick-title-btn" style="font-size: 11px;">Xét thì</button>
+                                <button type="button" class="btn btn-xs btn-outline-secondary py-0 px-2 quick-title-btn" style="font-size: 11px;">Nghĩa của câu</button>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-1">
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-move-up" title="Chuyển lên"><i class="fa-solid fa-arrow-up"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-move-down" title="Chuyển xuống"><i class="fa-solid fa-arrow-down"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-step" title="Xoá bước"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <textarea name="ReasoningSteps[${currentIndex}].Text" class="form-control step-text-input" rows="2" placeholder="Nhập nội dung phân tích cho tiêu chí này..."></textarea>
+                    </div>
+                    <div class="step-elim-wrapper d-flex align-items-center flex-wrap gap-2">
+                        <span class="small fw-semibold text-secondary me-2">Tích chọn đáp án loại:</span>
+                        <div class="form-check form-check-inline m-0">
+                            <input class="form-check-input step-elim-checkbox" type="checkbox" name="ReasoningSteps[${currentIndex}].Eliminated" id="step_${currentIndex}_A" value="A" />
+                            <label class="form-check-label badge bg-danger-subtle text-danger border border-danger-subtle" for="step_${currentIndex}_A">Loại A</label>
+                        </div>
+                        <div class="form-check form-check-inline m-0">
+                            <input class="form-check-input step-elim-checkbox" type="checkbox" name="ReasoningSteps[${currentIndex}].Eliminated" id="step_${currentIndex}_B" value="B" />
+                            <label class="form-check-label badge bg-danger-subtle text-danger border border-danger-subtle" for="step_${currentIndex}_B">Loại B</label>
+                        </div>
+                        <div class="form-check form-check-inline m-0">
+                            <input class="form-check-input step-elim-checkbox" type="checkbox" name="ReasoningSteps[${currentIndex}].Eliminated" id="step_${currentIndex}_C" value="C" />
+                            <label class="form-check-label badge bg-danger-subtle text-danger border border-danger-subtle" for="step_${currentIndex}_C">Loại C</label>
+                        </div>
+                        <div class="form-check form-check-inline m-0">
+                            <input class="form-check-input step-elim-checkbox" type="checkbox" name="ReasoningSteps[${currentIndex}].Eliminated" id="step_${currentIndex}_D" value="D" />
+                            <label class="form-check-label badge bg-danger-subtle text-danger border border-danger-subtle" for="step_${currentIndex}_D">Loại D</label>
+                        </div>
+                    </div>
+                    <div class="step-blank-hint d-none text-muted small fst-italic">
+                        <i class="fa-solid fa-circle-info me-1 text-primary"></i> Tiêu chí "Vị trí chỗ trống" dùng để xác định thành phần câu cần điền, không cần loại đáp án.
+                    </div>
+                `;
+                container.appendChild(newCard);
+                updateStepIndexes();
+                const newTitle = newCard.querySelector(".step-title-input");
+                if (newTitle) {
+                    newTitle.focus();
+                    newTitle.select();
+                }
+            });
+        }
+
+        // Khởi tạo ban đầu
+        updateStepIndexes();
+    });
+</script>
+}

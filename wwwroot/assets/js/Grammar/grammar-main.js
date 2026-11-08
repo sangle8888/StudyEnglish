@@ -3,821 +3,76 @@
  * ========================================================= */
 (() => {
   // Main grammar interactions. The host page supplies #dashboardLayout and the shared feedback fallback.
-  const grammarGroups = [
-    {
-      id: "tenses",
-      title: "Thì thời gian (Verb Tenses)",
-      description:
-        "Nắm vững cấu trúc, cách dùng và dấu hiệu nhận biết của các thì trong tiếng Anh.",
-      icon: "fa-book-open",
-      topics: [
-        [
-          "Các thì hiện tại",
-          "TOEIC · VSTEP",
-          "The train usually ___ at 8 a.m.",
-          ["leave", "leaves", "is leave", "leaving"],
-          1,
-          "Chủ ngữ số ít “The train” dùng động từ thêm -s ở thì hiện tại đơn.",
-        ],
-        [
-          "Các thì quá khứ",
-          "TOEIC · VSTEP",
-          "We ___ the report yesterday.",
-          ["finish", "have finished", "finished", "are finishing"],
-          2,
-          "“Yesterday” là dấu hiệu của thì quá khứ đơn.",
-        ],
-        [
-          "Các thì tương lai",
-          "TOEIC · VSTEP",
-          "The manager ___ the results tomorrow.",
-          ["announces", "announced", "will announce", "has announced"],
-          2,
-          "“Tomorrow” diễn tả thời điểm tương lai; dùng will + động từ nguyên mẫu.",
-        ],
-        [
-          "Các thì hoàn thành",
-          "TOEIC · VSTEP",
-          "She ___ here since 2021.",
-          ["works", "worked", "has worked", "will work"],
-          2,
-          "“Since 2021” thường đi với hiện tại hoàn thành.",
-        ],
-        [
-          "Thì tiếp diễn",
-          "TOEIC · VSTEP",
-          "They ___ a meeting right now.",
-          ["have", "had", "are having", "will have"],
-          2,
-          "“Right now” diễn tả hành động đang xảy ra: am/is/are + V-ing.",
-        ],
-        [
-          "Sự hòa hợp các thì",
-          "VSTEP",
-          "He said that he ___ busy.",
-          ["is", "was", "will be", "has been"],
-          1,
-          "Trong câu tường thuật ở quá khứ, lùi thì hiện tại đơn thành quá khứ đơn.",
-        ],
-      ],
-    },
-    {
-      id: "structures",
-      title: "Cấu trúc câu (Sentence Structures)",
-      description:
-        "Luyện cách kết hợp mệnh đề và xây dựng câu rõ ràng, chính xác.",
-      icon: "fa-diagram-project",
-      topics: [
-        [
-          "Câu bị động",
-          "TOEIC · VSTEP",
-          "The documents ___ every Friday.",
-          ["review", "are reviewed", "reviewed", "are reviewing"],
-          1,
-          "Câu bị động hiện tại đơn: am/is/are + quá khứ phân từ.",
-        ],
-        [
-          "Câu điều kiện",
-          "TOEIC · VSTEP",
-          "If it rains, the event ___ indoors.",
-          ["moves", "moved", "would move", "moving"],
-          0,
-          "Câu điều kiện loại 1: If + hiện tại đơn, mệnh đề chính dùng hiện tại đơn hoặc will.",
-        ],
-        [
-          "Câu tường thuật",
-          "TOEIC · VSTEP",
-          "Mia said she ___ the email.",
-          ["sends", "will send", "had sent", "is sending"],
-          2,
-          "Câu tường thuật ở quá khứ thường lùi hiện tại hoàn thành thành quá khứ hoàn thành.",
-        ],
-        [
-          "Mệnh đề quan hệ",
-          "TOEIC · VSTEP",
-          "The applicant ___ we interviewed was qualified.",
-          ["who", "whose", "whom", "which"],
-          2,
-          "“Whom” làm tân ngữ chỉ người trong mệnh đề quan hệ trang trọng.",
-        ],
-        [
-          "Câu hỏi đuôi",
-          "VSTEP",
-          "You have met our director, ___?",
-          ["have you", "haven’t you", "do you", "didn’t you"],
-          1,
-          "Mệnh đề khẳng định hiện tại hoàn thành đi với câu hỏi đuôi phủ định “haven’t you?”.",
-        ],
-        [
-          "Đảo ngữ cơ bản",
-          "VSTEP",
-          "Never ___ such a helpful team.",
-          ["I have met", "have I met", "I met", "did I met"],
-          1,
-          "Khi “Never” đứng đầu câu, dùng đảo ngữ: trợ động từ + chủ ngữ + động từ.",
-        ],
-      ],
-    },
-    {
-      id: "parts",
-      title: "Từ loại (Parts of Speech)",
-      description:
-        "Nhận biết vị trí danh từ, động từ, tính từ và trạng từ trong câu.",
-      icon: "fa-spell-check",
-      topics: [
-        [
-          "Danh từ và mạo từ",
-          "TOEIC · VSTEP",
-          "Please send ___ updated schedule.",
-          ["a", "an", "the", "some"],
-          2,
-          "Dùng “the” khi nói đến lịch trình cụ thể đã được xác định.",
-        ],
-        [
-          "Động từ và dạng động từ",
-          "TOEIC · VSTEP",
-          "The team decided ___ the proposal.",
-          ["revise", "revising", "to revise", "revised"],
-          2,
-          "“Decide” thường đi với to-infinitive: decide to do something.",
-        ],
-        [
-          "Tính từ và trạng từ",
-          "TOEIC · VSTEP",
-          "The new system works ___.",
-          ["efficient", "efficiency", "efficiently", "more efficient"],
-          2,
-          "Trạng từ “efficiently” bổ nghĩa cho động từ “works”.",
-        ],
-        [
-          "Đại từ",
-          "TOEIC · VSTEP",
-          "Each employee should bring ___ ID card.",
-          ["they", "their", "them", "theirs"],
-          1,
-          "Tính từ sở hữu “their” đứng trước danh từ “ID card”.",
-        ],
-        [
-          "Lượng từ",
-          "TOEIC · VSTEP",
-          "There are ___ seats available.",
-          ["much", "a little", "several", "any of"],
-          2,
-          "“Several” dùng với danh từ đếm được số nhiều “seats”.",
-        ],
-        [
-          "So sánh hơn và nhất",
-          "TOEIC · VSTEP",
-          "This route is ___ than the old one.",
-          ["short", "shorter", "shortest", "more short"],
-          1,
-          "So sánh hơn của tính từ ngắn “short” là “shorter”.",
-        ],
-      ],
-    },
-    {
-      id: "clauses",
-      title: "Mệnh đề (Clauses)",
-      description:
-        "Phân biệt các loại mệnh đề và chọn liên từ phù hợp với ngữ cảnh.",
-      icon: "fa-puzzle-piece",
-      topics: [
-        [
-          "Mệnh đề danh từ",
-          "VSTEP",
-          "We don’t know ___ the package will arrive.",
-          ["what", "whether", "whose", "which one"],
-          1,
-          "“Whether” mở đầu mệnh đề danh từ mang nghĩa “liệu rằng”.",
-        ],
-        [
-          "Mệnh đề trạng ngữ",
-          "TOEIC · VSTEP",
-          "___ the meeting ended, staff returned to work.",
-          ["Although", "After", "Unless", "Despite"],
-          1,
-          "“After” nối hai hành động theo trình tự thời gian.",
-        ],
-        [
-          "Liên từ kết hợp",
-          "TOEIC · VSTEP",
-          "The offer is attractive, ___ it expires today.",
-          ["or", "but", "so", "for"],
-          1,
-          "“But” diễn tả sự tương phản giữa hai vế câu.",
-        ],
-        [
-          "Rút gọn mệnh đề",
-          "VSTEP",
-          "Employees ___ in the survey received a gift.",
-          ["participate", "participating", "participated", "to participate"],
-          1,
-          "“Participating” rút gọn mệnh đề quan hệ chủ động “who participated”.",
-        ],
-        [
-          "Cụm phân từ",
-          "VSTEP",
-          "___ by the announcement, staff asked questions.",
-          ["Surprising", "Surprised", "Surprise", "To surprise"],
-          1,
-          "Nhân viên nhận tác động nên dùng quá khứ phân từ “Surprised”.",
-        ],
-        [
-          "Câu ghép và câu phức",
-          "VSTEP",
-          "The store was closed, ___ we returned later.",
-          ["so", "although", "unless", "because"],
-          0,
-          "“So” nối nguyên nhân với kết quả trong câu ghép.",
-        ],
-      ],
-    },
-    {
-      id: "prepositions",
-      title: "Giới từ & cụm từ (Prepositions)",
-      description:
-        "Ghi nhớ giới từ đi kèm thời gian, địa điểm và các cụm từ thông dụng.",
-      icon: "fa-link",
-      topics: [
-        [
-          "Giới từ chỉ thời gian",
-          "TOEIC · VSTEP",
-          "The office closes ___ 6 p.m.",
-          ["in", "on", "at", "by"],
-          2,
-          "Dùng “at” trước thời điểm cụ thể trong ngày.",
-        ],
-        [
-          "Giới từ chỉ địa điểm",
-          "TOEIC · VSTEP",
-          "The files are ___ the cabinet.",
-          ["at", "in", "on", "to"],
-          1,
-          "Dùng “in” khi vật nằm bên trong một không gian chứa.",
-        ],
-        [
-          "Tính từ đi với giới từ",
-          "TOEIC · VSTEP",
-          "The client is satisfied ___ the service.",
-          ["at", "for", "with", "by"],
-          2,
-          "Cụm đúng là “satisfied with something”.",
-        ],
-        [
-          "Động từ đi với giới từ",
-          "TOEIC · VSTEP",
-          "Our team is looking ___ the issue.",
-          ["at", "into", "for", "after"],
-          1,
-          "“Look into” có nghĩa là xem xét hoặc điều tra vấn đề.",
-        ],
-        [
-          "Cụm động từ",
-          "TOEIC · VSTEP",
-          "Please ___ the form before submitting it.",
-          ["fill out", "take off", "put away", "bring up"],
-          0,
-          "“Fill out a form” nghĩa là điền vào biểu mẫu.",
-        ],
-        [
-          "Liên từ và từ nối",
-          "VSTEP",
-          "The flight was delayed ___ bad weather.",
-          ["because", "because of", "although", "despite of"],
-          1,
-          "“Because of” đứng trước cụm danh từ “bad weather”.",
-        ],
-      ],
-    },
-  ];
+  const grammarData = window.GRAMMAR_DATA || { groups: [], state: {} };
+  const grammarState = grammarData.state || {};
+  const grammarGroups = grammarData.groups || [];
 
   const totalTopics = grammarGroups.reduce(
     (sum, group) => sum + group.topics.length,
     0,
   );
-  const grammarTranslations = {
-    "tenses-0": {
-      question: "Chuyến tàu thường ___ lúc 8 giờ sáng.",
-      options: ["rời đi", "rời đi", "đang rời đi", "việc rời đi"],
-    },
-    "tenses-1": {
-      question: "Chúng tôi ___ báo cáo ngày hôm qua.",
-      options: [
-        "hoàn thành",
-        "đã hoàn thành",
-        "đã hoàn thành",
-        "đang hoàn thành",
-      ],
-    },
-    "tenses-2": {
-      question: "Người quản lý ___ kết quả vào ngày mai.",
-      options: ["công bố", "đã công bố", "sẽ công bố", "đã công bố"],
-    },
-    "tenses-3": {
-      question: "Cô ấy ___ ở đây kể từ năm 2021.",
-      options: ["làm việc", "đã làm việc", "đã làm việc", "sẽ làm việc"],
-    },
-    "tenses-4": {
-      question: "Họ ___ một cuộc họp ngay lúc này.",
-      options: ["có", "đã có", "đang có", "sẽ có"],
-    },
-    "tenses-5": {
-      question: "Anh ấy nói rằng anh ấy ___ bận.",
-      options: ["đang", "đã", "sẽ", "đã từng"],
-    },
-    "structures-0": {
-      question: "Các tài liệu ___ vào mỗi thứ Sáu.",
-      options: ["xem xét", "được xem xét", "đã xem xét", "đang xem xét"],
-    },
-    "structures-1": {
-      question: "Nếu trời mưa, sự kiện ___ trong nhà.",
-      options: [
-        "diễn ra",
-        "đã diễn ra",
-        "sẽ diễn ra (giả định)",
-        "đang diễn ra",
-      ],
-    },
-    "structures-2": {
-      question: "Mia nói rằng cô ấy ___ email.",
-      options: ["gửi", "sẽ gửi", "đã gửi trước đó", "đang gửi"],
-    },
-    "structures-3": {
-      question: "Ứng viên ___ mà chúng tôi phỏng vấn đã đủ tiêu chuẩn.",
-      options: ["người mà", "có (sở hữu)", "người mà (tân ngữ)", "vật mà"],
-    },
-    "structures-4": {
-      question: "Bạn đã gặp giám đốc của chúng tôi rồi, ___?",
-      options: ["đã bạn?", "chưa phải không?", "bạn có?", "đã không?"],
-    },
-    "structures-5": {
-      question: "Chưa bao giờ ___ một đội ngũ hữu ích đến vậy.",
-      options: [
-        "tôi đã gặp",
-        "đã gặp tôi",
-        "tôi gặp",
-        "đã gặp tôi (sai cấu trúc)",
-      ],
-    },
-    "parts-0": {
-      question: "Vui lòng gửi ___ lịch trình đã cập nhật.",
-      options: ["một", "một (trước nguyên âm)", "cái/đó", "một vài"],
-    },
-    "parts-1": {
-      question: "Nhóm đã quyết định ___ đề xuất.",
-      options: [
-        "điều chỉnh",
-        "việc điều chỉnh",
-        "điều chỉnh (to + động từ)",
-        "đã điều chỉnh",
-      ],
-    },
-    "parts-2": {
-      question: "Hệ thống mới hoạt động ___.",
-      options: [
-        "hiệu quả (tính từ)",
-        "hiệu suất",
-        "một cách hiệu quả",
-        "hiệu quả hơn",
-      ],
-    },
-    "parts-3": {
-      question: "Mỗi nhân viên nên mang theo thẻ ID ___.",
-      options: [
-        "họ (chủ ngữ)",
-        "của họ",
-        "họ (tân ngữ)",
-        "của họ (đại từ sở hữu)",
-      ],
-    },
-    "parts-4": {
-      question: "Có ___ chỗ ngồi còn trống.",
-      options: [
-        "nhiều (danh từ không đếm được)",
-        "một ít",
-        "một vài",
-        "bất kỳ trong số",
-      ],
-    },
-    "parts-5": {
-      question: "Tuyến đường này ___ tuyến đường cũ.",
-      options: [
-        "ngắn",
-        "ngắn hơn",
-        "ngắn nhất",
-        "ngắn hơn (không đúng cấu trúc)",
-      ],
-    },
-    "clauses-0": {
-      question: "Chúng tôi không biết ___ kiện hàng sẽ đến.",
-      options: ["điều gì", "liệu rằng", "của ai", "cái nào"],
-    },
-    "clauses-1": {
-      question: "___ cuộc họp kết thúc, nhân viên quay lại làm việc.",
-      options: ["Mặc dù", "Sau khi", "Trừ khi", "Mặc cho"],
-    },
-    "clauses-2": {
-      question: "Đề nghị này rất hấp dẫn, ___ nó sẽ hết hạn hôm nay.",
-      options: ["hoặc", "nhưng", "vì vậy", "bởi vì"],
-    },
-    "clauses-3": {
-      question: "Những nhân viên ___ trong khảo sát đã nhận được một món quà.",
-      options: ["tham gia", "đang/đã tham gia", "đã tham gia", "để tham gia"],
-    },
-    "clauses-4": {
-      question: "___ trước thông báo, nhân viên đã đặt câu hỏi.",
-      options: [
-        "Gây ngạc nhiên",
-        "Ngạc nhiên (bị tác động)",
-        "Sự ngạc nhiên",
-        "Để gây ngạc nhiên",
-      ],
-    },
-    "clauses-5": {
-      question: "Cửa hàng đã đóng cửa, ___ chúng tôi quay lại sau.",
-      options: ["vì vậy", "mặc dù", "trừ khi", "bởi vì"],
-    },
-    "prepositions-0": {
-      question: "Văn phòng đóng cửa ___ 6 giờ tối.",
-      options: [
-        "vào (tháng/năm)",
-        "vào (thứ/ngày)",
-        "lúc (thời điểm cụ thể)",
-        "trước/trong hạn",
-      ],
-    },
-    "prepositions-1": {
-      question: "Các tập hồ sơ ở ___ chiếc tủ.",
-      options: ["tại", "trong", "trên", "đến"],
-    },
-    "prepositions-2": {
-      question: "Khách hàng hài lòng ___ dịch vụ.",
-      options: ["tại", "cho", "với", "bởi"],
-    },
-    "prepositions-3": {
-      question: "Nhóm chúng tôi đang xem xét ___ vấn đề.",
-      options: ["nhìn vào", "điều tra/xem xét", "tìm kiếm", "chăm sóc"],
-    },
-    "prepositions-4": {
-      question: "Vui lòng ___ biểu mẫu trước khi nộp.",
-      options: ["điền vào", "cất cánh", "cất đi", "đề cập đến"],
-    },
-    "prepositions-5": {
-      question: "Chuyến bay bị hoãn ___ thời tiết xấu.",
-      options: [
-        "bởi vì",
-        "bởi vì (đứng trước cụm danh từ)",
-        "mặc dù",
-        "mặc cho (dạng sai)",
-      ],
-    },
-  };
-  // Each entry follows the option order; the correct option has no elimination reason.
-  const grammarReasoning = {
-    "tenses-0": {
-      context:
-        'Chỗ trống là động từ chính của chủ ngữ "The train". "Usually" diễn tả một hành động thường xuyên.',
-      distractors: [
-        '"The train" là chủ ngữ số ít, nên không dùng động từ nguyên mẫu "leave" trong câu khẳng định hiện tại đơn.',
-        "",
-        '"Is leave" sai cấu trúc: hiện tại tiếp diễn phải dùng is + V-ing.',
-        '"Leaving" đứng một mình không thể làm động từ chính; dạng tiếp diễn cần có trợ động từ.',
-      ],
-      rule: "Hiện tại đơn diễn tả thói quen và lịch trình. He, she, it hoặc danh từ số ít đi với V(s/es); I, you, we, they đi với V nguyên mẫu.",
-    },
-    "tenses-1": {
-      context:
-        'Chỗ trống là động từ chính sau "We". "Yesterday" xác định một thời điểm đã kết thúc trong quá khứ.',
-      distractors: [
-        '"Finish" là hiện tại đơn, không phù hợp với "yesterday".',
-        'Hiện tại hoàn thành "have finished" không dùng với thời điểm quá khứ đã kết thúc như "yesterday".',
-        "",
-        '"Are finishing" diễn tả hành động đang xảy ra, không phù hợp với "yesterday".',
-      ],
-      rule: "Quá khứ đơn: S + V2/ed. Các dấu hiệu thường gặp: yesterday, last week, ago. Finish là động từ có quy tắc: finished.",
-    },
-    "tenses-2": {
-      context:
-        'Chỗ trống là động từ chính sau "The manager". "Tomorrow" hướng hành động công bố đến tương lai.',
-      distractors: [
-        '"Announces" có thể dùng cho lịch trình cố định, nhưng câu này không đưa ra ngữ cảnh lịch trình; "will announce" phù hợp nhất.',
-        '"Announced" diễn tả quá khứ, không phù hợp với "tomorrow".',
-        "",
-        '"Has announced" diễn tả hành động đã xảy ra, không phù hợp với việc sẽ công bố ngày mai.',
-      ],
-      rule: "Tương lai đơn: S + will + V nguyên mẫu. Động từ sau will không thêm -s hoặc -ed.",
-    },
-    "tenses-3": {
-      context:
-        '"Since 2021" chỉ mốc bắt đầu của việc làm việc kéo dài đến hiện tại; chủ ngữ "She" là số ít.',
-      distractors: [
-        '"Works" không thể hiện khoảng thời gian kéo dài từ năm 2021 đến hiện tại.',
-        '"Worked" mô tả một việc trong quá khứ, không thể hiện sự tiếp diễn đến hiện tại trong câu này.',
-        "",
-        '"Will work" chỉ tương lai, không phù hợp với mốc bắt đầu "since 2021".',
-      ],
-      rule: "Hiện tại hoàn thành: S + have/has + V3/ed. Since + mốc thời gian; for + khoảng thời gian. She/he/it dùng has.",
-    },
-    "tenses-4": {
-      context:
-        '"Right now" cho biết cuộc họp đang diễn ra ngay lúc nói. Chủ ngữ "They" cần trợ động từ "are".',
-      distractors: [
-        '"Have" là hiện tại đơn, không diễn tả cuộc họp đang diễn ra ngay bây giờ.',
-        '"Had" là quá khứ đơn, không phù hợp với "right now".',
-        "",
-        '"Will have" diễn tả tương lai, không phải hành động đang diễn ra.',
-      ],
-      rule: "Hiện tại tiếp diễn: S + am/is/are + V-ing. Now, right now và at the moment thường là dấu hiệu nhận biết.",
-    },
-    "tenses-5": {
-      context:
-        'Động từ tường thuật "said" ở quá khứ. Chỗ trống đứng trước tính từ "busy", cần một dạng của động từ be.',
-      distractors: [
-        'Theo quy tắc lùi thì thông thường của bài này, "is" đổi thành "was" sau "said".',
-        "",
-        '"Will be" chưa được lùi thì; nếu tường thuật ý tương lai thì thường đổi thành "would be".',
-        '"Has been" chưa được lùi thì và câu không có ngữ cảnh cho một khoảng thời gian kéo dài đến hiện tại.',
-      ],
-      rule: "Khi động từ tường thuật ở quá khứ, hiện tại đơn thường lùi thành quá khứ đơn. Có thể giữ thì nếu thông tin vẫn đúng, nhưng bài này kiểm tra cách lùi thì cơ bản.",
-    },
-    "structures-0": {
-      context:
-        '"The documents" nhận hành động xem xét. "Every Friday" cho biết đây là một việc định kỳ.',
-      distractors: [
-        '"Review" ở thể chủ động, khiến câu mang nghĩa các tài liệu tự xem xét một thứ gì đó.',
-        "",
-        '"Reviewed" thiếu trợ động từ be để tạo câu bị động.',
-        '"Are reviewing" là chủ động tiếp diễn, không phù hợp với tài liệu là đối tượng được xem xét.',
-      ],
-      rule: 'Bị động hiện tại đơn: S + am/is/are + V3/ed. Chủ ngữ số nhiều "documents" dùng are reviewed.',
-    },
-    "structures-1": {
-      context:
-        'Mệnh đề "If it rains" nêu điều kiện có thể xảy ra. Mệnh đề chính mô tả cách tổ chức sự kiện khi có mưa.',
-      distractors: [
-        "",
-        '"Moved" ở quá khứ, không hòa hợp với điều kiện hiện tại "If it rains".',
-        '"Would move" thường đi với điều kiện loại 2: If it rained.',
-        '"Moving" thiếu trợ động từ, không tạo thành động từ chính của "the event".',
-      ],
-      rule: "Điều kiện loại 1 thường dùng If + hiện tại đơn, will + V. Mệnh đề chính cũng có thể dùng hiện tại đơn để nêu cách xử lý đã được quy định.",
-    },
-    "structures-2": {
-      context:
-        '"Said" là động từ tường thuật ở quá khứ. Trong ngữ cảnh bài này, việc gửi email xảy ra trước lúc Mia nói.',
-      distractors: [
-        '"Sends" là hiện tại đơn, không thể hiện việc gửi trước thời điểm nói trong quá khứ.',
-        '"Will send" là tương lai chưa lùi thì; trong câu tường thuật quá khứ thường dùng "would send".',
-        "",
-        '"Is sending" là hiện tại tiếp diễn chưa lùi thì, không diễn tả hành động đã hoàn tất trước lúc nói.',
-      ],
-      rule: "Quá khứ hoàn thành: S + had + V3/ed, diễn tả hành động xảy ra trước một mốc quá khứ. Trong câu tường thuật, quá khứ đơn hoặc hiện tại hoàn thành có thể lùi thành quá khứ hoàn thành.",
-    },
-    "structures-3": {
-      context:
-        '"The applicant" chỉ người. Trong mệnh đề "we interviewed ___", từ còn thiếu làm tân ngữ của "interviewed".',
-      distractors: [
-        '"Who" cũng được dùng làm tân ngữ trong tiếng Anh thông dụng; bài này chọn "whom" theo văn phong trang trọng.',
-        '"Whose" chỉ sở hữu và cần đi với danh từ, không làm tân ngữ trong cấu trúc này.',
-        "",
-        '"Which" thay cho vật hoặc sự việc, không phù hợp với "the applicant".',
-      ],
-      rule: "Who chỉ người, thường làm chủ ngữ; whom làm tân ngữ trong văn phong trang trọng; whose chỉ sở hữu. Với tân ngữ chỉ người, who hoặc lược bỏ đại từ cũng có thể đúng trong văn phong thông dụng.",
-    },
-    "structures-4": {
-      context:
-        'Mệnh đề chính "You have met our director" là câu khẳng định ở hiện tại hoàn thành.',
-      distractors: [
-        '"Have you?" cùng dạng khẳng định; câu hỏi đuôi xác nhận thông thường cần dạng phủ định.',
-        "",
-        '"Do you?" dùng trợ động từ hiện tại đơn, không khớp với "have met".',
-        '"Didn’t you?" dùng quá khứ đơn, không khớp với hiện tại hoàn thành.',
-      ],
-      rule: "Câu hỏi đuôi xác nhận: mệnh đề khẳng định + đuôi phủ định, và ngược lại. Giữ đúng trợ động từ và đại từ chủ ngữ: have met → haven’t you?",
-    },
-    "structures-5": {
-      context:
-        'Trạng từ phủ định "Never" đứng đầu câu, nên câu cần đảo trợ động từ lên trước chủ ngữ.',
-      distractors: [
-        '"I have met" giữ trật tự câu thông thường, chưa đảo ngữ sau "Never".',
-        "",
-        '"I met" chưa đảo ngữ sau trạng từ phủ định đứng đầu câu.',
-        'Sau trợ động từ "did", động từ phải ở dạng nguyên mẫu "meet", không phải "met".',
-      ],
-      rule: "Never + trợ động từ + S + động từ. Với hiện tại hoàn thành: Never + have/has + S + V3/ed.",
-    },
-    "parts-0": {
-      context:
-        'Chỗ trống đứng trước cụm danh từ số ít "updated schedule". Bài này giả định lịch trình đã được xác định.',
-      distractors: [
-        '"A" không đứng trước âm nguyên âm đầu của "updated".',
-        '"An" đúng về âm và có thể dùng cho lịch trình chưa xác định; bài này chọn "the" theo ngữ cảnh lịch trình cụ thể.',
-        "",
-        '"Some" không dùng trực tiếp với danh từ đếm được số ít "schedule" theo nghĩa thông thường của câu này.',
-      ],
-      rule: 'The dùng cho đối tượng cụ thể đã được xác định. A/an dùng cho đối tượng chưa xác định; chọn an trước âm nguyên âm. Nếu thiếu ngữ cảnh, "an updated schedule" cũng là một cụm đúng.',
-    },
-    "parts-1": {
-      context:
-        'Chỗ trống nằm sau "decided", cần dạng động từ được phép đi sau decide.',
-      distractors: [
-        '"Decide" không đi trực tiếp với động từ nguyên mẫu "revise".',
-        "Cấu trúc thông thường là decide to do, không phải decide doing.",
-        "",
-        '"Revised" là dạng quá khứ/phân từ, không phù hợp sau "decided" trong câu này.',
-      ],
-      rule: "Decide + to-infinitive: decide to do something. Một số động từ tương tự: plan, hope, want và agree.",
-    },
-    "parts-2": {
-      context:
-        'Chỗ trống bổ nghĩa cho động từ "works", diễn tả cách hệ thống hoạt động; cần một trạng từ.',
-      distractors: [
-        '"Efficient" là tính từ, không phù hợp để bổ nghĩa trực tiếp cho "works" trong câu này.',
-        '"Efficiency" là danh từ, không diễn tả cách hoạt động ở vị trí này.',
-        "",
-        '"More efficient" là cụm tính từ so sánh, không phải trạng từ bổ nghĩa cho "works".',
-      ],
-      rule: "Tính từ bổ nghĩa cho danh từ; trạng từ bổ nghĩa cho động từ. Efficient → efficiently; works efficiently = hoạt động hiệu quả.",
-    },
-    "parts-3": {
-      context:
-        'Chỗ trống đứng ngay trước danh từ "ID card", cần từ thể hiện quyền sở hữu.',
-      distractors: [
-        '"They" là đại từ chủ ngữ, không đứng trước danh từ để chỉ sở hữu.',
-        "",
-        '"Them" là đại từ tân ngữ, không thể bổ nghĩa sở hữu cho "ID card".',
-        '"Theirs" là đại từ sở hữu đứng độc lập, không đi kèm danh từ phía sau.',
-      ],
-      rule: 'Tính từ sở hữu + danh từ: my card, your card, their card. Their có thể dùng với "each employee" khi không xác định giới tính (singular they).',
-    },
-    "parts-4": {
-      context:
-        '"Seats" là danh từ đếm được số nhiều; cần một lượng từ phù hợp.',
-      distractors: [
-        '"Much" đi với danh từ không đếm được, không dùng với "seats".',
-        '"A little" đi với danh từ không đếm được, không dùng với "seats".',
-        "",
-        '"Any of" cần một cụm xác định như "any of the seats", không phải "any of seats".',
-      ],
-      rule: "Several, many và a few đi với danh từ đếm được số nhiều. Much, a little và little đi với danh từ không đếm được.",
-    },
-    "parts-5": {
-      context:
-        '"Than the old one" cho biết câu đang so sánh hai tuyến đường; cần dạng so sánh hơn của "short".',
-      distractors: [
-        '"Short" là dạng tính từ gốc, chưa thể hiện so sánh hơn trước "than".',
-        "",
-        '"Shortest" là so sánh nhất, không dùng cho cấu trúc so sánh hai đối tượng với "than".',
-        'Tính từ ngắn "short" thường thêm -er, không dùng "more short" trong cấu trúc này.',
-      ],
-      rule: "Tính từ ngắn: adjective + -er + than. Tính từ dài thường dùng more + adjective + than.",
-    },
-    "clauses-0": {
-      context:
-        'Sau "don’t know" là một mệnh đề với đầy đủ chủ ngữ và động từ: "the package will arrive".',
-      distractors: [
-        '"What" thường thay cho một thành phần còn thiếu; mệnh đề "the package will arrive" đã đầy đủ.',
-        "",
-        '"Whose" chỉ sở hữu, không diễn tả ý "liệu kiện hàng có đến hay không".',
-        '"Which one" chỉ sự lựa chọn một đối tượng, không nối được với mệnh đề đầy đủ ở đây.',
-      ],
-      rule: 'Whether/if có thể mở đầu mệnh đề danh từ mang nghĩa "liệu... hay không". Trật tự trong mệnh đề là chủ ngữ + động từ, không đảo như câu hỏi.',
-    },
-    "clauses-1": {
-      context:
-        "Hai hành động được kể theo trình tự: cuộc họp kết thúc, sau đó nhân viên quay lại làm việc.",
-      distractors: [
-        '"Although" diễn tả nhượng bộ, không thể hiện trình tự thời gian mà câu đang hướng đến.',
-        "",
-        '"Unless" diễn tả điều kiện "trừ khi", không phù hợp với hai hành động đã xảy ra.',
-        '"Despite" đi với danh từ hoặc V-ing, không đi trực tiếp với mệnh đề "the meeting ended".',
-      ],
-      rule: "After + S + V diễn tả một hành động xảy ra sau một hành động khác. Despite + danh từ/V-ing; although + mệnh đề.",
-    },
-    "clauses-2": {
-      context:
-        "Đề nghị hấp dẫn là một điểm thuận lợi, còn việc hết hạn hôm nay là một hạn chế; hai vế tương phản.",
-      distractors: [
-        '"Or" đưa ra lựa chọn, không nêu quan hệ tương phản giữa hai vế.',
-        "",
-        '"So" nêu kết quả; việc hấp dẫn không phải nguyên nhân khiến đề nghị hết hạn hôm nay.',
-        '"For" nêu lý do; việc hết hạn không giải thích tại sao đề nghị hấp dẫn.',
-      ],
-      rule: "But nối hai ý tương phản. And bổ sung, or nêu lựa chọn, so nêu kết quả và for nêu lý do.",
-    },
-    "clauses-3": {
-      context:
-        'Cụm sau "Employees" bổ nghĩa cho nhân viên; động từ chính của câu đã là "received".',
-      distractors: [
-        '"Participate" tạo thêm một động từ đã chia nhưng không có liên từ hoặc đại từ quan hệ.',
-        "",
-        '"Participated" không dùng trực tiếp như một cụm phân từ chủ động ở đây; cần "who participated".',
-        '"To participate" gợi mục đích hoặc hành động cần thực hiện, không diễn tả những người đã tham gia khảo sát.',
-      ],
-      rule: "Mệnh đề quan hệ chủ động có thể rút gọn thành V-ing: employees who participated → employees participating. Dạng V-ing rút gọn không tự xác định thì của cả câu.",
-    },
-    "clauses-4": {
-      context:
-        '"Staff" là những người cảm thấy ngạc nhiên do thông báo tác động đến; cần phân từ mang nghĩa bị tác động.',
-      distractors: [
-        '"Surprising" diễn tả việc gây ngạc nhiên, không phải cảm giác của nhân viên trước thông báo.',
-        "",
-        '"Surprise" là danh từ hoặc động từ nguyên mẫu, không phù hợp cho cụm phân từ đầu câu.',
-        '"To surprise" diễn tả mục đích gây ngạc nhiên, không phù hợp với "by the announcement".',
-      ],
-      rule: "V-ed thường diễn tả cảm xúc của người nhận tác động; V-ing diễn tả đặc điểm gây cảm xúc: surprised staff, a surprising announcement.",
-    },
-    "clauses-5": {
-      context:
-        "Cửa hàng đóng cửa là nguyên nhân; việc quay lại sau là kết quả.",
-      distractors: [
-        "",
-        '"Although" nêu nhượng bộ, không thể hiện kết quả trực tiếp trong câu này.',
-        '"Unless" đặt ra điều kiện, không phù hợp với hai sự việc đã được kể.',
-        '"Because" sẽ làm việc quay lại sau trở thành nguyên nhân khiến cửa hàng đóng cửa, đảo ngược quan hệ ý nghĩa.',
-      ],
-      rule: "Cause, so + result: nguyên nhân, vì vậy + kết quả. Result + because + cause: kết quả + bởi vì + nguyên nhân.",
-    },
-    "prepositions-0": {
-      context: 'Sau chỗ trống là "6 p.m.", một giờ cụ thể trong ngày.',
-      distractors: [
-        '"In" thường dùng với tháng, năm hoặc buổi trong ngày, không dùng trực tiếp với giờ cụ thể.',
-        '"On" dùng với ngày hoặc thứ, không dùng trực tiếp với "6 p.m.".',
-        "",
-        '"By 6 p.m." có nghĩa "chậm nhất lúc 6 giờ", khác với giờ đóng cửa chính xác mà bài này muốn diễn tả.',
-      ],
-      rule: "At + giờ; on + thứ/ngày; in + tháng/năm/buổi. By + thời điểm nêu hạn chót, không phải một giờ chính xác.",
-    },
-    "prepositions-1": {
-      context:
-        "Câu mô tả vị trí của hồ sơ bên trong chiếc tủ theo ngữ cảnh của bài.",
-      distractors: [
-        '"At" chỉ một vị trí chung, không thể hiện hồ sơ nằm bên trong tủ.',
-        "",
-        '"On" diễn tả hồ sơ trên bề mặt tủ, khác với vị trí bên trong mà bài này muốn nói.',
-        '"To" chỉ hướng di chuyển đến nơi nào đó, không phù hợp sau "are" để mô tả vị trí đứng yên.',
-      ],
-      rule: 'In = bên trong; on = trên bề mặt; at = tại một điểm/vị trí. Chọn giới từ theo vị trí thực tế; "on the cabinet" cũng đúng nếu hồ sơ ở trên nóc tủ.',
-    },
-    "prepositions-2": {
-      context:
-        'Chỗ trống nối tính từ "satisfied" với đối tượng khiến khách hàng hài lòng: "the service".',
-      distractors: [
-        'Không dùng "satisfied at" để nói hài lòng với dịch vụ trong cụm này.',
-        '"Satisfied for" không phải cụm kết hợp thông thường với đối tượng gây hài lòng.',
-        "",
-        'Bài này kiểm tra cụm cố định "satisfied with the service"; "by" không phải lựa chọn thông thường ở đây.',
-      ],
-      rule: "Satisfied with + danh từ: hài lòng với điều gì. Ghi nhớ cả cụm tính từ + giới từ thay vì học riêng từng từ.",
-    },
-    "prepositions-3": {
-      context:
-        'Câu muốn diễn tả nhóm đang xem xét hoặc điều tra vấn đề, cần đúng cụm động từ với "look".',
-      distractors: [
-        '"Look at" nghĩa là nhìn vào hoặc xem; "look into" chính xác hơn cho ý điều tra vấn đề của bài.',
-        "",
-        '"Look for" nghĩa là tìm kiếm, không phải điều tra một vấn đề đã biết.',
-        '"Look after" nghĩa là chăm sóc, không phù hợp với việc điều tra vấn đề.',
-      ],
-      rule: "Look into = điều tra/xem xét; look for = tìm kiếm; look after = chăm sóc; look at = nhìn/xem.",
-    },
-    "prepositions-4": {
-      context:
-        "Đây là câu yêu cầu hoàn tất biểu mẫu trước khi nộp; cần một cụm động từ mang nghĩa điền thông tin.",
-      distractors: [
-        "",
-        '"Take off" thường mang nghĩa cất cánh hoặc cởi bỏ, không diễn tả điền biểu mẫu.',
-        '"Put away" nghĩa là cất đi, không diễn tả hoàn tất thông tin trong biểu mẫu.',
-        '"Bring up" nghĩa là đề cập hoặc nuôi dưỡng, không phù hợp với yêu cầu điền biểu mẫu.',
-      ],
-      rule: "Fill out a form = điền vào biểu mẫu. Câu mệnh lệnh bắt đầu bằng động từ nguyên mẫu: Please fill out...",
-    },
-    "prepositions-5": {
-      context:
-        'Sau chỗ trống là cụm danh từ "bad weather", nêu nguyên nhân chuyến bay bị hoãn.',
-      distractors: [
-        '"Because" phải đứng trước một mệnh đề có chủ ngữ và động từ, không phải chỉ "bad weather".',
-        "",
-        '"Although" cần một mệnh đề và mang nghĩa nhượng bộ, không phù hợp với cụm danh từ chỉ nguyên nhân.',
-        '"Despite of" là dạng sai; despite không đi với of và mang nghĩa "mặc dù", không phải nguyên nhân.',
-      ],
-      rule: "Because + S + V; because of + danh từ/V-ing. Although + S + V; despite/in spite of + danh từ/V-ing.",
-    },
-  };
-  const savedTopics = new Set(
-    JSON.parse(localStorage.getItem("grammarBookmarks") || "[]"),
-  );
-  const savedQuestions = new Set(
-    JSON.parse(localStorage.getItem("grammarQuestionBookmarks") || "[]"),
-  );
-  const savedTheories = JSON.parse(
-    localStorage.getItem("grammarSavedTheories") || "[]",
-  );
-  const topicStats = JSON.parse(
-    localStorage.getItem("grammarTopicStats") || "{}",
-  );
-  let answeredTotal = Number(localStorage.getItem("grammarAnsweredTotal") || 0);
-  let correctTotal = Number(localStorage.getItem("grammarCorrectTotal") || 0);
+  // Trạng thái học viên được nạp từ cơ sở dữ liệu (xem GrammarController.Index)
+  const grammarApiUrls = window.GRAMMAR_API || {};
+  const savedTopics = new Set();
+  const savedQuestions = new Set(grammarState.bookmarks || []);
+  const answeredQuestions = new Set(grammarState.answeredQuestions || []);
+  const savedTheories = [...(grammarState.notes || [])];
+  const topicStats = { ...(grammarState.topicStats || {}) };
+  let answeredTotal = Number(grammarState.answeredTotal || 0);
+  let correctTotal = Number(grammarState.correctTotal || 0);
+
+  async function grammarApi(url, payload) {
+    const token = document.querySelector(
+      '#grammarAntiforgery input[name="__RequestVerificationToken"]',
+    )?.value;
+    const response = await fetch(url, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        RequestVerificationToken: token || "",
+      },
+      body: JSON.stringify(payload),
+    });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    return response.json();
+  }
+
+  function addNoteOnServer(note) {
+    note.pending = grammarApi(grammarApiUrls.saveNote, {
+      topic: note.topic,
+      type: note.type,
+      typeLabel: note.typeLabel,
+      content: note.content,
+      subContent: note.subContent || null,
+    })
+      .then((saved) => {
+        note.id = saved.id;
+      })
+      .catch(showSyncError);
+  }
+
+  function removeNoteOnServer(note) {
+    return Promise.resolve(note.pending)
+      .then(() =>
+        note.id && !String(note.id).startsWith("tmp-")
+          ? grammarApi(grammarApiUrls.removeNote, { noteId: numericId(note.id) })
+          : null,
+      )
+      .catch(showSyncError);
+  }
+
+  function numericId(id) {
+    return Number(String(id).replace(/^\D+/, ""));
+  }
+
+  function showSyncError(error) {
+    console.error("Không thể đồng bộ dữ liệu với máy chủ:", error);
+    const feedback = document.getElementById("practiceFeedback");
+    if (feedback && !practicePage?.hidden) {
+      feedback.dataset.syncError = "true";
+    }
+  }
   let activeExam = "all";
   let activeCategory = "all";
   let activeSort = "default";
@@ -852,29 +107,48 @@
   const practiceNext = document.getElementById("practiceNext");
   const practiceReportDialog = document.getElementById("practiceReportDialog");
 
-  function allTopicRecords() {
-    return grammarGroups.flatMap((group) =>
-      group.topics.map((topic, index) => ({
-        id: `${group.id}-${index}`,
+  // Mỗi "chủ đề" gồm nhiều câu hỏi; câu hỏi mang theo thông tin nhóm/chủ đề để dùng chung với giao diện luyện tập.
+  const topicRecords = grammarGroups.flatMap((group) =>
+    group.topics.map((topic, index) => {
+      const record = {
+        id: topic.id,
+        dbId: topic.dbId,
         group,
         index,
-        title: topic[0],
-        exam: topic[1],
-        question: topic[2],
-        options: topic[3],
-        answer: topic[4],
-        explanation: topic[5],
-        translation: grammarTranslations[`${group.id}-${index}`],
-      })),
-    );
+        title: topic.title,
+        exam: topic.exam,
+        questions: [],
+      };
+      record.questions = topic.questions.map((item, questionIndex) => ({
+        id: item.id,
+        dbId: item.dbId,
+        topicId: topic.id,
+        topicDbId: topic.dbId,
+        group,
+        index: questionIndex,
+        title: topic.title,
+        exam: topic.exam,
+        question: item.question,
+        options: item.options,
+        answer: item.answer,
+        explanation: item.explanation,
+        translation: item.translation,
+        reasoning: item.reasoning,
+      }));
+      return record;
+    }),
+  );
+
+  function allTopicRecords() {
+    return topicRecords;
   }
 
-  function saveProgress() {
-    localStorage.setItem("grammarTopicStats", JSON.stringify(topicStats));
-    localStorage.setItem("grammarAnsweredTotal", String(answeredTotal));
-    localStorage.setItem("grammarCorrectTotal", String(correctTotal));
-    localStorage.setItem("grammarBookmarks", JSON.stringify([...savedTopics]));
+  function allQuestionRecords() {
+    return topicRecords.flatMap((record) => record.questions);
   }
+
+  // Tiến độ được lưu trên máy chủ ngay khi trả lời; hàm này giữ lại cho các điểm gọi cũ.
+  function saveProgress() {}
 
   function updateSummary() {
     const weakTopics = Object.values(topicStats).filter(
@@ -927,6 +201,10 @@
     const accuracy = stat.done
       ? Math.round((stat.correct / stat.done) * 100)
       : 0;
+    const totalQuestions = record.questions.length;
+    const answeredInTopic = record.questions.filter((item) =>
+      answeredQuestions.has(item.id),
+    ).length;
     const article = document.createElement("article");
     article.className = "topic-card";
     article.dataset.topicId = record.id;
@@ -952,7 +230,7 @@
             <div class="topic-progress-track"><div class="topic-progress-fill" style="width:${accuracy}%"></div></div>
           </div>
           <div class="topic-card-footer">
-            <span class="topic-question-count">${stat.done}/50 câu</span>
+            <span class="topic-question-count">${answeredInTopic}/${totalQuestions} câu</span>
             <button class="practice-button" type="button" data-practice="${record.id}">
               Luyện ngay <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
             </button>
@@ -960,8 +238,8 @@
     return article;
   }
 
+  let initialRenderDone = false;
   function renderTopics() {
-    topicSections.replaceChildren();
     const query = document
       .getElementById("topicSearch")
       .value.trim()
@@ -972,14 +250,21 @@
       return;
     }
 
+    if (!initialRenderDone && !query && activeCategory === "all" && activeExam === "all" && activeSort === "default" && topicSections.children.length > 0) {
+      initialRenderDone = true;
+      document.getElementById("emptyState").classList.remove("visible");
+      return;
+    }
+    initialRenderDone = true;
+
+    topicSections.replaceChildren();
+
     let visibleCount = 0;
 
     grammarGroups.forEach((group) => {
       if (activeCategory !== "all" && activeCategory !== group.id) return;
-      let records = group.topics.map((_, index) =>
-        allTopicRecords().find(
-          (record) => record.id === `${group.id}-${index}`,
-        ),
+      let records = allTopicRecords().filter(
+        (record) => record.group.id === group.id,
       );
       records = records.filter((record) => {
         const matchesSearch =
@@ -1011,14 +296,9 @@
       grid.className = "topic-grid";
       records.forEach((record) => grid.appendChild(makeTopicCard(record)));
 
-      if (
-        group.id === "tenses" &&
-        activeTab === "learning" &&
-        !query &&
-        activeExam !== "VSTEP"
-      ) {
+      if (activeTab === "learning" && !query && activeExam !== "VSTEP") {
         grid.appendChild(makeReviewCard(group));
-        grid.appendChild(makeMiniTestCard(group));
+        if (group === grammarGroups[0]) grid.appendChild(makeMiniTestCard(group));
       }
       section.append(heading, grid);
       topicSections.appendChild(section);
@@ -1038,7 +318,7 @@
     document.getElementById("emptyState").classList.remove("visible");
     topicSections.setAttribute("aria-labelledby", "notebookTab");
 
-    const allRecords = allTopicRecords();
+    const allRecords = allQuestionRecords();
     let bookmarkedQuestions = allRecords.filter((rec) => savedQuestions.has(rec.id));
     if (query) {
       bookmarkedQuestions = bookmarkedQuestions.filter((rec) =>
@@ -1101,12 +381,10 @@
           e.stopPropagation();
           const targetId = e.currentTarget.dataset.removeQuestion || rec.id;
           savedQuestions.delete(targetId);
-          savedTopics.delete(targetId);
-          localStorage.setItem(
-            "grammarQuestionBookmarks",
-            JSON.stringify([...savedQuestions]),
-          );
-          saveProgress();
+          grammarApi(grammarApiUrls.setBookmark, {
+            questionId: numericId(targetId),
+            saved: false,
+          }).catch(showSyncError);
           updateSummary();
           card.remove();
           const remainingCards = qGrid.querySelectorAll(".notebook-question-card");
@@ -1124,7 +402,8 @@
         });
 
         card.querySelector("[data-retry-topic]").addEventListener("click", (e) => {
-          openPractice([rec], e.currentTarget);
+          const topicRecord = allTopicRecords().find((item) => item.id === rec.topicId);
+          openPractice(topicRecord ? topicRecord.questions : [rec], e.currentTarget);
         });
 
         qGrid.appendChild(card);
@@ -1198,8 +477,8 @@
           const targetId = e.currentTarget.dataset.removeTheory || theoryItem.id;
           const idx = savedTheories.findIndex((t) => t.id === targetId);
           if (idx !== -1) {
-            savedTheories.splice(idx, 1);
-            localStorage.setItem("grammarSavedTheories", JSON.stringify(savedTheories));
+            const [removedNote] = savedTheories.splice(idx, 1);
+            removeNoteOnServer(removedNote);
             updateSummary();
             card.remove();
             const remaining = gGrid.querySelectorAll(".notebook-theory-card");
@@ -1264,7 +543,7 @@
     card.className = "topic-utility-card test-card";
     card.innerHTML = `
           <h3 class="utility-title"><span class="utility-icon"><i class="fa-regular fa-clipboard"></i></span>Mini Test <span class="topic-exam-badge">TOEIC</span></h3>
-          <p class="utility-description">Bản xem thử giao diện Mini Test TOEIC: 50 lượt câu hỏi, mỗi câu 60 giây.</p>
+          <p class="utility-description">Mini Test TOEIC: 50 câu hỏi, mỗi câu 60 giây.</p>
           <div class="utility-footer">
             <div class="choice-pills"><button type="button" aria-pressed="true"><i class="fa-regular fa-clock"></i> 60s/câu</button></div>
             <button class="practice-button" type="button" data-start-group="${group.id}" data-mode="test">Bắt đầu kiểm tra <i class="fa-solid fa-arrow-right"></i></button>
@@ -1273,6 +552,9 @@
   }
 
   function renderCategoryFilters() {
+    if (categoryFilters && categoryFilters.querySelectorAll(".category-filter[data-category]:not([data-category='all'])").length > 0) {
+      return;
+    }
     grammarGroups.forEach((group) => {
       const button = document.createElement("button");
       button.className = "category-filter filter-option";
@@ -1316,7 +598,7 @@
     );
     const practiceTitle = isMiniTest
       ? "Mini Test"
-      : sessionQuestions.length === 1
+      : new Set(sessionQuestions.map((item) => item.topicId)).size === 1
         ? sessionQuestions[0].title
         : `Ôn tập ngẫu nhiên · ${sessionQuestions[0].group.title}`;
     document.getElementById("practiceTitle").textContent = practiceTitle;
@@ -1480,7 +762,15 @@
   function renderPracticeAnswer(question, selectedIndex) {
     const isCorrect = selectedIndex === question.answer;
     const answerLetter = String.fromCharCode(65 + question.answer);
-    const details = grammarReasoning[question.id];
+    const reasoning = question.reasoning;
+    const details =
+      reasoning &&
+      (reasoning.context ||
+        reasoning.rule ||
+        (Array.isArray(reasoning.steps) && reasoning.steps.length > 0) ||
+        (Array.isArray(reasoning.distractors) && reasoning.distractors.some(Boolean)))
+        ? reasoning
+        : null;
     practiceOptions
       .querySelectorAll(".answer-option")
       .forEach((button, index) => {
@@ -1543,7 +833,7 @@
     explanation.replaceChildren();
     const steps = document.createElement("ol");
     steps.className = "practice-reasoning-steps";
-    function addStep(title, text, eliminatedIndex) {
+    function addStep(title, text, eliminatedList) {
       const step = document.createElement("li");
       step.className = "practice-reasoning-step";
       const heading = document.createElement("h4");
@@ -1551,27 +841,49 @@
       const description = document.createElement("p");
       description.textContent = text;
       step.append(heading, description);
-      if (eliminatedIndex !== undefined) {
-        const tag = document.createElement("span");
-        tag.className = "practice-elimination";
-        tag.textContent = `Loại ${String.fromCharCode(65 + eliminatedIndex)}`;
-        step.appendChild(tag);
+
+      if (eliminatedList) {
+        const list = Array.isArray(eliminatedList) ? eliminatedList : [eliminatedList];
+        if (list.length > 0) {
+          const group = document.createElement("div");
+          group.className = "practice-elimination-group";
+          list.forEach((item) => {
+            if (item === undefined || item === null || item === "") return;
+            const tag = document.createElement("span");
+            tag.className = "practice-elimination";
+            const label = typeof item === "number" ? String.fromCharCode(65 + item) : String(item);
+            tag.textContent = label.startsWith("Loại") ? label : `Loại ${label}`;
+            group.appendChild(tag);
+          });
+          if (group.children.length > 0) {
+            step.appendChild(group);
+          }
+        }
       }
       steps.appendChild(step);
     }
-    if (details) {
-      addStep("Vị trí chỗ trống", details.context);
-      details.distractors.forEach((reason, index) => {
-        if (index !== question.answer && reason) {
-          addStep(`Xét "${question.options[index]}"`, reason, index);
+
+    if (details && Array.isArray(details.steps) && details.steps.length > 0) {
+      details.steps.forEach((s) => {
+        if (s && (s.text || s.title)) {
+          addStep(s.title || "Phân tích", s.text || "", s.eliminated);
         }
       });
+    } else if (details) {
+      if (details.context) addStep("Vị trí chỗ trống", details.context);
+      if (Array.isArray(details.distractors)) {
+        details.distractors.forEach((reason, index) => {
+          if (index !== question.answer && reason) {
+            addStep(`Xét "${question.options[index]}"`, reason, [index]);
+          }
+        });
+      }
     } else {
       addStep("Áp dụng quy tắc", question.explanation);
     }
     explanation.appendChild(steps);
     document.getElementById("practiceAnswerText").textContent =
-      `Chọn ${answerLetter}: "${question.options[question.answer]}".`;
+      `Chọn ${answerLetter} — "${question.options[question.answer]}".`;
     document.getElementById("practiceAnswerSummary").hidden = false;
     document.getElementById("practiceGrammarRule").textContent =
       details?.rule || question.explanation;
@@ -1602,7 +914,7 @@
     sessionAttempted += 1;
     answeredTotal += 1;
     const isCorrect = selectedIndex === question.answer;
-    const stat = topicStats[question.id] || { done: 0, wrong: 0, correct: 0 };
+    const stat = topicStats[question.topicId] || { done: 0, wrong: 0, correct: 0 };
     stat.done += 1;
     if (isCorrect) {
       correctTotal += 1;
@@ -1611,8 +923,12 @@
     } else {
       stat.wrong += 1;
     }
-    topicStats[question.id] = stat;
-    saveProgress();
+    topicStats[question.topicId] = stat;
+    answeredQuestions.add(question.id);
+    grammarApi(grammarApiUrls.submitAnswer, {
+      questionId: question.dbId,
+      selectedIndex,
+    }).catch(showSyncError);
 
     renderPracticeAnswer(question, selectedIndex);
     updatePracticeActions(question);
@@ -1758,52 +1074,7 @@
     }
   }
 
-  const grammarTheoryContent = {
-    tenses: {
-      goldenRules: ["S + V(s/es)", "S + am/is/are + V-ing"],
-      summary:
-        "Nắm chắc quy tắc này để tăng tốc khi gặp câu hỏi ngữ pháp trong bài thi.",
-      quickIntro: "Trước khi sang phần luyện tập, tự kiểm tra nhanh:",
-      quickItems: [
-        ["He, She, It, danh từ số ít", "→ V(s/es)"],
-        ["We, They, danh từ số nhiều", "→ V nguyên mẫu"],
-      ],
-      model: ["Ai / Điều gì", "làm gì?"],
-      mentalDescription:
-        "Thì hiện tại gồm 4 thì chính: Hiện tại đơn, Hiện tại tiếp diễn, Hiện tại hoàn thành và Hiện tại hoàn thành tiếp diễn.",
-      formulas: [
-        "S + V(s/es)",
-        "S + am/is/are + V-ing",
-        "S + have/has + V3/ed",
-        "S + have/has + been + V-ing",
-      ],
-      usage: [
-        {
-          title: "Số ít",
-          text: "He, She, It, danh từ số ít, Each, Every",
-          result: "→ V(s/es)",
-        },
-        {
-          title: "Số nhiều",
-          text: "We, They, danh từ số nhiều, These, Those",
-          result: "→ V nguyên mẫu",
-          green: true,
-        },
-      ],
-      mistakes: [
-        "Quên thêm -s/-es cho động từ ngôi thứ ba số ít ở hiện tại đơn.",
-        "Dùng am/is/are với động từ nguyên mẫu; thì tiếp diễn cần V-ing.",
-        "Nhầm hiện tại hoàn thành với quá khứ đơn; chú ý since, for và mốc thời gian.",
-        "Dùng have với He/She/It thay vì has.",
-      ],
-      examples: [
-        "Mr. Tanaka usually submits his monthly reports on the first Friday of each month.",
-        "The students are preparing for their final examination now.",
-        "She has worked at this company since 2021.",
-        "We have been waiting for the bus for twenty minutes.",
-      ],
-    },
-  };
+  const grammarTheoryContent = Object.fromEntries(grammarGroups.filter((group) => group.theory).map((group) => [group.id, group.theory]));
 
   function fillTheoryMistakes(containerId, items) {
     const list = document.getElementById(containerId);
@@ -1871,26 +1142,27 @@
         const currentlySaved = saveBtn.getAttribute("aria-pressed") === "true";
         if (currentlySaved) {
           const idx = savedTheories.findIndex((t) => t.type === "example" && t.content === en);
-          if (idx !== -1) savedTheories.splice(idx, 1);
+          if (idx !== -1) removeNoteOnServer(savedTheories.splice(idx, 1)[0]);
           saveBtn.setAttribute("aria-pressed", "false");
           saveBtn.classList.remove("saved");
           saveBtn.querySelector("svg").setAttribute("fill", "none");
           showTheoryToast("Đã xóa khỏi sổ tay", true);
         } else {
-          savedTheories.push({
-            id: `theory-ex-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          const exampleNote = {
+            id: `tmp-ex-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
             topic: topicTitle || "NGỮ PHÁP",
             type: "example",
             typeLabel: "Ví dụ",
             content: en,
             subContent: vi,
-          });
+          };
+          savedTheories.push(exampleNote);
+          addNoteOnServer(exampleNote);
           saveBtn.setAttribute("aria-pressed", "true");
           saveBtn.classList.add("saved");
           saveBtn.querySelector("svg").setAttribute("fill", "currentColor");
           showTheoryToast("Đã lưu vào sổ tay cá nhân");
         }
-        localStorage.setItem("grammarSavedTheories", JSON.stringify(savedTheories));
         updateSummary();
         if (activeTab === "notebook") renderTopics();
       });
@@ -1904,20 +1176,23 @@
     return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
-  function renderGrammarTheory(question) {
-    const group = question.group;
-    const theory = grammarTheoryContent[group.id] || {
+  // Lý thuyết mặc định khi quản trị viên chưa nhập lý thuyết cho nhóm chủ đề.
+  function buildFallbackTheory(group, question) {
+    const samples = group.topics
+      .map((topic) => ({ title: topic.title, item: topic.questions[0] }))
+      .filter((sample) => sample.item);
+    return {
       goldenRules: [question.title, "Xác định cấu trúc và ngữ cảnh câu"],
       summary: group.description,
       quickIntro: "Ghi nhớ nhanh các điểm trọng tâm của chủ đề:",
-      quickItems: group.topics.slice(0, 2).map((topic) => [topic[0], topic[5]]),
+      quickItems: samples.slice(0, 2).map((s) => [s.title, s.item.explanation]),
       model: ["Cấu trúc", "ngữ cảnh?"],
       mentalDescription: group.description,
-      formulas: group.topics.slice(0, 4).map((topic) => topic[5]),
-      usage: group.topics.slice(0, 2).map((topic, index) => ({
-        title: topic[0],
-        text: topic[5],
-        result: `→ ${topic[3][topic[4]]}`,
+      formulas: samples.slice(0, 4).map((s) => s.item.explanation),
+      usage: samples.slice(0, 2).map((s, index) => ({
+        title: s.title,
+        text: s.item.explanation,
+        result: `→ ${s.item.options[s.item.answer]}`,
         green: index === 1,
       })),
       mistakes: [
@@ -1926,13 +1201,18 @@
         "Loại đáp án không phù hợp về cấu trúc.",
         "Để ý các từ khóa chỉ quan hệ hoặc thời gian.",
       ],
-      examples: group.topics
+      examples: samples
         .slice(0, 4)
         .map(
-          (topic) =>
-            `${topic[2].replace("___", topic[3][topic[4]])} — ${topic[5]}`,
+          (s) =>
+            `${s.item.question.replace("___", s.item.options[s.item.answer])} — ${s.item.explanation}`,
         ),
     };
+  }
+
+  function renderGrammarTheory(question) {
+    const group = question.group;
+    const theory = grammarTheoryContent[group.id] || buildFallbackTheory(group, question);
 
     document.getElementById("grammarTheoryDialogTitle").textContent =
       "Lý thuyết";
@@ -1981,25 +1261,26 @@
         const currentlySaved = saveButton.getAttribute("aria-pressed") === "true";
         if (currentlySaved) {
           const idx = savedTheories.findIndex((t) => t.type === "formula" && t.content === formula);
-          if (idx !== -1) savedTheories.splice(idx, 1);
+          if (idx !== -1) removeNoteOnServer(savedTheories.splice(idx, 1)[0]);
           saveButton.setAttribute("aria-pressed", "false");
           saveButton.classList.remove("saved");
           saveButton.querySelector("svg").setAttribute("fill", "none");
           showTheoryToast("Đã xóa khỏi sổ tay", true);
         } else {
-          savedTheories.push({
-            id: `theory-f-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
+          const formulaNote = {
+            id: `tmp-f-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
             topic: question.group.title || "NGỮ PHÁP",
             type: "formula",
             typeLabel: "Công thức",
             content: formula,
-          });
+          };
+          savedTheories.push(formulaNote);
+          addNoteOnServer(formulaNote);
           saveButton.setAttribute("aria-pressed", "true");
           saveButton.classList.add("saved");
           saveButton.querySelector("svg").setAttribute("fill", "currentColor");
           showTheoryToast("Đã lưu vào sổ tay cá nhân");
         }
-        localStorage.setItem("grammarSavedTheories", JSON.stringify(savedTheories));
         updateSummary();
         if (activeTab === "notebook") renderTopics();
       });
@@ -2073,6 +1354,12 @@
         0,
       );
       sessionAttempted = sessionQuestions.length;
+      grammarApi(grammarApiUrls.submitMiniTest, {
+        answers: sessionQuestions.map((question, index) => ({
+          questionId: question.dbId,
+          selectedIndex: sessionAnswers[index] ?? null,
+        })),
+      }).catch(showSyncError);
     }
     document.getElementById("practiceTitle").textContent = isMiniTest
       ? "Hoàn thành Mini Test"
@@ -2108,7 +1395,7 @@
       .getElementById("practiceExplanationPanel")
       .classList.remove("is-awaiting-answer");
     document.getElementById("practiceExplanation").textContent = isMiniTest
-      ? `Kết quả demo: ${sessionCorrect} câu đúng trên tổng số ${sessionQuestions.length} câu.`
+      ? `Kết quả: ${sessionCorrect} câu đúng trên tổng số ${sessionQuestions.length} câu.`
       : `Bạn đã hoàn thành bài luyện với ${sessionCorrect} câu trả lời đúng trên tổng số ${sessionAttempted} câu.`;
     document.getElementById("practiceNextLabel").textContent = "Đóng";
     practiceNext.querySelector("i").className = "fa-solid fa-xmark";
@@ -2171,10 +1458,14 @@
     resetTopicConfirm.addEventListener("click", () => {
       if (topicToReset && topicStats[topicToReset]) {
         const stat = topicStats[topicToReset];
+        const topicRecord = allTopicRecords().find((item) => item.id === topicToReset);
         answeredTotal = Math.max(0, answeredTotal - (stat.done || 0));
         correctTotal = Math.max(0, correctTotal - (stat.correct || 0));
         delete topicStats[topicToReset];
-        saveProgress();
+        topicRecord?.questions.forEach((item) => answeredQuestions.delete(item.id));
+        grammarApi(grammarApiUrls.resetTopic, {
+          topicId: topicRecord?.dbId ?? numericId(topicToReset),
+        }).catch(showSyncError);
         updateSummary();
         renderTopics();
       }
@@ -2197,8 +1488,8 @@
       const theoryId = removeTheoryBtn.dataset.removeTheory;
       const idx = savedTheories.findIndex((t) => t.id === theoryId);
       if (idx !== -1) {
-        savedTheories.splice(idx, 1);
-        localStorage.setItem("grammarSavedTheories", JSON.stringify(savedTheories));
+        const [removedNote] = savedTheories.splice(idx, 1);
+        removeNoteOnServer(removedNote);
         updateSummary();
         const card = removeTheoryBtn.closest(".notebook-theory-card");
         if (card) card.remove();
@@ -2225,12 +1516,10 @@
       event.stopPropagation();
       const questionId = removeQuestionBtn.dataset.removeQuestion;
       savedQuestions.delete(questionId);
-      savedTopics.delete(questionId);
-      localStorage.setItem(
-        "grammarQuestionBookmarks",
-        JSON.stringify([...savedQuestions]),
-      );
-      saveProgress();
+      grammarApi(grammarApiUrls.setBookmark, {
+        questionId: numericId(questionId),
+        saved: false,
+      }).catch(showSyncError);
       updateSummary();
       const card = removeQuestionBtn.closest(".notebook-question-card");
       if (card) card.remove();
@@ -2266,7 +1555,7 @@
       const record = allTopicRecords().find(
         (item) => item.id === practiceButton.dataset.practice,
       );
-      openPractice([record], practiceButton);
+      if (record) openPractice(record.questions, practiceButton);
       return;
     }
 
@@ -2284,7 +1573,7 @@
       );
       if (!group) return;
       const isTest = groupButton.dataset.mode === "test";
-      let records = allTopicRecords().filter((item) =>
+      let records = allQuestionRecords().filter((item) =>
         isTest ? item.exam.includes("TOEIC") : item.group.id === group.id,
       );
       if (isTest && records.length) {
@@ -2385,10 +1674,10 @@
       const question = sessionQuestions[questionIndex];
       if (savedQuestions.has(question.id)) savedQuestions.delete(question.id);
       else savedQuestions.add(question.id);
-      localStorage.setItem(
-        "grammarQuestionBookmarks",
-        JSON.stringify([...savedQuestions]),
-      );
+      grammarApi(grammarApiUrls.setBookmark, {
+        questionId: question.dbId,
+        saved: savedQuestions.has(question.id),
+      }).catch(showSyncError);
       updatePracticeActions(question);
       updateSummary();
       if (activeTab === "notebook") renderTopics();
@@ -2429,8 +1718,24 @@
         document.getElementById("practiceReportDetails").focus();
         return;
       }
-      status.textContent =
-        "Báo lỗi đã nhập trên trang này nhưng chưa kết nối hệ thống gửi báo lỗi.";
+      const question = sessionQuestions[questionIndex];
+      const submitButton = document.getElementById("practiceReportSubmit");
+      submitButton.disabled = true;
+      status.textContent = "Đang gửi báo lỗi...";
+      grammarApi(grammarApiUrls.reportQuestion, {
+        questionId: question.dbId,
+        details,
+      })
+        .then(() => {
+          status.textContent = "Cảm ơn bạn! Báo lỗi đã được gửi tới quản trị viên.";
+          document.getElementById("practiceReportDetails").value = "";
+        })
+        .catch(() => {
+          status.textContent = "Không gửi được báo lỗi. Vui lòng thử lại.";
+        })
+        .finally(() => {
+          submitButton.disabled = false;
+        });
     });
   document
     .getElementById("practiceFeedbackToggle")

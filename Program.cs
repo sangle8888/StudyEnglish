@@ -18,6 +18,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.SlidingExpiration = true;
     });
 
+builder.Services.AddScoped<StudyEnglish.Services.GrammarContentService>();
+builder.Services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
@@ -46,5 +48,25 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+// Tự động kiểm tra và thêm cột SortOrder vào bảng Questions nếu chưa tồn tại
+try
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.ExecuteSqlRaw(@"
+        IF NOT EXISTS (
+            SELECT 1 FROM sys.columns 
+            WHERE object_id = OBJECT_ID('dbo.Questions') AND name = 'SortOrder'
+        )
+        BEGIN
+            ALTER TABLE dbo.Questions ADD SortOrder INT NOT NULL CONSTRAINT DF_Questions_SortOrder DEFAULT (1);
+        END
+    ");
+}
+catch
+{
+    // Bỏ qua nếu môi trường không cho phép DDL
+}
 
 app.Run();

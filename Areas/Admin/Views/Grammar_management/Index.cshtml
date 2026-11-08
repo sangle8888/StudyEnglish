@@ -1,0 +1,105 @@
+@model GrammarIndexViewModel
+@{
+    ViewData["Title"] = "Quản lý Ngữ pháp";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <h1 class="h3 mb-0">Quản lý Ngữ pháp</h1>
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-secondary" asp-action="Reports">
+            Báo lỗi câu hỏi
+            @if (Model.OpenReports > 0)
+            {
+                <span class="badge text-bg-danger ms-1">@Model.OpenReports</span>
+            }
+        </a>
+        <a class="btn btn-outline-primary" asp-action="CreateCategory">+ Nhóm chủ đề</a>
+        <a class="btn btn-primary" asp-action="CreateTopic" asp-route-categoryId="@Model.SelectedCategoryId">+ Chủ đề</a>
+    </div>
+</div>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="alert alert-success" role="alert">@success</div>
+}
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4"><div class="card shadow-sm"><div class="card-body"><div class="text-muted">Nhóm chủ đề</div><div class="display-6">@Model.Categories.Count</div></div></div></div>
+    <div class="col-md-4"><div class="card shadow-sm"><div class="card-body"><div class="text-muted">Chủ đề</div><div class="display-6">@Model.TotalTopics</div></div></div></div>
+    <div class="col-md-4"><div class="card shadow-sm"><div class="card-body"><div class="text-muted">Câu hỏi</div><div class="display-6">@Model.TotalQuestions</div></div></div></div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header fw-semibold">Nhóm chủ đề</div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr><th>#</th><th>Tiêu đề</th><th>Mã</th><th>Chủ đề</th><th>Trạng thái</th><th class="text-end">Thao tác</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var c in Model.Categories)
+                {
+                    <tr class="@(Model.SelectedCategoryId == c.Id ? "table-active" : "")">
+                        <td>@c.SortOrder</td>
+                        <td><a asp-action="Index" asp-route-categoryId="@c.Id" class="fw-semibold text-decoration-none">@c.Title</a></td>
+                        <td><code>@c.Slug</code></td>
+                        <td>@c.TopicCount</td>
+                        <td>@if (c.IsActive) { <span class="badge text-bg-success">Hiển thị</span> } else { <span class="badge text-bg-secondary">Ẩn</span> }</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-primary" asp-action="EditCategory" asp-route-id="@c.Id">Sửa</a>
+                            <form method="post" asp-action="DeleteCategory" asp-route-id="@c.Id" class="d-inline" onsubmit="return confirm('Xoá nhóm này?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Xoá</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                @if (Model.Categories.Count == 0)
+                {
+                    <tr><td colspan="6" class="text-center text-muted py-4">Chưa có nhóm chủ đề nào.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span class="fw-semibold">Chủ đề @(Model.SelectedCategoryId.HasValue ? "(đang lọc theo nhóm)" : "(tất cả)")</span>
+        @if (Model.SelectedCategoryId.HasValue)
+        {
+            <a class="btn btn-sm btn-link" asp-action="Index">Bỏ lọc</a>
+        }
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead>
+                <tr><th>#</th><th>Chủ đề</th><th>Nhóm</th><th>Kỳ thi</th><th>Câu hỏi</th><th>Trạng thái</th><th class="text-end">Thao tác</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var t in Model.Topics)
+                {
+                    <tr>
+                        <td>@t.SortOrder</td>
+                        <td class="fw-semibold">@t.Title</td>
+                        <td>@t.CategoryTitle</td>
+                        <td>@t.ExamLabel</td>
+                        <td>@t.QuestionCount</td>
+                        <td>@if (t.IsActive) { <span class="badge text-bg-success">Hiển thị</span> } else { <span class="badge text-bg-secondary">Ẩn</span> }</td>
+                        <td class="text-end">
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="EditTheory" asp-route-topicId="@t.Id">Lý thuyết</a>
+                            <a class="btn btn-sm btn-outline-secondary" asp-action="Questions" asp-route-topicId="@t.Id">Câu hỏi</a>
+                            <a class="btn btn-sm btn-outline-primary" asp-action="EditTopic" asp-route-id="@t.Id">Sửa</a>
+                            <form method="post" asp-action="DeleteTopic" asp-route-id="@t.Id" class="d-inline" onsubmit="return confirm('Xoá chủ đề này?');">
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Xoá</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+                @if (Model.Topics.Count == 0)
+                {
+                    <tr><td colspan="7" class="text-center text-muted py-4">Chưa có chủ đề nào.</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

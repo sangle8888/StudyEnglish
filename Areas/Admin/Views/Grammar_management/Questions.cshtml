@@ -1,0 +1,482 @@
+@model GrammarQuestionListViewModel
+
+<div class="mb-4">
+    <a asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="text-decoration-none">&larr; Quay lại danh sách chủ đề</a>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-2">
+        <div>
+            <h1 class="h3 mb-0">@Model.TopicTitle</h1>
+            <div class="text-muted">@Model.CategoryTitle · @Model.Questions.Count câu hỏi</div>
+        </div>
+        <a class="btn btn-primary" asp-action="CreateQuestion" asp-route-topicId="@Model.TopicId">
+            <i class="fa-solid fa-plus me-1"></i>Thêm câu hỏi
+        </a>
+    </div>
+</div>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fa-solid fa-circle-check me-2"></i>@success
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<!-- Bộ lọc tìm kiếm, trạng thái, độ khó -->
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <div class="row g-2 align-items-center">
+            <div class="col-md-5">
+                <div class="input-group">
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                    <input type="text" id="questionSearchInput" class="form-control" placeholder="Tìm kiếm nội dung câu hỏi, đáp án..." />
+                </div>
+            </div>
+            <div class="col-md-3">
+                <select id="statusFilter" class="form-select">
+                    <option value="">-- Tất cả trạng thái --</option>
+                    <option value="active">Hiển thị</option>
+                    <option value="inactive">Ẩn / Đã xoá</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select id="difficultyFilter" class="form-select">
+                    <option value="">-- Tất cả độ khó --</option>
+                    <option value="1">1 - Cơ bản (Easy)</option>
+                    <option value="2">2 - Trung bình (Medium)</option>
+                    <option value="3">3 - Nâng cao (Hard)</option>
+                </select>
+            </div>
+            <div class="col-md-1 d-grid">
+                <button type="button" id="btnResetFilter" class="btn btn-outline-secondary" title="Đặt lại bộ lọc">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </button>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top small text-muted">
+            <span>Đang hiển thị <strong id="visibleCount" class="text-primary">@Model.Questions.Count</strong> trên tổng số <strong>@Model.Questions.Count</strong> câu hỏi</span>
+        </div>
+    </div>
+</div>
+
+<!-- Thanh thao tác hàng loạt khi có tích ô -->
+<div id="bulkActionBar" class="alert alert-info py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 shadow-sm" style="display: none !important;">
+    <div class="d-flex align-items-center gap-2">
+        <i class="fa-solid fa-circle-check text-primary fs-5"></i>
+        <span>Đã chọn <strong id="selectedCountBadge" class="text-primary">0</strong> câu hỏi</span>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" id="btnOpenBulkDeleteModal" data-bs-toggle="modal" data-bs-target="#bulkDeleteConfirmModal">
+            <i class="fa-solid fa-trash-can me-1"></i>Xoá các câu đã chọn
+        </button>
+        <button type="button" class="btn btn-sm btn-link text-decoration-none text-muted" id="btnClearSelection">
+            Bỏ chọn
+        </button>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" id="questionsTable">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 45px;" class="text-center">
+                        <input type="checkbox" id="checkAllRows" class="form-check-input" title="Tích chọn tất cả các câu đang hiển thị" />
+                    </th>
+                    <th style="width: 60px;" class="text-center">STT</th>
+                    <th>Câu hỏi</th>
+                    <th style="width: 140px;">Độ khó</th>
+                    <th style="width: 130px;">Trạng thái</th>
+                    <th class="text-end" style="width: 190px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var idx = 0; idx < Model.Questions.Count; idx++)
+                {
+                    var q = Model.Questions[idx];
+                    var options = q.Options.OrderBy(o => o.SortOrder).ToList();
+                    var correctIdx = options.FindIndex(o => o.IsCorrect);
+                    var optionTextCombined = string.Join(" ", options.Select(o => o.Content ?? ""));
+                    var statusKey = !q.IsDeleted ? "active" : "inactive";
+
+                    <tr class="question-row" 
+                        data-stem="@q.Stem.ToLower()" 
+                        data-options="@optionTextCombined.ToLower()" 
+                        data-status="@statusKey" 
+                        data-difficulty="@q.Difficulty"
+                        data-qid="@q.QuestionId">
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input row-checkbox" value="@q.QuestionId" />
+                        </td>
+                        <td class="text-center fw-semibold text-muted stt-col">@(idx + 1)</td>
+                        <td>
+                            <div class="fw-semibold text-dark">@q.Stem</div>
+                            @if (!string.IsNullOrWhiteSpace(q.StemVi))
+                            {
+                                <div class="text-secondary small fst-italic">@q.StemVi</div>
+                            }
+                            <div class="small mt-1 d-flex flex-wrap gap-2">
+                                @for (var i = 0; i < options.Count; i++)
+                                {
+                                    var opt = options[i];
+                                    var letter = (char)('A' + i);
+                                    if (opt.IsCorrect)
+                                    {
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle fw-bold">
+                                            <i class="fa-solid fa-check me-1"></i>@letter. @opt.Content
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            @letter. @opt.Content
+                                        </span>
+                                    }
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            @switch (q.Difficulty)
+                            {
+                                case 1:
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                        <i class="fa-solid fa-gauge-simple me-1"></i>Cơ bản
+                                    </span>
+                                    break;
+                                case 2:
+                                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
+                                        <i class="fa-solid fa-gauge-med me-1"></i>Trung bình
+                                    </span>
+                                    break;
+                                case 3:
+                                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+                                        <i class="fa-solid fa-gauge-high me-1"></i>Nâng cao
+                                    </span>
+                                    break;
+                                default:
+                                    <span class="badge bg-light text-secondary border">Mức @q.Difficulty</span>
+                                    break;
+                            }
+                        </td>
+                        <td>
+                            @if (!q.IsDeleted)
+                            {
+                                <span class="badge bg-success-subtle text-success border border-success-subtle">
+                                    <i class="fa-solid fa-circle-check me-1"></i>Hiển thị
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
+                                    <i class="fa-solid fa-eye-slash me-1"></i>Ẩn
+                                </span>
+                            }
+                        </td>
+                        <td class="text-end text-nowrap">
+                            <div class="d-inline-flex align-items-center justify-content-end" style="gap: 8px;">
+                                <a class="btn btn-sm btn-outline-primary rounded-pill px-3" asp-action="EditQuestion" asp-route-id="@q.QuestionId">
+                                    <i class="fa-regular fa-pen-to-square me-1"></i>Sửa
+                                </a>
+                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 btn-delete-question" 
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteConfirmModal"
+                                        data-id="@q.QuestionId" 
+                                        data-stem="@q.Stem">
+                                    <i class="fa-regular fa-trash-can me-1"></i>Xoá
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+
+                <tr id="noResultsRow" style="display: none;">
+                    <td colspan="6" class="text-center text-muted py-4">
+                        <i class="fa-solid fa-filter me-1 text-secondary"></i> Không tìm thấy câu hỏi nào phù hợp với bộ lọc hiện tại.
+                    </td>
+                </tr>
+
+                @if (Model.Questions.Count == 0)
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            Chủ đề này chưa có câu hỏi nào. Nhấn nút <strong>+ Thêm câu hỏi</strong> ở trên để tạo câu hỏi mới.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Modal xác nhận xoá 1 câu hỏi -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body p-4 text-center">
+                <div class="mb-3">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width: 60px; height: 60px;">
+                        <i class="fa-solid fa-trash-can fs-3"></i>
+                    </span>
+                </div>
+                <h5 class="modal-title fw-bold text-dark mb-2" id="deleteModalTitle">Xác nhận xoá câu hỏi</h5>
+                <p class="text-secondary small mb-3">Bạn có chắc chắn muốn xoá câu hỏi này? Câu hỏi sẽ được chuyển vào danh sách ẩn.</p>
+                
+                <div class="p-3 bg-light rounded-3 text-start mb-3 border">
+                    <div class="small text-muted mb-1">Nội dung câu hỏi:</div>
+                    <div class="fw-semibold text-dark text-break" id="modalQuestionStem"></div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Huỷ</button>
+                    <form id="deleteQuestionForm" method="post" asp-action="DeleteQuestion">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" id="deleteQuestionIdInput" value="" />
+                        <button type="submit" class="btn btn-danger rounded-pill px-4">
+                            <i class="fa-solid fa-trash-can me-1"></i>Xác nhận xoá
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xác nhận xoá nhiều câu hỏi đã chọn -->
+<div class="modal fade" id="bulkDeleteConfirmModal" tabindex="-1" aria-labelledby="bulkDeleteModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body p-4 text-center">
+                <div class="mb-3">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width: 60px; height: 60px;">
+                        <i class="fa-solid fa-triangle-exclamation fs-3"></i>
+                    </span>
+                </div>
+                <h5 class="modal-title fw-bold text-dark mb-2" id="bulkDeleteModalTitle">Xoá các câu hỏi đã chọn</h5>
+                <p class="text-secondary small mb-3">
+                    Bạn đang chọn <strong id="bulkDeleteCount" class="text-danger">0</strong> câu hỏi. Bạn có chắc chắn muốn xoá tất cả các câu hỏi này không?
+                </p>
+
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Huỷ</button>
+                    <form id="bulkDeleteForm" method="post" asp-action="DeleteMultipleQuestions">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="topicId" value="@Model.TopicId" />
+                        <div id="bulkDeleteInputsContainer"></div>
+                        <button type="submit" class="btn btn-danger rounded-pill px-4">
+                            <i class="fa-solid fa-trash-can me-1"></i>Xác nhận xoá
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("questionSearchInput");
+        const statusFilter = document.getElementById("statusFilter");
+        const difficultyFilter = document.getElementById("difficultyFilter");
+        const btnReset = document.getElementById("btnResetFilter");
+        const visibleCountEl = document.getElementById("visibleCount");
+        const checkAllRows = document.getElementById("checkAllRows");
+        const noResultsRow = document.getElementById("noResultsRow");
+        const table = document.getElementById("questionsTable");
+        const rows = table.querySelectorAll("tbody tr.question-row");
+
+        // Modal xoá đơn
+        const deleteModalEl = document.getElementById("deleteConfirmModal");
+        const deleteModal = deleteModalEl ? new bootstrap.Modal(deleteModalEl) : null;
+        const deleteForm = document.getElementById("deleteQuestionForm");
+        const modalQuestionStem = document.getElementById("modalQuestionStem");
+
+        // Modal xoá hàng loạt & thanh thao tác
+        const bulkDeleteModalEl = document.getElementById("bulkDeleteConfirmModal");
+        const bulkDeleteModal = bulkDeleteModalEl ? new bootstrap.Modal(bulkDeleteModalEl) : null;
+        const bulkActionBar = document.getElementById("bulkActionBar");
+        const selectedCountBadge = document.getElementById("selectedCountBadge");
+        const bulkDeleteCount = document.getElementById("bulkDeleteCount");
+        const btnOpenBulkDeleteModal = document.getElementById("btnOpenBulkDeleteModal");
+        const btnClearSelection = document.getElementById("btnClearSelection");
+        const bulkDeleteInputsContainer = document.getElementById("bulkDeleteInputsContainer");
+
+        function removeVietnameseTones(str) {
+            str = str.toLowerCase();
+            str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
+            str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e");
+            str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i");
+            str = str.replace(/ò|ó|ọ|ỏ|õ|ô|ồ|ố|ộ|ổ|ỗ|ơ|ờ|ớ|ợ|ở|ỡ/g, "o");
+            str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
+            str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
+            str = str.replace(/đ/g, "d");
+            str = str.replace(/\u0300|\u0301|\u0303|\u0309|\u0323/g, "");
+            str = str.replace(/\u02C6|\u0306|\u031B/g, "");
+            return str.trim();
+        }
+
+        function filterQuestions() {
+            const rawKeyword = searchInput.value.trim().toLowerCase();
+            const keyword = removeVietnameseTones(rawKeyword);
+            const statusVal = statusFilter ? statusFilter.value : "";
+            const diffVal = difficultyFilter ? difficultyFilter.value : "";
+
+            let visibleCount = 0;
+
+            rows.forEach((row) => {
+                const stem = row.dataset.stem || "";
+                const options = row.dataset.options || "";
+                const status = row.dataset.status || "";
+                const diff = row.dataset.difficulty || "";
+
+                const stemNorm = removeVietnameseTones(stem);
+                const optionsNorm = removeVietnameseTones(options);
+
+                const matchKeyword = !keyword || stemNorm.includes(keyword) || optionsNorm.includes(keyword);
+                const matchStatus = !statusVal || status === statusVal;
+                const matchDiff = !diffVal || diff === diffVal;
+
+                if (matchKeyword && matchStatus && matchDiff) {
+                    row.style.display = "";
+                    visibleCount++;
+                    const sttCell = row.querySelector(".stt-col");
+                    if (sttCell) sttCell.textContent = visibleCount;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            if (visibleCountEl) visibleCountEl.textContent = visibleCount;
+            if (noResultsRow) {
+                noResultsRow.style.display = (visibleCount === 0 && rows.length > 0) ? "" : "none";
+            }
+
+            updateSelectedState();
+        }
+
+        function updateCheckAllState() {
+            if (!checkAllRows) return;
+            const visibleRows = Array.from(rows).filter(r => r.style.display !== "none");
+            if (visibleRows.length > 0) {
+                const visibleChecked = visibleRows.filter(r => {
+                    const cb = r.querySelector("input.row-checkbox");
+                    return cb && cb.checked;
+                });
+                checkAllRows.checked = visibleChecked.length === visibleRows.length;
+                checkAllRows.indeterminate = visibleChecked.length > 0 && visibleChecked.length < visibleRows.length;
+            } else {
+                checkAllRows.checked = false;
+                checkAllRows.indeterminate = false;
+            }
+        }
+
+        function updateSelectedState() {
+            const checkedBoxes = table.querySelectorAll("tbody tr.question-row input.row-checkbox:checked");
+            const count = checkedBoxes.length;
+
+            if (selectedCountBadge) selectedCountBadge.textContent = count;
+            if (bulkDeleteCount) bulkDeleteCount.textContent = count;
+
+            if (bulkActionBar) {
+                if (count > 0) {
+                    bulkActionBar.style.setProperty("display", "flex", "important");
+                } else {
+                    bulkActionBar.style.setProperty("display", "none", "important");
+                }
+            }
+
+            updateCheckAllState();
+        }
+
+        // Xử lý nạp dữ liệu khi mở Modal xoá 1 câu hỏi
+        if (deleteModalEl) {
+            deleteModalEl.addEventListener("show.bs.modal", function (event) {
+                const btn = event.relatedTarget || document.activeElement;
+                if (btn && btn.classList && btn.classList.contains("btn-delete-question")) {
+                    const qId = btn.getAttribute("data-id");
+                    const stem = btn.getAttribute("data-stem") || "";
+                    if (modalQuestionStem) modalQuestionStem.textContent = stem;
+                    const inputId = document.getElementById("deleteQuestionIdInput");
+                    if (inputId) inputId.value = qId;
+                    if (deleteForm) {
+                        deleteForm.action = `@Url.Action("DeleteQuestion", "Grammar_management", new { area = "Admin" })/${qId}`;
+                    }
+                }
+            });
+        }
+
+        // Xử lý nạp dữ liệu khi mở Modal xoá nhiều câu hỏi
+        if (bulkDeleteModalEl) {
+            bulkDeleteModalEl.addEventListener("show.bs.modal", function () {
+                const checkedBoxes = table.querySelectorAll("tbody tr.question-row input.row-checkbox:checked");
+                if (bulkDeleteCount) bulkDeleteCount.textContent = checkedBoxes.length;
+                if (bulkDeleteInputsContainer) {
+                    bulkDeleteInputsContainer.innerHTML = "";
+                    checkedBoxes.forEach(cb => {
+                        const input = document.createElement("input");
+                        input.type = "hidden";
+                        input.name = "questionIds";
+                        input.value = cb.value;
+                        bulkDeleteInputsContainer.appendChild(input);
+                    });
+                }
+            });
+        }
+
+        // Bỏ chọn tất cả các câu
+        if (btnClearSelection) {
+            btnClearSelection.addEventListener("click", function () {
+                rows.forEach(r => {
+                    const cb = r.querySelector("input.row-checkbox");
+                    if (cb) cb.checked = false;
+                    r.classList.remove("table-active");
+                });
+                updateSelectedState();
+            });
+        }
+
+        if (searchInput) searchInput.addEventListener("input", filterQuestions);
+        if (statusFilter) statusFilter.addEventListener("change", filterQuestions);
+        if (difficultyFilter) difficultyFilter.addEventListener("change", filterQuestions);
+
+        // Đặt lại bộ lọc về mặc định
+        if (btnReset) {
+            btnReset.addEventListener("click", function () {
+                searchInput.value = "";
+                if (statusFilter) statusFilter.value = "";
+                if (difficultyFilter) difficultyFilter.value = "";
+                filterQuestions();
+            });
+        }
+
+        // Tích ô từng câu hỏi
+        table.addEventListener("change", function (e) {
+            if (e.target && e.target.classList.contains("row-checkbox")) {
+                const row = e.target.closest("tr");
+                if (row) {
+                    if (e.target.checked) row.classList.add("table-active");
+                    else row.classList.remove("table-active");
+                }
+                updateSelectedState();
+            }
+        });
+
+        // Tích ô chọn tất cả
+        if (checkAllRows) {
+            checkAllRows.addEventListener("change", function () {
+                const isChecked = checkAllRows.checked;
+                rows.forEach(r => {
+                    if (r.style.display !== "none") {
+                        const cb = r.querySelector("input.row-checkbox");
+                        if (cb) {
+                            cb.checked = isChecked;
+                            if (isChecked) r.classList.add("table-active");
+                            else r.classList.remove("table-active");
+                        }
+                    }
+                });
+                updateSelectedState();
+            });
+        }
+    });
+</script>
+}

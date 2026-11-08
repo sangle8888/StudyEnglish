@@ -1598,9 +1598,9 @@
             .practice-result-answer { padding: 3px 9px; border-radius: 999px; color: #684cf3; background: #eee9ff; font-size: 11px; white-space: nowrap; }
             .practice-explanation-heading { margin: 14px 0 10px; color: #684cf3; font-size: 11px; font-weight: 900; letter-spacing: .06em; }
             .practice-explanation-body { min-height: 110px; margin: 0; color: #596477; font-size: 13px; line-height: 1.65; }
-            .practice-answer-summary { margin-top: 14px; padding: 10px 12px; border: 1px solid #a7e8ca; border-radius: 13px; color: #334155; background: #e8f6f0; font-size: 12px; font-weight: 700; }
+            .practice-answer-summary { margin-top: 14px; padding: 12px 16px; border: 1px solid #a7f3d0; border-radius: 13px; color: #065f46; background: #ecfdf5; font-size: 13px; font-weight: 700; }
             .practice-answer-summary[hidden] { display: none; }
-            .practice-answer-summary i { margin-right: 6px; color: #168556; }
+            .practice-answer-summary i { margin-right: 8px; color: #10b981; }
             .practice-reasoning-steps { margin: 0; padding: 0; list-style: none; counter-reset: reasoning; }
             .practice-reasoning-step { position: relative; margin: 0; padding: 0 0 16px 36px; counter-increment: reasoning; }
             .practice-reasoning-step::before { position: absolute; top: 0; left: 0; z-index: 1; display: grid; width: 24px; height: 24px; place-items: center; border-radius: 50%; color: #684cf3; background: #eee9ff; content: counter(reasoning); font-size: 12px; font-weight: 700; }
@@ -1608,7 +1608,8 @@
             .practice-reasoning-step:last-child { padding-bottom: 0; }
             .practice-reasoning-step h4 { margin: 0 0 3px; color: #202b3c; font-size: 14px; font-weight: 800; }
             .practice-reasoning-step p { margin: 0; }
-            .practice-elimination { display: inline-flex; margin-top: 6px; padding: 1px 8px; border-radius: 999px; color: #dc2626; background: #fde8e8; font-size: 12px; font-weight: 700; }
+            .practice-elimination-group { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+            .practice-elimination { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; color: #dc2626; background: #fee2e2; font-size: 12px; font-weight: 700; line-height: 1.4; }
             .practice-result-status { display: inline-flex; align-items: center; gap: 10px; }
             .practice-result-status i { font-size: 18px; }
             .practice-grammar-reminder { margin-top: 14px; padding: 14px; border: 1px solid #d9d0ff; border-radius: 14px; color: #596477; background: #f8f6ff; font-size: 14px; line-height: 1.65; }

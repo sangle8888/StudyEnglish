@@ -1,6 +1,13 @@
+@model StudyEnglish.Services.GrammarPageDto
 @{
     ViewData["Title"] = "Ngữ Pháp - Grammar";
     Layout = "~/Views/Shared/_LayoutSidebar.cshtml"; 
+
+    var answeredCount = Model?.State?.AnsweredTotal ?? 0;
+    var totalTopics = Model?.Groups?.Sum(g => g.Topics.Count) ?? 0;
+    var weakCount = Model?.State?.TopicStats?.Values.Count(s => s.Wrong > 0) ?? 0;
+    var accuracy = answeredCount > 0 ? (int)Math.Round((double)((Model?.State?.CorrectTotal ?? 0) * 100) / answeredCount) : 0;
+    var bookmarkCount = (Model?.State?.Bookmarks?.Count ?? 0) + (Model?.State?.Notes?.Count ?? 0);
 }
 
 @section Styles {
@@ -40,7 +47,7 @@
                       </span>
                       <span>Câu đã làm</span>
                     </div>
-                    <div class="grammar-stat-value" id="answeredCount">0</div>
+                    <div class="grammar-stat-value" id="answeredCount">@answeredCount</div>
                   </div>
                   <div class="grammar-stat">
                     <div class="grammar-stat-label">
@@ -49,7 +56,7 @@
                       </span>
                       <span>Chủ đề</span>
                     </div>
-                    <div class="grammar-stat-value" id="topicCount">30</div>
+                    <div class="grammar-stat-value" id="topicCount">@totalTopics</div>
                   </div>
                   <div class="grammar-stat">
                     <div class="grammar-stat-label">
@@ -58,20 +65,19 @@
                       </span>
                       <span>Điểm yếu</span>
                     </div>
-                    <div class="grammar-stat-value" id="weakCount">0</div>
+                    <div class="grammar-stat-value" id="weakCount">@weakCount</div>
                   </div>
                 </div>
               </div>
               <div class="grammar-progress-wrap">
                 <div class="grammar-progress-label">
                   <span>Độ chính xác tổng</span>
-                  <span class="grammar-progress-value"
-                    id="accuracyValue">0%</span>
+                  <span class="grammar-progress-value" id="accuracyValue">@(accuracy)%</span>
                 </div>
                 <div class="grammar-progress-track" role="progressbar"
                   aria-label="Độ chính xác tổng" aria-valuemin="0"
-                  aria-valuemax="100" aria-valuenow="0">
-                  <div class="grammar-progress-fill" id="accuracyFill"></div>
+                  aria-valuemax="100" aria-valuenow="@accuracy">
+                  <div class="grammar-progress-fill" id="accuracyFill" style="width: @(accuracy)%"></div>
                 </div>
               </div>
             </div>
@@ -98,8 +104,7 @@
               aria-selected="false" aria-controls="topicSections">
               <i class="fa-regular fa-bookmark"
                 aria-hidden="true"></i>
-              Sổ tay cá nhân (<span class="grammar-tab-count"
-                id="bookmarkCount">0</span>)
+              Sổ tay cá nhân (<span class="grammar-tab-count" id="bookmarkCount">@bookmarkCount</span>)
             </button>
           </div>
 
@@ -194,8 +199,15 @@
                 <h2>LỌC THEO NHÓM CHỦ ĐỀ NGỮ PHÁP</h2>
                 <div class="filter-options" id="categoryFilters">
                   <button class="category-filter filter-option" type="button"
-                    data-category="all" aria-pressed="true">Tất cả chủ
-                    đề</button>
+                    data-category="all" aria-pressed="true">Tất cả chủ đề</button>
+                  @if (Model?.Groups != null)
+                  {
+                    foreach (var group in Model.Groups)
+                    {
+                      <button class="category-filter filter-option" type="button"
+                        data-category="@group.Id" aria-pressed="false">@group.Title</button>
+                    }
+                  }
                 </div>
               </section>
               <section class="filter-group" aria-label="Kỳ thi">
@@ -226,8 +238,110 @@
             </footer>
           </aside>
 
-          <div id="topicSections" role="tabpanel"
-            aria-labelledby="learningTab"></div>
+          <div id="topicSections" role="tabpanel" aria-labelledby="learningTab">
+          @if (Model?.Groups != null)
+          {
+              foreach (var group in Model.Groups)
+              {
+                  <section class="topic-section" data-group="@group.Id">
+                    <div class="topic-section-heading">
+                      <div>
+                        <h2>@group.Title</h2>
+                        <p>@group.Description</p>
+                      </div>
+                      <span class="topic-section-count">@group.Topics.Count chủ đề</span>
+                    </div>
+                    <div class="topic-grid">
+                      @foreach (var topic in group.Topics)
+                      {
+                          var stat = Model.State.TopicStats != null && Model.State.TopicStats.TryGetValue(topic.Id, out var s) ? s : null;
+                          var done = stat?.Done ?? 0;
+                          var correct = stat?.Correct ?? 0;
+                          var wrong = stat?.Wrong ?? 0;
+                          var topicAcc = done > 0 ? (int)Math.Round((double)(correct * 100) / done) : 0;
+                          var totalQ = topic.Questions.Count;
+                          var answeredInTopic = topic.Questions.Count(q => Model.State.AnsweredQuestions.Contains(q.Id));
+
+                          <article class="topic-card"
+                                   data-topic-id="@topic.Id"
+                                   data-group="@group.Id"
+                                   data-exam="@topic.Exam"
+                                   data-title="@topic.Title.ToLowerInvariant()"
+                                   data-wrong="@wrong">
+                            <div class="topic-card-top">
+                              <span class="topic-card-icon" aria-hidden="true">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-book-open"><path d="M12 7v14"></path><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"></path></svg>
+                              </span>
+                              <span class="topic-card-title">@topic.Title</span>
+                              @if (done > 0)
+                              {
+                                <button class="topic-bookmark" type="button" data-reset-topic="@topic.Id"
+                                        aria-label="Làm lại từ đầu chủ đề @topic.Title"
+                                        title="Làm lại từ đầu">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rotate-ccw"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                                </button>
+                              }
+                              <span class="topic-exam-badge">@topic.Exam</span>
+                            </div>
+                            <div class="topic-progress">
+                              <div class="topic-progress-heading">
+                                <span>Mức độ chính xác</span>
+                                <strong>@(topicAcc)%</strong>
+                              </div>
+                              <div class="topic-progress-track">
+                                <div class="topic-progress-fill" style="width:@(topicAcc)%"></div>
+                              </div>
+                            </div>
+                            <div class="topic-card-footer">
+                              <span class="topic-question-count">@answeredInTopic/@totalQ câu</span>
+                              <button class="practice-button" type="button" data-practice="@topic.Id">
+                                Luyện ngay <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                              </button>
+                            </div>
+                          </article>
+                      }
+
+                      <article class="topic-card topic-card-action topic-card-review" data-utility-card="review" data-group="@group.Id" data-exam="all">
+                        <div class="topic-card-top">
+                          <span class="topic-card-icon review-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shuffle"><path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"></path><path d="M2 6h1.973a4 4 0 0 1 3.3 1.7l5.454 8.6a4 4 0 0 0 3.3 1.7H22"></path></svg>
+                          </span>
+                          <span class="topic-card-title">Ôn tập ngẫu nhiên</span>
+                          <span class="topic-exam-badge">TOEIC · VSTEP</span>
+                        </div>
+                        <p class="topic-card-description">Luyện tập ngẫu nhiên các câu hỏi trong nhóm chủ đề này để củng cố phản xạ.</p>
+                        <div class="topic-card-footer">
+                          <span class="topic-question-count">@group.Topics.Sum(t => t.Questions.Count) câu</span>
+                          <button class="practice-button action-btn" type="button" data-start-group="@group.Id">
+                            Bắt đầu ôn tập <i class="fa-solid fa-play" aria-hidden="true"></i>
+                          </button>
+                        </div>
+                      </article>
+
+                      @if (group == Model.Groups.FirstOrDefault())
+                      {
+                        <article class="topic-card topic-card-action topic-card-mini-test" data-utility-card="mini-test" data-group="@group.Id" data-exam="all">
+                          <div class="topic-card-top">
+                            <span class="topic-card-icon minitest-icon" aria-hidden="true">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                            </span>
+                            <span class="topic-card-title">Mini Test tổng hợp</span>
+                            <span class="topic-exam-badge badge-timed">Có tính giờ</span>
+                          </div>
+                          <p class="topic-card-description">Kiểm tra nhanh kiến thức ngữ pháp với đề thi ngẫu nhiên có bấm giờ.</p>
+                          <div class="topic-card-footer">
+                            <span class="topic-question-count">10 - 20 - 50 câu</span>
+                            <button class="practice-button action-btn minitest-btn" type="button" data-start-mini-test="true">
+                              Làm bài test <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
+                            </button>
+                          </div>
+                        </article>
+                      }
+                    </div>
+                  </section>
+              }
+          }
+          </div>
           <div id="emptyState">
             <i class="fa-solid fa-magnifying-glass mb-2 text-xl"
               aria-hidden="true"></i>
@@ -280,8 +394,7 @@
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
                 </button>
                 <div class="practice-heading">
-                  <h2 id="practiceTitle">Luyện tập ngữ
-                    pháp</h2>
+                  <h2 id="practiceTitle">Luyện tập ngữ pháp</h2>
                   <div id="practiceProgress"
                     aria-live="polite"></div>
                 </div>
@@ -731,5 +844,18 @@
 }
 
 @section Scripts {
+    <form id="grammarAntiforgery" hidden>@Html.AntiForgeryToken()</form>
+    <script>
+      window.GRAMMAR_DATA = @Html.Raw(ViewBag.GrammarDataJson ?? "{\"groups\":[],\"state\":{}}");
+      window.GRAMMAR_API = {
+        submitAnswer: "@Url.Action("SubmitAnswer", "Grammar")",
+        resetTopic: "@Url.Action("ResetTopic", "Grammar")",
+        setBookmark: "@Url.Action("SetBookmark", "Grammar")",
+        saveNote: "@Url.Action("SaveNote", "Grammar")",
+        removeNote: "@Url.Action("RemoveNote", "Grammar")",
+        reportQuestion: "@Url.Action("ReportQuestion", "Grammar")",
+        submitMiniTest: "@Url.Action("SubmitMiniTest", "Grammar")"
+      };
+    </script>
     <script src="~/assets/js/Grammar/grammar-main.js" asp-append-version="true"></script>
 }
