@@ -809,7 +809,7 @@ public sealed class Grammar_managementController : Controller
                text.Contains("TrÆ");
     }
 
-    private GrammarTheoryFormViewModel? GetSeedTheory(string? categoryCode)
+    private GrammarTheoryFormViewModel? GetSeedTheory(string? categoryCode, string? topicTitle = null)
     {
         try
         {
@@ -823,7 +823,11 @@ public sealed class Grammar_managementController : Controller
             if (!doc.RootElement.TryGetProperty("theory", out var theoryEl)) return null;
 
             JsonElement tEl = default;
-            if (!string.IsNullOrEmpty(categoryCode) && theoryEl.TryGetProperty(categoryCode, out var matchEl))
+            if (!string.IsNullOrEmpty(topicTitle) && theoryEl.TryGetProperty(topicTitle, out var matchTopicEl))
+            {
+                tEl = matchTopicEl;
+            }
+            else if (!string.IsNullOrEmpty(categoryCode) && theoryEl.TryGetProperty(categoryCode, out var matchEl))
             {
                 tEl = matchEl;
             }
@@ -865,7 +869,22 @@ public sealed class Grammar_managementController : Controller
                     if (item.ValueKind == JsonValueKind.Array)
                     {
                         var pair = item.EnumerateArray().Select(x => x.GetString() ?? "").ToList();
-                        qItems.Add($"{pair.ElementAtOrDefault(0)} | {pair.ElementAtOrDefault(1)}");
+                        if (pair.Count >= 2 && !string.IsNullOrWhiteSpace(pair[1]))
+                        {
+                            qItems.Add($"{pair[0]} | {pair[1]}");
+                        }
+                        else
+                        {
+                            qItems.Add(pair.ElementAtOrDefault(0) ?? "");
+                        }
+                    }
+                    else if (item.ValueKind == JsonValueKind.String)
+                    {
+                        var str = item.GetString();
+                        if (!string.IsNullOrWhiteSpace(str))
+                        {
+                            qItems.Add(str);
+                        }
                     }
                 }
                 vm.QuickItems = string.Join("\n", qItems);
@@ -923,9 +942,27 @@ public sealed class Grammar_managementController : Controller
         var items = th.Items.OrderBy(i => i.SortOrder).ToList();
 
         var goldenRules = string.Join("\n", items.Where(i => i.ItemType == "GoldenRule").Select(i => i.Content ?? i.Title ?? ""));
-        var quickItems = string.Join("\n", items.Where(i => i.ItemType == "QuickItem").Select(i => $"{i.Title} | {i.Result ?? i.Content}"));
+        var quickItems = string.Join("\n", items.Where(i => i.ItemType == "QuickItem").Select(i =>
+        {
+            if (!string.IsNullOrEmpty(i.Result))
+            {
+                return $"{i.Title} | {i.Result}";
+            }
+            return i.Content ?? i.Title ?? "";
+        }));
         var formulas = string.Join("\n", items.Where(i => i.ItemType == "Formula").Select(i => i.Content ?? ""));
-        var usage = string.Join("\n", items.Where(i => i.ItemType == "Usage").Select(i => $"{i.Title} | {i.Content} | {i.Result}" + (i.IsGreen == true ? " | green" : "")));
+        var usage = string.Join("\n", items.Where(i => i.ItemType == "Usage").Select(i =>
+        {
+            if (!string.IsNullOrEmpty(i.Result) || i.IsGreen)
+            {
+                return $"{i.Title} | {i.Content} | {i.Result}" + (i.IsGreen ? " | green" : "");
+            }
+            if (!string.IsNullOrEmpty(i.Title) && !string.IsNullOrEmpty(i.Content))
+            {
+                return $"{i.Title}: {i.Content}";
+            }
+            return i.Content ?? i.Title ?? "";
+        }));
         var mistakes = string.Join("\n", items.Where(i => i.ItemType == "Mistake").Select(i => string.IsNullOrEmpty(i.Title) ? (i.Content ?? "") : $"{i.Title}: {i.Content}"));
         var examples = string.Join("\n", items.Where(i => i.ItemType == "Example").Select(i => string.IsNullOrEmpty(i.Result) ? (i.Content ?? "") : $"{i.Content} — {i.Result}"));
 
@@ -955,7 +992,7 @@ public sealed class Grammar_managementController : Controller
 
         if (hasMojibake)
         {
-            var seedVm = GetSeedTheory(t.Category?.Code);
+            var seedVm = GetSeedTheory(t.Category?.Code, t.Title);
             if (seedVm != null)
             {
                 vm.GoldenRules = seedVm.GoldenRules;
@@ -974,7 +1011,7 @@ public sealed class Grammar_managementController : Controller
         }
 
         ViewData["Title"] = $"Lý thuyết - {t.Title}";
-        return View("~/Areas/Admin/Views/Grammar_management/EditTheory.cshtml", vm);
+        return View(vm);
     }
 
     [HttpPost, ValidateAntiForgeryToken]
@@ -987,7 +1024,7 @@ public sealed class Grammar_managementController : Controller
             .FirstOrDefaultAsync(x => x.TopicId == topicId);
         if (t is null) return NotFound();
 
-        var seedVm = GetSeedTheory(t.Category?.Code);
+        var seedVm = GetSeedTheory(t.Category?.Code, t.Title);
         if (seedVm is null)
         {
             TempData["Error"] = "Không tìm thấy dữ liệu lý thuyết mẫu cho chủ đề này.";
@@ -1053,32 +1090,84 @@ public sealed class Grammar_managementController : Controller
             }
         }
 
+        static string? SafeTitle(string? t) => string.IsNullOrWhiteSpace(t) ? null : (t.Length > 200 ? t[..200] : t.Trim());
+
         AddLines(model.GoldenRules, "GoldenRule", (line, item) => item.Content = line);
         AddLines(model.QuickItems, "QuickItem", (line, item) =>
         {
-            var p = line.Split('|', 2, StringSplitOptions.TrimEntries);
-            item.Title = p.ElementAtOrDefault(0);
-            item.Result = p.ElementAtOrDefault(1);
+            if (line.Contains('|'))
+            {
+                var p = line.Split('|', 2, StringSplitOptions.TrimEntries);
+                item.Title = SafeTitle(p.ElementAtOrDefault(0));
+                item.Result = p.ElementAtOrDefault(1);
+                item.Content = null;
+            }
+            else
+            {
+                item.Title = null;
+                item.Result = null;
+                item.Content = line.Trim();
+            }
         });
         AddLines(model.Formulas, "Formula", (line, item) => item.Content = line);
         AddLines(model.Usage, "Usage", (line, item) =>
         {
-            var p = line.Split('|', StringSplitOptions.TrimEntries);
-            item.Title = p.ElementAtOrDefault(0);
-            item.Content = p.ElementAtOrDefault(1);
-            item.Result = p.ElementAtOrDefault(2);
-            item.IsGreen = string.Equals(p.ElementAtOrDefault(3), "green", StringComparison.OrdinalIgnoreCase);
-        });
-        AddLines(model.Mistakes, "Mistake", (line, item) =>
-        {
-            if (line.Contains(':'))
+            if (line.Contains('|'))
             {
-                var p = line.Split(':', 2, StringSplitOptions.TrimEntries);
-                item.Title = p.ElementAtOrDefault(0);
+                var p = line.Split('|', StringSplitOptions.TrimEntries);
+                var rawTitle = p.ElementAtOrDefault(0);
+                item.Title = SafeTitle(rawTitle);
                 item.Content = p.ElementAtOrDefault(1);
+                item.Result = p.ElementAtOrDefault(2);
+                item.IsGreen = string.Equals(p.ElementAtOrDefault(3), "green", StringComparison.OrdinalIgnoreCase);
+            }
+            else if (line.Contains(':') || line.Contains('：'))
+            {
+                char sep = line.Contains(':') ? ':' : '：';
+                var p = line.Split(sep, 2, StringSplitOptions.TrimEntries);
+                var title = p.ElementAtOrDefault(0);
+                if (title != null && title.Length > 200)
+                {
+                    item.Title = null;
+                    item.Content = line.Trim();
+                }
+                else
+                {
+                    item.Title = SafeTitle(title);
+                    item.Content = p.ElementAtOrDefault(1);
+                }
+                item.Result = null;
+                item.IsGreen = false;
             }
             else
             {
+                item.Title = null;
+                item.Content = line.Trim();
+                item.Result = null;
+                item.IsGreen = false;
+            }
+        });
+        AddLines(model.Mistakes, "Mistake", (line, item) =>
+        {
+            if (line.Contains(':') || line.Contains('：'))
+            {
+                char sep = line.Contains(':') ? ':' : '：';
+                var p = line.Split(sep, 2, StringSplitOptions.TrimEntries);
+                var title = p.ElementAtOrDefault(0);
+                if (title != null && title.Length > 200)
+                {
+                    item.Title = null;
+                    item.Content = line.Trim();
+                }
+                else
+                {
+                    item.Title = SafeTitle(title);
+                    item.Content = p.ElementAtOrDefault(1);
+                }
+            }
+            else
+            {
+                item.Title = null;
                 item.Content = line.Trim();
             }
         });
@@ -1087,6 +1176,12 @@ public sealed class Grammar_managementController : Controller
             if (line.Contains('—'))
             {
                 var p = line.Split('—', 2, StringSplitOptions.TrimEntries);
+                item.Content = p.ElementAtOrDefault(0);
+                item.Result = p.ElementAtOrDefault(1);
+            }
+            else if (line.Contains('|'))
+            {
+                var p = line.Split('|', 2, StringSplitOptions.TrimEntries);
                 item.Content = p.ElementAtOrDefault(0);
                 item.Result = p.ElementAtOrDefault(1);
             }

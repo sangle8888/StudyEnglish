@@ -237,7 +237,6 @@ public class GrammarTheoryItem
 
     public int SortOrder { get; set; }
 
-    [StringLength(255)]
     public string? Title { get; set; }
 
     public string? Content { get; set; }

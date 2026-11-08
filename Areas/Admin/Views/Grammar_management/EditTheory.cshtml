@@ -59,6 +59,11 @@
                 <div class="col-md-6">
                     <label asp-for="QuickItems" class="form-label"></label>
                     <textarea asp-for="QuickItems" class="form-control" rows="3"></textarea>
+                    <div class="form-text text-muted" style="font-size: 0.8rem;">
+                        <strong>2 kiểu hiển thị:</strong><br/>
+                        • <em>Kiểu 1 (Diễn giải liền mạch):</em> Nhập trực tiếp văn bản như: <code>Past Simple: Dùng với yesterday...</code><br/>
+                        • <em>Kiểu 2 (Mũi tên kết quả):</em> Dùng dấu <code>|</code> như: <code>He, She, It, danh từ số ít | → V(s/es)</code>
+                    </div>
                 </div>
                 <div class="col-md-3">
                     <label asp-for="ModelLeft" class="form-label"></label>
@@ -77,8 +82,15 @@
                     <textarea asp-for="Formulas" class="form-control" rows="4"></textarea>
                 </div>
                 <div class="col-md-6">
-                    <label asp-for="Usage" class="form-label"></label>
-                    <textarea asp-for="Usage" class="form-control" rows="4"></textarea>
+                    <label asp-for="Usage" class="form-label fw-bold"></label>
+                    <div class="small text-muted mb-2">
+                        Hỗ trợ 2 kiểu thiết kế tự động:
+                        <ul class="mb-1 ps-3">
+                            <li><strong>Kiểu 1 (Thẻ hộp phân loại):</strong> <code>Tiêu đề | Nội dung | Kết quả | green</code> (ví dụ: <em>Số ít | He, She... | → V(s/es)</em>)</li>
+                            <li><strong>Kiểu 2 (Danh sách dòng icon):</strong> <code>Tiêu đề: Nội dung diễn giải</code> (ví dụ: <em>Past Simple: Dùng với yesterday...</em>)</li>
+                        </ul>
+                    </div>
+                    <textarea asp-for="Usage" class="form-control" rows="5" placeholder="Past Simple: Dùng với yesterday, ago, last week..."></textarea>
                 </div>
                 <div class="col-md-6">
                     <label asp-for="Mistakes" class="form-label"></label>

@@ -878,17 +878,37 @@
               color: rgba(15, 23, 42, 0.85);
             }
             .grammar-theory-quick-item svg {
-              margin-top: 0.2rem;
+              margin-top: 0.25rem;
               width: 1rem;
               height: 1rem;
               flex-shrink: 0;
               color: #0284c7;
             }
+            .grammar-theory-quick-item .quick-item-copy {
+              flex: 1;
+              min-width: 0;
+            }
+            .grammar-theory-quick-item .quick-item-label {
+              display: block;
+              color: inherit;
+            }
+            .grammar-theory-quick-item .quick-item-result,
             .grammar-theory-quick-item strong {
               display: block;
               margin-top: 0.125rem;
               font-weight: 800;
               color: #0284c7;
+            }
+            .grammar-theory-quick-item .quick-item-text {
+              display: block;
+              line-height: 1.6;
+              color: inherit;
+            }
+            .grammar-theory-quick-item.quick-item-descriptive strong {
+              display: inline;
+              margin-top: 0;
+              font-weight: 600;
+              color: inherit;
             }
 
             /* Mascot Card */
@@ -1110,6 +1130,36 @@
             }
             @media (min-width: 1024px) {
               .grammar-theory-usage { grid-column: span 6; }
+            }
+            .grammar-theory-usage-list {
+              margin-top: 1rem;
+              display: flex;
+              flex-direction: column;
+              gap: 1rem;
+            }
+            .grammar-theory-usage-item {
+              display: flex;
+              align-items: flex-start;
+              gap: 0.75rem;
+              font-size: 0.875rem;
+              line-height: 1.6;
+              color: #334155;
+            }
+            .grammar-theory-usage-item .usage-item-icon {
+              flex-shrink: 0;
+              margin-top: 0.2rem;
+              color: #10b981;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .grammar-theory-usage-item .usage-item-text {
+              flex: 1;
+              word-break: break-word;
+            }
+            .grammar-theory-usage-item strong {
+              color: #0f172a;
+              font-weight: 700;
             }
             .grammar-theory-usage-columns {
               margin-top: 1rem;

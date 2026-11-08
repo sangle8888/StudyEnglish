@@ -10,6 +10,9 @@ public sealed class GrammarQuestionDto
     public string Id { get; set; } = "";
     public int DbId { get; set; }
     public string TopicId { get; set; } = "";
+    public int TopicDbId { get; set; }
+    public string TopicTitle { get; set; } = "";
+    public GrammarTheoryDto? Theory { get; set; }
     public string Question { get; set; } = "";
     public List<string> Options { get; set; } = [];
     public int Answer { get; set; }
@@ -45,6 +48,7 @@ public sealed class GrammarTopicDto
     public int DbId { get; set; }
     public string Title { get; set; } = "";
     public string Exam { get; set; } = "";
+    public GrammarTheoryDto? Theory { get; set; }
     public List<GrammarQuestionDto> Questions { get; set; } = [];
 }
 
@@ -153,7 +157,7 @@ public sealed class GrammarContentService
             .AsSplitQuery()
             .ToListAsync();
 
-        // 2. Tự động phát hiện và sửa lỗi font chữ (Mojibake) nếu CSDL chứa chuỗi lỗi
+        // 2. Tự động phát hiện và sửa lỗi font chữ (Mojibake) hoặc sai lệch lý thuyết nếu CSDL chứa chuỗi lỗi
         var seed = LoadSeed();
         if (seed != null)
         {
@@ -162,7 +166,11 @@ public sealed class GrammarContentService
                                                                      (t.Theory != null && (IsMojibake(t.Theory.Summary) ||
                                                                                            IsMojibake(t.Theory.QuickIntro) ||
                                                                                            IsMojibake(t.Theory.MentalDescription) ||
-                                                                                           t.Theory.Items.Any(i => IsMojibake(i.Content) || IsMojibake(i.Title) || IsMojibake(i.Result))))));
+                                                                                           t.Theory.Items.Any(i => IsMojibake(i.Content) || IsMojibake(i.Title) || IsMojibake(i.Result)))) ||
+                                                                     (t.Title.Contains("quá khứ") && t.Theory != null && (
+                                                                         (t.Theory.MentalDescription != null && t.Theory.MentalDescription.Contains("Hiện tại")) ||
+                                                                         !t.Theory.Items.Any(i => i.ItemType == "QuickItem" && i.Content != null && i.Content.Contains("Past Simple"))
+                                                                     ))));
             if (needsRepair)
             {
                 await FixDatabaseEncodingAsync(categories, seed);
@@ -189,13 +197,15 @@ public sealed class GrammarContentService
             {
                 var examCodes = t.TopicExams.Select(te => te.Exam.Code).ToList();
                 var examLabel = examCodes.Count > 0 ? string.Join(" · ", examCodes) : "TOEIC · VSTEP";
+                var topicTheory = t.Theory != null ? ToTheoryDto(t.Theory) : (firstTheory != null ? ToTheoryDto(firstTheory) : null);
 
                 var topic = new GrammarTopicDto
                 {
                     Id = $"t{t.TopicId}",
                     DbId = t.TopicId,
                     Title = t.Title,
-                    Exam = examLabel
+                    Exam = examLabel,
+                    Theory = topicTheory
                 };
 
                 foreach (var q in t.Questions.OrderBy(q => q.SortOrder).ThenBy(q => q.QuestionId))
@@ -211,6 +221,9 @@ public sealed class GrammarContentService
                         Id = $"q{q.QuestionId}",
                         DbId = q.QuestionId,
                         TopicId = topic.Id,
+                        TopicDbId = t.TopicId,
+                        TopicTitle = t.Title,
+                        Theory = topicTheory,
                         Question = q.Stem,
                         Options = options.Select(o => o.Content).ToList(),
                         Answer = correctIdx,
@@ -305,7 +318,14 @@ public sealed class GrammarContentService
             QuickIntro = th.QuickIntro ?? "",
             QuickItems = items
                 .Where(i => string.Equals(i.ItemType, "QuickItem", StringComparison.OrdinalIgnoreCase))
-                .Select(i => new[] { i.Title ?? "", i.Result ?? i.Content ?? "" })
+                .Select(i =>
+                {
+                    if (!string.IsNullOrWhiteSpace(i.Result))
+                    {
+                        return new[] { i.Title ?? i.Content ?? "", i.Result };
+                    }
+                    return new[] { i.Content ?? i.Title ?? "", "" };
+                })
                 .ToList(),
             Model = [th.ModelLeft ?? "Ai / Điều gì", th.ModelRight ?? "làm gì?"],
             MentalDescription = th.MentalDescription ?? "",
@@ -483,17 +503,46 @@ public sealed class GrammarContentService
             {
                 foreach (var cat in categories)
                 {
-                    var code = string.IsNullOrWhiteSpace(cat.Code) ? "tenses" : cat.Code;
-                    if (!seed.Theory.TryGetValue(code, out var thEl) && !seed.Theory.TryGetValue("tenses", out thEl))
-                        continue;
-
                     foreach (var topic in cat.Topics)
                     {
-                        if (topic.Theory == null) continue;
-                        if (IsMojibake(topic.Theory.Summary) || IsMojibake(topic.Theory.QuickIntro) || IsMojibake(topic.Theory.MentalDescription) ||
-                            topic.Theory.Items.Any(i => IsMojibake(i.Content) || IsMojibake(i.Title) || IsMojibake(i.Result)))
+                        JsonElement thEl = default;
+                        bool found = false;
+
+                        if (seed.Theory.TryGetValue(topic.Title, out var topicSeed))
                         {
+                            thEl = topicSeed;
+                            found = true;
+                        }
+                        else if (cat.Topics.FirstOrDefault() == topic)
+                        {
+                            var code = string.IsNullOrWhiteSpace(cat.Code) ? "tenses" : cat.Code;
+                            if (seed.Theory.TryGetValue(code, out var catSeed))
+                            {
+                                thEl = catSeed;
+                                found = true;
+                            }
+                        }
+
+                        if (!found) continue;
+
+                        if (topic.Theory == null)
+                        {
+                            topic.Theory = new GrammarTheory { TopicId = topic.TopicId };
+                            _db.GrammarTheories.Add(topic.Theory);
                             ApplySeedTheory(topic.Theory, thEl);
+                        }
+                        else
+                        {
+                            var isMoji = IsMojibake(topic.Theory.Summary) || IsMojibake(topic.Theory.QuickIntro) || IsMojibake(topic.Theory.MentalDescription) ||
+                                         topic.Theory.Items.Any(i => IsMojibake(i.Content) || IsMojibake(i.Title) || IsMojibake(i.Result));
+                            var isWrongTopicTheory = topic.Title.Contains("quá khứ") && 
+                                ((topic.Theory.MentalDescription != null && topic.Theory.MentalDescription.Contains("Hiện tại")) ||
+                                 !topic.Theory.Items.Any(i => i.ItemType == "QuickItem" && i.Content != null && i.Content.Contains("Past Simple")));
+
+                            if (isMoji || isWrongTopicTheory)
+                            {
+                                ApplySeedTheory(topic.Theory, thEl);
+                            }
                         }
                     }
                 }
@@ -540,14 +589,41 @@ public sealed class GrammarContentService
                 if (item.ValueKind == JsonValueKind.Array)
                 {
                     var pair = item.EnumerateArray().Select(x => x.GetString() ?? "").ToList();
-                    th.Items.Add(new GrammarTheoryItem
+                    if (pair.Count >= 2 && !string.IsNullOrWhiteSpace(pair[1]))
                     {
-                        TheoryId = th.TheoryId,
-                        ItemType = "QuickItem",
-                        SortOrder = ++sortOrder,
-                        Title = pair.ElementAtOrDefault(0),
-                        Result = pair.ElementAtOrDefault(1)
-                    });
+                        th.Items.Add(new GrammarTheoryItem
+                        {
+                            TheoryId = th.TheoryId,
+                            ItemType = "QuickItem",
+                            SortOrder = ++sortOrder,
+                            Title = pair.ElementAtOrDefault(0),
+                            Result = pair.ElementAtOrDefault(1)
+                        });
+                    }
+                    else
+                    {
+                        th.Items.Add(new GrammarTheoryItem
+                        {
+                            TheoryId = th.TheoryId,
+                            ItemType = "QuickItem",
+                            SortOrder = ++sortOrder,
+                            Content = pair.ElementAtOrDefault(0)
+                        });
+                    }
+                }
+                else if (item.ValueKind == JsonValueKind.String)
+                {
+                    var str = item.GetString();
+                    if (!string.IsNullOrWhiteSpace(str))
+                    {
+                        th.Items.Add(new GrammarTheoryItem
+                        {
+                            TheoryId = th.TheoryId,
+                            ItemType = "QuickItem",
+                            SortOrder = ++sortOrder,
+                            Content = str
+                        });
+                    }
                 }
             }
         }

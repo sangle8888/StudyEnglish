@@ -117,6 +117,7 @@
         index,
         title: topic.title,
         exam: topic.exam,
+        theory: topic.theory,
         questions: [],
       };
       record.questions = topic.questions.map((item, questionIndex) => ({
@@ -128,6 +129,7 @@
         index: questionIndex,
         title: topic.title,
         exam: topic.exam,
+        theory: item.theory || topic.theory,
         question: item.question,
         options: item.options,
         answer: item.answer,
@@ -1075,6 +1077,15 @@
   }
 
   const grammarTheoryContent = Object.fromEntries(grammarGroups.filter((group) => group.theory).map((group) => [group.id, group.theory]));
+  const grammarTopicTheories = {};
+  grammarGroups.forEach((g) => {
+    (g.topics || []).forEach((t) => {
+      if (t.theory) {
+        grammarTopicTheories[t.id] = t.theory;
+        if (t.dbId) grammarTopicTheories[`topic-${t.dbId}`] = t.theory;
+      }
+    });
+  });
 
   function fillTheoryMistakes(containerId, items) {
     const list = document.getElementById(containerId);
@@ -1212,7 +1223,12 @@
 
   function renderGrammarTheory(question) {
     const group = question.group;
-    const theory = grammarTheoryContent[group.id] || buildFallbackTheory(group, question);
+    const theory = question.theory ||
+                   grammarTopicTheories[question.topicId] ||
+                   grammarTopicTheories[`topic-${question.topicDbId}`] ||
+                   (question.topic && question.topic.theory) ||
+                   grammarTheoryContent[group.id] ||
+                   buildFallbackTheory(group, question);
 
     document.getElementById("grammarTheoryDialogTitle").textContent =
       "Lý thuyết";
@@ -1230,13 +1246,41 @@
 
     const quickList = document.getElementById("theoryQuickList");
     quickList.replaceChildren();
-    theory.quickItems.forEach(([label, result]) => {
+    const iconSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>`;
+
+    (theory.quickItems || []).forEach((entry) => {
+      let label = "";
+      let result = "";
+      if (Array.isArray(entry)) {
+        label = entry[0] || "";
+        result = entry[1] || "";
+      } else if (typeof entry === "string") {
+        label = entry;
+      }
+
       const item = document.createElement("li");
       item.className = "grammar-theory-quick-item";
-      item.innerHTML = `
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check"><circle cx="12" cy="12" r="10"></circle><path d="m9 12 2 2 4-4"></path></svg>
-        <span><span>${escapeHtml(label)}</span><strong>${escapeHtml(result)}</strong></span>
-      `;
+
+      if (result && result.trim()) {
+        // Kiểu 2: Có dòng mũi tên kết quả riêng biệt (He, She, It... \n → V(s/es))
+        item.classList.add("quick-item-paired");
+        item.innerHTML = `
+          ${iconSvg}
+          <div class="quick-item-copy">
+            <span class="quick-item-label">${escapeHtml(label)}</span>
+            <strong class="quick-item-result">${escapeHtml(result)}</strong>
+          </div>
+        `;
+      } else {
+        // Kiểu 1: Dạng đoạn văn diễn giải liền mạch (Past Simple: Dùng với yesterday...)
+        item.classList.add("quick-item-descriptive");
+        item.innerHTML = `
+          ${iconSvg}
+          <div class="quick-item-copy">
+            <span class="quick-item-text">${escapeHtml(label)}</span>
+          </div>
+        `;
+      }
       quickList.appendChild(item);
     });
 
@@ -1269,7 +1313,7 @@
         } else {
           const formulaNote = {
             id: `tmp-f-${Date.now()}-${Math.random().toString(36).substr(2, 4)}`,
-            topic: question.group.title || "NGỮ PHÁP",
+            topic: question.title || question.group.title || "NGỮ PHÁP",
             type: "formula",
             typeLabel: "Công thức",
             content: formula,
@@ -1289,24 +1333,59 @@
 
     const usageList = document.getElementById("theoryUsageList");
     usageList.replaceChildren();
-    theory.usage.forEach((item) => {
-      const box = document.createElement("div");
-      box.className = `grammar-theory-usage-box ${item.green ? "usage-plural" : "usage-singular"}`;
-      box.innerHTML = `
-        <div class="usage-box-header">
-          ${item.green 
-            ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round"><path d="M18 21a8 8 0 0 0-16 0"></path><circle cx="10" cy="8" r="5"></circle><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"></path></svg>'
-            : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>'
-          }
-          <strong>${escapeHtml(item.title)}</strong>
-        </div>
-        <p class="usage-box-text">${escapeHtml(item.text)}</p>
-        <p class="usage-box-result ${item.green ? 'text-green' : 'text-purple'}">${escapeHtml(item.result)}</p>
-      `;
-      usageList.appendChild(box);
-    });
+
+    // Nếu các mục cách dùng không có 'result' (hoặc ở dạng danh sách diễn giải như Past Simple: Dùng với...)
+    const isDescriptiveList = Array.isArray(theory.usage) && theory.usage.some(item => !item.result || item.result.trim() === "");
+
+    if (isDescriptiveList) {
+      usageList.className = "grammar-theory-usage-list";
+      theory.usage.forEach((item) => {
+        const row = document.createElement("div");
+        row.className = "grammar-theory-usage-item";
+        const titleText = item.title ? item.title.trim() : "";
+        const bodyText = item.text ? item.text.trim() : "";
+        const resultText = item.result ? item.result.trim() : "";
+
+        let contentHtml = "";
+        if (titleText && bodyText) {
+          contentHtml = `<strong>${escapeHtml(titleText)}:</strong> ${escapeHtml(bodyText)}`;
+        } else {
+          contentHtml = escapeHtml(titleText || bodyText);
+        }
+
+        if (resultText) {
+          contentHtml += ` <span class="usage-item-result text-green font-semibold">${escapeHtml(resultText)}</span>`;
+        }
+
+        row.innerHTML = `
+          <span class="usage-item-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-target text-green"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          </span>
+          <div class="usage-item-text">${contentHtml}</div>
+        `;
+        usageList.appendChild(row);
+      });
+    } else {
+      usageList.className = "grammar-theory-usage-columns";
+      theory.usage.forEach((item) => {
+        const box = document.createElement("div");
+        box.className = `grammar-theory-usage-box ${item.green ? "usage-plural" : "usage-singular"}`;
+        box.innerHTML = `
+          <div class="usage-box-header">
+            ${item.green 
+              ? '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round"><path d="M18 21a8 8 0 0 0-16 0"></path><circle cx="10" cy="8" r="5"></circle><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"></path></svg>'
+              : '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-round"><circle cx="12" cy="8" r="5"></circle><path d="M20 21a8 8 0 0 0-16 0"></path></svg>'
+            }
+            <strong>${escapeHtml(item.title)}</strong>
+          </div>
+          <p class="usage-box-text">${escapeHtml(item.text)}</p>
+          ${item.result ? `<p class="usage-box-result ${item.green ? 'text-green' : 'text-purple'}">${escapeHtml(item.result)}</p>` : ''}
+        `;
+        usageList.appendChild(box);
+      });
+    }
     fillTheoryMistakes("theoryMistakes", theory.mistakes);
-    fillTheoryExamples("theoryExamples", theory.examples, question.group.title);
+    fillTheoryExamples("theoryExamples", theory.examples, question.title || question.group.title);
   }
 
   function openGrammarTheory() {

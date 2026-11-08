@@ -63,6 +63,25 @@ try
             ALTER TABLE dbo.Questions ADD SortOrder INT NOT NULL CONSTRAINT DF_Questions_SortOrder DEFAULT (1);
         END
     ");
+
+    // Mở rộng độ dài cột Title và Result của bảng GrammarTheoryItems lên NVARCHAR(1000)
+    db.Database.ExecuteSqlRaw(@"
+        IF EXISTS (
+            SELECT 1 FROM sys.columns 
+            WHERE object_id = OBJECT_ID('dbo.GrammarTheoryItems') AND name = 'Title' AND max_length < 2000 AND max_length > 0
+        )
+        BEGIN
+            ALTER TABLE dbo.GrammarTheoryItems ALTER COLUMN Title NVARCHAR(1000) NULL;
+        END
+
+        IF EXISTS (
+            SELECT 1 FROM sys.columns 
+            WHERE object_id = OBJECT_ID('dbo.GrammarTheoryItems') AND name = 'Result' AND max_length < 2000 AND max_length > 0
+        )
+        BEGIN
+            ALTER TABLE dbo.GrammarTheoryItems ALTER COLUMN Result NVARCHAR(1000) NULL;
+        END
+    ");
 }
 catch
 {
