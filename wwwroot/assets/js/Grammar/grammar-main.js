@@ -210,12 +210,13 @@
     const accuracy = stat.done
       ? Math.round((stat.correct / stat.done) * 100)
       : 0;
+    const isWeak = stat.done > 0 && accuracy < 50;
     const totalQuestions = record.questions.length;
     const answeredInTopic = record.questions.filter((item) =>
       answeredQuestions.has(item.id),
     ).length;
     const article = document.createElement("article");
-    article.className = "topic-card";
+    article.className = `topic-card ${isWeak ? "is-weak" : ""}`;
     article.dataset.topicId = record.id;
     article.dataset.group = record.group.id;
     article.dataset.exam = record.exam;
@@ -235,8 +236,8 @@
             <span class="topic-exam-badge">${record.exam}</span>
           </div>
           <div class="topic-progress">
-            <div class="topic-progress-heading"><span>Mức độ chính xác</span><strong>${accuracy}%</strong></div>
-            <div class="topic-progress-track"><div class="topic-progress-fill" style="width:${accuracy}%"></div></div>
+            <div class="topic-progress-heading"><span>Mức độ chính xác</span><strong class="${isWeak ? "text-weak" : ""}">${accuracy}%</strong></div>
+            <div class="topic-progress-track"><div class="topic-progress-fill ${isWeak ? "fill-weak" : ""}" style="width:${accuracy}%"></div></div>
           </div>
           <div class="topic-card-footer">
             <span class="topic-question-count">${answeredInTopic}/${totalQuestions} câu</span>
@@ -534,7 +535,7 @@
 
   function makeReviewCard(group) {
     const card = document.createElement("article");
-    card.className = "topic-utility-card";
+    card.className = "topic-utility-card topic-card-review";
     card.innerHTML = `
           <div class="utility-content">
             <div class="utility-heading">
@@ -555,7 +556,7 @@
 
   function makeMiniTestCard(group) {
     const card = document.createElement("article");
-    card.className = "topic-utility-card test-card";
+    card.className = "topic-utility-card test-card topic-card-mini-test";
     card.innerHTML = `
           <div class="utility-content">
             <div class="utility-heading">
@@ -1474,6 +1475,25 @@
         0,
       );
       sessionAttempted = sessionQuestions.length;
+      sessionQuestions.forEach((question, index) => {
+        const selected = sessionAnswers[index];
+        if (selected !== undefined && selected !== null) {
+          const isCorrect = selected === question.answer;
+          const stat = topicStats[question.topicId] || { done: 0, wrong: 0, correct: 0 };
+          stat.done += 1;
+          answeredTotal += 1;
+          if (isCorrect) {
+            correctTotal += 1;
+            stat.correct += 1;
+          } else {
+            stat.wrong += 1;
+          }
+          topicStats[question.topicId] = stat;
+          answeredQuestions.add(question.id);
+        }
+      });
+      updateSummary();
+      renderTopics();
       grammarApi(grammarApiUrls.submitMiniTest, {
         answers: sessionQuestions.map((question, index) => ({
           questionId: question.dbId,

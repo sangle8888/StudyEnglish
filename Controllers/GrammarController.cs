@@ -456,6 +456,16 @@ public class GrammarController : Controller
         _context.PracticeSessions.Add(session);
         await _context.SaveChangesAsync();
 
+        var topicStatMap = new Dictionary<int, UserTopicStat>();
+        var userTopicIds = questions.Select(q => q.TopicId).Distinct().ToList();
+        var existingStats = await _context.UserTopicStats
+            .Where(s => s.UserId == userId && userTopicIds.Contains(s.TopicId))
+            .ToListAsync();
+        foreach (var s in existingStats)
+        {
+            topicStatMap[s.TopicId] = s;
+        }
+
         foreach (var a in request.Answers)
         {
             var isAnsCorrect = a.SelectedIndex.HasValue &&
@@ -469,6 +479,29 @@ public class GrammarController : Controller
                 IsCorrect = isAnsCorrect,
                 AnsweredAt = DateTime.UtcNow
             });
+
+            if (a.SelectedIndex.HasValue)
+            {
+                var q = questions.FirstOrDefault(x => x.QuestionId == a.QuestionId);
+                if (q != null)
+                {
+                    if (!topicStatMap.TryGetValue(q.TopicId, out var stat))
+                    {
+                        stat = new UserTopicStat
+                        {
+                            UserId = userId,
+                            TopicId = q.TopicId
+                        };
+                        _context.UserTopicStats.Add(stat);
+                        topicStatMap[q.TopicId] = stat;
+                    }
+
+                    stat.TotalAttempted++;
+                    if (isAnsCorrect) stat.CorrectCount++; else stat.WrongCount++;
+                    stat.AccuracyRate = stat.TotalAttempted > 0 ? (int)Math.Round((double)(stat.CorrectCount * 100) / stat.TotalAttempted) : 0;
+                    stat.LastPracticedAt = DateTime.UtcNow;
+                }
+            }
         }
         await _context.SaveChangesAsync();
 

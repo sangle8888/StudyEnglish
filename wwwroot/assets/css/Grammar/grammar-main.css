@@ -297,122 +297,143 @@
             }
 
             /* 1. Ôn tập ngẫu nhiên - Card Tím nhạt giống Hình 2 */
-            .topic-utility-card:not(.test-card),
-            #grammarPage .topic-utility-card:not(.test-card),
-            #grammarPage .topic-card.topic-card-review {
+            /* 1. Ôn tập ngẫu nhiên - Card Tím nhạt giống Hình 2 (Light Mode) */
+            html:not(.dark) .topic-utility-card:not(.test-card),
+            html:not(.dark) #grammarPage .topic-utility-card:not(.test-card),
+            html:not(.dark) #grammarPage .topic-card-review,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review {
               border: 1px solid rgba(118, 87, 255, 0.35) !important;
               background: #eee9ff !important;
               padding: 0 !important;
             }
-            .topic-utility-card:not(.test-card)::before,
-            #grammarPage .topic-utility-card:not(.test-card)::before,
-            #grammarPage .topic-card.topic-card-review::before {
+            html:not(.dark) .topic-utility-card:not(.test-card)::before,
+            html:not(.dark) #grammarPage .topic-utility-card:not(.test-card)::before,
+            html:not(.dark) #grammarPage .topic-card-review::before,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review::before {
               background: #6366f1 !important;
             }
-            .topic-utility-card:not(.test-card) .utility-title,
-            #grammarPage .topic-card.topic-card-review .utility-title,
-            #grammarPage .topic-card.topic-card-review .topic-card-title {
+            html:not(.dark) .topic-utility-card:not(.test-card) .utility-title,
+            html:not(.dark) #grammarPage .topic-card-review .utility-title,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .utility-title,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .topic-card-title {
               color: #4338ca !important;
             }
-            .topic-utility-card:not(.test-card) .utility-icon,
-            #grammarPage .topic-card.topic-card-review .utility-icon,
-            #grammarPage .topic-card.topic-card-review .topic-card-icon {
+            html:not(.dark) .topic-utility-card:not(.test-card) .utility-icon,
+            html:not(.dark) #grammarPage .topic-card-review .utility-icon,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .utility-icon,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .topic-card-icon {
               color: #6366f1 !important;
               background: #ffffff !important;
               box-shadow: 0 2px 6px rgba(99, 102, 241, 0.16) !important;
             }
-            .topic-utility-card:not(.test-card) .utility-description,
-            #grammarPage .topic-card.topic-card-review .utility-description,
-            #grammarPage .topic-card.topic-card-review .topic-card-description {
+            html:not(.dark) .topic-utility-card:not(.test-card) .utility-description,
+            html:not(.dark) #grammarPage .topic-card-review .utility-description,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .utility-description,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .topic-card-description {
               color: #334155 !important;
             }
-            .topic-utility-card:not(.test-card) .utility-footer,
-            #grammarPage .topic-card.topic-card-review .utility-footer,
-            #grammarPage .topic-card.topic-card-review .topic-card-footer {
+            html:not(.dark) .topic-utility-card:not(.test-card) .utility-footer,
+            html:not(.dark) #grammarPage .topic-card-review .utility-footer,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .utility-footer,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .topic-card-footer {
               border-top: 1px solid rgba(118, 87, 255, 0.2) !important;
             }
-            .topic-utility-card:not(.test-card) .choice-pills button,
-            #grammarPage .topic-card.topic-card-review .choice-pills button {
+            html:not(.dark) .topic-utility-card:not(.test-card) .choice-pills button,
+            html:not(.dark) #grammarPage .topic-card-review .choice-pills button,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .choice-pills button {
               border: 1px solid #ded9ef !important;
               background: #ffffff !important;
               color: #475569 !important;
             }
-            .topic-utility-card:not(.test-card) .choice-pills button[aria-pressed="true"],
-            #grammarPage .topic-card.topic-card-review .choice-pills button[aria-pressed="true"] {
+            html:not(.dark) .topic-utility-card:not(.test-card) .choice-pills button[aria-pressed="true"],
+            html:not(.dark) #grammarPage .topic-card-review .choice-pills button[aria-pressed="true"],
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .choice-pills button[aria-pressed="true"] {
               border-color: #5b21b6 !important;
               background: #5b21b6 !important;
               color: #ffffff !important;
             }
-            .topic-utility-card:not(.test-card) .practice-button,
-            #grammarPage .topic-card.topic-card-review .practice-button,
-            #grammarPage .topic-card.topic-card-review .action-btn {
+            html:not(.dark) .topic-utility-card:not(.test-card) .practice-button,
+            html:not(.dark) #grammarPage .topic-card-review .practice-button,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .practice-button,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .action-btn {
               background: #5b21b6 !important;
               color: #ffffff !important;
               border: none !important;
             }
-            .topic-utility-card:not(.test-card) .practice-button:hover,
-            #grammarPage .topic-card.topic-card-review .practice-button:hover,
-            #grammarPage .topic-card.topic-card-review .action-btn:hover {
+            html:not(.dark) .topic-utility-card:not(.test-card) .practice-button:hover,
+            html:not(.dark) #grammarPage .topic-card-review .practice-button:hover,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .practice-button:hover,
+            html:not(.dark) #grammarPage .topic-card.topic-card-review .action-btn:hover {
               background: #4c1d95 !important;
             }
 
-            /* 2. Mini Test tổng hợp - Card Vàng ấm / Nâu hổ phách giống Hình 2 */
-            .topic-utility-card.test-card,
-            #grammarPage .topic-utility-card.test-card,
-            #grammarPage .topic-card.topic-card-mini-test {
+            /* 2. Mini Test tổng hợp - Card Vàng ấm / Nâu hổ phách giống Hình 2 (Light Mode) */
+            html:not(.dark) .topic-utility-card.test-card,
+            html:not(.dark) #grammarPage .topic-utility-card.test-card,
+            html:not(.dark) #grammarPage .topic-card-mini-test,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test {
               border: 1px solid rgba(245, 206, 130, 0.85) !important;
               background: #fff8e7 !important;
               padding: 0 !important;
             }
-            .topic-utility-card.test-card::before,
-            #grammarPage .topic-utility-card.test-card::before,
-            #grammarPage .topic-card.topic-card-mini-test::before {
+            html:not(.dark) .topic-utility-card.test-card::before,
+            html:not(.dark) #grammarPage .topic-utility-card.test-card::before,
+            html:not(.dark) #grammarPage .topic-card-mini-test::before,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test::before {
               background: #92400e !important;
             }
-            .topic-utility-card.test-card .utility-title,
-            #grammarPage .topic-card.topic-card-mini-test .utility-title,
-            #grammarPage .topic-card.topic-card-mini-test .topic-card-title {
+            html:not(.dark) .topic-utility-card.test-card .utility-title,
+            html:not(.dark) #grammarPage .topic-card-mini-test .utility-title,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .utility-title,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .topic-card-title {
               color: #854d0e !important;
             }
-            .topic-utility-card.test-card .utility-icon,
-            #grammarPage .topic-card.topic-card-mini-test .utility-icon,
-            #grammarPage .topic-card.topic-card-mini-test .topic-card-icon {
+            html:not(.dark) .topic-utility-card.test-card .utility-icon,
+            html:not(.dark) #grammarPage .topic-card-mini-test .utility-icon,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .utility-icon,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .topic-card-icon {
               color: #92400e !important;
               background: #ffffff !important;
               box-shadow: 0 2px 6px rgba(180, 83, 9, 0.16) !important;
             }
-            .topic-utility-card.test-card .utility-description,
-            #grammarPage .topic-card.topic-card-mini-test .utility-description,
-            #grammarPage .topic-card.topic-card-mini-test .topic-card-description {
+            html:not(.dark) .topic-utility-card.test-card .utility-description,
+            html:not(.dark) #grammarPage .topic-card-mini-test .utility-description,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .utility-description,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .topic-card-description {
               color: #475569 !important;
             }
-            .topic-utility-card.test-card .utility-footer,
-            #grammarPage .topic-card.topic-card-mini-test .utility-footer,
-            #grammarPage .topic-card.topic-card-mini-test .topic-card-footer {
+            html:not(.dark) .topic-utility-card.test-card .utility-footer,
+            html:not(.dark) #grammarPage .topic-card-mini-test .utility-footer,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .utility-footer,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .topic-card-footer {
               border-top: 1px solid rgba(217, 119, 6, 0.2) !important;
             }
-            .topic-utility-card.test-card .choice-pills button,
-            #grammarPage .topic-card.topic-card-mini-test .choice-pills button {
+            html:not(.dark) .topic-utility-card.test-card .choice-pills button,
+            html:not(.dark) #grammarPage .topic-card-mini-test .choice-pills button,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .choice-pills button {
               border: 1px solid rgba(245, 206, 130, 0.85) !important;
               color: #78350f !important;
               background: #ffffff !important;
             }
-            .topic-utility-card.test-card .choice-pills button[aria-pressed="true"],
-            #grammarPage .topic-card.topic-card-mini-test .choice-pills button[aria-pressed="true"] {
+            html:not(.dark) .topic-utility-card.test-card .choice-pills button[aria-pressed="true"],
+            html:not(.dark) #grammarPage .topic-card-mini-test .choice-pills button[aria-pressed="true"],
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .choice-pills button[aria-pressed="true"] {
               border-color: #854d0e !important;
               background: #854d0e !important;
               color: #ffffff !important;
             }
-            .topic-utility-card.test-card .practice-button,
-            #grammarPage .topic-card.topic-card-mini-test .practice-button,
-            #grammarPage .topic-card.topic-card-mini-test .action-btn {
+            html:not(.dark) .topic-utility-card.test-card .practice-button,
+            html:not(.dark) #grammarPage .topic-card-mini-test .practice-button,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .practice-button,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .action-btn {
               background: #854d0e !important;
               color: #ffffff !important;
               border: none !important;
             }
-            .topic-utility-card.test-card .practice-button:hover,
-            #grammarPage .topic-card.topic-card-mini-test .practice-button:hover,
-            #grammarPage .topic-card.topic-card-mini-test .action-btn:hover {
+            html:not(.dark) .topic-utility-card.test-card .practice-button:hover,
+            html:not(.dark) #grammarPage .topic-card-mini-test .practice-button:hover,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .practice-button:hover,
+            html:not(.dark) #grammarPage .topic-card.topic-card-mini-test .action-btn:hover {
               background: #713f12 !important;
             }
 
@@ -2332,17 +2353,199 @@
             html.dark .topic-progress-heading, html.dark .topic-question-count { color: #aab4c5; }
             html.dark .topic-progress-track { background: #374151; }
             html.dark .topic-card-footer { border-top-color: rgba(148,163,184,.13); }
-            html.dark .topic-utility-card { border-color: rgba(139,118,255,.24); border-left-color: #8b76ff; background: rgba(43,40,67,.96); }
-            html.dark .topic-utility-card:not(.test-card) { border-color: rgba(139,118,255,.35); background: rgba(43,40,67,.96); }
-            html.dark .topic-utility-card:not(.test-card) .utility-title { color: #c4b5fd; }
-            html.dark .topic-utility-card:not(.test-card) .utility-icon { color: #c4b5fd; background: #343052; }
-            html.dark .topic-utility-card.test-card { border-color: rgba(251,191,36,.24); border-left-color: #d49a24; background: rgba(58,47,31,.96); }
-            html.dark .utility-actions .topic-bookmark { background: #312e81 !important; color: #c4b5fd !important; border-color: rgba(196, 181, 253, 0.25) !important; }
-            html.dark .utility-actions .topic-bookmark:hover { background: #3730a3 !important; }
-            html.dark .utility-actions .topic-exam-badge { background: #1e293b !important; color: #f1f5f9 !important; border-color: rgba(255, 255, 255, 0.15) !important; }
-            html.dark .utility-description { color: #b4bdcc; }
-            html.dark .utility-footer { border-top-color: rgba(148,163,184,.18); }
-            html.dark .choice-pills button { border-color: rgba(148,163,184,.2); color: #cbd5e1; background: #252e3d; }
+            /* Ôn tập ngẫu nhiên ở giao diện Dark */
+            html.dark .topic-utility-card:not(.test-card),
+            html.dark #grammarPage .topic-utility-card:not(.test-card),
+            html.dark #grammarPage .topic-card-review,
+            html.dark #grammarPage .topic-card.topic-card-review {
+              border: 1px solid rgba(139, 92, 246, 0.3) !important;
+              background: #1e1b38 !important;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+            }
+            html.dark .topic-utility-card:not(.test-card)::before,
+            html.dark #grammarPage .topic-utility-card:not(.test-card)::before,
+            html.dark #grammarPage .topic-card-review::before,
+            html.dark #grammarPage .topic-card.topic-card-review::before {
+              background: #8b5cf6 !important;
+            }
+            html.dark .topic-utility-card:not(.test-card) .utility-title,
+            html.dark #grammarPage .topic-utility-card:not(.test-card) .utility-title,
+            html.dark #grammarPage .topic-card-review .utility-title,
+            html.dark #grammarPage .topic-card.topic-card-review .utility-title,
+            html.dark #grammarPage .topic-card.topic-card-review .topic-card-title {
+              color: #c4b5fd !important;
+            }
+            html.dark .topic-utility-card:not(.test-card) .utility-icon,
+            html.dark #grammarPage .topic-utility-card:not(.test-card) .utility-icon,
+            html.dark #grammarPage .topic-card-review .utility-icon,
+            html.dark #grammarPage .topic-card.topic-card-review .utility-icon,
+            html.dark #grammarPage .topic-card.topic-card-review .topic-card-icon {
+              color: #c4b5fd !important;
+              background: #2d2650 !important;
+              box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+            }
+            html.dark .topic-utility-card:not(.test-card) .utility-description,
+            html.dark #grammarPage .topic-utility-card:not(.test-card) .utility-description,
+            html.dark #grammarPage .topic-card-review .utility-description,
+            html.dark #grammarPage .topic-card.topic-card-review .utility-description,
+            html.dark #grammarPage .topic-card.topic-card-review .topic-card-description {
+              color: #cbd5e1 !important;
+            }
+            html.dark .topic-utility-card:not(.test-card) .utility-description strong,
+            html.dark #grammarPage .topic-utility-card:not(.test-card) .utility-description strong,
+            html.dark #grammarPage .topic-card-review .utility-description strong,
+            html.dark #grammarPage .topic-card.topic-card-review .utility-description strong {
+              color: #f8fafc !important;
+            }
+            html.dark .topic-utility-card:not(.test-card) .utility-footer,
+            html.dark #grammarPage .topic-utility-card:not(.test-card) .utility-footer,
+            html.dark #grammarPage .topic-card-review .utility-footer,
+            html.dark #grammarPage .topic-card.topic-card-review .utility-footer,
+            html.dark #grammarPage .topic-card.topic-card-review .topic-card-footer {
+              border-top-color: rgba(139, 92, 246, 0.2) !important;
+            }
+            html.dark .topic-utility-card:not(.test-card) .choice-pills button,
+            html.dark #grammarPage .topic-utility-card:not(.test-card) .choice-pills button,
+            html.dark #grammarPage .topic-card-review .choice-pills button,
+            html.dark #grammarPage .topic-card.topic-card-review .choice-pills button {
+              border: 1px solid rgba(139, 92, 246, 0.25) !important;
+              background: #252042 !important;
+              color: #cbd5e1 !important;
+            }
+            html.dark .topic-utility-card:not(.test-card) .choice-pills button[aria-pressed="true"],
+            html.dark #grammarPage .topic-utility-card:not(.test-card) .choice-pills button[aria-pressed="true"],
+            html.dark #grammarPage .topic-card-review .choice-pills button[aria-pressed="true"],
+            html.dark #grammarPage .topic-card.topic-card-review .choice-pills button[aria-pressed="true"] {
+              border-color: #6366f1 !important;
+              background: #6366f1 !important;
+              color: #ffffff !important;
+            }
+            html.dark .topic-utility-card:not(.test-card) .practice-button,
+            html.dark #grammarPage .topic-utility-card:not(.test-card) .practice-button,
+            html.dark #grammarPage .topic-card-review .practice-button,
+            html.dark #grammarPage .topic-card.topic-card-review .practice-button,
+            html.dark #grammarPage .topic-card.topic-card-review .action-btn {
+              background: #6366f1 !important;
+              color: #ffffff !important;
+            }
+            html.dark .topic-utility-card:not(.test-card) .practice-button:hover,
+            html.dark #grammarPage .topic-utility-card:not(.test-card) .practice-button:hover,
+            html.dark #grammarPage .topic-card-review .practice-button:hover,
+            html.dark #grammarPage .topic-card.topic-card-review .practice-button:hover,
+            html.dark #grammarPage .topic-card.topic-card-review .action-btn:hover {
+              background: #4f46e5 !important;
+            }
+
+            /* Mini Test ở giao diện Dark */
+            html.dark .topic-utility-card.test-card,
+            html.dark #grammarPage .topic-utility-card.test-card,
+            html.dark #grammarPage .topic-card-mini-test,
+            html.dark #grammarPage .topic-card.topic-card-mini-test {
+              border: 1px solid rgba(234, 179, 8, 0.35) !important;
+              background: #362912 !important;
+              box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25) !important;
+            }
+            html.dark .topic-utility-card.test-card::before,
+            html.dark #grammarPage .topic-utility-card.test-card::before,
+            html.dark #grammarPage .topic-card-mini-test::before,
+            html.dark #grammarPage .topic-card.topic-card-mini-test::before {
+              background: #facc15 !important;
+            }
+            html.dark .topic-utility-card.test-card .utility-title,
+            html.dark #grammarPage .topic-utility-card.test-card .utility-title,
+            html.dark #grammarPage .topic-card-mini-test .utility-title,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .utility-title,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .topic-card-title {
+              color: #facc15 !important;
+            }
+            html.dark .topic-utility-card.test-card .utility-icon,
+            html.dark #grammarPage .topic-utility-card.test-card .utility-icon,
+            html.dark #grammarPage .topic-card-mini-test .utility-icon,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .utility-icon,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .topic-card-icon {
+              color: #facc15 !important;
+              background: #4a3818 !important;
+              box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+            }
+            html.dark .topic-utility-card.test-card .utility-actions .topic-bookmark,
+            html.dark #grammarPage .topic-utility-card.test-card .utility-actions .topic-bookmark,
+            html.dark #grammarPage .topic-card-mini-test .utility-actions .topic-bookmark {
+              background: #4a3818 !important;
+              color: #facc15 !important;
+              border: 1px solid rgba(250, 204, 21, 0.3) !important;
+            }
+            html.dark .topic-utility-card.test-card .utility-actions .topic-bookmark:hover,
+            html.dark #grammarPage .topic-utility-card.test-card .utility-actions .topic-bookmark:hover,
+            html.dark #grammarPage .topic-card-mini-test .utility-actions .topic-bookmark:hover {
+              background: #5c451e !important;
+            }
+            html.dark .topic-utility-card.test-card .utility-actions .topic-exam-badge,
+            html.dark #grammarPage .topic-utility-card.test-card .utility-actions .topic-exam-badge,
+            html.dark #grammarPage .topic-card-mini-test .utility-actions .topic-exam-badge {
+              background: #241a0b !important;
+              color: #facc15 !important;
+              border: 1px solid rgba(250, 204, 21, 0.3) !important;
+            }
+            html.dark .topic-utility-card.test-card .utility-description,
+            html.dark #grammarPage .topic-utility-card.test-card .utility-description,
+            html.dark #grammarPage .topic-card-mini-test .utility-description,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .utility-description,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .topic-card-description {
+              color: #cbd5e1 !important;
+            }
+            html.dark .topic-utility-card.test-card .utility-description strong,
+            html.dark #grammarPage .topic-utility-card.test-card .utility-description strong,
+            html.dark #grammarPage .topic-card-mini-test .utility-description strong,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .utility-description strong {
+              color: #f8fafc !important;
+            }
+            html.dark .topic-utility-card.test-card .utility-footer,
+            html.dark #grammarPage .topic-utility-card.test-card .utility-footer,
+            html.dark #grammarPage .topic-card-mini-test .utility-footer,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .utility-footer,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .topic-card-footer {
+              border-top-color: rgba(234, 179, 8, 0.2) !important;
+            }
+            html.dark .topic-utility-card.test-card .choice-pills button,
+            html.dark #grammarPage .topic-utility-card.test-card .choice-pills button,
+            html.dark #grammarPage .topic-card-mini-test .choice-pills button,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .choice-pills button {
+              border: 1px solid rgba(250, 204, 21, 0.25) !important;
+              background: #271d0d !important;
+              color: #fef08a !important;
+            }
+            html.dark .topic-utility-card.test-card .choice-pills button[aria-pressed="true"],
+            html.dark #grammarPage .topic-utility-card.test-card .choice-pills button[aria-pressed="true"],
+            html.dark #grammarPage .topic-card-mini-test .choice-pills button[aria-pressed="true"],
+            html.dark #grammarPage .topic-card.topic-card-mini-test .choice-pills button[aria-pressed="true"] {
+              border-color: #fbbf24 !important;
+              background: #fbbf24 !important;
+              color: #451a03 !important;
+              font-weight: 700 !important;
+            }
+            html.dark .topic-utility-card.test-card .choice-pills button[aria-pressed="true"] i,
+            html.dark #grammarPage .topic-utility-card.test-card .choice-pills button[aria-pressed="true"] i,
+            html.dark #grammarPage .topic-card-mini-test .choice-pills button[aria-pressed="true"] i,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .choice-pills button[aria-pressed="true"] i {
+              color: #451a03 !important;
+            }
+            html.dark .topic-utility-card.test-card .practice-button,
+            html.dark #grammarPage .topic-utility-card.test-card .practice-button,
+            html.dark #grammarPage .topic-card-mini-test .practice-button,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .practice-button,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .action-btn {
+              background: #fbbf24 !important;
+              color: #451a03 !important;
+              font-weight: 700 !important;
+              border: none !important;
+            }
+            html.dark .topic-utility-card.test-card .practice-button:hover,
+            html.dark #grammarPage .topic-utility-card.test-card .practice-button:hover,
+            html.dark #grammarPage .topic-card-mini-test .practice-button:hover,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .practice-button:hover,
+            html.dark #grammarPage .topic-card.topic-card-mini-test .action-btn:hover {
+              background: #f59e0b !important;
+            }
             html.dark #emptyState { border-color: rgba(148,163,184,.3); color: #aab4c5; background: rgba(28,36,49,.8); }
             html.dark .practice-page.is-regular-practice .practice-session-header {
               border-color: rgba(148, 163, 184, .2);
@@ -2984,6 +3187,31 @@
         background: rgba(28, 36, 49, .96);
       }
       html.dark #grammarPage .topic-card::before { background: #8b76ff; }
+
+      /* Mức độ chính xác: < 50% hiển thị màu đỏ (cả sáng và tối) */
+      #grammarPage .topic-card.is-weak::before {
+        background: #ef4444 !important;
+      }
+      .topic-card.is-weak .topic-progress-heading strong,
+      .topic-card .topic-progress-heading strong.text-weak {
+        color: #ef4444 !important;
+      }
+      .topic-card.is-weak .topic-progress-fill,
+      .topic-card .topic-progress-fill.fill-weak {
+        background: #ef4444 !important;
+      }
+
+      html.dark #grammarPage .topic-card.is-weak::before {
+        background: #ef4444 !important;
+      }
+      html.dark .topic-card.is-weak .topic-progress-heading strong,
+      html.dark .topic-card .topic-progress-heading strong.text-weak {
+        color: #ef4444 !important;
+      }
+      html.dark .topic-card.is-weak .topic-progress-fill,
+      html.dark .topic-card .topic-progress-fill.fill-weak {
+        background: #ef4444 !important;
+      }
 
       .filter-backdrop[hidden], .filter-drawer[hidden] { display: none; }
       .filter-backdrop {

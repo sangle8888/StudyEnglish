@@ -259,10 +259,11 @@
                           var correct = stat?.Correct ?? 0;
                           var wrong = stat?.Wrong ?? 0;
                           var topicAcc = done > 0 ? (int)Math.Round((double)(correct * 100) / done) : 0;
+                          var isWeak = done > 0 && topicAcc < 50;
                           var totalQ = topic.Questions.Count;
                           var answeredInTopic = topic.Questions.Count(q => Model.State.AnsweredQuestions.Contains(q.Id));
 
-                          <article class="topic-card"
+                          <article class="topic-card @(isWeak ? "is-weak" : "")"
                                    data-topic-id="@topic.Id"
                                    data-group="@group.Id"
                                    data-exam="@topic.Exam"
@@ -286,10 +287,10 @@
                             <div class="topic-progress">
                               <div class="topic-progress-heading">
                                 <span>Mức độ chính xác</span>
-                                <strong>@(topicAcc)%</strong>
+                                <strong class="@(isWeak ? "text-weak" : "")">@(topicAcc)%</strong>
                               </div>
                               <div class="topic-progress-track">
-                                <div class="topic-progress-fill" style="width:@(topicAcc)%"></div>
+                                <div class="topic-progress-fill @(isWeak ? "fill-weak" : "")" style="width:@(topicAcc)%"></div>
                               </div>
                             </div>
                             <div class="topic-card-footer">
