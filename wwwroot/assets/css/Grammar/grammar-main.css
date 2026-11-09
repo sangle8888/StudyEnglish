@@ -3153,7 +3153,8 @@
         color: #7657ff;
         background: rgba(118, 87, 255, .13);
       }
-      #grammarPage .topic-card-icon svg { width: 20px; height: 20px; }
+      #grammarPage .topic-card-icon svg,
+      #grammarPage .topic-card-icon i[data-lucide] { width: 20px; height: 20px; }
       html.dark #grammarPage .topic-card-icon { color: #c4b5fd; background: #343052; }
       #grammarPage .topic-card {
         position: relative;

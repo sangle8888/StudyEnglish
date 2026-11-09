@@ -11,7 +11,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label asp-for="CategoryId" class="form-label"></label>
+                    <label asp-for="CategoryId" class="form-label fw-semibold"></label>
                     <select asp-for="CategoryId" class="form-select">
                         @foreach (var cat in Model.Categories)
                         {
@@ -23,34 +23,122 @@
                     <span asp-validation-for="CategoryId" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">
-                    <label asp-for="Title" class="form-label"></label>
+                    <label asp-for="Title" class="form-label fw-semibold"></label>
                     <input asp-for="Title" class="form-control" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
-                <div class="col-md-4">
-                    <label asp-for="ExamLabel" class="form-label"></label>
-                    <select asp-for="ExamLabel" class="form-select">
-                        <option value="TOEIC · VSTEP">TOEIC · VSTEP</option>
-                        <option value="TOEIC">TOEIC</option>
-                        <option value="VSTEP">VSTEP</option>
-                    </select>
-                    <span asp-validation-for="ExamLabel" class="text-danger"></span>
+
+                <div class="col-md-6">
+                    <label asp-for="Icon" class="form-label fw-semibold">Biểu tượng (Lucide Icon)</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-white" id="iconPreviewContainer" style="width: 48px; justify-content: center;">
+                            <i id="topicIconPreview" data-lucide="@(string.IsNullOrWhiteSpace(Model.Icon) ? "book-open" : Model.Icon)" style="width: 20px; height: 20px;"></i>
+                        </span>
+                        <input asp-for="Icon" class="form-control" id="topicIconInput" placeholder="vd: book-open, clock, calendar, zap..." autocomplete="off" />
+                    </div>
+                    <span asp-validation-for="Icon" class="text-danger"></span>
+                    <div class="mt-2">
+                        <div class="small text-muted mb-1 fw-semibold">Gợi ý biểu tượng thường dùng (bấm để chọn):</div>
+                        <div class="d-flex flex-wrap gap-1" id="topicIconSuggestions"></div>
+                        <div class="small text-muted mt-2">
+                            <i class="fa-solid fa-circle-info me-1"></i>Xem danh sách toàn bộ icon tại <a href="https://lucide.dev/icons" target="_blank" rel="noopener" class="text-decoration-none">lucide.dev/icons</a> (nhập tên icon vào ô phía trên).
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-4">
-                    <label asp-for="SortOrder" class="form-label"></label>
-                    <input asp-for="SortOrder" class="form-control" />
-                </div>
-                <div class="col-md-4 d-flex align-items-end">
-                    <div class="form-check">
-                        <input asp-for="IsActive" class="form-check-input" />
-                        <label asp-for="IsActive" class="form-check-label"></label>
+
+                <div class="col-md-6">
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label asp-for="ExamLabel" class="form-label fw-semibold"></label>
+                            <select asp-for="ExamLabel" class="form-select">
+                                <option value="TOEIC · VSTEP">TOEIC · VSTEP</option>
+                                <option value="TOEIC">TOEIC</option>
+                                <option value="VSTEP">VSTEP</option>
+                            </select>
+                            <span asp-validation-for="ExamLabel" class="text-danger"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label asp-for="SortOrder" class="form-label fw-semibold"></label>
+                            <input asp-for="SortOrder" class="form-control" style="max-width: 140px;" type="number" min="0" />
+                        </div>
+                        <div class="col-sm-6 d-flex align-items-center pt-sm-4">
+                            <div class="form-check mt-sm-2">
+                                <input asp-for="IsActive" class="form-check-input" />
+                                <label asp-for="IsActive" class="form-check-label fw-semibold"></label>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="mt-4 d-flex gap-2">
-                <button type="submit" class="btn btn-primary">Lưu</button>
+            <div class="mt-4 pt-3 border-top d-flex gap-2">
+                <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-check me-1"></i>Lưu</button>
                 <a asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="btn btn-outline-secondary">Huỷ</a>
             </div>
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const input = document.getElementById("topicIconInput");
+            const previewContainer = document.getElementById("iconPreviewContainer");
+            const suggestionsContainer = document.getElementById("topicIconSuggestions");
+
+            const commonIcons = [
+                { name: "book-open", label: "Sách mở (Mặc định)" },
+                { name: "clock", label: "Đồng hồ" },
+                { name: "calendar", label: "Lịch" },
+                { name: "check-circle", label: "Hoàn thành" },
+                { name: "zap", label: "Tia chớp" },
+                { name: "sparkles", label: "Lấp lánh" },
+                { name: "target", label: "Mục tiêu" },
+                { name: "award", label: "Huy hiệu" },
+                { name: "compass", label: "La bàn" },
+                { name: "layers", label: "Cấu trúc" },
+                { name: "puzzle", label: "Mảnh ghép" },
+                { name: "message-square", label: "Hội thoại" },
+                { name: "file-text", label: "Văn bản" },
+                { name: "feather", label: "Ngòi bút" },
+                { name: "flag", label: "Ghi nhớ" },
+                { name: "lightbulb", label: "Mẹo" },
+                { name: "shield-alert", label: "Cảnh báo" },
+                { name: "refresh-cw", label: "Ôn tập" }
+            ];
+
+            function updatePreview(iconName) {
+                const cleanName = (iconName || "book-open").trim().toLowerCase();
+                previewContainer.innerHTML = `<i data-lucide="${cleanName}" style="width: 20px; height: 20px;"></i>`;
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
+            }
+
+            // Render quick selection pills
+            commonIcons.forEach(item => {
+                const btn = document.createElement("button");
+                btn.type = "button";
+                btn.className = "btn btn-sm btn-outline-secondary d-inline-flex align-items-center gap-1 py-1 px-2";
+                btn.title = item.label;
+                btn.innerHTML = `<i data-lucide="${item.name}" style="width: 13px; height: 13px;"></i> <span>${item.name}</span>`;
+                btn.addEventListener("click", function () {
+                    input.value = item.name;
+                    updatePreview(item.name);
+                    input.focus();
+                });
+                suggestionsContainer.appendChild(btn);
+            });
+
+            // Initialize all icons on page
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+
+            // Live preview while typing
+            input.addEventListener("input", function () {
+                updatePreview(this.value);
+            });
+        });
+    </script>
+}

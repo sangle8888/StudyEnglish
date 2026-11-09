@@ -30,6 +30,7 @@ public class GrammarTopicRow
     public int CategoryId { get; set; }
     public string CategoryTitle { get; set; } = "";
     public string Title { get; set; } = "";
+    public string? Icon { get; set; } = "book-open";
     public string ExamLabel { get; set; } = "";
     public int SortOrder { get; set; }
     public bool IsActive { get; set; }
@@ -53,9 +54,9 @@ public class GrammarCategoryFormViewModel
     [Display(Name = "Mô tả")]
     public string? Description { get; set; }
 
-    [Required, StringLength(50)]
-    [Display(Name = "Biểu tượng (Font Awesome)")]
-    public string Icon { get; set; } = "fa-book-open";
+    [StringLength(50)]
+    [Display(Name = "Biểu tượng")]
+    public string? Icon { get; set; } = "fa-book-open";
 
     [Display(Name = "Thứ tự")]
     public int SortOrder { get; set; }
@@ -74,6 +75,10 @@ public class GrammarTopicFormViewModel
     [Required(ErrorMessage = "Tên chủ đề là bắt buộc"), StringLength(200)]
     [Display(Name = "Tên chủ đề")]
     public string Title { get; set; } = "";
+
+    [StringLength(100)]
+    [Display(Name = "Biểu tượng (Lucide Icon)")]
+    public string? Icon { get; set; } = "book-open";
 
     [Required, StringLength(50)]
     [Display(Name = "Kỳ thi")]

@@ -61,6 +61,9 @@ public class GrammarTopic
     [StringLength(500)]
     public string? Description { get; set; }
 
+    [StringLength(100)]
+    public string? Icon { get; set; } = "book-open";
+
     public int SortOrder { get; set; }
 
     public bool IsActive { get; set; } = true;

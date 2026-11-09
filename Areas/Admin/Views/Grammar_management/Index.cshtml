@@ -130,11 +130,11 @@
                                 <a class="btn btn-sm btn-outline-primary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" asp-action="EditCategory" asp-route-id="@c.Id" title="Chỉnh sửa nhóm">
                                     <i class="fa-solid fa-pen-to-square"></i><span>Sửa</span>
                                 </a>
-                                <form method="post" asp-action="DeleteCategory" asp-route-id="@c.Id" class="d-inline m-0 p-0" onsubmit="return confirm('Xoá nhóm này? Tất cả chủ đề bên trong có thể bị ảnh hưởng.');">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" title="Xoá nhóm">
-                                        <i class="fa-solid fa-trash-can"></i><span>Xoá</span>
-                                    </button>
-                                </form>
+                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap btn-delete-category" 
+                                        data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" 
+                                        data-id="@c.Id" data-title="@c.Title" data-count="@c.TopicCount" title="Xoá nhóm">
+                                    <i class="fa-solid fa-trash-can"></i><span>Xoá</span>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -268,7 +268,12 @@
                         </td>
                         <td class="topic-stt text-center fw-semibold text-muted">@(topicStt++)</td>
                         <td class="fw-semibold">
-                            <span class="topic-title-text">@t.Title</span>
+                            <div class="d-inline-flex align-items-center gap-2">
+                                <span class="d-inline-flex align-items-center justify-content-center rounded bg-light border text-primary" style="width: 30px; height: 30px; flex-shrink: 0;" title="Biểu tượng: @(string.IsNullOrWhiteSpace(t.Icon) ? "book-open" : t.Icon)">
+                                    <i data-lucide="@(string.IsNullOrWhiteSpace(t.Icon) ? "book-open" : t.Icon)" style="width: 16px; height: 16px;"></i>
+                                </span>
+                                <span class="topic-title-text">@t.Title</span>
+                            </div>
                         </td>
                         <td>
                             <span class="badge text-bg-light border text-dark">@t.CategoryTitle</span>
@@ -300,11 +305,11 @@
                                 <a class="btn btn-sm btn-outline-primary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" asp-action="EditTopic" asp-route-id="@t.Id" title="Chỉnh sửa chủ đề">
                                     <i class="fa-solid fa-pen-to-square"></i><span>Sửa</span>
                                 </a>
-                                <form method="post" asp-action="DeleteTopic" asp-route-id="@t.Id" class="d-inline m-0 p-0" onsubmit="return confirm('Xoá chủ đề này?');">
-                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" title="Xoá chủ đề">
-                                        <i class="fa-solid fa-trash-can"></i><span>Xoá</span>
-                                    </button>
-                                </form>
+                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap btn-delete-topic" 
+                                        data-bs-toggle="modal" data-bs-target="#deleteTopicModal" 
+                                        data-id="@t.Id" data-title="@t.Title" data-questions="@t.QuestionCount" title="Xoá chủ đề">
+                                    <i class="fa-solid fa-trash-can"></i><span>Xoá</span>
+                                </button>
                             </div>
                         </td>
                     </tr>
@@ -318,6 +323,100 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+
+<!-- Modal xác nhận xoá Nhóm chủ đề -->
+<div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body p-4 text-center">
+                <div class="mb-3">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width: 60px; height: 60px;">
+                        <i class="fa-solid fa-trash-can fs-3"></i>
+                    </span>
+                </div>
+                <h5 class="modal-title fw-bold text-dark mb-2" id="deleteCategoryModalTitle">Xác nhận xoá nhóm chủ đề</h5>
+                <p class="text-secondary small mb-3">Bạn có chắc chắn muốn xoá nhóm chủ đề này không? Các chủ đề thuộc nhóm có thể bị ảnh hưởng.</p>
+
+                <div class="p-3 bg-light rounded-3 text-start mb-3 border">
+                    <div class="small text-muted mb-1">Tên nhóm chủ đề:</div>
+                    <div class="fw-bold text-dark text-break fs-6" id="modalCategoryTitle"></div>
+                    <div class="small text-danger mt-1 fw-semibold" id="modalCategoryWarning"></div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Huỷ</button>
+                    <form id="deleteCategoryForm" method="post" asp-action="DeleteCategory">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" id="deleteCategoryIdInput" value="" />
+                        <button type="submit" class="btn btn-danger rounded-pill px-4">
+                            <i class="fa-solid fa-trash-can me-1"></i>Xác nhận xoá
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xác nhận xoá Chủ đề -->
+<div class="modal fade" id="deleteTopicModal" tabindex="-1" aria-labelledby="deleteTopicModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body p-4 text-center">
+                <div class="mb-3">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width: 60px; height: 60px;">
+                        <i class="fa-solid fa-trash-can fs-3"></i>
+                    </span>
+                </div>
+                <h5 class="modal-title fw-bold text-dark mb-2" id="deleteTopicModalTitle">Xác nhận xoá chủ đề</h5>
+                <p class="text-secondary small mb-3">Bạn có chắc chắn muốn xoá chủ đề này không? Chủ đề sẽ được chuyển sang danh sách ẩn.</p>
+
+                <div class="p-3 bg-light rounded-3 text-start mb-3 border">
+                    <div class="small text-muted mb-1">Tên chủ đề:</div>
+                    <div class="fw-bold text-dark text-break fs-6" id="modalTopicTitle"></div>
+                    <div class="small text-muted mt-1" id="modalTopicQuestions"></div>
+                </div>
+
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Huỷ</button>
+                    <form id="deleteTopicForm" method="post" asp-action="DeleteTopic">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" id="deleteTopicIdInput" value="" />
+                        <button type="submit" class="btn btn-danger rounded-pill px-4">
+                            <i class="fa-solid fa-trash-can me-1"></i>Xác nhận xoá
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xác nhận xoá hàng loạt chủ đề -->
+<div class="modal fade" id="bulkDeleteTopicModal" tabindex="-1" aria-labelledby="bulkDeleteTopicModalTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0 rounded-4">
+            <div class="modal-body p-4 text-center">
+                <div class="mb-3">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width: 60px; height: 60px;">
+                        <i class="fa-solid fa-triangle-exclamation fs-3"></i>
+                    </span>
+                </div>
+                <h5 class="modal-title fw-bold text-dark mb-2" id="bulkDeleteTopicModalTitle">Xác nhận xoá các chủ đề đã chọn</h5>
+                <p class="text-secondary small mb-3">
+                    Bạn đang chọn <strong id="modalBulkDeleteTopicCount" class="text-danger">0</strong> chủ đề. Bạn có chắc chắn muốn xoá tất cả các chủ đề này không?
+                </p>
+
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Huỷ</button>
+                    <button type="button" class="btn btn-danger rounded-pill px-4" id="btnConfirmBulkDeleteTopics">
+                        <i class="fa-solid fa-trash-can me-1"></i>Xác nhận xoá
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -565,13 +664,98 @@
         if (btnBulkHideTopics) {
             btnBulkHideTopics.addEventListener("click", () => executeBulkTopicAction("hide", "Ẩn các chủ đề đã chọn?"));
         }
+
+        // ==========================================
+        // 4. XỬ LÝ CÁC MODAL XOÁ
+        // ==========================================
+        // Modal xoá nhóm chủ đề
+        const deleteCategoryModalEl = document.getElementById("deleteCategoryModal");
+        if (deleteCategoryModalEl) {
+            deleteCategoryModalEl.addEventListener("show.bs.modal", function (event) {
+                const btn = event.relatedTarget || document.activeElement;
+                if (btn && btn.classList && btn.classList.contains("btn-delete-category")) {
+                    const id = btn.getAttribute("data-id");
+                    const title = btn.getAttribute("data-title") || "";
+                    const count = parseInt(btn.getAttribute("data-count") || "0", 10);
+                    
+                    const titleEl = document.getElementById("modalCategoryTitle");
+                    if (titleEl) titleEl.textContent = title;
+
+                    const warningEl = document.getElementById("modalCategoryWarning");
+                    if (warningEl) {
+                        warningEl.textContent = count > 0 
+                            ? `Chú ý: Nhóm này hiện đang chứa ${count} chủ đề bên trong.` 
+                            : "";
+                    }
+
+                    const inputId = document.getElementById("deleteCategoryIdInput");
+                    if (inputId) inputId.value = id;
+                }
+            });
+        }
+
+        // Modal xoá chủ đề đơn
+        const deleteTopicModalEl = document.getElementById("deleteTopicModal");
+        if (deleteTopicModalEl) {
+            deleteTopicModalEl.addEventListener("show.bs.modal", function (event) {
+                const btn = event.relatedTarget || document.activeElement;
+                if (btn && btn.classList && btn.classList.contains("btn-delete-topic")) {
+                    const id = btn.getAttribute("data-id");
+                    const title = btn.getAttribute("data-title") || "";
+                    const questions = parseInt(btn.getAttribute("data-questions") || "0", 10);
+
+                    const titleEl = document.getElementById("modalTopicTitle");
+                    if (titleEl) titleEl.textContent = title;
+
+                    const questionsEl = document.getElementById("modalTopicQuestions");
+                    if (questionsEl) {
+                        questionsEl.textContent = `Chủ đề này có ${questions} câu hỏi.`;
+                    }
+
+                    const inputId = document.getElementById("deleteTopicIdInput");
+                    if (inputId) inputId.value = id;
+                }
+            });
+        }
+
+        // Modal xoá nhiều chủ đề
+        const bulkDeleteTopicModalEl = document.getElementById("bulkDeleteTopicModal");
+        const bulkDeleteTopicModal = bulkDeleteTopicModalEl ? new bootstrap.Modal(bulkDeleteTopicModalEl) : null;
+        const modalBulkDeleteTopicCount = document.getElementById("modalBulkDeleteTopicCount");
+        const btnConfirmBulkDeleteTopics = document.getElementById("btnConfirmBulkDeleteTopics");
+
         if (btnBulkDeleteTopics) {
-            btnBulkDeleteTopics.addEventListener("click", () => executeBulkTopicAction("delete", "Bạn có chắc chắn muốn xoá các chủ đề đã chọn?"));
+            btnBulkDeleteTopics.addEventListener("click", function () {
+                const ids = getSelectedTopicIds();
+                if (ids.length === 0) {
+                    alert("Vui lòng chọn ít nhất một chủ đề.");
+                    return;
+                }
+                if (modalBulkDeleteTopicCount) {
+                    modalBulkDeleteTopicCount.textContent = ids.length;
+                }
+                if (bulkDeleteTopicModal) {
+                    bulkDeleteTopicModal.show();
+                }
+            });
+        }
+
+        if (btnConfirmBulkDeleteTopics) {
+            btnConfirmBulkDeleteTopics.addEventListener("click", function () {
+                if (bulkDeleteTopicModal) {
+                    bulkDeleteTopicModal.hide();
+                }
+                executeBulkTopicAction("delete");
+            });
         }
 
         // Khởi tạo chạy lọc nếu trang nạp có sẵn selectedCategoryId
         if (topicCategoryFilter && topicCategoryFilter.value) {
             filterTopics();
+        }
+
+        if (window.lucide) {
+            lucide.createIcons();
         }
     });
 </script>

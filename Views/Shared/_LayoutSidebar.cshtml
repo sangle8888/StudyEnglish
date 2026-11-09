@@ -386,6 +386,18 @@
 
     <!-- Script chung của Sidebar -->
     <script src="~/assets/js/LayoutSidebar/sidebar.js" asp-append-version="true"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        if (window.lucide) {
+          lucide.createIcons();
+        }
+      });
+    </script>
   </body>
 </html>

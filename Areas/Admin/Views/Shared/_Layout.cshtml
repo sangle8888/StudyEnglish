@@ -242,6 +242,18 @@
       setInterval(updateAllLiveClocks, 1000);
     })();
   </script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
+  </script>
   @await RenderSectionAsync("Scripts", required: false)
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    });
+  </script>
 </body>
 </html>

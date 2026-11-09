@@ -244,6 +244,15 @@ try
                 ALTER TABLE dbo.QuestionReports ADD CreatedAt DATETIME2 NOT NULL CONSTRAINT DF_QuestionReports_CreatedAt DEFAULT (GETUTCDATE());
             END
         END
+
+        IF EXISTS (SELECT 1 FROM sys.tables WHERE name = 'GrammarTopics')
+        BEGIN
+            IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.GrammarTopics') AND name = 'Icon')
+            BEGIN
+                ALTER TABLE dbo.GrammarTopics ADD Icon NVARCHAR(100) NULL CONSTRAINT DF_GrammarTopics_Icon DEFAULT ('book-open');
+            END
+            EXEC(N'UPDATE dbo.GrammarTopics SET Icon = ''book-open'' WHERE Icon IS NULL OR Icon = ''''');
+        END
     ");
 }
 catch

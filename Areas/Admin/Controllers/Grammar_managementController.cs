@@ -76,6 +76,7 @@ public sealed class Grammar_managementController : Controller
                 CategoryId = t.CategoryId,
                 CategoryTitle = t.Category.Title,
                 Title = t.Title,
+                Icon = string.IsNullOrWhiteSpace(t.Icon) ? "book-open" : t.Icon,
                 ExamLabel = t.TopicExams.Any() ? string.Join(" · ", t.TopicExams.Select(te => te.Exam.Code)) : "TOEIC · VSTEP",
                 SortOrder = t.SortOrder,
                 IsActive = t.IsActive,
@@ -110,7 +111,7 @@ public sealed class Grammar_managementController : Controller
             Code = model.Slug.Trim(),
             Title = model.Title.Trim(),
             Description = model.Description?.Trim(),
-            Icon = model.Icon.Trim(),
+            Icon = string.IsNullOrWhiteSpace(model.Icon) ? "book-open" : model.Icon.Trim(),
             SortOrder = model.SortOrder,
             IsActive = model.IsActive,
             CreatedAt = DateTime.UtcNow
@@ -157,7 +158,10 @@ public sealed class Grammar_managementController : Controller
         c.Code = model.Slug.Trim();
         c.Title = model.Title.Trim();
         c.Description = model.Description?.Trim();
-        c.Icon = model.Icon.Trim();
+        if (!string.IsNullOrWhiteSpace(model.Icon))
+        {
+            c.Icon = model.Icon.Trim();
+        }
         c.SortOrder = model.SortOrder;
         c.IsActive = model.IsActive;
         c.UpdatedAt = DateTime.UtcNow;
@@ -302,6 +306,7 @@ public sealed class Grammar_managementController : Controller
             CategoryId = model.CategoryId,
             Title = model.Title.Trim(),
             Slug = GenerateSlug(model.Title),
+            Icon = string.IsNullOrWhiteSpace(model.Icon) ? "book-open" : model.Icon.Trim().ToLowerInvariant(),
             SortOrder = model.SortOrder,
             IsActive = model.IsActive,
             CreatedAt = DateTime.UtcNow
@@ -330,6 +335,7 @@ public sealed class Grammar_managementController : Controller
             Id = t.TopicId,
             CategoryId = t.CategoryId,
             Title = t.Title,
+            Icon = string.IsNullOrWhiteSpace(t.Icon) ? "book-open" : t.Icon,
             ExamLabel = examLabel,
             SortOrder = t.SortOrder,
             IsActive = t.IsActive,
@@ -354,6 +360,7 @@ public sealed class Grammar_managementController : Controller
 
         t.CategoryId = model.CategoryId;
         t.Title = model.Title.Trim();
+        t.Icon = string.IsNullOrWhiteSpace(model.Icon) ? "book-open" : model.Icon.Trim().ToLowerInvariant();
         t.SortOrder = model.SortOrder;
         t.IsActive = model.IsActive;
         t.UpdatedAt = DateTime.UtcNow;
@@ -450,7 +457,7 @@ public sealed class Grammar_managementController : Controller
         var selected = categoryId ?? categories.FirstOrDefault()?.CategoryId ?? 0;
         var next = (await _context.GrammarTopics.Where(t => t.CategoryId == selected)
             .MaxAsync(t => (int?)t.SortOrder) ?? 0) + 1;
-        return new GrammarTopicFormViewModel { CategoryId = selected, SortOrder = next, Categories = categories };
+        return new GrammarTopicFormViewModel { CategoryId = selected, SortOrder = next, Icon = "book-open", Categories = categories };
     }
 
     private Task<List<GrammarCategory>> LoadCategoriesAsync() =>

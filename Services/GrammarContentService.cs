@@ -47,6 +47,7 @@ public sealed class GrammarTopicDto
     public string Id { get; set; } = "";
     public int DbId { get; set; }
     public string Title { get; set; } = "";
+    public string Icon { get; set; } = "book-open";
     public string Exam { get; set; } = "";
     public GrammarTheoryDto? Theory { get; set; }
     public List<GrammarQuestionDto> Questions { get; set; } = [];
@@ -204,6 +205,7 @@ public sealed class GrammarContentService
                     Id = $"t{t.TopicId}",
                     DbId = t.TopicId,
                     Title = t.Title,
+                    Icon = string.IsNullOrWhiteSpace(t.Icon) ? "book-open" : t.Icon,
                     Exam = examLabel,
                     Theory = topicTheory
                 };
