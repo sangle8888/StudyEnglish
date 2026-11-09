@@ -4,102 +4,575 @@
 }
 
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
-    <h1 class="h3 mb-0">Quản lý Ngữ pháp</h1>
+    <div>
+        <h1 class="h3 mb-1">Quản lý Ngữ pháp</h1>
+        <p class="text-muted small mb-0">Quản lý cấu trúc danh mục, chủ đề ngữ pháp và hệ thống câu hỏi luyện tập.</p>
+    </div>
     <div class="d-flex gap-2">
         <a class="btn btn-outline-secondary" asp-action="Reports">
-            Báo lỗi câu hỏi
+            <i class="fa-regular fa-flag me-1"></i>Báo lỗi câu hỏi
             @if (Model.OpenReports > 0)
             {
                 <span class="badge text-bg-danger ms-1">@Model.OpenReports</span>
             }
         </a>
-        <a class="btn btn-outline-primary" asp-action="CreateCategory">+ Nhóm chủ đề</a>
-        <a class="btn btn-primary" asp-action="CreateTopic" asp-route-categoryId="@Model.SelectedCategoryId">+ Chủ đề</a>
+        <a class="btn btn-outline-primary" asp-action="CreateCategory">
+            <i class="fa-solid fa-plus me-1"></i>Nhóm chủ đề
+        </a>
+        <a class="btn btn-primary" asp-action="CreateTopic" asp-route-categoryId="@Model.SelectedCategoryId">
+            <i class="fa-solid fa-plus me-1"></i>Chủ đề
+        </a>
     </div>
 </div>
 
 @if (TempData["Success"] is string success)
 {
-    <div class="alert alert-success" role="alert">@success</div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fa-solid fa-circle-check me-2"></i>@success
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+    </div>
 }
 
+<div id="indexAlertContainer"></div>
+
 <div class="row g-3 mb-4">
-    <div class="col-md-4"><div class="card shadow-sm"><div class="card-body"><div class="text-muted">Nhóm chủ đề</div><div class="display-6">@Model.Categories.Count</div></div></div></div>
-    <div class="col-md-4"><div class="card shadow-sm"><div class="card-body"><div class="text-muted">Chủ đề</div><div class="display-6">@Model.TotalTopics</div></div></div></div>
-    <div class="col-md-4"><div class="card shadow-sm"><div class="card-body"><div class="text-muted">Câu hỏi</div><div class="display-6">@Model.TotalQuestions</div></div></div></div>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 border-start border-primary border-4">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase fw-bold">Nhóm chủ đề</div>
+                <div class="display-6 fw-bold text-primary">@Model.Categories.Count</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 border-start border-success border-4">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase fw-bold">Chủ đề</div>
+                <div class="display-6 fw-bold text-success">@Model.TotalTopics</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 border-start border-info border-4">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase fw-bold">Câu hỏi</div>
+                <div class="display-6 fw-bold text-info">@Model.TotalQuestions</div>
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- [BẢNG 1] NHÓM CHỦ ĐỀ -->
 <div class="card shadow-sm mb-4">
-    <div class="card-header fw-semibold">Nhóm chủ đề</div>
+    <div class="card-header bg-white py-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-primary"><i class="fa-solid fa-layer-group me-1"></i>Nhóm chủ đề</span>
+                <span id="categoryCountBadge" class="badge bg-light text-dark border">@Model.Categories.Count nhóm</span>
+            </div>
+            <!-- Bộ lọc tìm kiếm nhóm chủ đề -->
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <div class="input-group input-group-sm" style="min-width: 220px;">
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                    <input type="text" id="categorySearchInput" class="form-control" placeholder="Tìm kiếm nhóm chủ đề..." />
+                </div>
+                <select id="categoryStatusFilter" class="form-select form-select-sm" style="width: 140px;">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="active">Hiển thị</option>
+                    <option value="inactive">Ẩn</option>
+                </select>
+                <button type="button" id="btnResetCategoryFilter" class="btn btn-sm btn-outline-secondary" title="Đặt lại bộ lọc nhóm">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </button>
+            </div>
+        </div>
+    </div>
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead>
-                <tr><th>#</th><th>Tiêu đề</th><th>Mã</th><th>Chủ đề</th><th>Trạng thái</th><th class="text-end">Thao tác</th></tr>
+        <table class="table table-hover align-middle mb-0" id="categoryTable">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 60px;" class="text-center">STT</th>
+                    <th>Tiêu đề</th>
+                    <th class="text-center" style="width: 130px;">Số chủ đề</th>
+                    <th style="width: 130px;">Trạng thái</th>
+                    <th class="text-end text-nowrap" style="width: 140px;">Thao tác</th>
+                </tr>
             </thead>
             <tbody>
+                @{ int catStt = 1; }
                 @foreach (var c in Model.Categories)
                 {
-                    <tr class="@(Model.SelectedCategoryId == c.Id ? "table-active" : "")">
-                        <td>@c.SortOrder</td>
-                        <td><a asp-action="Index" asp-route-categoryId="@c.Id" class="fw-semibold text-decoration-none">@c.Title</a></td>
-                        <td><code>@c.Slug</code></td>
-                        <td>@c.TopicCount</td>
-                        <td>@if (c.IsActive) { <span class="badge text-bg-success">Hiển thị</span> } else { <span class="badge text-bg-secondary">Ẩn</span> }</td>
-                        <td class="text-end">
-                            <a class="btn btn-sm btn-outline-primary" asp-action="EditCategory" asp-route-id="@c.Id">Sửa</a>
-                            <form method="post" asp-action="DeleteCategory" asp-route-id="@c.Id" class="d-inline" onsubmit="return confirm('Xoá nhóm này?');">
-                                <button type="submit" class="btn btn-sm btn-outline-danger">Xoá</button>
-                            </form>
+                    <tr class="category-row @(Model.SelectedCategoryId == c.Id ? "table-active" : "")"
+                        data-id="@c.Id"
+                        data-title="@c.Title.ToLower()"
+                        data-status="@(c.IsActive ? "active" : "inactive")">
+                        <td class="category-stt text-center fw-semibold text-muted">@(catStt++)</td>
+                        <td>
+                            <a asp-action="Index" asp-route-categoryId="@(Model.SelectedCategoryId == c.Id ? null : c.Id)" class="fw-semibold text-decoration-none text-dark hover-primary" title="@(Model.SelectedCategoryId == c.Id ? "Bỏ lọc theo nhóm này" : "Lọc các chủ đề thuộc nhóm này")">
+                                @c.Title
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge rounded-pill bg-light text-dark border">@c.TopicCount chủ đề</span>
+                        </td>
+                        <td class="category-status-cell">
+                            @if (c.IsActive)
+                            {
+                                <span class="badge text-bg-success">Hiển thị</span>
+                            }
+                            else
+                            {
+                                <span class="badge text-bg-secondary">Ẩn</span>
+                            }
+                        </td>
+                        <td class="text-end text-nowrap">
+                            <div class="d-inline-flex align-items-center justify-content-end" style="gap: 6px;">
+                                <a class="btn btn-sm btn-outline-primary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" asp-action="EditCategory" asp-route-id="@c.Id" title="Chỉnh sửa nhóm">
+                                    <i class="fa-solid fa-pen-to-square"></i><span>Sửa</span>
+                                </a>
+                                <form method="post" asp-action="DeleteCategory" asp-route-id="@c.Id" class="d-inline m-0 p-0" onsubmit="return confirm('Xoá nhóm này? Tất cả chủ đề bên trong có thể bị ảnh hưởng.');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" title="Xoá nhóm">
+                                        <i class="fa-solid fa-trash-can"></i><span>Xoá</span>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 }
                 @if (Model.Categories.Count == 0)
                 {
-                    <tr><td colspan="6" class="text-center text-muted py-4">Chưa có nhóm chủ đề nào.</td></tr>
+                    <tr id="emptyCategoryRow"><td colspan="5" class="text-center text-muted py-4">Chưa có nhóm chủ đề nào.</td></tr>
                 }
+                <tr id="noCategoryMatchRow" style="display: none;">
+                    <td colspan="5" class="text-center text-muted py-4"><i class="fa-solid fa-filter-circle-xmark me-2"></i>Không tìm thấy nhóm chủ đề nào phù hợp.</td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
 
+<!-- [BẢNG 2] CHỦ ĐỀ -->
 <div class="card shadow-sm">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <span class="fw-semibold">Chủ đề @(Model.SelectedCategoryId.HasValue ? "(đang lọc theo nhóm)" : "(tất cả)")</span>
-        @if (Model.SelectedCategoryId.HasValue)
-        {
-            <a class="btn btn-sm btn-link" asp-action="Index">Bỏ lọc</a>
-        }
+    <div class="card-header bg-white py-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-success"><i class="fa-solid fa-book-bookmark me-1"></i>Chủ đề</span>
+                <span id="topicGroupFilterLabel" class="text-muted small">
+                    @(Model.SelectedCategoryId.HasValue ? "(đang lọc theo nhóm)" : "(tất cả)")
+                </span>
+                <span id="topicCountBadge" class="badge bg-light text-dark border ms-1">@Model.Topics.Count chủ đề</span>
+            </div>
+            @if (Model.SelectedCategoryId.HasValue)
+            {
+                <a class="btn btn-sm btn-outline-secondary" asp-action="Index">
+                    <i class="fa-solid fa-xmark me-1"></i>Bỏ lọc nhóm URL
+                </a>
+            }
+        </div>
     </div>
+
+    <!-- Bộ lọc & tìm kiếm chủ đề -->
+    <div class="p-3 border-bottom bg-light bg-opacity-50">
+        <div class="row g-2 align-items-center">
+            <div class="col-lg-4 col-md-5">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                    <input type="text" id="topicSearchInput" class="form-control" placeholder="Tìm kiếm tên chủ đề, nhóm, kỳ thi..." />
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <select id="topicCategoryFilter" class="form-select form-select-sm">
+                    <option value="">-- Tất cả nhóm chủ đề --</option>
+                    @foreach (var c in Model.Categories)
+                    {
+                        <!option value="@c.Id" @(Model.SelectedCategoryId == c.Id ? "selected" : "")>@c.Title@(!c.IsActive ? " (Ẩn)" : "")</!option>
+                    }
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <select id="topicExamFilter" class="form-select form-select-sm">
+                    <option value="">-- Tất cả kỳ thi --</option>
+                    <option value="TOEIC">TOEIC</option>
+                    <option value="VSTEP">VSTEP</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <select id="topicStatusFilter" class="form-select form-select-sm">
+                    <option value="">-- Tất cả trạng thái --</option>
+                    <option value="active">Hiển thị</option>
+                    <option value="inactive">Ẩn</option>
+                </select>
+            </div>
+            <div class="col-lg-1 col-md-12">
+                <button type="button" id="btnResetTopicFilter" class="btn btn-sm btn-outline-secondary w-100" title="Đặt lại bộ lọc">
+                    <i class="fa-solid fa-rotate-left"></i>
+                </button>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top small text-muted">
+            <span>Đang hiển thị <strong id="visibleTopicCount" class="text-success">@Model.Topics.Count</strong> trên tổng số <strong>@Model.Topics.Count</strong> chủ đề</span>
+        </div>
+    </div>
+
+    <!-- Thanh thao tác hàng loạt cho các chủ đề có dấu tích chọn -->
+    <div id="bulkTopicActionBar" class="alert alert-info py-2 px-3 mx-3 mt-3 mb-0 d-flex align-items-center justify-content-between flex-wrap gap-2 shadow-sm" style="display: none !important;">
+        <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-circle-check text-primary fs-5"></i>
+            <span>Đã chọn <strong id="selectedTopicsBadge" class="text-primary">0</strong> chủ đề</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-sm btn-success rounded-pill px-3" id="btnBulkShowTopics">
+                <i class="fa-solid fa-eye me-1"></i>Hiện mục chọn
+            </button>
+            <button type="button" class="btn btn-sm btn-warning text-dark rounded-pill px-3" id="btnBulkHideTopics">
+                <i class="fa-solid fa-eye-slash me-1"></i>Ẩn mục chọn
+            </button>
+            <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" id="btnBulkDeleteTopics">
+                <i class="fa-solid fa-trash-can me-1"></i>Xoá mục chọn
+            </button>
+            <button type="button" class="btn btn-sm btn-link text-decoration-none text-muted" id="btnClearTopicSelection">
+                Bỏ chọn
+            </button>
+        </div>
+    </div>
+
     <div class="table-responsive">
-        <table class="table table-hover align-middle mb-0">
-            <thead>
-                <tr><th>#</th><th>Chủ đề</th><th>Nhóm</th><th>Kỳ thi</th><th>Câu hỏi</th><th>Trạng thái</th><th class="text-end">Thao tác</th></tr>
+        <table class="table table-hover align-middle mb-0" id="topicTable">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 40px;" class="text-center">
+                        <input type="checkbox" id="checkAllTopics" class="form-check-input" title="Chọn tất cả">
+                    </th>
+                    <th style="width: 60px;" class="text-center">STT</th>
+                    <th>Chủ đề</th>
+                    <th>Nhóm</th>
+                    <th style="width: 140px;">Kỳ thi</th>
+                    <th class="text-center" style="width: 110px;">Câu hỏi</th>
+                    <th style="width: 120px;">Trạng thái</th>
+                    <th class="text-end text-nowrap" style="width: 360px;">Thao tác</th>
+                </tr>
             </thead>
             <tbody>
+                @{ int topicStt = 1; }
                 @foreach (var t in Model.Topics)
                 {
-                    <tr>
-                        <td>@t.SortOrder</td>
-                        <td class="fw-semibold">@t.Title</td>
-                        <td>@t.CategoryTitle</td>
-                        <td>@t.ExamLabel</td>
-                        <td>@t.QuestionCount</td>
-                        <td>@if (t.IsActive) { <span class="badge text-bg-success">Hiển thị</span> } else { <span class="badge text-bg-secondary">Ẩn</span> }</td>
-                        <td class="text-end">
-                            <a class="btn btn-sm btn-outline-secondary" asp-action="EditTheory" asp-route-topicId="@t.Id">Lý thuyết</a>
-                            <a class="btn btn-sm btn-outline-secondary" asp-action="Questions" asp-route-topicId="@t.Id">Câu hỏi</a>
-                            <a class="btn btn-sm btn-outline-primary" asp-action="EditTopic" asp-route-id="@t.Id">Sửa</a>
-                            <form method="post" asp-action="DeleteTopic" asp-route-id="@t.Id" class="d-inline" onsubmit="return confirm('Xoá chủ đề này?');">
-                                <button type="submit" class="btn btn-sm btn-outline-danger">Xoá</button>
-                            </form>
+                    <tr class="topic-row"
+                        data-id="@t.Id"
+                        data-title="@t.Title.ToLower()"
+                        data-category-id="@t.CategoryId"
+                        data-category="@t.CategoryTitle.ToLower()"
+                        data-exam="@t.ExamLabel.ToLower()"
+                        data-status="@(t.IsActive ? "active" : "inactive")">
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input topic-row-checkbox" value="@t.Id">
+                        </td>
+                        <td class="topic-stt text-center fw-semibold text-muted">@(topicStt++)</td>
+                        <td class="fw-semibold">
+                            <span class="topic-title-text">@t.Title</span>
+                        </td>
+                        <td>
+                            <span class="badge text-bg-light border text-dark">@t.CategoryTitle</span>
+                        </td>
+                        <td>
+                            <span class="small text-secondary">@t.ExamLabel</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge rounded-pill bg-light text-primary border">@t.QuestionCount câu</span>
+                        </td>
+                        <td class="topic-status-cell">
+                            @if (t.IsActive)
+                            {
+                                <span class="badge text-bg-success"><i class="fa-solid fa-circle-check me-1"></i>Hiển thị</span>
+                            }
+                            else
+                            {
+                                <span class="badge text-bg-secondary"><i class="fa-solid fa-eye-slash me-1"></i>Ẩn</span>
+                            }
+                        </td>
+                        <td class="text-end text-nowrap">
+                            <div class="d-inline-flex align-items-center justify-content-end" style="gap: 6px;">
+                                <a class="btn btn-sm btn-outline-secondary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" asp-action="EditTheory" asp-route-topicId="@t.Id" title="Quản lý lý thuyết">
+                                    <i class="fa-solid fa-book-open"></i><span>Lý thuyết</span>
+                                </a>
+                                <a class="btn btn-sm btn-outline-secondary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" asp-action="Questions" asp-route-topicId="@t.Id" title="Quản lý câu hỏi">
+                                    <i class="fa-solid fa-list-check"></i><span>Câu hỏi</span>
+                                </a>
+                                <a class="btn btn-sm btn-outline-primary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" asp-action="EditTopic" asp-route-id="@t.Id" title="Chỉnh sửa chủ đề">
+                                    <i class="fa-solid fa-pen-to-square"></i><span>Sửa</span>
+                                </a>
+                                <form method="post" asp-action="DeleteTopic" asp-route-id="@t.Id" class="d-inline m-0 p-0" onsubmit="return confirm('Xoá chủ đề này?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" title="Xoá chủ đề">
+                                        <i class="fa-solid fa-trash-can"></i><span>Xoá</span>
+                                    </button>
+                                </form>
+                            </div>
                         </td>
                     </tr>
                 }
                 @if (Model.Topics.Count == 0)
                 {
-                    <tr><td colspan="7" class="text-center text-muted py-4">Chưa có chủ đề nào.</td></tr>
+                    <tr id="emptyTopicRow"><td colspan="8" class="text-center text-muted py-4">Chưa có chủ đề nào.</td></tr>
                 }
+                <tr id="noTopicMatchRow" style="display: none;">
+                    <td colspan="8" class="text-center text-muted py-4"><i class="fa-solid fa-filter-circle-xmark me-2"></i>Không tìm thấy chủ đề nào phù hợp với bộ lọc.</td>
+                </tr>
             </tbody>
         </table>
     </div>
 </div>
+
+<form id="antiforgeryForm" hidden>@Html.AntiForgeryToken()</form>
+
+@section Scripts {
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const token = document.querySelector('#antiforgeryForm input[name="__RequestVerificationToken"]')?.value || "";
+
+        // ==========================================
+        // 1. BỘ LỌC & TÌM KIẾM NHÓM CHỦ ĐỀ
+        // ==========================================
+        const categorySearchInput = document.getElementById("categorySearchInput");
+        const categoryStatusFilter = document.getElementById("categoryStatusFilter");
+        const btnResetCategoryFilter = document.getElementById("btnResetCategoryFilter");
+        const categoryRows = Array.from(document.querySelectorAll("#categoryTable tbody tr.category-row"));
+        const noCategoryMatchRow = document.getElementById("noCategoryMatchRow");
+        const categoryCountBadge = document.getElementById("categoryCountBadge");
+
+        function filterCategories() {
+            const query = (categorySearchInput?.value || "").trim().toLowerCase();
+            const status = categoryStatusFilter?.value || "";
+
+            let visibleCount = 0;
+            categoryRows.forEach(row => {
+                const title = row.getAttribute("data-title") || "";
+                const rowStatus = row.getAttribute("data-status") || "";
+
+                const matchQuery = !query || title.includes(query);
+                const matchStatus = !status || rowStatus === status;
+
+                if (matchQuery && matchStatus) {
+                    row.style.display = "";
+                    visibleCount++;
+                    const sttCell = row.querySelector(".category-stt");
+                    if (sttCell) sttCell.textContent = visibleCount;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            if (noCategoryMatchRow) {
+                noCategoryMatchRow.style.display = (visibleCount === 0 && categoryRows.length > 0) ? "" : "none";
+            }
+            if (categoryCountBadge) {
+                categoryCountBadge.textContent = `${visibleCount}/${categoryRows.length} nhóm`;
+            }
+        }
+
+        if (categorySearchInput) categorySearchInput.addEventListener("input", filterCategories);
+        if (categoryStatusFilter) categoryStatusFilter.addEventListener("change", filterCategories);
+        if (btnResetCategoryFilter) {
+            btnResetCategoryFilter.addEventListener("click", function () {
+                if (categorySearchInput) categorySearchInput.value = "";
+                if (categoryStatusFilter) categoryStatusFilter.value = "";
+                filterCategories();
+            });
+        }
+
+        // ==========================================
+        // 2. BỘ LỌC, TÌM KIẾM & CHỌN NHIỀU CHỦ ĐỀ
+        // ==========================================
+        const topicSearchInput = document.getElementById("topicSearchInput");
+        const topicCategoryFilter = document.getElementById("topicCategoryFilter");
+        const topicExamFilter = document.getElementById("topicExamFilter");
+        const topicStatusFilter = document.getElementById("topicStatusFilter");
+        const btnResetTopicFilter = document.getElementById("btnResetTopicFilter");
+        const topicRows = Array.from(document.querySelectorAll("#topicTable tbody tr.topic-row"));
+        const noTopicMatchRow = document.getElementById("noTopicMatchRow");
+        const visibleTopicCount = document.getElementById("visibleTopicCount");
+        const checkAllTopics = document.getElementById("checkAllTopics");
+        const bulkTopicActionBar = document.getElementById("bulkTopicActionBar");
+        const selectedTopicsBadge = document.getElementById("selectedTopicsBadge");
+        const btnClearTopicSelection = document.getElementById("btnClearTopicSelection");
+        const btnBulkShowTopics = document.getElementById("btnBulkShowTopics");
+        const btnBulkHideTopics = document.getElementById("btnBulkHideTopics");
+        const btnBulkDeleteTopics = document.getElementById("btnBulkDeleteTopics");
+
+        function filterTopics() {
+            const query = (topicSearchInput?.value || "").trim().toLowerCase();
+            const categoryId = topicCategoryFilter?.value || "";
+            const exam = (topicExamFilter?.value || "").trim().toLowerCase();
+            const status = topicStatusFilter?.value || "";
+
+            let visibleCount = 0;
+            topicRows.forEach(row => {
+                const title = row.getAttribute("data-title") || "";
+                const rowCatId = row.getAttribute("data-category-id") || "";
+                const rowCatTitle = row.getAttribute("data-category-title") || "";
+                const rowExam = row.getAttribute("data-exam") || "";
+                const rowStatus = row.getAttribute("data-status") || "";
+
+                const matchQuery = !query || title.includes(query) || rowCatTitle.includes(query) || rowExam.includes(query);
+                const matchCategory = !categoryId || rowCatId === categoryId;
+                const matchExam = !exam || rowExam.includes(exam);
+                const matchStatus = !status || rowStatus === status;
+
+                if (matchQuery && matchCategory && matchExam && matchStatus) {
+                    row.style.display = "";
+                    visibleCount++;
+                    // Đánh số thứ tự tăng dần liên tục cho các dòng hiển thị
+                    const sttCell = row.querySelector(".topic-stt");
+                    if (sttCell) sttCell.textContent = visibleCount;
+                } else {
+                    row.style.display = "none";
+                    const cb = row.querySelector("input.topic-row-checkbox");
+                    if (cb) cb.checked = false;
+                    row.classList.remove("table-active");
+                }
+            });
+
+            if (noTopicMatchRow) {
+                noTopicMatchRow.style.display = (visibleCount === 0 && topicRows.length > 0) ? "" : "none";
+            }
+            if (visibleTopicCount) {
+                visibleTopicCount.textContent = visibleCount;
+            }
+
+            updateSelectedTopicsState();
+        }
+
+        if (topicSearchInput) topicSearchInput.addEventListener("input", filterTopics);
+        if (topicCategoryFilter) topicCategoryFilter.addEventListener("change", filterTopics);
+        if (topicExamFilter) topicExamFilter.addEventListener("change", filterTopics);
+        if (topicStatusFilter) topicStatusFilter.addEventListener("change", filterTopics);
+
+        if (btnResetTopicFilter) {
+            btnResetTopicFilter.addEventListener("click", function () {
+                if (topicSearchInput) topicSearchInput.value = "";
+                if (topicCategoryFilter) topicCategoryFilter.value = "";
+                if (topicExamFilter) topicExamFilter.value = "";
+                if (topicStatusFilter) topicStatusFilter.value = "";
+                filterTopics();
+            });
+        }
+
+        // ==========================================
+        // 3. XỬ LÝ DẤU TÍCH CHỌN VÀ THAO TÁC HÀNG LOẠT
+        // ==========================================
+        function getSelectedTopicIds() {
+            return Array.from(document.querySelectorAll("#topicTable tbody tr.topic-row input.topic-row-checkbox:checked"))
+                .map(cb => parseInt(cb.value, 10))
+                .filter(id => !isNaN(id));
+        }
+
+        function updateSelectedTopicsState() {
+            const checkedBoxes = document.querySelectorAll("#topicTable tbody tr.topic-row:not([style*='display: none']) input.topic-row-checkbox:checked");
+            const visibleBoxes = document.querySelectorAll("#topicTable tbody tr.topic-row:not([style*='display: none']) input.topic-row-checkbox");
+            const count = checkedBoxes.length;
+
+            if (selectedTopicsBadge) selectedTopicsBadge.textContent = count;
+
+            if (bulkTopicActionBar) {
+                if (count > 0) {
+                    bulkTopicActionBar.style.setProperty("display", "flex", "important");
+                } else {
+                    bulkTopicActionBar.style.setProperty("display", "none", "important");
+                }
+            }
+
+            if (checkAllTopics) {
+                checkAllTopics.checked = visibleBoxes.length > 0 && checkedBoxes.length === visibleBoxes.length;
+                checkAllTopics.indeterminate = checkedBoxes.length > 0 && checkedBoxes.length < visibleBoxes.length;
+            }
+        }
+
+        // Chọn tất cả
+        if (checkAllTopics) {
+            checkAllTopics.addEventListener("change", function () {
+                const isChecked = checkAllTopics.checked;
+                topicRows.forEach(row => {
+                    if (row.style.display !== "none") {
+                        const cb = row.querySelector("input.topic-row-checkbox");
+                        if (cb) {
+                            cb.checked = isChecked;
+                            if (isChecked) row.classList.add("table-active");
+                            else row.classList.remove("table-active");
+                        }
+                    }
+                });
+                updateSelectedTopicsState();
+            });
+        }
+
+        // Chọn từng ô
+        document.getElementById("topicTable")?.addEventListener("change", function (e) {
+            if (e.target && e.target.classList.contains("topic-row-checkbox")) {
+                const row = e.target.closest("tr");
+                if (row) {
+                    if (e.target.checked) row.classList.add("table-active");
+                    else row.classList.remove("table-active");
+                }
+                updateSelectedTopicsState();
+            }
+        });
+
+        // Nút bỏ chọn
+        if (btnClearTopicSelection) {
+            btnClearTopicSelection.addEventListener("click", function () {
+                topicRows.forEach(r => {
+                    const cb = r.querySelector("input.topic-row-checkbox");
+                    if (cb) cb.checked = false;
+                    r.classList.remove("table-active");
+                });
+                updateSelectedTopicsState();
+            });
+        }
+
+        // Thực hiện thao tác hàng loạt qua AJAX
+        async function executeBulkTopicAction(action, confirmMsg) {
+            const ids = getSelectedTopicIds();
+            if (ids.length === 0) {
+                alert("Vui lòng chọn ít nhất một chủ đề.");
+                return;
+            }
+            if (confirmMsg && !confirm(confirmMsg)) {
+                return;
+            }
+
+            try {
+                const response = await fetch('@Url.Action("BulkUpdateTopics", "Grammar_management", new { area = "Admin" })', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "RequestVerificationToken": token
+                    },
+                    body: JSON.stringify({ ids: ids, action: action })
+                });
+
+                const data = await response.json();
+                if (data && data.success) {
+                    window.location.reload();
+                } else {
+                    alert(data?.message || "Có lỗi xảy ra khi thực hiện.");
+                }
+            } catch (err) {
+                alert("Lỗi kết nối máy chủ. Vui lòng thử lại.");
+            }
+        }
+
+        if (btnBulkShowTopics) {
+            btnBulkShowTopics.addEventListener("click", () => executeBulkTopicAction("show", "Hiển thị các chủ đề đã chọn?"));
+        }
+        if (btnBulkHideTopics) {
+            btnBulkHideTopics.addEventListener("click", () => executeBulkTopicAction("hide", "Ẩn các chủ đề đã chọn?"));
+        }
+        if (btnBulkDeleteTopics) {
+            btnBulkDeleteTopics.addEventListener("click", () => executeBulkTopicAction("delete", "Bạn có chắc chắn muốn xoá các chủ đề đã chọn?"));
+        }
+
+        // Khởi tạo chạy lọc nếu trang nạp có sẵn selectedCategoryId
+        if (topicCategoryFilter && topicCategoryFilter.value) {
+            filterTopics();
+        }
+    });
+</script>
+}

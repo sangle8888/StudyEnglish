@@ -25,6 +25,21 @@ public sealed class Grammar_managementController : Controller
     [HttpGet]
     public async Task<IActionResult> Index(int? categoryId)
     {
+        // Tự động đồng bộ: nếu nhóm chủ đề bị ẩn thì các chủ đề liên quan cũng chuyển qua trạng thái ẩn
+        var outOfSyncTopics = await _context.GrammarTopics
+            .Include(t => t.Category)
+            .Where(t => !t.IsDeleted && t.IsActive && !t.Category.IsDeleted && !t.Category.IsActive)
+            .ToListAsync();
+        if (outOfSyncTopics.Count > 0)
+        {
+            foreach (var t in outOfSyncTopics)
+            {
+                t.IsActive = false;
+                t.UpdatedAt = DateTime.UtcNow;
+            }
+            await _context.SaveChangesAsync();
+        }
+
         var model = new GrammarIndexViewModel
         {
             SelectedCategoryId = categoryId,
@@ -126,7 +141,9 @@ public sealed class Grammar_managementController : Controller
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> EditCategory(int id, GrammarCategoryFormViewModel model)
     {
-        var c = await _context.GrammarCategories.FirstOrDefaultAsync(x => x.CategoryId == id);
+        var c = await _context.GrammarCategories
+            .Include(x => x.Topics)
+            .FirstOrDefaultAsync(x => x.CategoryId == id);
         if (c is null) return NotFound();
 
         model.Id = id;
@@ -144,20 +161,106 @@ public sealed class Grammar_managementController : Controller
         c.SortOrder = model.SortOrder;
         c.IsActive = model.IsActive;
         c.UpdatedAt = DateTime.UtcNow;
+
+        // Nếu nhóm chủ đề chuyển sang trạng thái Ẩn: tất cả chủ đề liên quan cũng chuyển qua trạng thái Ẩn
+        if (!c.IsActive)
+        {
+            var activeTopics = c.Topics.Where(t => !t.IsDeleted && t.IsActive).ToList();
+            foreach (var t in activeTopics)
+            {
+                t.IsActive = false;
+                t.UpdatedAt = DateTime.UtcNow;
+            }
+        }
+
         await _context.SaveChangesAsync();
         TempData["Success"] = "Đã cập nhật nhóm chủ đề.";
         return RedirectToAction(nameof(Index));
     }
 
     [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> ToggleCategoryStatus(int id)
+    {
+        var c = await _context.GrammarCategories
+            .Include(x => x.Topics)
+            .FirstOrDefaultAsync(x => x.CategoryId == id && !x.IsDeleted);
+
+        if (c is null)
+        {
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest" || Request.Headers.Accept.ToString().Contains("application/json"))
+                return Json(new { success = false, message = "Không tìm thấy nhóm chủ đề." });
+            TempData["Error"] = "Không tìm thấy nhóm chủ đề.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        c.IsActive = !c.IsActive;
+        c.UpdatedAt = DateTime.UtcNow;
+
+        int affectedTopics = 0;
+        if (!c.IsActive)
+        {
+            // Khi nhóm chủ đề chuyển sang trạng thái Ẩn:
+            // Các chủ đề liên quan ở phía dưới không hiện nữa mà chuyển qua trạng thái Ẩn
+            var activeTopics = c.Topics.Where(t => !t.IsDeleted && t.IsActive).ToList();
+            affectedTopics = activeTopics.Count;
+            foreach (var t in activeTopics)
+            {
+                t.IsActive = false;
+                t.UpdatedAt = DateTime.UtcNow;
+            }
+            await _context.SaveChangesAsync();
+            TempData["Success"] = $"Đã ẩn nhóm \"{c.Title}\" và chuyển {affectedTopics} chủ đề liên quan sang trạng thái ẩn.";
+        }
+        else
+        {
+            // Khi nhóm chủ đề hiển thị trở lại:
+            // Kích hoạt lại các chủ đề liên quan
+            var inactiveTopics = c.Topics.Where(t => !t.IsDeleted && !t.IsActive).ToList();
+            affectedTopics = inactiveTopics.Count;
+            foreach (var t in inactiveTopics)
+            {
+                t.IsActive = true;
+                t.UpdatedAt = DateTime.UtcNow;
+            }
+            await _context.SaveChangesAsync();
+            TempData["Success"] = $"Đã hiển thị nhóm \"{c.Title}\" và kích hoạt {affectedTopics} chủ đề liên quan.";
+        }
+
+        if (Request.Headers["X-Requested-With"] == "XMLHttpRequest" || Request.Headers.Accept.ToString().Contains("application/json"))
+        {
+            return Json(new
+            {
+                success = true,
+                isActive = c.IsActive,
+                categoryId = c.CategoryId,
+                affectedTopics = affectedTopics,
+                message = TempData["Success"]
+            });
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteCategory(int id)
     {
-        var c = await _context.GrammarCategories.FirstOrDefaultAsync(x => x.CategoryId == id);
+        var c = await _context.GrammarCategories
+            .Include(x => x.Topics)
+            .FirstOrDefaultAsync(x => x.CategoryId == id);
         if (c is not null)
         {
             c.IsDeleted = true;
             c.IsActive = false;
             c.UpdatedAt = DateTime.UtcNow;
+
+            // Xoá và ẩn các chủ đề thuộc nhóm bị xoá
+            foreach (var t in c.Topics.Where(t => !t.IsDeleted))
+            {
+                t.IsDeleted = true;
+                t.IsActive = false;
+                t.UpdatedAt = DateTime.UtcNow;
+            }
+
             await _context.SaveChangesAsync();
             TempData["Success"] = "Đã xoá nhóm chủ đề.";
         }
@@ -275,6 +378,48 @@ public sealed class Grammar_managementController : Controller
         await _context.SaveChangesAsync();
         TempData["Success"] = "Đã xoá chủ đề.";
         return RedirectToAction(nameof(Index), new { categoryId });
+    }
+
+    public sealed class BulkTopicsRequest
+    {
+        public List<int> Ids { get; set; } = [];
+        public string Action { get; set; } = "";
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> BulkUpdateTopics([FromBody] BulkTopicsRequest request)
+    {
+        if (request == null || request.Ids.Count == 0)
+        {
+            return Json(new { success = false, message = "Chưa chọn chủ đề nào." });
+        }
+
+        var topics = await _context.GrammarTopics
+            .Where(t => request.Ids.Contains(t.TopicId) && !t.IsDeleted)
+            .ToListAsync();
+
+        if (topics.Count == 0)
+        {
+            return Json(new { success = false, message = "Không tìm thấy chủ đề phù hợp." });
+        }
+
+        switch (request.Action.ToLowerInvariant())
+        {
+            case "show":
+                foreach (var t in topics) { t.IsActive = true; t.UpdatedAt = DateTime.UtcNow; }
+                break;
+            case "hide":
+                foreach (var t in topics) { t.IsActive = false; t.UpdatedAt = DateTime.UtcNow; }
+                break;
+            case "delete":
+                foreach (var t in topics) { t.IsDeleted = true; t.IsActive = false; t.UpdatedAt = DateTime.UtcNow; }
+                break;
+            default:
+                return Json(new { success = false, message = "Hành động không hợp lệ." });
+        }
+
+        await _context.SaveChangesAsync();
+        return Json(new { success = true, count = topics.Count, message = $"Đã cập nhật {topics.Count} chủ đề." });
     }
 
     private async Task SyncTopicExamsAsync(int topicId, string examLabel)
@@ -398,7 +543,8 @@ public sealed class Grammar_managementController : Controller
             TopicId = model.TopicId,
             Difficulty = model.Difficulty > 0 ? model.Difficulty : (byte)1,
             Status = validStatus,
-            CreatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
         ApplyQuestion(question, model, validStatus);
         _context.Questions.Add(question);
@@ -417,9 +563,19 @@ public sealed class Grammar_managementController : Controller
             otherQuestions[i].SortOrder = i + 1;
         }
 
-        await _context.SaveChangesAsync();
-        TempData["Success"] = "Đã thêm câu hỏi.";
-        return RedirectToAction(nameof(Questions), new { topicId = model.TopicId });
+        try
+        {
+            await _context.SaveChangesAsync();
+            TempData["Success"] = "Đã thêm câu hỏi.";
+            return RedirectToAction(nameof(Questions), new { topicId = model.TopicId });
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("", $"Lỗi khi lưu câu hỏi vào cơ sở dữ liệu: {ex.InnerException?.Message ?? ex.Message}");
+            model.TopicTitle = topic.Title;
+            ViewData["Title"] = "Thêm câu hỏi";
+            return View("QuestionForm", model);
+        }
     }
 
     [HttpGet]
@@ -574,9 +730,19 @@ public sealed class Grammar_managementController : Controller
             otherQuestions[i].SortOrder = i + 1;
         }
 
-        await _context.SaveChangesAsync();
-        TempData["Success"] = "Đã cập nhật câu hỏi.";
-        return RedirectToAction(nameof(Questions), new { topicId = q.TopicId });
+        try
+        {
+            await _context.SaveChangesAsync();
+            TempData["Success"] = "Đã cập nhật câu hỏi.";
+            return RedirectToAction(nameof(Questions), new { topicId = q.TopicId });
+        }
+        catch (Exception ex)
+        {
+            ModelState.AddModelError("", $"Lỗi khi lưu câu hỏi vào cơ sở dữ liệu: {ex.InnerException?.Message ?? ex.Message}");
+            model.TopicTitle = q.Topic?.Title ?? "Chủ đề";
+            ViewData["Title"] = "Sửa câu hỏi";
+            return View("QuestionForm", model);
+        }
     }
 
     [HttpPost, ValidateAntiForgeryToken]
@@ -677,9 +843,9 @@ public sealed class Grammar_managementController : Controller
 
     private static void ApplyQuestion(Question q, GrammarQuestionFormViewModel m, string? validStatus)
     {
-        q.Stem = m.Content.Trim();
+        q.Stem = (m.Content ?? "").Trim();
         q.StemVi = Clean(m.ContentVi);
-        q.ShortExplanation = m.Explanation.Trim();
+        q.ShortExplanation = Clean(m.Explanation);
         q.RuleNote = Clean(m.Rule);
         q.Difficulty = m.Difficulty > 0 ? m.Difficulty : (byte)1;
         q.Status = validStatus;
@@ -739,7 +905,7 @@ public sealed class Grammar_managementController : Controller
                 q.Options.Add(opt);
             }
             opt.SortOrder = (byte)(i + 1);
-            opt.Content = m.OptionTexts[i].Trim();
+            opt.Content = (m.OptionTexts.ElementAtOrDefault(i) ?? "").Trim();
             opt.ContentVi = Clean(m.OptionTextsVi.ElementAtOrDefault(i));
             opt.IsCorrect = (i == m.CorrectPosition);
             opt.WhyWrong = (i == m.CorrectPosition) ? null : Clean(m.OptionReasons.ElementAtOrDefault(i));
@@ -1058,9 +1224,12 @@ public sealed class Grammar_managementController : Controller
         var th = t.Theory;
         if (th is null)
         {
-            th = new GrammarTheory { TopicId = t.TopicId };
+            th = new GrammarTheory
+            {
+                TopicId = t.TopicId,
+                UpdatedAt = DateTime.UtcNow
+            };
             _context.GrammarTheories.Add(th);
-            await _context.SaveChangesAsync();
         }
 
         th.Summary = model.Summary?.Trim();
@@ -1069,6 +1238,11 @@ public sealed class Grammar_managementController : Controller
         th.ModelRight = model.ModelRight?.Trim();
         th.MentalDescription = model.MentalDescription?.Trim();
         th.UpdatedAt = DateTime.UtcNow;
+
+        if (th.TheoryId == 0)
+        {
+            await _context.SaveChangesAsync();
+        }
 
         _context.GrammarTheoryItems.RemoveRange(th.Items);
 
@@ -1214,6 +1388,7 @@ public sealed class Grammar_managementController : Controller
                 QuestionId = r.QuestionId,
                 QuestionContent = r.Question.Stem,
                 Details = r.Details,
+                ReportType = r.ReportType,
                 IsResolved = (r.Status == "Resolved"),
                 CreatedAt = r.CreatedAt
             })

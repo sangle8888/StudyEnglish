@@ -34,7 +34,7 @@ public class GrammarCategory
 
     public int? CreatedBy { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public int? UpdatedBy { get; set; }
 
@@ -71,7 +71,7 @@ public class GrammarTopic
 
     public int? CreatedBy { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public int? UpdatedBy { get; set; }
 
@@ -159,7 +159,7 @@ public class Question
 
     public int? CreatedBy { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public int? UpdatedBy { get; set; }
 
@@ -214,7 +214,7 @@ public class GrammarTheory
 
     public string? MentalDescription { get; set; }
 
-    public DateTime? UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public int? UpdatedBy { get; set; }
 

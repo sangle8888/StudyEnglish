@@ -26,6 +26,7 @@ public class AppDbContext : DbContext
     public DbSet<PracticeSession> PracticeSessions => Set<PracticeSession>();
     public DbSet<PracticeAnswer> PracticeAnswers => Set<PracticeAnswer>();
     public DbSet<QuestionReport> QuestionReports => Set<QuestionReport>();
+    public DbSet<Feedback> Feedbacks => Set<Feedback>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,5 +64,11 @@ public class AppDbContext : DbContext
             .HasOne(t => t.Theory)
             .WithOne(th => th.Topic)
             .HasForeignKey<GrammarTheory>(th => th.TopicId);
+
+        modelBuilder.Entity<Feedback>()
+            .HasOne(f => f.User)
+            .WithMany()
+            .HasForeignKey(f => f.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

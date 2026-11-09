@@ -34,7 +34,14 @@
       },
       body: JSON.stringify(payload),
     });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    if (!response.ok) {
+      let message = `Lỗi ${response.status}`;
+      try {
+        const data = await response.json();
+        if (data && data.message) message = data.message;
+      } catch (_) {}
+      throw new Error(message);
+    }
     return response.json();
   }
 
@@ -233,9 +240,15 @@
           </div>
           <div class="topic-card-footer">
             <span class="topic-question-count">${answeredInTopic}/${totalQuestions} câu</span>
-            <button class="practice-button" type="button" data-practice="${record.id}">
-              Luyện ngay <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-            </button>
+            ${totalQuestions > 0 ? `
+              <button class="practice-button" type="button" data-practice="${record.id}">
+                Luyện ngay <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+              </button>
+            ` : `
+              <button class="practice-button" type="button" disabled style="opacity: 0.65; cursor: not-allowed; background: #94a3b8;" title="Chủ đề đang được cập nhật câu hỏi">
+                Đang cập nhật
+              </button>
+            `}
           </div>`;
     return article;
   }
@@ -531,9 +544,9 @@
             <p class="utility-description">Luyện câu hỏi ngẫu nhiên từ các chủ đề trong <strong>${group.title}</strong>.</p>
             <div class="utility-footer">
               <div class="choice-pills" data-size-group="review" role="group" aria-label="Số câu ôn tập">
-                ${[20, 30, 50].map((size) => `<button type="button" data-size="${size}" aria-pressed="${selectedTestSize === size}">${selectedTestSize === size ? '<i class="fa-solid fa-check" aria-hidden="true"></i>' : ""}${size} câu</button>`).join("")}
+                ${[20, 30, 50].map((size) => `<button type="button" data-size="${size}" aria-pressed="${selectedTestSize === size}">${selectedTestSize === size ? '<i class="fa-solid fa-check me-1" aria-hidden="true"></i>' : ""}${size} câu</button>`).join("")}
               </div>
-              <button class="practice-button" type="button" data-start-group="${group.id}" data-mode="review">Bắt đầu ôn tập <i class="fa-solid fa-arrow-right"></i></button>
+              <button class="practice-button" type="button" data-start-group="${group.id}" data-mode="review">Bắt đầu ôn tập <i class="fa-solid fa-arrow-right ms-1"></i></button>
             </div>
           </div>
         `;
@@ -544,11 +557,25 @@
     const card = document.createElement("article");
     card.className = "topic-utility-card test-card";
     card.innerHTML = `
-          <h3 class="utility-title"><span class="utility-icon"><i class="fa-regular fa-clipboard"></i></span>Mini Test <span class="topic-exam-badge">TOEIC</span></h3>
-          <p class="utility-description">Mini Test TOEIC: 50 câu hỏi, mỗi câu 60 giây.</p>
-          <div class="utility-footer">
-            <div class="choice-pills"><button type="button" aria-pressed="true"><i class="fa-regular fa-clock"></i> 60s/câu</button></div>
-            <button class="practice-button" type="button" data-start-group="${group.id}" data-mode="test">Bắt đầu kiểm tra <i class="fa-solid fa-arrow-right"></i></button>
+          <div class="utility-content">
+            <div class="utility-heading">
+              <span class="utility-icon" aria-hidden="true"><i class="fa-regular fa-clipboard"></i></span>
+              <h3 class="utility-title">Mini Test</h3>
+              <div class="utility-actions">
+                <button class="topic-bookmark" type="button" data-start-group="${group.id}" data-mode="test" aria-label="Làm lại Mini Test" title="Làm lại Mini Test">
+                  <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <span class="topic-exam-badge">TOEIC</span>
+              </div>
+            </div>
+            <p class="utility-description">Bài kiểm tra các chủ đề trong <strong>${group.title}</strong>, đếm ngược thời gian làm cho từng câu.</p>
+            <div class="utility-footer">
+              <div class="choice-pills">
+                <button type="button" aria-pressed="true"><i class="fa-regular fa-clock me-1"></i>1p</button>
+                <button type="button" aria-pressed="false"><i class="fa-regular fa-clock me-1"></i>30s</button>
+              </div>
+              <button class="practice-button minitest-btn" type="button" data-start-group="${group.id}" data-mode="test">Làm tiếp <i class="fa-solid fa-arrow-right ms-1"></i></button>
+            </div>
           </div>`;
     return card;
   }
@@ -585,7 +612,8 @@
     isMiniTest = trigger.dataset.mode === "test";
     practicePage.classList.toggle("is-mini-test", isMiniTest);
     practicePage.classList.toggle("is-regular-practice", !isMiniTest);
-    document.getElementById("miniTestStatus").hidden = !isMiniTest;
+    document.getElementById("miniTestStatus").hidden = true;
+    document.getElementById("miniTestTimerWrap").hidden = !isMiniTest;
     closePracticeQuestionMap(false);
     document
       .getElementById("practiceTheoryToggle")
@@ -598,8 +626,10 @@
       0,
       window.scrollY + grammarPage.getBoundingClientRect().top,
     );
+    const group = grammarGroups.find((item) => item.id === trigger.dataset?.startGroup) || sessionQuestions[0]?.group;
+    const groupTitle = group ? group.title : (sessionQuestions[0]?.group?.title || "");
     const practiceTitle = isMiniTest
-      ? "Mini Test"
+      ? (groupTitle ? `Mini test: ${groupTitle} (TOEIC Part 5)` : "Mini test: Thì thời gian (TOEIC Part 5)")
       : new Set(sessionQuestions.map((item) => item.topicId)).size === 1
         ? sessionQuestions[0].title
         : `Ôn tập ngẫu nhiên · ${sessionQuestions[0].group.title}`;
@@ -661,13 +691,14 @@
     questionAnswered =
       !isMiniTest && sessionAnswers[questionIndex] !== undefined;
     translationVisible = false;
-    document.getElementById("practiceProgress").innerHTML =
-      `Câu <strong class="progress-current">${questionIndex + 1}</strong>/${sessionQuestions.length} <span class="progress-sep">·</span> Đúng <strong class="progress-correct">${sessionCorrect}</strong>`;
     if (isMiniTest) {
       document.getElementById("miniTestQuestionNumber").textContent =
         questionIndex + 1;
+      document.getElementById("practiceProgress").textContent =
+        `Câu ${questionIndex + 1}/${sessionQuestions.length}`;
+    } else {
       document.getElementById("practiceProgress").innerHTML =
-        `Câu <strong class="progress-current">${questionIndex + 1}</strong>/${sessionQuestions.length} <span class="progress-sep">·</span> Mini Test`;
+        `Câu <strong class="progress-current">${questionIndex + 1}</strong>/${sessionQuestions.length} <span class="progress-sep">·</span> Đúng <strong class="progress-correct">${sessionCorrect}</strong>`;
     }
     const progress = Math.round(
       ((questionIndex + 1) / sessionQuestions.length) * 100,
@@ -676,7 +707,17 @@
     progressTrack.setAttribute("aria-valuenow", progress);
     document.getElementById("practiceProgressFill").style.width =
       `${progress}%`;
-    document.getElementById("practiceQuestion").textContent = question.question;
+    if (isMiniTest) {
+      const qEl = document.getElementById("practiceQuestion");
+      qEl.replaceChildren();
+      const numBadge = document.createElement("span");
+      numBadge.className = "mini-test-q-badge";
+      numBadge.textContent = questionIndex + 1;
+      qEl.appendChild(numBadge);
+      qEl.appendChild(document.createTextNode(" " + question.question));
+    } else {
+      document.getElementById("practiceQuestion").textContent = question.question;
+    }
     document.getElementById("practicePromptBadge").textContent = isMiniTest
       ? "CHỌN MỘT ĐÁP ÁN"
       : "CHỌN ĐÁP ÁN ĐÚNG ĐỂ HOÀN THÀNH CÂU";
@@ -756,7 +797,7 @@
       renderPracticeAnswer(question, sessionAnswers[questionIndex]);
     }
     renderPracticeQuestionMap();
-    document.querySelector(".practice-actions").hidden = isMiniTest;
+    document.querySelector(".practice-actions").hidden = false;
     if (!isMiniTest) updatePracticeActions(question);
     else startMiniTestTimer();
   }
@@ -909,7 +950,7 @@
           if (index === selectedIndex) button.classList.add("selected");
         });
       document.getElementById("practiceProgress").textContent =
-        `Câu ${questionIndex + 1}/${sessionQuestions.length} · Đã chọn đáp án`;
+        `Câu ${questionIndex + 1}/${sessionQuestions.length}`;
       practiceNext.disabled = false;
       return;
     }
@@ -1457,6 +1498,7 @@
       : `Bạn trả lời đúng ${sessionCorrect}/${sessionAttempted} câu. Hãy tiếp tục luyện tập để củng cố kiến thức nhé!`;
     document.getElementById("practiceQuestionTranslation").hidden = true;
     document.getElementById("miniTestStatus").hidden = true;
+    document.getElementById("miniTestTimerWrap").hidden = true;
     closePracticeQuestionMap(false);
     document
       .getElementById("practiceTheoryToggle")
@@ -1488,6 +1530,7 @@
     practicePage.classList.remove("is-mini-test");
     practicePage.classList.remove("is-regular-practice");
     document.getElementById("miniTestStatus").hidden = true;
+    document.getElementById("miniTestTimerWrap").hidden = true;
     const topicCrumbWrap = document.getElementById("practiceTopicCrumbWrap");
     if (topicCrumbWrap) topicCrumbWrap.hidden = true;
     if (document.getElementById("practiceTopicCrumb")) {
@@ -1634,7 +1677,13 @@
       const record = allTopicRecords().find(
         (item) => item.id === practiceButton.dataset.practice,
       );
-      if (record) openPractice(record.questions, practiceButton);
+      if (record) {
+        if (!record.questions || record.questions.length === 0) {
+          alert("Chủ đề này chưa có câu hỏi luyện tập. Đang cập nhật nội dung!");
+          return;
+        }
+        openPractice(record.questions, practiceButton);
+      }
       return;
     }
 
@@ -1761,17 +1810,59 @@
       updateSummary();
       if (activeTab === "notebook") renderTopics();
     });
+  let selectedReportCategory = "Sai đáp án";
+  let reportToastTimer = null;
+
+  function showReportToast(message) {
+    const toast = document.getElementById("practiceReportToast");
+    if (!toast) return;
+    toast.textContent = message;
+    toast.hidden = false;
+    clearTimeout(reportToastTimer);
+    reportToastTimer = setTimeout(() => {
+      toast.hidden = true;
+    }, 3200);
+  }
+
+  function resetReportDialog() {
+    selectedReportCategory = "Sai đáp án";
+    document.querySelectorAll(".practice-report-chip").forEach((chip) => {
+      chip.setAttribute(
+        "aria-pressed",
+        chip.dataset.reportCategory === "Sai đáp án" ? "true" : "false"
+      );
+    });
+    const detailsInput = document.getElementById("practiceReportDetails");
+    if (detailsInput) detailsInput.value = "";
+    const status = document.getElementById("practiceReportStatus");
+    if (status) status.textContent = "";
+  }
+
+  document.querySelectorAll(".practice-report-chip").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      selectedReportCategory = chip.dataset.reportCategory || "Sai đáp án";
+      document.querySelectorAll(".practice-report-chip").forEach((c) => {
+        c.setAttribute("aria-pressed", c === chip ? "true" : "false");
+      });
+    });
+  });
+
+  const practiceReportClose = document.getElementById("practiceReportClose");
+  if (practiceReportClose) {
+    practiceReportClose.addEventListener("click", () => {
+      practiceReportDialog.hidden = true;
+      document.getElementById("practiceReportToggle").focus();
+    });
+  }
+
   document
     .getElementById("practiceReportToggle")
     .addEventListener("click", () => {
       const question = sessionQuestions[questionIndex];
-      const options = question.options
-        .map((option, index) => `${String.fromCharCode(65 + index)}. ${option}`)
-        .join(" · ");
+      if (!question) return;
       document.getElementById("practiceReportQuestion").textContent =
-        `${question.title}: ${question.question} (${options})`;
-      document.getElementById("practiceReportDetails").value = "";
-      document.getElementById("practiceReportStatus").textContent = "";
+        question.question || question.stem || "";
+      resetReportDialog();
       practiceReportDialog.hidden = false;
       document.getElementById("practiceReportDetails").focus();
     });
@@ -1792,28 +1883,41 @@
         .getElementById("practiceReportDetails")
         .value.trim();
       const status = document.getElementById("practiceReportStatus");
-      if (!details) {
-        status.textContent = "Vui lòng mô tả lỗi trước khi gửi.";
-        document.getElementById("practiceReportDetails").focus();
-        return;
-      }
       const question = sessionQuestions[questionIndex];
+      if (!question) return;
+
       const submitButton = document.getElementById("practiceReportSubmit");
       submitButton.disabled = true;
-      status.textContent = "Đang gửi báo lỗi...";
+      const originalText = submitButton.textContent;
+      submitButton.textContent = "Đang gửi...";
+      status.textContent = "";
+
+      const qId = Number(question.dbId) || numericId(question.id) || 0;
+
       grammarApi(grammarApiUrls.reportQuestion, {
-        questionId: question.dbId,
-        details,
+        questionId: qId,
+        details: details,
+        category: selectedReportCategory,
       })
-        .then(() => {
-          status.textContent = "Cảm ơn bạn! Báo lỗi đã được gửi tới quản trị viên.";
-          document.getElementById("practiceReportDetails").value = "";
+        .then((res) => {
+          if (res && res.ok === false) {
+            status.textContent = res.message || "Không gửi được báo lỗi. Vui lòng thử lại.";
+            return;
+          }
+          practiceReportDialog.hidden = true;
+          showReportToast("Cảm ơn bạn! Báo lỗi đã được gửi tới đội ngũ rà soát.");
+          resetReportDialog();
         })
-        .catch(() => {
-          status.textContent = "Không gửi được báo lỗi. Vui lòng thử lại.";
+        .catch((err) => {
+          console.error("Report Question Error:", err);
+          status.textContent =
+            err && err.message
+              ? err.message
+              : "Không gửi được báo lỗi. Vui lòng thử lại.";
         })
         .finally(() => {
           submitButton.disabled = false;
+          submitButton.textContent = originalText;
         });
     });
   document

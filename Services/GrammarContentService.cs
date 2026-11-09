@@ -239,10 +239,8 @@ public sealed class GrammarContentService
                     });
                 }
 
-                if (topic.Questions.Count > 0)
-                {
-                    group.Topics.Add(topic);
-                }
+                // Luôn thêm chủ đề vào nhóm để hiển thị trên giao diện người dùng (kể cả khi mới tạo chưa có câu hỏi)
+                group.Topics.Add(topic);
             }
 
             if (group.Topics.Count > 0)
@@ -527,7 +525,7 @@ public sealed class GrammarContentService
 
                         if (topic.Theory == null)
                         {
-                            topic.Theory = new GrammarTheory { TopicId = topic.TopicId };
+                            topic.Theory = new GrammarTheory { TopicId = topic.TopicId, UpdatedAt = DateTime.UtcNow };
                             _db.GrammarTheories.Add(topic.Theory);
                             ApplySeedTheory(topic.Theory, thEl);
                         }

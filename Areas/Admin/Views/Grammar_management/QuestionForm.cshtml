@@ -8,7 +8,13 @@
 <form method="post">
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="TopicId" />
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger shadow-sm mb-3">
+            <div class="fw-bold mb-1"><i class="fa-solid fa-triangle-exclamation me-1"></i>Không thể lưu câu hỏi. Vui lòng kiểm tra các thông tin sau:</div>
+            <div asp-validation-summary="All" class="mb-0"></div>
+        </div>
+    }
 
     <div class="card shadow-sm mb-3">
         <div class="card-header fw-semibold">Nội dung câu hỏi</div>
@@ -42,7 +48,7 @@
                     </div>
                     <div class="col-md-4">
                         <input name="OptionTexts[@i]" value="@Model.OptionTexts[i]" class="form-control" placeholder="Đáp án @letter" />
-                        <span asp-validation-for="OptionTexts[i]" class="text-danger"></span>
+                        @Html.ValidationMessage($"OptionTexts[{i}]", "", new { @class = "text-danger small" })
                     </div>
                     <div class="col-md-3">
                         <input name="OptionTextsVi[@i]" value="@Model.OptionTextsVi[i]" class="form-control" placeholder="Nghĩa tiếng Việt" />

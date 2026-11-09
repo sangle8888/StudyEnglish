@@ -12,7 +12,14 @@
             <div class="row g-3">
                 <div class="col-md-6">
                     <label asp-for="CategoryId" class="form-label"></label>
-                    <select asp-for="CategoryId" class="form-select" asp-items="@(new SelectList(Model.Categories, "CategoryId", "Title", Model.CategoryId))"></select>
+                    <select asp-for="CategoryId" class="form-select">
+                        @foreach (var cat in Model.Categories)
+                        {
+                            <!option value="@cat.CategoryId" @(cat.CategoryId == Model.CategoryId ? "selected" : "")>
+                                @cat.Title @(!cat.IsActive ? "(Đang ẩn)" : "")
+                            </!option>
+                        }
+                    </select>
                     <span asp-validation-for="CategoryId" class="text-danger"></span>
                 </div>
                 <div class="col-md-6">

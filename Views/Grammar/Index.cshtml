@@ -294,46 +294,70 @@
                             </div>
                             <div class="topic-card-footer">
                               <span class="topic-question-count">@answeredInTopic/@totalQ câu</span>
-                              <button class="practice-button" type="button" data-practice="@topic.Id">
-                                Luyện ngay <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-                              </button>
+                              @if (totalQ > 0)
+                              {
+                                <button class="practice-button" type="button" data-practice="@topic.Id">
+                                  Luyện ngay <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                                </button>
+                              }
+                              else
+                              {
+                                <button class="practice-button" type="button" disabled style="opacity: 0.65; cursor: not-allowed; background: #94a3b8;" title="Chủ đề đang được cập nhật câu hỏi">
+                                  Đang cập nhật
+                                </button>
+                              }
                             </div>
                           </article>
                       }
 
-                      <article class="topic-card topic-card-action topic-card-review" data-utility-card="review" data-group="@group.Id" data-exam="all">
-                        <div class="topic-card-top">
-                          <span class="topic-card-icon review-icon" aria-hidden="true">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shuffle"><path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-8.6a4 4 0 0 1 3.3-1.7H22"></path><path d="M2 6h1.973a4 4 0 0 1 3.3 1.7l5.454 8.6a4 4 0 0 0 3.3 1.7H22"></path></svg>
-                          </span>
-                          <span class="topic-card-title">Ôn tập ngẫu nhiên</span>
-                          <span class="topic-exam-badge">TOEIC · VSTEP</span>
-                        </div>
-                        <p class="topic-card-description">Luyện tập ngẫu nhiên các câu hỏi trong nhóm chủ đề này để củng cố phản xạ.</p>
-                        <div class="topic-card-footer">
-                          <span class="topic-question-count">@group.Topics.Sum(t => t.Questions.Count) câu</span>
-                          <button class="practice-button action-btn" type="button" data-start-group="@group.Id">
-                            Bắt đầu ôn tập <i class="fa-solid fa-play" aria-hidden="true"></i>
-                          </button>
+                      <article class="topic-utility-card topic-card-review" data-utility-card="review" data-group="@group.Id" data-exam="all">
+                        <div class="utility-content">
+                          <div class="utility-heading">
+                            <span class="utility-icon" aria-hidden="true">
+                              <i class="fa-solid fa-shuffle"></i>
+                            </span>
+                            <h3 class="utility-title">Ôn tập ngẫu nhiên</h3>
+                          </div>
+                          <p class="utility-description">Luyện câu hỏi ngẫu nhiên từ các chủ đề trong <strong>@group.Title</strong>.</p>
+                          <div class="utility-footer">
+                            <div class="choice-pills" data-size-group="review" role="group" aria-label="Số câu ôn tập">
+                              <button type="button" data-size="20" aria-pressed="true"><i class="fa-solid fa-check me-1" aria-hidden="true"></i>20 câu</button>
+                              <button type="button" data-size="30" aria-pressed="false">30 câu</button>
+                              <button type="button" data-size="50" aria-pressed="false">50 câu</button>
+                            </div>
+                            <button class="practice-button" type="button" data-start-group="@group.Id" data-mode="review">
+                              Bắt đầu ôn tập <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </button>
+                          </div>
                         </div>
                       </article>
 
                       @if (group == Model.Groups.FirstOrDefault())
                       {
-                        <article class="topic-card topic-card-action topic-card-mini-test" data-utility-card="mini-test" data-group="@group.Id" data-exam="all">
-                          <div class="topic-card-top">
-                            <span class="topic-card-icon minitest-icon" aria-hidden="true">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                            </span>
-                            <span class="topic-card-title">Mini Test tổng hợp</span>
-                            <span class="topic-exam-badge badge-timed">Có tính giờ</span>
-                          </div>
-                          <p class="topic-card-description">Kiểm tra nhanh kiến thức ngữ pháp với đề thi ngẫu nhiên có bấm giờ.</p>
-                          <div class="topic-card-footer">
-                            <span class="topic-question-count">10 - 20 - 50 câu</span>
-                            <button class="practice-button action-btn minitest-btn" type="button" data-start-mini-test="true">
-                              Làm bài test <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
-                            </button>
+                        <article class="topic-utility-card test-card topic-card-mini-test" data-utility-card="mini-test" data-group="@group.Id" data-exam="all">
+                          <div class="utility-content">
+                            <div class="utility-heading">
+                              <span class="utility-icon" aria-hidden="true">
+                                <i class="fa-regular fa-clipboard"></i>
+                              </span>
+                              <h3 class="utility-title">Mini Test</h3>
+                              <div class="utility-actions">
+                                <button class="topic-bookmark" type="button" data-start-group="@group.Id" data-mode="test" aria-label="Làm lại Mini Test" title="Làm lại Mini Test">
+                                  <i class="fa-solid fa-rotate-right"></i>
+                                </button>
+                                <span class="topic-exam-badge">TOEIC</span>
+                              </div>
+                            </div>
+                            <p class="utility-description">Bài kiểm tra các chủ đề trong <strong>@group.Title</strong>, đếm ngược thời gian làm cho từng câu.</p>
+                            <div class="utility-footer">
+                              <div class="choice-pills">
+                                <button type="button" aria-pressed="true"><i class="fa-regular fa-clock me-1"></i>1p</button>
+                                <button type="button" aria-pressed="false"><i class="fa-regular fa-clock me-1"></i>30s</button>
+                              </div>
+                              <button class="practice-button minitest-btn" type="button" data-start-group="@group.Id" data-mode="test">
+                                Làm tiếp <i class="fa-solid fa-arrow-right ms-1"></i>
+                              </button>
+                            </div>
                           </div>
                         </article>
                       }
@@ -370,22 +394,8 @@
               <span class="practice-breadcrumb-current" id="practiceBreadcrumbTitle" aria-current="page">Luyện</span>
             </nav>
             <header class="practice-session-header">
-              <div class="mini-test-status" id="miniTestStatus"
-                hidden>
-                <span class="mini-test-status-label"><i
-                    class="fa-solid fa-list-check"
-                    aria-hidden="true"></i>
-                  Câu <strong
-                    id="miniTestQuestionNumber">1</strong> /
-                  50
-                </span>
-                <span class="mini-test-timer"
-                  id="miniTestTimerWrap" role="timer"
-                  aria-live="off">
-                  <i class="fa-regular fa-clock"
-                    aria-hidden="true"></i>
-                  <span id="miniTestTimer">01:00</span>
-                </span>
+              <div class="mini-test-status" id="miniTestStatus" style="display: none !important;" hidden>
+                <span id="miniTestQuestionNumber">1</span>
               </div>
               <div class="practice-header-main">
                 <button class="practice-dialog-close"
@@ -456,6 +466,13 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-layout-grid"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
                     <span>Bản đồ câu</span>
                   </button>
+                  <span class="mini-test-timer"
+                    id="miniTestTimerWrap" role="timer"
+                    aria-live="off" hidden>
+                    <i class="fa-regular fa-clock"
+                      aria-hidden="true"></i>
+                    <span id="miniTestTimer">00:20</span>
+                  </span>
                 </div>
               </div>
               <div class="practice-progress-track"
@@ -795,24 +812,52 @@
       </aside>
     </div>
 
-    <div id="practiceReportDialog" hidden>
+    <div id="practiceReportDialog" class="practice-report-overlay" hidden>
       <div class="practice-report-card" role="dialog" aria-modal="true"
         aria-labelledby="practiceReportTitle">
-        <h2 id="practiceReportTitle">Báo lỗi câu hỏi</h2>
-        <p class="practice-report-question"
-          id="practiceReportQuestion"></p>
-        <textarea id="practiceReportDetails"
-          placeholder="Mô tả lỗi bạn gặp (đáp án sai, nội dung khó hiểu…)"
-          aria-label="Mô tả lỗi"></textarea>
-        <p class="practice-report-status" id="practiceReportStatus"
-          role="status" aria-live="polite"></p>
+        <div class="practice-report-head">
+          <span class="practice-report-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flag"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg>
+          </span>
+          <div class="practice-report-title-group">
+            <h2 id="practiceReportTitle">Báo lỗi nội dung</h2>
+            <p id="practiceReportSubtitle">Phản hồi giúp đội ngũ rà soát lại câu hỏi.</p>
+          </div>
+          <button id="practiceReportClose" class="practice-report-close" type="button" aria-label="Đóng">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+          </button>
+        </div>
+
+        <div class="practice-report-body">
+          <p class="practice-report-question" id="practiceReportQuestion"></p>
+
+          <span class="practice-report-label">LOẠI LỖI</span>
+          <div class="practice-report-options" role="radiogroup" aria-label="Loại lỗi">
+            <button type="button" class="practice-report-chip" data-report-category="Sai đáp án" aria-pressed="true">Sai đáp án</button>
+            <button type="button" class="practice-report-chip" data-report-category="Lỗi chính tả / diễn đạt" aria-pressed="false">Lỗi chính tả / diễn đạt</button>
+            <button type="button" class="practice-report-chip" data-report-category="Lỗi khác" aria-pressed="false">Lỗi khác</button>
+          </div>
+
+          <label class="practice-report-label" for="practiceReportDetails">
+            MÔ TẢ THÊM <span>(không bắt buộc)</span>
+          </label>
+          <textarea id="practiceReportDetails"
+            placeholder="Ví dụ: đáp án C mới đúng vì..."
+            maxlength="1000"
+            aria-label="Mô tả thêm"></textarea>
+
+          <p class="practice-report-status" id="practiceReportStatus"
+            role="status" aria-live="polite"></p>
+        </div>
+
         <div class="practice-report-actions">
-          <button id="practiceReportCancel" type="button">Hủy</button>
-          <button id="practiceReportSubmit" type="button">Gửi báo
-            lỗi</button>
+          <button id="practiceReportCancel" type="button">Huỷ</button>
+          <button id="practiceReportSubmit" type="button">Gửi báo lỗi</button>
         </div>
       </div>
     </div>
+
+    <div id="practiceReportToast" class="practice-report-toast" role="status" aria-live="polite" hidden></div>
 
     <!-- Dialog xác nhận làm lại chủ đề -->
     <div id="resetTopicModal" class="grammar-dialog-backdrop" hidden>

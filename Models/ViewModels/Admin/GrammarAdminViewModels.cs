@@ -115,9 +115,9 @@ public class GrammarQuestionFormViewModel
     [Display(Name = "Đáp án đúng")]
     public int CorrectPosition { get; set; }
 
-    [Required(ErrorMessage = "Giải thích là bắt buộc"), StringLength(1000)]
+    [StringLength(1000)]
     [Display(Name = "Giải thích đáp án đúng")]
-    public string Explanation { get; set; } = "";
+    public string? Explanation { get; set; }
 
     [StringLength(1000)]
     [Display(Name = "Vị trí chỗ trống / ngữ cảnh")]
@@ -208,6 +208,7 @@ public class GrammarReportRow
     public int TopicId { get; set; }
     public string QuestionContent { get; set; } = "";
     public string Details { get; set; } = "";
+    public string? ReportType { get; set; }
     public bool IsResolved { get; set; }
     public DateTime CreatedAt { get; set; }
 }

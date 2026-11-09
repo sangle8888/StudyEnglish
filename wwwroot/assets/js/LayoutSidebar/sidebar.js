@@ -71,42 +71,129 @@ function triggerFeedbackModal() {
   const dialog = document.getElementById('websiteFeedbackDialog');
   const textarea = document.getElementById('websiteFeedbackText');
   feedbackTriggerElement = document.activeElement;
-  document.getElementById('websiteFeedbackStatus').textContent = '';
-  document.getElementById('websiteFeedbackSubmit').disabled = false;
-  textarea.value = '';
-  document.getElementById('websiteFeedbackCount').textContent = '0/1000';
-  dialog.hidden = false;
-  textarea.focus();
+  const status = document.getElementById('websiteFeedbackStatus');
+  if (status) {
+    status.textContent = '';
+    status.style.color = '';
+  }
+  const submitBtn = document.getElementById('websiteFeedbackSubmit');
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Gửi góp ý';
+  }
+  if (textarea) {
+    textarea.value = '';
+    textarea.focus();
+  }
+  const countEl = document.getElementById('websiteFeedbackCount');
+  if (countEl) countEl.textContent = '0/1000';
+  if (dialog) dialog.hidden = false;
 }
+window.triggerFeedbackModal = triggerFeedbackModal;
 
 const feedbackDialog = document.getElementById('websiteFeedbackDialog');
 const closeFeedbackDialog = () => {
-  feedbackDialog.hidden = true;
+  if (feedbackDialog) feedbackDialog.hidden = true;
   if (feedbackTriggerElement?.isConnected && !feedbackTriggerElement.disabled)
     feedbackTriggerElement.focus({ preventScroll: true });
 };
-document.getElementById('websiteFeedbackClose').addEventListener('click', closeFeedbackDialog);
-document.getElementById('websiteFeedbackCancel').addEventListener('click', closeFeedbackDialog);
-feedbackDialog.addEventListener('click', event => {
-  if (event.target === feedbackDialog) closeFeedbackDialog();
-});
-document.getElementById('websiteFeedbackSubmit').addEventListener('click', () => {
-  const textarea = document.getElementById('websiteFeedbackText');
-  const message = textarea.value.trim();
-  const status = document.getElementById('websiteFeedbackStatus');
-  if (!message) {
-    status.textContent = 'Vui lòng nhập nội dung góp ý.';
-    textarea.focus();
-    return;
-  }
-  try {
-    const saved = JSON.parse(localStorage.getItem('websiteFeedback') || '[]');
-    saved.push({ message, createdAt: new Date().toISOString() });
-    localStorage.setItem('websiteFeedback', JSON.stringify(saved));
-    status.textContent = 'Góp ý đã được lưu trên thiết bị này.';
-    document.getElementById('websiteFeedbackSubmit').disabled = true;
-  } catch (error) {
-    status.textContent = 'Không thể lưu góp ý trên thiết bị này.';
+const closeBtn = document.getElementById('websiteFeedbackClose');
+if (closeBtn) closeBtn.addEventListener('click', closeFeedbackDialog);
+const cancelBtn = document.getElementById('websiteFeedbackCancel');
+if (cancelBtn) cancelBtn.addEventListener('click', closeFeedbackDialog);
+if (feedbackDialog) {
+  feedbackDialog.addEventListener('click', event => {
+    if (event.target === feedbackDialog) closeFeedbackDialog();
+  });
+}
+
+const submitBtn = document.getElementById('websiteFeedbackSubmit');
+if (submitBtn) {
+  submitBtn.addEventListener('click', () => {
+    const textarea = document.getElementById('websiteFeedbackText');
+    const message = textarea ? textarea.value.trim() : '';
+    const status = document.getElementById('websiteFeedbackStatus');
+    if (!message) {
+      if (status) {
+        status.style.color = '#ef4444';
+        status.textContent = 'Vui lòng nhập nội dung góp ý.';
+      }
+      if (textarea) textarea.focus();
+      return;
+    }
+
+    const activeTypeBtn = document.querySelector('.website-feedback-type[aria-pressed="true"]');
+    const feedbackType = activeTypeBtn ? activeTypeBtn.textContent.trim() : 'Đề xuất tính năng mới';
+
+    submitBtn.disabled = true;
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Đang gửi...';
+    if (status) {
+      status.style.color = '#64748b';
+      status.textContent = 'Đang gửi góp ý đến quản trị viên...';
+    }
+
+    fetch('/Feedback/Submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        feedbackType: feedbackType,
+        content: message
+      })
+    })
+    .then(async res => {
+      const isJson = res.headers.get('content-type')?.includes('application/json');
+      const data = isJson ? await res.json() : null;
+      if (!res.ok) {
+        throw new Error((data && data.message) || `Lỗi máy chủ (${res.status}). Hãy đảm bảo ứng dụng đã được khởi động lại.`);
+      }
+      return data || { success: true };
+    })
+    .then(data => {
+      if (data.success) {
+        if (status) {
+          status.style.color = '#16a34a';
+          status.textContent = data.message || 'Cảm ơn bạn đã đóng góp ý kiến!';
+        }
+        if (textarea) textarea.value = '';
+        const countEl = document.getElementById('websiteFeedbackCount');
+        if (countEl) countEl.textContent = '0/1000';
+        submitBtn.textContent = 'Đã gửi ✓';
+        setTimeout(() => {
+          closeFeedbackDialog();
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          if (status) status.textContent = '';
+        }, 1600);
+      } else {
+        if (status) {
+          status.style.color = '#ef4444';
+          status.textContent = data.message || 'Không thể gửi góp ý. Vui lòng thử lại.';
+        }
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    })
+    .catch(err => {
+      console.error('Lỗi gửi góp ý:', err);
+      if (status) {
+        status.style.color = '#ef4444';
+        status.textContent = err.message || 'Có lỗi xảy ra khi kết nối máy chủ. Vui lòng thử lại!';
+      }
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalText;
+    });
+  });
+}
+
+document.addEventListener('click', event => {
+  const trigger = event.target.closest('#profileFeedbackButton, [data-reading-feedback="feedback"], #phrasePracticeFeedbackButton, #lessonFeedbackButton, #practiceFeedbackToggle');
+  if (trigger) {
+    event.preventDefault();
+    triggerFeedbackModal();
   }
 });
 

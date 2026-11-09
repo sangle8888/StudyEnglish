@@ -922,6 +922,17 @@
                   if (listeningFeedbackError) listeningFeedbackError.textContent = 'Kh\u00F4ng th\u1EC3 l\u01B0u ph\u1EA3n h\u1ED3i trong tr\u00ECnh duy\u1EC7t n\u00E0y.';
                   return;
                 }
+                if (listeningFeedbackType === 'feedback') {
+                  fetch('/Feedback/Submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      feedbackType: category || 'Nội dung học',
+                      content: description + (qData ? ` [Luyện nghe: ${qData.test}, Câu: ${qData.questionNum}]` : '')
+                    })
+                  }).catch(e => console.error('Lỗi gửi góp ý:', e));
+                }
+
                 closeListeningFeedback();
                 if (listeningFeedbackToast) {
                   listeningFeedbackToast.textContent = listeningFeedbackType === 'report'

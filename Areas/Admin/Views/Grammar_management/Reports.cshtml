@@ -29,7 +29,13 @@
                             <div class="small text-muted">@r.TopicTitle</div>
                             <div>@r.QuestionContent</div>
                         </td>
-                        <td>@r.Details</td>
+                        <td>
+                            @if (!string.IsNullOrWhiteSpace(r.ReportType) && r.ReportType != "UserGrammarReport")
+                            {
+                                <span class="badge bg-danger-subtle text-danger border border-danger-subtle me-1">@r.ReportType</span>
+                            }
+                            <span>@r.Details</span>
+                        </td>
                         <td>@if (r.IsResolved) { <span class="badge text-bg-success">Đã xử lý</span> } else { <span class="badge text-bg-warning">Mới</span> }</td>
                         <td class="text-end text-nowrap">
                             <a class="btn btn-sm btn-outline-primary" asp-action="EditQuestion" asp-route-id="@r.QuestionId">Sửa câu</a>

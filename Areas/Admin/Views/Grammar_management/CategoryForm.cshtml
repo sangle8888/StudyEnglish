@@ -34,11 +34,12 @@
                     <label asp-for="SortOrder" class="form-label"></label>
                     <input asp-for="SortOrder" class="form-control" />
                 </div>
-                <div class="col-md-4 d-flex align-items-end">
+                <div class="col-md-4 d-flex flex-column justify-content-end">
                     <div class="form-check">
                         <input asp-for="IsActive" class="form-check-input" />
                         <label asp-for="IsActive" class="form-check-label"></label>
                     </div>
+                    <small class="text-muted mt-1">Khi bỏ chọn (Ẩn), tất cả chủ đề thuộc nhóm này cũng sẽ chuyển sang trạng thái ẩn.</small>
                 </div>
             </div>
             <div class="mt-4 d-flex gap-2">
