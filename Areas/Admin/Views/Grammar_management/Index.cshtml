@@ -143,17 +143,17 @@
     </div>
     <div class="d-flex gap-2">
         <a class="btn btn-outline-secondary" asp-action="Reports">
-            <i class="fa-regular fa-flag me-1"></i>Báo lỗi câu hỏi
+            <i data-lucide="flag" class="me-1"></i>Báo lỗi câu hỏi
             @if (Model.OpenReports > 0)
             {
                 <span class="badge text-bg-danger ms-1">@Model.OpenReports</span>
             }
         </a>
         <a class="btn btn-outline-primary" asp-action="CreateCategory">
-            <i class="fa-solid fa-plus me-1"></i>Nhóm chủ đề
+            <i data-lucide="plus" class="me-1"></i>Nhóm chủ đề
         </a>
         <a class="btn btn-primary" asp-action="CreateTopic" asp-route-categoryId="@Model.SelectedCategoryId">
-            <i class="fa-solid fa-plus me-1"></i>Chủ đề
+            <i data-lucide="plus" class="me-1"></i>Chủ đề
         </a>
     </div>
 </div>
@@ -161,7 +161,7 @@
 @if (TempData["Success"] is string success)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fa-solid fa-circle-check me-2"></i>@success
+        <i data-lucide="check-circle" class="me-2 text-success"></i>@success
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
     </div>
 }
@@ -200,13 +200,13 @@
     <div class="card-header py-3">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
             <div class="d-flex align-items-center gap-2">
-                <span class="fw-bold text-primary"><i class="fa-solid fa-layer-group me-1"></i>Nhóm chủ đề</span>
+                <span class="fw-bold text-primary"><i data-lucide="layers" class="me-1"></i>Nhóm chủ đề</span>
                 <span id="categoryCountBadge" class="badge custom-count-badge">@Model.Categories.Count nhóm</span>
             </div>
             <!-- Bộ lọc tìm kiếm nhóm chủ đề -->
             <div class="d-flex align-items-center gap-2 flex-nowrap ms-auto admin-filter-bar">
                 <div class="input-group-search" style="width: 260px;">
-                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <span class="search-icon"><i data-lucide="search"></i></span>
                     <input type="text" id="categorySearchInput" class="form-control" placeholder="Tìm kiếm nhóm chủ đề..." />
                 </div>
                 <select id="categoryStatusFilter" class="form-select" style="width: 170px; flex-shrink: 0;">
@@ -215,7 +215,7 @@
                     <option value="inactive">Ẩn</option>
                 </select>
                 <button type="button" id="btnResetCategoryFilter" class="btn btn-outline-secondary btn-filter-reset flex-shrink-0" title="Đặt lại bộ lọc nhóm">
-                    <i class="fa-solid fa-rotate-left"></i>
+                    <i data-lucide="rotate-ccw"></i>
                 </button>
             </div>
         </div>
@@ -261,12 +261,12 @@
                         <td class="text-end text-nowrap">
                             <div class="d-inline-flex align-items-center justify-content-end" style="gap: 6px;">
                                 <a class="btn btn-sm btn-outline-primary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" asp-action="EditCategory" asp-route-id="@c.Id" title="Chỉnh sửa nhóm">
-                                    <i class="fa-solid fa-pen-to-square"></i><span>Sửa</span>
+                                    <i data-lucide="square-pen" class="me-1"></i><span>Sửa</span>
                                 </a>
                                 <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap btn-delete-category" 
                                         data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" 
                                         data-id="@c.Id" data-title="@c.Title" data-count="@c.TopicCount" title="Xoá nhóm">
-                                    <i class="fa-solid fa-trash-can"></i><span>Xoá</span>
+                                    <i data-lucide="trash-2" class="me-1"></i><span>Xoá</span>
                                 </button>
                             </div>
                         </td>
@@ -277,7 +277,7 @@
                     <tr id="emptyCategoryRow"><td colspan="5" class="text-center text-muted py-4">Chưa có nhóm chủ đề nào.</td></tr>
                 }
                 <tr id="noCategoryMatchRow" style="display: none;">
-                    <td colspan="5" class="text-center text-muted py-4"><i class="fa-solid fa-filter-circle-xmark me-2"></i>Không tìm thấy nhóm chủ đề nào phù hợp.</td>
+                    <td colspan="5" class="text-center text-muted py-4"><i data-lucide="filter-x" class="me-2"></i>Không tìm thấy nhóm chủ đề nào phù hợp.</td>
                 </tr>
             </tbody>
         </table>
@@ -289,7 +289,7 @@
     <div class="card-header py-3">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
             <div class="d-flex align-items-center gap-2">
-                <span class="fw-bold text-success"><i class="fa-solid fa-book-bookmark me-1"></i>Chủ đề</span>
+                <span class="fw-bold text-success"><i data-lucide="book-marked" class="me-1"></i>Chủ đề</span>
                 <span id="topicGroupFilterLabel" class="text-muted small">
                     @(Model.SelectedCategoryId.HasValue ? "(đang lọc theo nhóm)" : "(tất cả)")
                 </span>
@@ -298,7 +298,7 @@
             @if (Model.SelectedCategoryId.HasValue)
             {
                 <a class="btn btn-sm btn-outline-secondary" asp-action="Index">
-                    <i class="fa-solid fa-xmark me-1"></i>Bỏ lọc nhóm URL
+                    <i data-lucide="x" class="me-1"></i>Bỏ lọc nhóm URL
                 </a>
             }
         </div>
@@ -309,7 +309,7 @@
         <div class="row g-2 align-items-center">
             <div class="col-lg-4 col-md-5">
                 <div class="input-group-search w-100">
-                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <span class="search-icon"><i data-lucide="search"></i></span>
                     <input type="text" id="topicSearchInput" class="form-control" placeholder="Tìm kiếm tên chủ đề, nhóm, kỳ thi..." />
                 </div>
             </div>
@@ -338,7 +338,7 @@
             </div>
             <div class="col-lg-1 col-md-12">
                 <button type="button" id="btnResetTopicFilter" class="btn btn-outline-secondary btn-filter-reset w-100" title="Đặt lại bộ lọc">
-                    <i class="fa-solid fa-rotate-left"></i>
+                    <i data-lucide="rotate-ccw"></i>
                 </button>
             </div>
         </div>
@@ -350,18 +350,18 @@
     <!-- Thanh thao tác hàng loạt cho các chủ đề có dấu tích chọn -->
     <div id="bulkTopicActionBar" class="alert alert-info py-2 px-3 mx-3 mt-3 mb-0 d-flex align-items-center justify-content-between flex-wrap gap-2 shadow-sm" style="display: none !important;">
         <div class="d-flex align-items-center gap-2">
-            <i class="fa-solid fa-circle-check text-primary fs-5"></i>
+            <i data-lucide="check-circle" class="text-primary fs-5"></i>
             <span>Đã chọn <strong id="selectedTopicsBadge" class="text-primary">0</strong> chủ đề</span>
         </div>
         <div class="d-flex align-items-center gap-2">
             <button type="button" class="btn btn-sm btn-success rounded-pill px-3" id="btnBulkShowTopics">
-                <i class="fa-solid fa-eye me-1"></i>Hiện mục chọn
+                <i data-lucide="eye" class="me-1"></i>Hiện mục chọn
             </button>
             <button type="button" class="btn btn-sm btn-warning text-dark rounded-pill px-3" id="btnBulkHideTopics">
-                <i class="fa-solid fa-eye-slash me-1"></i>Ẩn mục chọn
+                <i data-lucide="eye-off" class="me-1"></i>Ẩn mục chọn
             </button>
             <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" id="btnBulkDeleteTopics">
-                <i class="fa-solid fa-trash-can me-1"></i>Xoá mục chọn
+                <i data-lucide="trash-2" class="me-1"></i>Xoá mục chọn
             </button>
             <button type="button" class="btn btn-sm btn-link text-decoration-none text-muted" id="btnClearTopicSelection">
                 Bỏ chọn
@@ -420,28 +420,28 @@
                         <td class="topic-status-cell">
                             @if (t.IsActive)
                             {
-                                <span class="badge text-bg-success"><i class="fa-solid fa-circle-check me-1"></i>Hiển thị</span>
+                                <span class="badge text-bg-success"><i data-lucide="check-circle" class="me-1"></i>Hiển thị</span>
                             }
                             else
                             {
-                                <span class="badge text-bg-secondary"><i class="fa-solid fa-eye-slash me-1"></i>Ẩn</span>
+                                <span class="badge text-bg-secondary"><i data-lucide="eye-off" class="me-1"></i>Ẩn</span>
                             }
                         </td>
                         <td class="text-end text-nowrap">
                             <div class="d-inline-flex align-items-center justify-content-end" style="gap: 6px;">
                                 <a class="btn btn-sm btn-outline-secondary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" asp-action="EditTheory" asp-route-topicId="@t.Id" title="Quản lý lý thuyết">
-                                    <i class="fa-solid fa-book-open"></i><span>Lý thuyết</span>
+                                    <i data-lucide="book-open" class="me-1"></i><span>Lý thuyết</span>
                                 </a>
                                 <a class="btn btn-sm btn-outline-secondary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" asp-action="Questions" asp-route-topicId="@t.Id" title="Quản lý câu hỏi">
-                                    <i class="fa-solid fa-list-check"></i><span>Câu hỏi</span>
+                                    <i data-lucide="list-checks" class="me-1"></i><span>Câu hỏi</span>
                                 </a>
                                 <a class="btn btn-sm btn-outline-primary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap" asp-action="EditTopic" asp-route-id="@t.Id" title="Chỉnh sửa chủ đề">
-                                    <i class="fa-solid fa-pen-to-square"></i><span>Sửa</span>
+                                    <i data-lucide="square-pen" class="me-1"></i><span>Sửa</span>
                                 </a>
                                 <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap btn-delete-topic" 
                                         data-bs-toggle="modal" data-bs-target="#deleteTopicModal" 
                                         data-id="@t.Id" data-title="@t.Title" data-questions="@t.QuestionCount" title="Xoá chủ đề">
-                                    <i class="fa-solid fa-trash-can"></i><span>Xoá</span>
+                                    <i data-lucide="trash-2" class="me-1"></i><span>Xoá</span>
                                 </button>
                             </div>
                         </td>
@@ -452,7 +452,7 @@
                     <tr id="emptyTopicRow"><td colspan="8" class="text-center text-muted py-4">Chưa có chủ đề nào.</td></tr>
                 }
                 <tr id="noTopicMatchRow" style="display: none;">
-                    <td colspan="8" class="text-center text-muted py-4"><i class="fa-solid fa-filter-circle-xmark me-2"></i>Không tìm thấy chủ đề nào phù hợp với bộ lọc.</td>
+                    <td colspan="8" class="text-center text-muted py-4"><i data-lucide="filter-x" class="me-2"></i>Không tìm thấy chủ đề nào phù hợp với bộ lọc.</td>
                 </tr>
             </tbody>
         </table>
@@ -466,7 +466,7 @@
             <div class="modal-body p-4 text-center">
                 <div class="mb-3">
                     <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width: 60px; height: 60px;">
-                        <i class="fa-solid fa-trash-can fs-3"></i>
+                        <i data-lucide="trash-2" class="fs-3"></i>
                     </span>
                 </div>
                 <h5 class="modal-title fw-bold mb-2" id="deleteCategoryModalTitle">Xác nhận xoá nhóm chủ đề</h5>
@@ -484,7 +484,7 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" id="deleteCategoryIdInput" value="" />
                         <button type="submit" class="btn btn-danger rounded-pill px-4">
-                            <i class="fa-solid fa-trash-can me-1"></i>Xác nhận xoá
+                            <i data-lucide="trash-2" class="me-1"></i>Xác nhận xoá
                         </button>
                     </form>
                 </div>
@@ -500,7 +500,7 @@
             <div class="modal-body p-4 text-center">
                 <div class="mb-3">
                     <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width: 60px; height: 60px;">
-                        <i class="fa-solid fa-trash-can fs-3"></i>
+                        <i data-lucide="trash-2" class="fs-3"></i>
                     </span>
                 </div>
                 <h5 class="modal-title fw-bold mb-2" id="deleteTopicModalTitle">Xác nhận xoá chủ đề</h5>
@@ -518,7 +518,7 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" id="deleteTopicIdInput" value="" />
                         <button type="submit" class="btn btn-danger rounded-pill px-4">
-                            <i class="fa-solid fa-trash-can me-1"></i>Xác nhận xoá
+                            <i data-lucide="trash-2" class="me-1"></i>Xác nhận xoá
                         </button>
                     </form>
                 </div>
@@ -534,7 +534,7 @@
             <div class="modal-body p-4 text-center">
                 <div class="mb-3">
                     <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width: 60px; height: 60px;">
-                        <i class="fa-solid fa-triangle-exclamation fs-3"></i>
+                        <i data-lucide="alert-triangle" class="fs-3"></i>
                     </span>
                 </div>
                 <h5 class="modal-title fw-bold mb-2" id="bulkDeleteTopicModalTitle">Xác nhận xoá các chủ đề đã chọn</h5>
@@ -545,7 +545,7 @@
                 <div class="d-flex justify-content-center gap-2">
                     <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Huỷ</button>
                     <button type="button" class="btn btn-danger rounded-pill px-4" id="btnConfirmBulkDeleteTopics">
-                        <i class="fa-solid fa-trash-can me-1"></i>Xác nhận xoá
+                        <i data-lucide="trash-2" class="me-1"></i>Xác nhận xoá
                     </button>
                 </div>
             </div>

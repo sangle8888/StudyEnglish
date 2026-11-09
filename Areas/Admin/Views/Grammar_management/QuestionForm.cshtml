@@ -11,7 +11,7 @@
     @if (!ViewData.ModelState.IsValid)
     {
         <div class="alert alert-danger shadow-sm mb-3">
-            <div class="fw-bold mb-1"><i class="fa-solid fa-triangle-exclamation me-1"></i>Không thể lưu câu hỏi. Vui lòng kiểm tra các thông tin sau:</div>
+            <div class="fw-bold mb-1"><i data-lucide="alert-triangle" class="me-1"></i>Không thể lưu câu hỏi. Vui lòng kiểm tra các thông tin sau:</div>
             <div asp-validation-summary="All" class="mb-0"></div>
         </div>
     }
@@ -83,17 +83,17 @@
         <div class="card-header bg-light d-flex align-items-center justify-content-between flex-wrap gap-2">
             <div>
                 <span class="fw-bold text-primary">
-                    <i class="fa-solid fa-layer-group me-2"></i>CÁCH SUY LUẬN (TÙY CHỈNH TIÊU CHÍ)
+                    <i data-lucide="layers" class="me-2"></i>CÁCH SUY LUẬN (TÙY CHỈNH TIÊU CHÍ)
                 </span>
                 <span class="badge bg-primary-subtle text-primary ms-2" id="stepCountBadge">@(Model.ReasoningSteps.Count) bước</span>
             </div>
             <button type="button" class="btn btn-sm btn-success" id="btnAddReasoningStep">
-                <i class="fa-solid fa-plus me-1"></i>Thêm bước suy luận
+                <i data-lucide="plus" class="me-1"></i>Thêm bước suy luận
             </button>
         </div>
         <div class="card-body">
             <div class="alert alert-info py-2 px-3 small mb-3">
-                <i class="fa-solid fa-circle-info me-1"></i> Bạn có thể <strong>chỉnh sửa tiêu đề tiêu chí</strong> theo bất kỳ cấu trúc nào (Vị trí, Dạng từ, Hoà hợp S-V, Xét thì, Nghĩa câu, Cụm từ...), bấm thêm/xoá bước, sắp xếp lại thứ tự và tích chọn các đáp án cần loại ở từng bước.
+                <i data-lucide="info" class="me-1"></i> Bạn có thể <strong>chỉnh sửa tiêu đề tiêu chí</strong> theo bất kỳ cấu trúc nào (Vị trí, Dạng từ, Hoà hợp S-V, Xét thì, Nghĩa câu, Cụm từ...), bấm thêm/xoá bước, sắp xếp lại thứ tự và tích chọn các đáp án cần loại ở từng bước.
             </div>
 
             <div id="reasoningStepsContainer">
@@ -117,9 +117,9 @@
                                 </div>
                             </div>
                             <div class="d-flex align-items-center gap-1">
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn-move-up" title="Chuyển lên"><i class="fa-solid fa-arrow-up"></i></button>
-                                <button type="button" class="btn btn-sm btn-outline-secondary btn-move-down" title="Chuyển xuống"><i class="fa-solid fa-arrow-down"></i></button>
-                                <button type="button" class="btn btn-sm btn-outline-danger btn-delete-step" title="Xoá bước"><i class="fa-solid fa-trash-can"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-move-up" title="Chuyển lên"><i data-lucide="arrow-up"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-secondary btn-move-down" title="Chuyển xuống"><i data-lucide="arrow-down"></i></button>
+                                <button type="button" class="btn btn-sm btn-outline-danger btn-delete-step" title="Xoá bước"><i data-lucide="trash-2"></i></button>
                             </div>
                         </div>
                         <div class="mb-2">
@@ -140,7 +140,7 @@
                             }
                         </div>
                         <div class="step-blank-hint @(isBlankStep ? "" : "d-none") text-muted small fst-italic">
-                            <i class="fa-solid fa-circle-info me-1 text-primary"></i> Tiêu chí "Vị trí chỗ trống" dùng để xác định thành phần câu cần điền, không cần loại đáp án.
+                            <i data-lucide="info" class="me-1 text-primary"></i> Tiêu chí "Vị trí chỗ trống" dùng để xác định thành phần câu cần điền, không cần loại đáp án.
                         </div>
                     </div>
                 }
@@ -148,11 +148,11 @@
 
             <div class="row g-3 mt-2">
                 <div class="col-md-6">
-                    <label asp-for="Rule" class="form-label fw-semibold"><i class="fa-solid fa-graduation-cap me-1 text-primary"></i>Ngữ pháp cần nhớ</label>
+                    <label asp-for="Rule" class="form-label fw-semibold"><i data-lucide="graduation-cap" class="me-1 text-primary"></i>Ngữ pháp cần nhớ</label>
                     <textarea asp-for="Rule" class="form-control" rows="3" placeholder="Ví dụ: Hiện tại đơn (S + V-s/es) dùng cho lịch trình, thời gian biểu, sự kiện cố định..."></textarea>
                 </div>
                 <div class="col-md-6">
-                    <label asp-for="Explanation" class="form-label fw-semibold"><i class="fa-regular fa-comment-dots me-1 text-primary"></i>Giải thích tổng quát / Tóm tắt đáp án</label>
+                    <label asp-for="Explanation" class="form-label fw-semibold"><i data-lucide="message-square" class="me-1 text-primary"></i>Giải thích tổng quát / Tóm tắt đáp án</label>
                     <textarea asp-for="Explanation" class="form-control" rows="3" placeholder="Tóm tắt ngắn gọn lý do chọn đáp án đúng"></textarea>
                     <span asp-validation-for="Explanation" class="text-danger"></span>
                 </div>
@@ -431,9 +431,9 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center gap-1">
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn-move-up" title="Chuyển lên"><i class="fa-solid fa-arrow-up"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary btn-move-down" title="Chuyển xuống"><i class="fa-solid fa-arrow-down"></i></button>
-                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-step" title="Xoá bước"><i class="fa-solid fa-trash-can"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-move-up" title="Chuyển lên"><i data-lucide="arrow-up"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary btn-move-down" title="Chuyển xuống"><i data-lucide="arrow-down"></i></button>
+                            <button type="button" class="btn btn-sm btn-outline-danger btn-delete-step" title="Xoá bước"><i data-lucide="trash-2"></i></button>
                         </div>
                     </div>
                     <div class="mb-2">
@@ -459,11 +459,14 @@
                         </div>
                     </div>
                     <div class="step-blank-hint d-none text-muted small fst-italic">
-                        <i class="fa-solid fa-circle-info me-1 text-primary"></i> Tiêu chí "Vị trí chỗ trống" dùng để xác định thành phần câu cần điền, không cần loại đáp án.
+                        <i data-lucide="info" class="me-1 text-primary"></i> Tiêu chí "Vị trí chỗ trống" dùng để xác định thành phần câu cần điền, không cần loại đáp án.
                     </div>
                 `;
                 container.appendChild(newCard);
                 updateStepIndexes();
+                if (window.lucide) {
+                    lucide.createIcons();
+                }
                 const newTitle = newCard.querySelector(".step-title-input");
                 if (newTitle) {
                     newTitle.focus();
@@ -474,6 +477,10 @@
 
         // Khởi tạo ban đầu
         updateStepIndexes();
+
+        if (window.lucide) {
+            lucide.createIcons();
+        }
     });
 </script>
 }

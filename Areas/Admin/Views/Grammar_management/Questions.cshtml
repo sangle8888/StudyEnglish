@@ -8,7 +8,7 @@
             <div class="text-muted">@Model.CategoryTitle · @Model.Questions.Count câu hỏi</div>
         </div>
         <a class="btn btn-primary" asp-action="CreateQuestion" asp-route-topicId="@Model.TopicId">
-            <i class="fa-solid fa-plus me-1"></i>Thêm câu hỏi
+            <i data-lucide="plus" class="me-1"></i>Thêm câu hỏi
         </a>
     </div>
 </div>
@@ -16,7 +16,7 @@
 @if (TempData["Success"] is string success)
 {
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fa-solid fa-circle-check me-2"></i>@success
+        <i data-lucide="check-circle" class="me-2 text-success"></i>@success
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
@@ -27,7 +27,7 @@
         <div class="row g-2 align-items-center">
             <div class="col-md-5">
                 <div class="input-group">
-                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                    <span class="input-group-text bg-transparent"><i data-lucide="search" class="text-muted"></i></span>
                     <input type="text" id="questionSearchInput" class="form-control" placeholder="Tìm kiếm nội dung câu hỏi, đáp án..." />
                 </div>
             </div>
@@ -48,7 +48,7 @@
             </div>
             <div class="col-md-1 d-grid">
                 <button type="button" id="btnResetFilter" class="btn btn-outline-secondary" title="Đặt lại bộ lọc">
-                    <i class="fa-solid fa-rotate-left"></i>
+                    <i data-lucide="rotate-ccw"></i>
                 </button>
             </div>
         </div>
@@ -61,12 +61,12 @@
 <!-- Thanh thao tác hàng loạt khi có tích ô -->
 <div id="bulkActionBar" class="alert alert-info py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2 mb-3 shadow-sm" style="display: none !important;">
     <div class="d-flex align-items-center gap-2">
-        <i class="fa-solid fa-circle-check text-primary fs-5"></i>
+        <i data-lucide="check-circle" class="text-primary fs-5"></i>
         <span>Đã chọn <strong id="selectedCountBadge" class="text-primary">0</strong> câu hỏi</span>
     </div>
     <div class="d-flex align-items-center gap-2">
         <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" id="btnOpenBulkDeleteModal" data-bs-toggle="modal" data-bs-target="#bulkDeleteConfirmModal">
-            <i class="fa-solid fa-trash-can me-1"></i>Xoá các câu đã chọn
+            <i data-lucide="trash-2" class="me-1"></i>Xoá các câu đã chọn
         </button>
         <button type="button" class="btn btn-sm btn-link text-decoration-none text-muted" id="btnClearSelection">
             Bỏ chọn
@@ -122,7 +122,7 @@
                                     if (opt.IsCorrect)
                                     {
                                         <span class="badge bg-success-subtle text-success border border-success-subtle fw-bold">
-                                            <i class="fa-solid fa-check me-1"></i>@letter. @opt.Content
+                                            <i data-lucide="check" class="me-1"></i>@letter. @opt.Content
                                         </span>
                                     }
                                     else
@@ -139,17 +139,17 @@
                             {
                                 case 1:
                                     <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                        <i class="fa-solid fa-gauge-simple me-1"></i>Cơ bản
+                                        <i data-lucide="gauge" class="me-1"></i>Cơ bản
                                     </span>
                                     break;
                                 case 2:
                                     <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
-                                        <i class="fa-solid fa-gauge-med me-1"></i>Trung bình
+                                        <i data-lucide="gauge" class="me-1"></i>Trung bình
                                     </span>
                                     break;
                                 case 3:
                                     <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
-                                        <i class="fa-solid fa-gauge-high me-1"></i>Nâng cao
+                                        <i data-lucide="gauge" class="me-1"></i>Nâng cao
                                     </span>
                                     break;
                                 default:
@@ -161,27 +161,27 @@
                             @if (!q.IsDeleted)
                             {
                                 <span class="badge bg-success-subtle text-success border border-success-subtle">
-                                    <i class="fa-solid fa-circle-check me-1"></i>Hiển thị
+                                    <i data-lucide="check-circle" class="me-1"></i>Hiển thị
                                 </span>
                             }
                             else
                             {
                                 <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
-                                    <i class="fa-solid fa-eye-slash me-1"></i>Ẩn
+                                    <i data-lucide="eye-off" class="me-1"></i>Ẩn
                                 </span>
                             }
                         </td>
                         <td class="text-end text-nowrap">
                             <div class="d-inline-flex align-items-center justify-content-end" style="gap: 8px;">
                                 <a class="btn btn-sm btn-outline-primary rounded-pill px-3" asp-action="EditQuestion" asp-route-id="@q.QuestionId">
-                                    <i class="fa-regular fa-pen-to-square me-1"></i>Sửa
+                                    <i data-lucide="square-pen" class="me-1"></i>Sửa
                                 </a>
                                 <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 btn-delete-question" 
                                         data-bs-toggle="modal"
                                         data-bs-target="#deleteConfirmModal"
                                         data-id="@q.QuestionId" 
                                         data-stem="@q.Stem">
-                                    <i class="fa-regular fa-trash-can me-1"></i>Xoá
+                                    <i data-lucide="trash-2" class="me-1"></i>Xoá
                                 </button>
                             </div>
                         </td>
@@ -190,7 +190,7 @@
 
                 <tr id="noResultsRow" style="display: none;">
                     <td colspan="6" class="text-center text-muted py-4">
-                        <i class="fa-solid fa-filter me-1 text-secondary"></i> Không tìm thấy câu hỏi nào phù hợp với bộ lọc hiện tại.
+                        <i data-lucide="filter" class="me-1 text-secondary"></i> Không tìm thấy câu hỏi nào phù hợp với bộ lọc hiện tại.
                     </td>
                 </tr>
 
@@ -214,15 +214,15 @@
             <div class="modal-body p-4 text-center">
                 <div class="mb-3">
                     <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width: 60px; height: 60px;">
-                        <i class="fa-solid fa-trash-can fs-3"></i>
+                        <i data-lucide="trash-2" class="fs-3"></i>
                     </span>
                 </div>
-                <h5 class="modal-title fw-bold text-dark mb-2" id="deleteModalTitle">Xác nhận xoá câu hỏi</h5>
+                <h5 class="modal-title fw-bold mb-2" id="deleteModalTitle">Xác nhận xoá câu hỏi</h5>
                 <p class="text-secondary small mb-3">Bạn có chắc chắn muốn xoá câu hỏi này? Câu hỏi sẽ được chuyển vào danh sách ẩn.</p>
                 
                 <div class="p-3 bg-light rounded-3 text-start mb-3 border">
                     <div class="small text-muted mb-1">Nội dung câu hỏi:</div>
-                    <div class="fw-semibold text-dark text-break" id="modalQuestionStem"></div>
+                    <div class="fw-semibold text-break" id="modalQuestionStem"></div>
                 </div>
 
                 <div class="d-flex justify-content-center gap-2">
@@ -231,7 +231,7 @@
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="id" id="deleteQuestionIdInput" value="" />
                         <button type="submit" class="btn btn-danger rounded-pill px-4">
-                            <i class="fa-solid fa-trash-can me-1"></i>Xác nhận xoá
+                            <i data-lucide="trash-2" class="me-1"></i>Xác nhận xoá
                         </button>
                     </form>
                 </div>
@@ -247,10 +247,10 @@
             <div class="modal-body p-4 text-center">
                 <div class="mb-3">
                     <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-danger-subtle text-danger" style="width: 60px; height: 60px;">
-                        <i class="fa-solid fa-triangle-exclamation fs-3"></i>
+                        <i data-lucide="alert-triangle" class="fs-3"></i>
                     </span>
                 </div>
-                <h5 class="modal-title fw-bold text-dark mb-2" id="bulkDeleteModalTitle">Xoá các câu hỏi đã chọn</h5>
+                <h5 class="modal-title fw-bold mb-2" id="bulkDeleteModalTitle">Xoá các câu hỏi đã chọn</h5>
                 <p class="text-secondary small mb-3">
                     Bạn đang chọn <strong id="bulkDeleteCount" class="text-danger">0</strong> câu hỏi. Bạn có chắc chắn muốn xoá tất cả các câu hỏi này không?
                 </p>
@@ -262,7 +262,7 @@
                         <input type="hidden" name="topicId" value="@Model.TopicId" />
                         <div id="bulkDeleteInputsContainer"></div>
                         <button type="submit" class="btn btn-danger rounded-pill px-4">
-                            <i class="fa-solid fa-trash-can me-1"></i>Xác nhận xoá
+                            <i data-lucide="trash-2" class="me-1"></i>Xác nhận xoá
                         </button>
                     </form>
                 </div>
@@ -476,6 +476,10 @@
                 });
                 updateSelectedState();
             });
+        }
+
+        if (window.lucide) {
+            lucide.createIcons();
         }
     });
 </script>

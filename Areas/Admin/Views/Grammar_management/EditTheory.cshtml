@@ -9,7 +9,7 @@
 @if (TempData["Success"] is not null)
 {
     <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-        <i class="bi bi-check-circle-fill me-2"></i> @TempData["Success"]
+        <i data-lucide="check-circle" class="me-2 text-success"></i> @TempData["Success"]
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
@@ -17,7 +17,7 @@
 @if (TempData["Error"] is not null)
 {
     <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
-        <i class="bi bi-exclamation-octagon-fill me-2"></i> @TempData["Error"]
+        <i data-lucide="alert-octagon" class="me-2 text-danger"></i> @TempData["Error"]
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 }
@@ -27,7 +27,7 @@
     <div class="alert alert-warning border-0 shadow-sm d-flex align-items-center justify-content-between p-3 mb-4 rounded-3" role="alert">
         <div class="d-flex align-items-center gap-3">
             <div class="rounded-circle bg-warning text-dark p-2 d-flex align-items-center justify-content-center flex-shrink-0" style="width: 38px; height: 38px;">
-                <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+                <i data-lucide="alert-triangle" class="fs-5"></i>
             </div>
             <div>
                 <h6 class="mb-1 fw-bold text-dark">Hệ thống đã tự động khôi phục nội dung tiếng Việt chuẩn</h6>
@@ -104,13 +104,13 @@
             <div class="mt-4 d-flex align-items-center justify-content-between flex-wrap gap-2">
                 <div class="d-flex gap-2">
                     <button type="submit" class="btn btn-primary px-4 fw-medium">
-                        <i class="bi bi-check-lg me-1"></i> Lưu lý thuyết
+                        <i data-lucide="check" class="me-1"></i> Lưu lý thuyết
                     </button>
                     <a asp-action="Index" class="btn btn-outline-secondary px-3">Huỷ</a>
                 </div>
                 <div>
                     <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#restoreSeedModal">
-                        <i class="bi bi-arrow-counterclockwise me-1"></i> Khôi phục chuẩn tiếng Việt
+                        <i data-lucide="rotate-ccw" class="me-1"></i> Khôi phục chuẩn tiếng Việt
                     </button>
                 </div>
             </div>

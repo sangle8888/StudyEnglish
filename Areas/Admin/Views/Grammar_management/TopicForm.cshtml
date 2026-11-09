@@ -41,7 +41,7 @@
                         <div class="small text-muted mb-1 fw-semibold">Gợi ý biểu tượng thường dùng (bấm để chọn):</div>
                         <div class="d-flex flex-wrap gap-1" id="topicIconSuggestions"></div>
                         <div class="small text-muted mt-2">
-                            <i class="fa-solid fa-circle-info me-1"></i>Xem danh sách toàn bộ icon tại <a href="https://lucide.dev/icons" target="_blank" rel="noopener" class="text-decoration-none">lucide.dev/icons</a> (nhập tên icon vào ô phía trên).
+                            <i data-lucide="info" class="me-1"></i>Xem danh sách toàn bộ icon tại <a href="https://lucide.dev/icons" target="_blank" rel="noopener" class="text-decoration-none">lucide.dev/icons</a> (nhập tên icon vào ô phía trên).
                         </div>
                     </div>
                 </div>
@@ -71,7 +71,7 @@
                 </div>
             </div>
             <div class="mt-4 pt-3 border-top d-flex gap-2">
-                <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-check me-1"></i>Lưu</button>
+                <button type="submit" class="btn btn-primary px-4"><i data-lucide="check" class="me-1"></i>Lưu</button>
                 <a asp-action="Index" asp-route-categoryId="@Model.CategoryId" class="btn btn-outline-secondary">Huỷ</a>
             </div>
         </form>
