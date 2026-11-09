@@ -316,7 +316,7 @@
 
       if (activeTab === "learning" && !query && activeExam !== "VSTEP") {
         grid.appendChild(makeReviewCard(group));
-        if (group === grammarGroups[0]) grid.appendChild(makeMiniTestCard(group));
+        grid.appendChild(makeMiniTestCard(group));
       }
       section.append(heading, grid);
       topicSections.appendChild(section);
@@ -1726,12 +1726,21 @@
       );
       if (!group) return;
       const isTest = groupButton.dataset.mode === "test";
-      let records = allQuestionRecords().filter((item) =>
-        isTest ? item.exam.includes("TOEIC") : item.group.id === group.id,
-      );
+      let records = allQuestionRecords().filter((item) => item.group.id === group.id);
+      if (isTest) {
+        const toeicRecords = records.filter((item) => item.exam && item.exam.includes("TOEIC"));
+        if (toeicRecords.length > 0) {
+          records = toeicRecords;
+        }
+      }
+      if (!records || records.length === 0) {
+        alert("Chủ đề này chưa có câu hỏi luyện tập. Đang cập nhật nội dung!");
+        return;
+      }
       if (isTest && records.length) {
+        const targetCount = Math.min(50, Math.max(records.length, 10));
         const shuffledQuestions = [];
-        while (shuffledQuestions.length < 50) {
+        while (shuffledQuestions.length < targetCount && shuffledQuestions.length < 50) {
           const round = [...records].sort(() => Math.random() - 0.5);
           if (
             round.length > 1 &&
@@ -1747,7 +1756,7 @@
       openPractice(
         records,
         groupButton,
-        isTest ? 50 : Math.min(selectedTestSize, records.length),
+        isTest ? records.length : Math.min(selectedTestSize, records.length),
       );
     }
   });

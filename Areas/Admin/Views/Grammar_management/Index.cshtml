@@ -3,6 +3,139 @@
     ViewData["Title"] = "Quản lý Ngữ pháp";
 }
 
+@section Styles {
+<style>
+    .admin-filter-bar .input-group-search {
+        display: flex;
+        align-items: center;
+        background: var(--hr-surface, #fff);
+        border: 1.5px solid var(--hr-line-2, #d1d5db);
+        border-radius: 12px;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        height: 42px;
+        overflow: hidden;
+    }
+    .admin-filter-bar .input-group-search:focus-within {
+        border-color: var(--hr-primary, #4f46e5);
+        box-shadow: var(--hr-ring, 0 0 0 4px rgba(79, 70, 229, 0.22));
+    }
+    .admin-filter-bar .input-group-search .search-icon {
+        padding: 0 10px 0 14px;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .admin-filter-bar .input-group-search input.form-control {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        padding-left: 0 !important;
+        height: 100% !important;
+        font-size: 0.92rem;
+    }
+    .admin-filter-bar .form-select {
+        height: 42px;
+        border-radius: 12px;
+        border: 1.5px solid var(--hr-line-2, #d1d5db);
+        font-size: 0.92rem;
+    }
+    .admin-filter-bar .btn-filter-reset {
+        height: 42px;
+        border-radius: 12px;
+        border: 1.5px solid var(--hr-line-2, #d1d5db);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .admin-filter-bar .btn-filter-reset:not(.w-100) {
+        width: 42px;
+        padding: 0;
+    }
+
+    /* Styles tương thích cả Light Mode & Dark Mode */
+    .category-title-link {
+        color: #1e293b;
+        transition: color 0.15s ease;
+    }
+    .category-title-link:hover {
+        color: var(--hr-primary, #4f46e5);
+    }
+    .custom-count-badge {
+        background-color: #f1f5f9;
+        color: #334155;
+        border: 1px solid #e2e8f0;
+    }
+    .topic-icon-box {
+        background-color: #eef2ff;
+        color: #4f46e5;
+        border: 1px solid #e0e7ff;
+    }
+
+    [data-bs-theme="dark"] .card-header {
+        background-color: var(--hr-surface-2, #242247) !important;
+        border-bottom-color: var(--hr-line, #2d2a52) !important;
+        color: var(--hr-ink, #f2f0fb) !important;
+    }
+    [data-bs-theme="dark"] .table thead,
+    [data-bs-theme="dark"] .table thead th {
+        background-color: var(--hr-surface-2, #242247) !important;
+        color: var(--hr-ink, #f2f0fb) !important;
+        border-bottom-color: var(--hr-line, #2d2a52) !important;
+    }
+    [data-bs-theme="dark"] .table > :not(caption) > * > * {
+        background-color: transparent;
+        color: var(--hr-ink, #f2f0fb);
+        border-bottom-color: var(--hr-line, #2d2a52);
+    }
+    [data-bs-theme="dark"] .table-hover > tbody > tr:hover > * {
+        background-color: rgba(143, 136, 255, 0.08) !important;
+        color: var(--hr-ink, #f2f0fb);
+    }
+    [data-bs-theme="dark"] .category-title-link,
+    [data-bs-theme="dark"] .topic-title-text {
+        color: var(--hr-ink, #f2f0fb) !important;
+    }
+    [data-bs-theme="dark"] .category-title-link:hover {
+        color: var(--hr-primary, #8f88ff) !important;
+    }
+    [data-bs-theme="dark"] .topic-filter-panel {
+        background-color: var(--hr-surface, #1b1a37) !important;
+        border-bottom-color: var(--hr-line, #2d2a52) !important;
+    }
+    [data-bs-theme="dark"] .filter-counter-text {
+        color: var(--hr-muted, #aaa6cb) !important;
+    }
+    [data-bs-theme="dark"] .custom-count-badge {
+        background-color: var(--hr-surface-2, #242247) !important;
+        color: var(--hr-ink-2, #d6d2f0) !important;
+        border-color: var(--hr-line-2, #3c3968) !important;
+    }
+    [data-bs-theme="dark"] .topic-icon-box {
+        background-color: rgba(143, 136, 255, 0.16) !important;
+        border-color: rgba(143, 136, 255, 0.28) !important;
+        color: var(--hr-primary, #8f88ff) !important;
+    }
+    [data-bs-theme="dark"] .topic-stt,
+    [data-bs-theme="dark"] .category-stt {
+        color: var(--hr-muted, #aaa6cb) !important;
+    }
+    [data-bs-theme="dark"] .table-active {
+        --bs-table-active-bg: rgba(143, 136, 255, 0.15);
+        --bs-table-active-color: var(--hr-ink, #f2f0fb);
+    }
+    .modal-preview-box {
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+    }
+    [data-bs-theme="dark"] .modal-preview-box {
+        background-color: var(--hr-surface-2, #242247) !important;
+        border-color: var(--hr-line-2, #3c3968) !important;
+    }
+</style>
+}
+
 <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
     <div>
         <h1 class="h3 mb-1">Quản lý Ngữ pháp</h1>
@@ -64,24 +197,24 @@
 
 <!-- [BẢNG 1] NHÓM CHỦ ĐỀ -->
 <div class="card shadow-sm mb-4">
-    <div class="card-header bg-white py-3">
+    <div class="card-header py-3">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
             <div class="d-flex align-items-center gap-2">
                 <span class="fw-bold text-primary"><i class="fa-solid fa-layer-group me-1"></i>Nhóm chủ đề</span>
-                <span id="categoryCountBadge" class="badge bg-light text-dark border">@Model.Categories.Count nhóm</span>
+                <span id="categoryCountBadge" class="badge custom-count-badge">@Model.Categories.Count nhóm</span>
             </div>
             <!-- Bộ lọc tìm kiếm nhóm chủ đề -->
-            <div class="d-flex flex-wrap align-items-center gap-2">
-                <div class="input-group input-group-sm" style="min-width: 220px;">
-                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+            <div class="d-flex align-items-center gap-2 flex-nowrap ms-auto admin-filter-bar">
+                <div class="input-group-search" style="width: 260px;">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
                     <input type="text" id="categorySearchInput" class="form-control" placeholder="Tìm kiếm nhóm chủ đề..." />
                 </div>
-                <select id="categoryStatusFilter" class="form-select form-select-sm" style="width: 140px;">
+                <select id="categoryStatusFilter" class="form-select" style="width: 170px; flex-shrink: 0;">
                     <option value="">Tất cả trạng thái</option>
                     <option value="active">Hiển thị</option>
                     <option value="inactive">Ẩn</option>
                 </select>
-                <button type="button" id="btnResetCategoryFilter" class="btn btn-sm btn-outline-secondary" title="Đặt lại bộ lọc nhóm">
+                <button type="button" id="btnResetCategoryFilter" class="btn btn-outline-secondary btn-filter-reset flex-shrink-0" title="Đặt lại bộ lọc nhóm">
                     <i class="fa-solid fa-rotate-left"></i>
                 </button>
             </div>
@@ -89,7 +222,7 @@
     </div>
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0" id="categoryTable">
-            <thead class="table-light">
+            <thead>
                 <tr>
                     <th style="width: 60px;" class="text-center">STT</th>
                     <th>Tiêu đề</th>
@@ -106,14 +239,14 @@
                         data-id="@c.Id"
                         data-title="@c.Title.ToLower()"
                         data-status="@(c.IsActive ? "active" : "inactive")">
-                        <td class="category-stt text-center fw-semibold text-muted">@(catStt++)</td>
+                        <td class="category-stt text-center fw-semibold">@(catStt++)</td>
                         <td>
-                            <a asp-action="Index" asp-route-categoryId="@(Model.SelectedCategoryId == c.Id ? null : c.Id)" class="fw-semibold text-decoration-none text-dark hover-primary" title="@(Model.SelectedCategoryId == c.Id ? "Bỏ lọc theo nhóm này" : "Lọc các chủ đề thuộc nhóm này")">
+                            <a asp-action="Index" asp-route-categoryId="@(Model.SelectedCategoryId == c.Id ? null : c.Id)" class="category-title-link fw-semibold text-decoration-none" title="@(Model.SelectedCategoryId == c.Id ? "Bỏ lọc theo nhóm này" : "Lọc các chủ đề thuộc nhóm này")">
                                 @c.Title
                             </a>
                         </td>
                         <td class="text-center">
-                            <span class="badge rounded-pill bg-light text-dark border">@c.TopicCount chủ đề</span>
+                            <span class="badge rounded-pill custom-count-badge">@c.TopicCount chủ đề</span>
                         </td>
                         <td class="category-status-cell">
                             @if (c.IsActive)
@@ -153,14 +286,14 @@
 
 <!-- [BẢNG 2] CHỦ ĐỀ -->
 <div class="card shadow-sm">
-    <div class="card-header bg-white py-3">
+    <div class="card-header py-3">
         <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
             <div class="d-flex align-items-center gap-2">
                 <span class="fw-bold text-success"><i class="fa-solid fa-book-bookmark me-1"></i>Chủ đề</span>
                 <span id="topicGroupFilterLabel" class="text-muted small">
                     @(Model.SelectedCategoryId.HasValue ? "(đang lọc theo nhóm)" : "(tất cả)")
                 </span>
-                <span id="topicCountBadge" class="badge bg-light text-dark border ms-1">@Model.Topics.Count chủ đề</span>
+                <span id="topicCountBadge" class="badge custom-count-badge ms-1">@Model.Topics.Count chủ đề</span>
             </div>
             @if (Model.SelectedCategoryId.HasValue)
             {
@@ -172,16 +305,16 @@
     </div>
 
     <!-- Bộ lọc & tìm kiếm chủ đề -->
-    <div class="p-3 border-bottom bg-light bg-opacity-50">
+    <div class="p-3 border-bottom topic-filter-panel admin-filter-bar">
         <div class="row g-2 align-items-center">
             <div class="col-lg-4 col-md-5">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                <div class="input-group-search w-100">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
                     <input type="text" id="topicSearchInput" class="form-control" placeholder="Tìm kiếm tên chủ đề, nhóm, kỳ thi..." />
                 </div>
             </div>
             <div class="col-lg-3 col-md-3">
-                <select id="topicCategoryFilter" class="form-select form-select-sm">
+                <select id="topicCategoryFilter" class="form-select">
                     <option value="">-- Tất cả nhóm chủ đề --</option>
                     @foreach (var c in Model.Categories)
                     {
@@ -190,26 +323,26 @@
                 </select>
             </div>
             <div class="col-lg-2 col-md-2">
-                <select id="topicExamFilter" class="form-select form-select-sm">
+                <select id="topicExamFilter" class="form-select">
                     <option value="">-- Tất cả kỳ thi --</option>
                     <option value="TOEIC">TOEIC</option>
                     <option value="VSTEP">VSTEP</option>
                 </select>
             </div>
             <div class="col-lg-2 col-md-2">
-                <select id="topicStatusFilter" class="form-select form-select-sm">
+                <select id="topicStatusFilter" class="form-select">
                     <option value="">-- Tất cả trạng thái --</option>
                     <option value="active">Hiển thị</option>
                     <option value="inactive">Ẩn</option>
                 </select>
             </div>
             <div class="col-lg-1 col-md-12">
-                <button type="button" id="btnResetTopicFilter" class="btn btn-sm btn-outline-secondary w-100" title="Đặt lại bộ lọc">
+                <button type="button" id="btnResetTopicFilter" class="btn btn-outline-secondary btn-filter-reset w-100" title="Đặt lại bộ lọc">
                     <i class="fa-solid fa-rotate-left"></i>
                 </button>
             </div>
         </div>
-        <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top small text-muted">
+        <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top small filter-counter-text text-muted">
             <span>Đang hiển thị <strong id="visibleTopicCount" class="text-success">@Model.Topics.Count</strong> trên tổng số <strong>@Model.Topics.Count</strong> chủ đề</span>
         </div>
     </div>
@@ -238,7 +371,7 @@
 
     <div class="table-responsive">
         <table class="table table-hover align-middle mb-0" id="topicTable">
-            <thead class="table-light">
+            <thead>
                 <tr>
                     <th style="width: 40px;" class="text-center">
                         <input type="checkbox" id="checkAllTopics" class="form-check-input" title="Chọn tất cả">
@@ -266,23 +399,23 @@
                         <td class="text-center">
                             <input type="checkbox" class="form-check-input topic-row-checkbox" value="@t.Id">
                         </td>
-                        <td class="topic-stt text-center fw-semibold text-muted">@(topicStt++)</td>
+                        <td class="topic-stt text-center fw-semibold">@(topicStt++)</td>
                         <td class="fw-semibold">
                             <div class="d-inline-flex align-items-center gap-2">
-                                <span class="d-inline-flex align-items-center justify-content-center rounded bg-light border text-primary" style="width: 30px; height: 30px; flex-shrink: 0;" title="Biểu tượng: @(string.IsNullOrWhiteSpace(t.Icon) ? "book-open" : t.Icon)">
+                                <span class="topic-icon-box d-inline-flex align-items-center justify-content-center rounded" style="width: 30px; height: 30px; flex-shrink: 0;" title="Biểu tượng: @(string.IsNullOrWhiteSpace(t.Icon) ? "book-open" : t.Icon)">
                                     <i data-lucide="@(string.IsNullOrWhiteSpace(t.Icon) ? "book-open" : t.Icon)" style="width: 16px; height: 16px;"></i>
                                 </span>
                                 <span class="topic-title-text">@t.Title</span>
                             </div>
                         </td>
                         <td>
-                            <span class="badge text-bg-light border text-dark">@t.CategoryTitle</span>
+                            <span class="badge custom-count-badge">@t.CategoryTitle</span>
                         </td>
                         <td>
                             <span class="small text-secondary">@t.ExamLabel</span>
                         </td>
                         <td class="text-center">
-                            <span class="badge rounded-pill bg-light text-primary border">@t.QuestionCount câu</span>
+                            <span class="badge rounded-pill custom-count-badge text-primary">@t.QuestionCount câu</span>
                         </td>
                         <td class="topic-status-cell">
                             @if (t.IsActive)
@@ -336,12 +469,12 @@
                         <i class="fa-solid fa-trash-can fs-3"></i>
                     </span>
                 </div>
-                <h5 class="modal-title fw-bold text-dark mb-2" id="deleteCategoryModalTitle">Xác nhận xoá nhóm chủ đề</h5>
+                <h5 class="modal-title fw-bold mb-2" id="deleteCategoryModalTitle">Xác nhận xoá nhóm chủ đề</h5>
                 <p class="text-secondary small mb-3">Bạn có chắc chắn muốn xoá nhóm chủ đề này không? Các chủ đề thuộc nhóm có thể bị ảnh hưởng.</p>
 
-                <div class="p-3 bg-light rounded-3 text-start mb-3 border">
+                <div class="p-3 modal-preview-box rounded-3 text-start mb-3">
                     <div class="small text-muted mb-1">Tên nhóm chủ đề:</div>
-                    <div class="fw-bold text-dark text-break fs-6" id="modalCategoryTitle"></div>
+                    <div class="fw-bold text-break fs-6" id="modalCategoryTitle"></div>
                     <div class="small text-danger mt-1 fw-semibold" id="modalCategoryWarning"></div>
                 </div>
 
@@ -370,12 +503,12 @@
                         <i class="fa-solid fa-trash-can fs-3"></i>
                     </span>
                 </div>
-                <h5 class="modal-title fw-bold text-dark mb-2" id="deleteTopicModalTitle">Xác nhận xoá chủ đề</h5>
+                <h5 class="modal-title fw-bold mb-2" id="deleteTopicModalTitle">Xác nhận xoá chủ đề</h5>
                 <p class="text-secondary small mb-3">Bạn có chắc chắn muốn xoá chủ đề này không? Chủ đề sẽ được chuyển sang danh sách ẩn.</p>
 
-                <div class="p-3 bg-light rounded-3 text-start mb-3 border">
+                <div class="p-3 modal-preview-box rounded-3 text-start mb-3">
                     <div class="small text-muted mb-1">Tên chủ đề:</div>
-                    <div class="fw-bold text-dark text-break fs-6" id="modalTopicTitle"></div>
+                    <div class="fw-bold text-break fs-6" id="modalTopicTitle"></div>
                     <div class="small text-muted mt-1" id="modalTopicQuestions"></div>
                 </div>
 
@@ -404,7 +537,7 @@
                         <i class="fa-solid fa-triangle-exclamation fs-3"></i>
                     </span>
                 </div>
-                <h5 class="modal-title fw-bold text-dark mb-2" id="bulkDeleteTopicModalTitle">Xác nhận xoá các chủ đề đã chọn</h5>
+                <h5 class="modal-title fw-bold mb-2" id="bulkDeleteTopicModalTitle">Xác nhận xoá các chủ đề đã chọn</h5>
                 <p class="text-secondary small mb-3">
                     Bạn đang chọn <strong id="modalBulkDeleteTopicCount" class="text-danger">0</strong> chủ đề. Bạn có chắc chắn muốn xoá tất cả các chủ đề này không?
                 </p>

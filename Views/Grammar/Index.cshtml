@@ -333,35 +333,32 @@
                         </div>
                       </article>
 
-                      @if (group == Model.Groups.FirstOrDefault())
-                      {
-                        <article class="topic-utility-card test-card topic-card-mini-test" data-utility-card="mini-test" data-group="@group.Id" data-exam="all">
-                          <div class="utility-content">
-                            <div class="utility-heading">
-                              <span class="utility-icon" aria-hidden="true">
-                                <i class="fa-regular fa-clipboard"></i>
-                              </span>
-                              <h3 class="utility-title">Mini Test</h3>
-                              <div class="utility-actions">
-                                <button class="topic-bookmark" type="button" data-start-group="@group.Id" data-mode="test" aria-label="Làm lại Mini Test" title="Làm lại Mini Test">
-                                  <i class="fa-solid fa-rotate-right"></i>
-                                </button>
-                                <span class="topic-exam-badge">TOEIC</span>
-                              </div>
-                            </div>
-                            <p class="utility-description">Bài kiểm tra các chủ đề trong <strong>@group.Title</strong>, đếm ngược thời gian làm cho từng câu.</p>
-                            <div class="utility-footer">
-                              <div class="choice-pills">
-                                <button type="button" aria-pressed="true"><i class="fa-regular fa-clock me-1"></i>1p</button>
-                                <button type="button" aria-pressed="false"><i class="fa-regular fa-clock me-1"></i>30s</button>
-                              </div>
-                              <button class="practice-button minitest-btn" type="button" data-start-group="@group.Id" data-mode="test">
-                                Làm tiếp <i class="fa-solid fa-arrow-right ms-1"></i>
+                      <article class="topic-utility-card test-card topic-card-mini-test" data-utility-card="mini-test" data-group="@group.Id" data-exam="all">
+                        <div class="utility-content">
+                          <div class="utility-heading">
+                            <span class="utility-icon" aria-hidden="true">
+                              <i class="fa-regular fa-clipboard"></i>
+                            </span>
+                            <h3 class="utility-title">Mini Test</h3>
+                            <div class="utility-actions">
+                              <button class="topic-bookmark" type="button" data-start-group="@group.Id" data-mode="test" aria-label="Làm lại Mini Test" title="Làm lại Mini Test">
+                                <i class="fa-solid fa-rotate-right"></i>
                               </button>
+                              <span class="topic-exam-badge">TOEIC</span>
                             </div>
                           </div>
-                        </article>
-                      }
+                          <p class="utility-description">Bài kiểm tra các chủ đề trong <strong>@group.Title</strong>, đếm ngược thời gian làm cho từng câu.</p>
+                          <div class="utility-footer">
+                            <div class="choice-pills">
+                              <button type="button" aria-pressed="true"><i class="fa-regular fa-clock me-1"></i>1p</button>
+                              <button type="button" aria-pressed="false"><i class="fa-regular fa-clock me-1"></i>30s</button>
+                            </div>
+                            <button class="practice-button minitest-btn" type="button" data-start-group="@group.Id" data-mode="test">
+                              Làm tiếp <i class="fa-solid fa-arrow-right ms-1"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </article>
                     </div>
                   </section>
               }
