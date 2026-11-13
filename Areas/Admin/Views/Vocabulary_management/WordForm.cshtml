@@ -1,0 +1,869 @@
+@model StudyEnglish.Models.ViewModels.Admin.VocabWordInputModel
+@{
+    bool isEdit = Model.WordId > 0;
+    ViewData["Title"] = isEdit ? $"Chỉnh Sửa Từ Vựng: {Model.Word}" : "Thêm Từ Vựng Mới";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+    var topics = ViewBag.Topics as List<StudyEnglish.Models.Vocabulary.VocabTopic> ?? new List<StudyEnglish.Models.Vocabulary.VocabTopic>();
+    var categories = ViewBag.Categories as List<StudyEnglish.Models.Vocabulary.VocabCategory> ?? new List<StudyEnglish.Models.Vocabulary.VocabCategory>();
+}
+
+<div class="container-fluid px-4 py-4">
+    <!-- Breadcrumb & Tiêu đề -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-1 small">
+                    <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="text-decoration-none">Bảng điều khiển</a></li>
+                    <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Vocabulary_management" asp-action="Index" asp-route-tab="words" class="text-decoration-none">Quản lý từ vựng</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">@(isEdit ? "Chỉnh sửa từ vựng" : "Thêm từ mới")</li>
+                </ol>
+            </nav>
+            <h1 class="h3 fw-bold text-slate-900 dark:text-white mb-0 d-flex align-items-center gap-2">
+                <i data-lucide="spell-check" class="text-primary"></i>
+                @(isEdit ? $"Chỉnh Sửa Từ Vựng: {Model.Word}" : "Thêm Từ Vựng Mới")
+            </h1>
+            <p class="text-muted small mb-0 mt-1">Cấu hình đầy đủ 12 thành phần từ vựng chuẩn ngữ nghĩa học, đồng bộ hiển thị với ứng dụng học viên</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a asp-action="Index" asp-route-tab="words" asp-route-topicId="@Model.TopicId" class="btn btn-outline-secondary rounded-pill px-3">
+                <i data-lucide="arrow-left" class="me-1"></i> Quay lại danh sách
+            </a>
+            <button type="submit" form="formWordPage" class="btn btn-primary rounded-pill px-4 shadow-sm">
+                <i data-lucide="save" class="me-1"></i> Lưu Từ Vựng
+            </button>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show rounded-3 mb-4" role="alert">
+            <i data-lucide="check-circle" class="me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <form asp-action="SaveWordForm" method="post" id="formWordPage">
+        @Html.AntiForgeryToken()
+        <input type="hidden" asp-for="WordId" />
+
+        <div class="row g-4">
+            <!-- CỘT TRÁI: FORM NHẬP LIỆU TOÀN DIỆN 12 MỤC -->
+            <div class="col-lg-8">
+                <!-- KHỐI 1: BỘ TỪ, TỪ VỰNG, LOẠI TỪ, PHIÊN ÂM & NGHĨA -->
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom d-flex align-items-center gap-2">
+                        <span class="badge bg-primary text-white rounded-circle p-1" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px;">1</span>
+                        <h6 class="fw-bold mb-0 text-slate-800">Thông tin cơ bản &amp; Phát âm</h6>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <!-- 1. NHÓM BỘ TỪ -->
+                            <div class="col-md-6">
+                                <label asp-for="CategoryId" class="form-label fw-semibold small">1. Nhóm bộ từ (Category) <span class="text-danger">*</span></label>
+                                <select asp-for="CategoryId" class="form-select" id="pageCategoryId" onchange="onPageCategoryChange(this.value)">
+                                    <option value="">-- Tất cả nhóm bộ từ --</option>
+                                    @foreach (var cat in categories)
+                                    {
+                                        <option value="@cat.CategoryId" selected="@(cat.CategoryId == Model.CategoryId)">@cat.Name</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <!-- 2. BỘ TỪ VỰNG -->
+                            <div class="col-md-6">
+                                <label asp-for="TopicId" class="form-label fw-semibold small">2. Bộ từ vựng (Topic) <span class="text-danger">*</span></label>
+                                <select asp-for="TopicId" class="form-select" id="pageTopicId" required>
+                                    <option value="">-- Chọn bộ từ vựng --</option>
+                                    @foreach (var top in topics)
+                                    {
+                                        <option value="@top.TopicId" data-category-id="@top.CategoryId" selected="@(top.TopicId == Model.TopicId)">@top.Title (@(top.Category?.Name ?? "Chưa phân loại"))</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="TopicId" class="text-danger small"></span>
+                            </div>
+
+                            <!-- 3. TỪ VỰNG TIẾNG ANH -->
+                            <div class="col-md-6">
+                                <label asp-for="Word" class="form-label fw-semibold small">3. Từ vựng tiếng Anh <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input asp-for="Word" class="form-control fw-bold" id="pageWordInput" placeholder="vd: abide by, contract, strategy..." required oninput="syncPreview()" />
+                                    <button type="button" class="btn btn-outline-primary" onclick="speakCurrentInput()" title="Nghe phát âm">
+                                        <i data-lucide="volume-2"></i>
+                                    </button>
+                                </div>
+                                <span asp-validation-for="Word" class="text-danger small"></span>
+                            </div>
+
+                            <!-- 4. LOẠI TỪ -->
+                            <div class="col-md-6">
+                                <label asp-for="PartOfSpeech" class="form-label fw-semibold small">4. Loại từ (Part of Speech)</label>
+                                <select asp-for="PartOfSpeech" class="form-select" id="pagePosInput" onchange="syncPreview()">
+                                    <option value="noun">Danh từ (Noun)</option>
+                                    <option value="verb">Động từ (Verb)</option>
+                                    <option value="adjective">Tính từ (Adjective)</option>
+                                    <option value="adverb">Phó từ (Adverb)</option>
+                                    <option value="phrasal verb">Cụm động từ (Phrasal verb)</option>
+                                    <option value="idiom">Thành ngữ (Idiom)</option>
+                                    <option value="phrase">Cụm từ (Phrase)</option>
+                                </select>
+                            </div>
+
+                            <!-- 5. PHIÊN ÂM US & UK -->
+                            <div class="col-md-6">
+                                <label asp-for="PhoneticUs" class="form-label fw-semibold small">5. Phiên âm US IPA</label>
+                                <input asp-for="PhoneticUs" class="form-control font-monospace" id="pagePhoneticUs" placeholder="/əˈbaɪd baɪ/" oninput="syncPreview()" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="PhoneticUk" class="form-label fw-semibold small">Phiên âm UK IPA</label>
+                                <input asp-for="PhoneticUk" class="form-control font-monospace" id="pagePhoneticUk" placeholder="/əˈbaɪd baɪ/" oninput="syncPreview()" />
+                            </div>
+
+                            <!-- 6. NGHĨA TIẾNG VIỆT -->
+                            <div class="col-12">
+                                <label asp-for="Meaning" class="form-label fw-semibold small">6. Nghĩa tiếng Việt <span class="text-danger">*</span></label>
+                                <input asp-for="Meaning" class="form-control fw-bold text-primary" id="pageMeaning" placeholder="vd: tuân thủ, tuân theo, thực hiện đúng cam kết" required oninput="syncPreview()" />
+                                <span asp-validation-for="Meaning" class="text-danger small"></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CÁC TRƯỜNG ẨN ĐỒNG BỘ VỚI NÉT NGHĨA CHÍNH (BACKWARD COMPATIBILITY) -->
+                <input type="hidden" asp-for="EnglishDefinition" id="pageDefinition" />
+                <input type="hidden" asp-for="ExampleSentence" id="hiddenExampleSentence" />
+                <input type="hidden" asp-for="ExampleMeaning" id="hiddenExampleMeaning" />
+                <input type="hidden" asp-for="Collocations" id="pageCollocations" />
+                <input type="hidden" asp-for="Synonyms" id="pageSynonyms" />
+                <input type="hidden" asp-for="Antonyms" id="pageAntonyms" />
+                <input type="hidden" asp-for="SensesJson" id="pageSensesJson" />
+
+                <!-- KHỐI 2: NÉT NGHĨA TỪ VỰNG (ĐỊNH NGHĨA, VÍ DỤ, CỤM TỪ, ĐỒNG/TRÁI NGHĨA) -->
+                <div class="card border border-fuchsia-200 bg-fuchsia-50/10 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom border-fuchsia-200 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge text-white rounded-circle" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; background-color: #c026d3;">2</span>
+                            <div>
+                                <h6 class="fw-bold mb-0 text-slate-800 d-flex align-items-center gap-2">
+                                    <span>Nét nghĩa từ vựng (Định nghĩa · Ví dụ · Cụm từ · Đồng nghĩa · Trái nghĩa)</span>
+                                </h6>
+                                <small class="text-muted">Mỗi nét nghĩa bao gồm đầy đủ Định nghĩa tiếng Anh, Ví dụ ngữ cảnh, Cụm từ đi kèm, Từ đồng nghĩa &amp; Trái nghĩa. Có thể <strong>Thêm</strong>, <strong>Sửa</strong> hoặc <strong>Xóa</strong> từng nét nghĩa.</small>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-semibold shadow-sm" onclick="addNewSenseForm()">
+                            <i data-lucide="plus" style="width: 14px; height: 14px;" class="me-1"></i>+ Thêm nét nghĩa
+                        </button>
+                    </div>
+                    <div class="card-body p-4">
+                        <div id="pageSensesContainer" class="d-flex flex-column gap-3"></div>
+
+                        <div class="mt-3 text-center">
+                            <button type="button" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-sm" onclick="addNewSenseForm()">
+                                <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i>
+                                <span>+ Thêm nét nghĩa mới</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KHỐI 4: HỌ TỪ (WORD FAMILY) -->
+                <div class="card border border-purple-200 bg-purple-50/20 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-transparent py-3 border-bottom border-purple-200 d-flex align-items-center justify-content-between">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-purple-600 text-white rounded-circle" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px;">4</span>
+                            <h6 class="fw-bold mb-0 text-purple-800">10. Họ từ (Word Family)</h6>
+                        </div>
+                        <div class="d-flex gap-1">
+                            <button type="button" class="btn btn-xs btn-outline-purple py-1 px-2 text-xs" onclick="insertPageText('pageWordFamily', ' · ')">+ Chèn " · "</button>
+                            <button type="button" class="btn btn-xs btn-outline-purple py-1 px-2 text-xs" onclick="insertPageFamilyTemplate('noun')">+ Mẫu Danh từ</button>
+                            <button type="button" class="btn btn-xs btn-outline-purple py-1 px-2 text-xs" onclick="insertPageFamilyTemplate('adjective')">+ Mẫu Tính từ</button>
+                            <button type="button" class="btn btn-xs btn-outline-purple py-1 px-2 text-xs" onclick="insertPageFamilyTemplate('adverb')">+ Mẫu Trạng từ</button>
+                        </div>
+                    </div>
+                    <div class="card-body p-4">
+                        <textarea asp-for="WordFamily" class="form-control font-monospace" id="pageWordFamily" rows="3" placeholder="abide · verb · chịu đựng, tuân theo&#10;abiding · adjective · lâu dài, bền lâu" oninput="syncPreview()"></textarea>
+                        <div class="form-text text-xs text-purple-900 mt-2">
+                            <strong>Cú pháp chuẩn trên trang học:</strong> Mỗi dòng một từ theo dạng: <code>[từ tiếng Anh] · [loại từ] · [nghĩa tiếng Việt]</code> (ngăn cách bằng <code> · </code>).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KHỐI 5: LỖI THƯỜNG GẶP & MẸO NHỚ -->
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom d-flex align-items-center gap-2">
+                        <span class="badge bg-primary text-white rounded-circle" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px;">5</span>
+                        <h6 class="fw-bold mb-0 text-slate-800">Lỗi thường gặp &amp; Mẹo ghi nhớ</h6>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-4">
+                            <!-- 11. LỖI THƯỜNG GẶP -->
+                            <div class="col-md-7">
+                                <div class="p-3 rounded-3 border border-amber-300 bg-amber-50/30 h-100">
+                                    <h6 class="fw-bold text-amber-800 small mb-2 d-flex align-items-center gap-1.5">
+                                        <i data-lucide="alert-triangle" class="text-amber-600"></i> 11. Lỗi thường gặp (Common Mistakes)
+                                    </h6>
+                                    <div class="space-y-2">
+                                        <div>
+                                            <label class="form-label text-xs fw-semibold text-amber-700">Cách dùng sai (Wrong) ✗</label>
+                                            <input asp-for="CommonMistakeWrong" class="form-control form-control-sm border-amber-300" id="pageMistakeWrong" placeholder="Ví dụ: All employees must abide the safety rules..." oninput="syncPreview()" />
+                                        </div>
+                                        <div>
+                                            <label class="form-label text-xs fw-semibold text-success">Cách dùng đúng (Right) ✓</label>
+                                            <input asp-for="CommonMistakeRight" class="form-control form-control-sm border-success-subtle" id="pageMistakeRight" placeholder="Ví dụ: All employees must abide by the safety rules..." oninput="syncPreview()" />
+                                        </div>
+                                        <div>
+                                            <label class="form-label text-xs fw-semibold text-muted">Giải thích quy tắc sử dụng (Note)</label>
+                                            <textarea asp-for="CommonMistakeNote" class="form-control form-control-sm" id="pageMistakeNote" rows="2" placeholder="Ví dụ: 'Abide by' là cụm động từ cố định; phải có giới từ 'by'..." oninput="syncPreview()"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 12. MẸO NHỚ -->
+                            <div class="col-md-5">
+                                <div class="p-3 rounded-3 border border-purple-200 bg-purple-50/30 h-100">
+                                    <h6 class="fw-bold text-purple-800 small mb-2 d-flex align-items-center gap-1.5">
+                                        <i data-lucide="lightbulb" class="text-purple-600"></i> 12. Mẹo ghi nhớ (Memory Tip)
+                                    </h6>
+                                    <textarea asp-for="MemoryTip" class="form-control border-purple-200" id="pageMemoryTip" rows="5" placeholder="Ví dụ: 'Abide by' = đi 'by' (cạnh) luật mà sống, tức luôn đi cùng và tuân theo luật." oninput="syncPreview()"></textarea>
+                                    <div class="form-text text-xs text-purple-900 mt-2">
+                                        Mẹo liên tưởng câu chuyện ngắn hoặc từ đồng âm giúp học viên ghi nhớ ngay trong 3 giây.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KHỐI 6: ÂM THANH, ẢNH & CẤU HÌNH -->
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-white py-3 border-bottom d-flex align-items-center gap-2">
+                        <span class="badge bg-secondary text-white rounded-circle" style="width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 12px;">6</span>
+                        <h6 class="fw-bold mb-0 text-slate-800">Đa phương tiện &amp; Cài đặt</h6>
+                    </div>
+                    <div class="card-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="AudioUrl" class="form-label fw-semibold small">File âm thanh phát âm (Audio URL - Tùy chọn)</label>
+                                <div class="input-group">
+                                    <input asp-for="AudioUrl" class="form-control" id="pageAudioUrl" placeholder="https://... hoặc /audio/..." />
+                                    <button type="button" class="btn btn-outline-secondary" onclick="testPageAudio()" title="Phát thử">
+                                        <i data-lucide="play"></i>
+                                    </button>
+                                </div>
+                                <div class="form-text text-xs text-muted">Nếu để trống, ứng dụng sẽ dùng giọng đọc TTS US/UK tự động.</div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="ImageUrl" class="form-label fw-semibold small">Hình ảnh minh họa (Image URL - Flashcard)</label>
+                                <div class="input-group">
+                                    <input asp-for="ImageUrl" class="form-control" id="pageImageUrl" placeholder="https://images.unsplash.com/... hoặc /img/..." oninput="updatePageImagePreview(); syncPreview();" />
+                                    <button type="button" class="btn btn-outline-secondary" onclick="previewPageImageDirectly()" title="Xem ảnh">
+                                        <i data-lucide="search"></i>
+                                    </button>
+                                </div>
+                                <div class="mt-2 d-flex align-items-center gap-2" id="pageImagePreviewContainer" style="display: none !important;">
+                                    <img id="pageImageThumb" src="" alt="Thumbnail" class="rounded border object-cover" style="width: 44px; height: 44px;" />
+                                    <small class="text-success text-xs"><i data-lucide="check" class="me-1"></i>Ảnh hợp lệ</small>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="SortOrder" class="form-label fw-semibold small">Thứ tự hiển thị trong bộ</label>
+                                <input asp-for="SortOrder" class="form-control" type="number" min="1" />
+                            </div>
+
+                            <div class="col-md-4 d-flex align-items-center pt-3">
+                                <div class="form-check form-switch form-check-switch">
+                                    <input asp-for="IsActive" class="form-check-input" type="checkbox" id="pageIsActive" />
+                                    <label class="form-check-label fw-semibold small ms-1" for="pageIsActive">Kích hoạt hiển thị cho học viên</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CỘT PHẢI: MÔ PHỎNG THẺ HỌC SINH LIVE TRỰC QUAN -->
+            <div class="col-lg-4">
+                <div class="position-sticky" style="top: 24px;">
+                    <div class="card border border-indigo-200 shadow-sm rounded-4 overflow-hidden">
+                        <div class="card-header bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 d-flex align-items-center justify-content-between">
+                            <span class="fw-bold small text-uppercase tracking-wider">
+                                <i data-lucide="monitor" class="me-1"></i> Mô phỏng thẻ học viên
+                            </span>
+                            <span class="badge bg-white/20 text-white text-xs">Thời gian thực</span>
+                        </div>
+                        <div class="card-body p-3 bg-slate-50 dark:bg-slate-900/60">
+                            <div class="bg-white dark:bg-slate-800 p-3.5 rounded-3 shadow-xs border">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <div>
+                                        <span class="badge bg-indigo-50 text-indigo-700 fw-bold text-xs uppercase" id="cardPosBadge">VERB</span>
+                                        <h3 class="fw-bold text-slate-900 dark:text-white mt-1 mb-1" id="cardWordText">abide by</h3>
+                                        <div class="text-muted font-monospace text-xs">
+                                            <span>US <span id="cardUsText" class="text-indigo-600">/əˈbaɪd baɪ/</span></span> · 
+                                            <span>UK <span id="cardUkText" class="text-indigo-600">/əˈbaɪd baɪ/</span></span>
+                                        </div>
+                                    </div>
+                                    <div id="cardImgWrap" style="display: none;">
+                                        <img id="cardImgEl" src="" alt="Word Thumbnail" class="rounded border object-cover shadow-xs" style="width: 56px; height: 56px;" />
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 p-2.5 rounded-2 bg-indigo-50/60 border border-indigo-100">
+                                    <div class="fw-bold text-indigo-900 dark:text-white small" id="cardMeaningText">tuân thủ, tuân theo</div>
+                                    <div class="text-muted text-xs mt-0.5" id="cardDefText">To accept and follow a rule, decision...</div>
+                                </div>
+
+                                <!-- Ví dụ -->
+                                <div class="mt-2 space-y-1.5" id="cardExamplesList"></div>
+
+                                <!-- Cụm từ -->
+                                <div class="mt-2.5 pt-2 border-top">
+                                    <div class="text-xs fw-bold text-muted mb-1">Cụm từ đi kèm:</div>
+                                    <div class="d-flex flex-wrap gap-1" id="cardCollsList"></div>
+                                </div>
+
+                                <!-- Đồng nghĩa & Trái nghĩa -->
+                                <div class="row g-1 mt-1">
+                                    <div class="col-6">
+                                        <div class="text-xs fw-bold text-muted mb-1">Đồng nghĩa:</div>
+                                        <div class="d-flex flex-wrap gap-1" id="cardSynsList"></div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="text-xs fw-bold text-muted mb-1">Trái nghĩa:</div>
+                                        <div class="d-flex flex-wrap gap-1" id="cardAntsList"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Họ từ -->
+                                <div class="mt-2.5 p-2 rounded-2 border border-purple-200 bg-purple-50/20">
+                                    <div class="text-xs fw-bold text-purple-700 text-uppercase mb-1 d-flex align-items-center gap-1">
+                                        <i data-lucide="layers" class="text-purple-600"></i> HỌ TỪ
+                                    </div>
+                                    <div class="text-xs space-y-1" id="cardFamilyList"></div>
+                                </div>
+
+                                <!-- Lỗi thường gặp & Mẹo nhớ -->
+                                <div class="mt-2 p-2 rounded-2 border border-amber-200 bg-amber-50/30">
+                                    <div class="text-xs fw-bold text-amber-800 text-uppercase mb-1 d-flex align-items-center gap-1">
+                                        <i data-lucide="alert-triangle" class="text-amber-600"></i> LỖI THƯỜNG GẶP
+                                    </div>
+                                    <div class="bg-white p-2 rounded border border-amber-200/80 text-xs">
+                                        <div class="text-amber-600 text-decoration-line-through" id="cardMistakeWrong"></div>
+                                        <div class="text-success fw-bold" id="cardMistakeRight"></div>
+                                        <div class="text-muted mt-0.5" id="cardMistakeNote" style="font-size: 11px;"></div>
+                                    </div>
+                                </div>
+
+                                <div class="mt-2 p-2 rounded-2 border border-purple-200 bg-purple-50/30">
+                                    <div class="text-xs fw-bold text-purple-800 text-uppercase mb-1 d-flex align-items-center gap-1">
+                                        <i data-lucide="lightbulb" class="text-purple-600"></i> MẸO NHỚ
+                                    </div>
+                                    <p class="text-xs text-slate-800 mb-0 fw-medium" id="cardTipText"></p>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 d-grid gap-2">
+                                <button type="submit" form="formWordPage" class="btn btn-primary rounded-pill py-2 fw-semibold shadow-sm">
+                                    <i data-lucide="save" class="me-1"></i> Lưu Từ Vựng Này
+                                </button>
+                                <a asp-action="Index" asp-route-tab="words" asp-route-topicId="@Model.TopicId" class="btn btn-light rounded-pill py-2 text-muted">
+                                    Hủy bỏ
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function onPageCategoryChange(catId) {
+            const topicSelect = document.getElementById('pageTopicId');
+            if (!topicSelect) return;
+            const options = topicSelect.querySelectorAll('option');
+            let firstVisible = '';
+            options.forEach((opt, idx) => {
+                if (idx === 0) return;
+                const optCatId = opt.getAttribute('data-category-id');
+                if (!catId || optCatId === String(catId)) {
+                    opt.style.display = '';
+                    if (!firstVisible) firstVisible = opt.value;
+                } else {
+                    opt.style.display = 'none';
+                }
+            });
+            if (firstVisible && (!topicSelect.value || topicSelect.selectedOptions[0]?.style.display === 'none')) {
+                topicSelect.value = firstVisible;
+            }
+        }
+
+        function insertPageText(elementId, text) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            const start = el.selectionStart || el.value.length;
+            const end = el.selectionEnd || el.value.length;
+            const before = el.value.substring(0, start);
+            const after = el.value.substring(end);
+            el.value = before + text + after;
+            el.focus();
+            el.selectionStart = el.selectionEnd = start + text.length;
+            syncPreview();
+        }
+
+        function insertPageFamilyTemplate(pos) {
+            const currentWord = document.getElementById('pageWordInput').value.trim() || 'word';
+            let sample = '';
+            if (pos === 'noun') sample = `\n${currentWord} · noun · nghĩa danh từ`;
+            else if (pos === 'adjective') sample = `\n${currentWord}al · adjective · nghĩa tính từ`;
+            else if (pos === 'adverb') sample = `\n${currentWord}ly · adverb · nghĩa trạng từ`;
+            else sample = `\n${currentWord} · ${pos} · nghĩa`;
+
+            const el = document.getElementById('pageWordFamily');
+            if (el.value.trim().length === 0) sample = sample.trimStart();
+            insertPageText('pageWordFamily', sample);
+        }
+
+        function updateCombinedExamples() {
+            const ex1 = document.getElementById('pageEx1').value.trim();
+            const ex2 = document.getElementById('pageEx2').value.trim();
+            const m1 = document.getElementById('pageExM1').value.trim();
+            const m2 = document.getElementById('pageExM2').value.trim();
+
+            document.getElementById('hiddenExampleSentence').value = [ex1, ex2].filter(Boolean).join('\n');
+            document.getElementById('hiddenExampleMeaning').value = [m1, m2].filter(Boolean).join('\n');
+            syncPreview();
+        }
+
+        function updatePageImagePreview() {
+            const url = document.getElementById('pageImageUrl').value.trim();
+            const container = document.getElementById('pageImagePreviewContainer');
+            const thumb = document.getElementById('pageImageThumb');
+            if (url && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('/'))) {
+                thumb.src = url;
+                container.style.removeProperty('display');
+                container.style.display = 'flex';
+            } else {
+                container.style.setProperty('display', 'none', 'important');
+            }
+        }
+
+        function previewPageImageDirectly() {
+            const url = document.getElementById('pageImageUrl').value.trim();
+            if (!url) {
+                alert('Vui lòng nhập link hình ảnh trước.');
+                return;
+            }
+            window.open(url, '_blank');
+        }
+
+        function testPageAudio() {
+            const url = document.getElementById('pageAudioUrl').value.trim();
+            if (url) {
+                const audio = new Audio(url);
+                audio.play().catch(e => alert('Không thể phát file âm thanh từ liên kết này.'));
+            } else {
+                speakCurrentInput();
+            }
+        }
+
+        function speakCurrentInput() {
+            const word = document.getElementById('pageWordInput').value.trim();
+            if (!word) return;
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const u = new SpeechSynthesisUtterance(word);
+                u.lang = 'en-US';
+                window.speechSynthesis.speak(u);
+            }
+        }
+
+        function syncPreview() {
+            const word = document.getElementById('pageWordInput').value.trim() || 'abide by';
+            const pos = document.getElementById('pagePosInput').value || 'phrase';
+            const us = document.getElementById('pagePhoneticUs').value.trim() || '/.../';
+            const uk = document.getElementById('pagePhoneticUk').value.trim() || '/.../';
+            const meaning = document.getElementById('pageMeaning').value.trim() || 'Nghĩa tiếng Việt';
+            const def = document.getElementById('pageDefinition').value.trim() || 'Định nghĩa tiếng Anh...';
+            const imgUrl = document.getElementById('pageImageUrl').value.trim();
+
+            document.getElementById('cardWordText').textContent = word;
+            document.getElementById('cardPosBadge').textContent = pos.toUpperCase();
+            document.getElementById('cardUsText').textContent = us;
+            document.getElementById('cardUkText').textContent = uk;
+            document.getElementById('cardMeaningText').textContent = meaning;
+            document.getElementById('cardDefText').textContent = def;
+
+            const wrap = document.getElementById('cardImgWrap');
+            const imgEl = document.getElementById('cardImgEl');
+            if (imgUrl) {
+                imgEl.src = imgUrl;
+                wrap.style.display = 'block';
+            } else {
+                wrap.style.display = 'none';
+            }
+
+            // Examples
+            const ex1 = document.getElementById('pageEx1').value.trim();
+            const m1 = document.getElementById('pageExM1').value.trim();
+            const ex2 = document.getElementById('pageEx2').value.trim();
+            const m2 = document.getElementById('pageExM2').value.trim();
+
+            const exContainer = document.getElementById('cardExamplesList');
+            exContainer.innerHTML = '';
+            const exList = [];
+            if (ex1) exList.push([ex1, m1]);
+            if (ex2) exList.push([ex2, m2]);
+            if (exList.length === 0) {
+                exList.push([`All employees must ${word} the contract.`, 'Tất cả nhân viên phải tuân thủ điều khoản hợp đồng.']);
+            }
+            exList.forEach(([e, m], idx) => {
+                const d = document.createElement('div');
+                d.className = 'p-2 rounded bg-light/70 border text-xs';
+                d.innerHTML = `<span class="badge bg-secondary me-1">VD ${idx + 1}</span> <strong>“${e}”</strong><div class="text-muted mt-0.5" style="font-size: 11px;">${m || ''}</div>`;
+                exContainer.appendChild(d);
+            });
+
+            // Collocations
+            const collStr = document.getElementById('pageCollocations').value.trim();
+            const collContainer = document.getElementById('cardCollsList');
+            collContainer.innerHTML = '';
+            if (collStr) {
+                collStr.split(';').map(s => s.trim()).filter(Boolean).forEach(c => {
+                    const sp = document.createElement('span');
+                    sp.className = 'badge bg-light text-slate-800 border px-1.5 py-0.5';
+                    sp.style.fontSize = '11px';
+                    sp.textContent = c;
+                    collContainer.appendChild(sp);
+                });
+            } else {
+                collContainer.innerHTML = '<span class="text-muted" style="font-size: 11px;">Chưa có</span>';
+            }
+
+            // Synonyms & Antonyms
+            function renderCardChips(targetId, str, bgClass) {
+                const c = document.getElementById(targetId);
+                c.innerHTML = '';
+                if (str) {
+                    str.split(/[,;]/).map(s => s.trim()).filter(Boolean).forEach(it => {
+                        const sp = document.createElement('span');
+                        sp.className = `badge ${bgClass} border px-1.5 py-0.5`;
+                        sp.style.fontSize = '11px';
+                        sp.textContent = it;
+                        c.appendChild(sp);
+                    });
+                } else {
+                    c.innerHTML = '<span class="text-muted" style="font-size: 11px;">Không</span>';
+                }
+            }
+            renderCardChips('cardSynsList', document.getElementById('pageSynonyms').value.trim(), 'bg-emerald-50 text-emerald-700 border-emerald-200');
+            renderCardChips('cardAntsList', document.getElementById('pageAntonyms').value.trim(), 'bg-rose-50 text-rose-700 border-rose-200');
+
+            // Word Family
+            const famStr = document.getElementById('pageWordFamily').value.trim();
+            const famContainer = document.getElementById('cardFamilyList');
+            famContainer.innerHTML = '';
+            if (famStr) {
+                famStr.split('\n').map(s => s.trim()).filter(Boolean).forEach(line => {
+                    const parts = line.split(' · ');
+                    const row = document.createElement('div');
+                    row.className = 'text-xs';
+                    const strong = document.createElement('strong');
+                    strong.className = 'fw-bold text-slate-900';
+                    strong.textContent = parts[0] || '';
+                    const desc = document.createElement('span');
+                    desc.className = 'text-muted';
+                    desc.textContent = parts.length > 1 ? ` · ${parts.slice(1).join(' · ')}` : '';
+                    row.appendChild(strong);
+                    row.appendChild(desc);
+                    famContainer.appendChild(row);
+                });
+            } else {
+                famContainer.innerHTML = '<span class="text-muted" style="font-size: 11px;">Chưa có</span>';
+            }
+
+            // Mistake & Memory Tip
+            const wrong = document.getElementById('pageMistakeWrong').value.trim();
+            const right = document.getElementById('pageMistakeRight').value.trim();
+            const note = document.getElementById('pageMistakeNote').value.trim();
+            document.getElementById('cardMistakeWrong').textContent = wrong ? `✗ ${wrong}` : '✗ Cách dùng sai';
+            document.getElementById('cardMistakeRight').textContent = right ? `✓ ${right}` : '✓ Cách dùng đúng';
+            document.getElementById('cardMistakeNote').textContent = note || 'Giải thích quy tắc.';
+
+            const tip = document.getElementById('pageMemoryTip').value.trim();
+            document.getElementById('cardTipText').textContent = tip || 'Chưa thiết lập mẹo ghi nhớ.';
+        }
+
+        // ===== MULTIPLE SENSES MANAGEMENT =====
+        let pageSensesData = [];
+
+        function renderPageSensesUI() {
+            const container = document.getElementById('pageSensesContainer');
+            if (!container) return;
+
+            if (!pageSensesData || pageSensesData.length === 0) {
+                pageSensesData = [{
+                    partOfSpeech: document.getElementById('pagePosInput')?.value || 'noun',
+                    meaning: document.getElementById('pageMeaning')?.value?.trim() || '',
+                    englishDefinition: '',
+                    examples: [],
+                    collocations: '',
+                    synonyms: '',
+                    antonyms: ''
+                }];
+            }
+
+            container.innerHTML = '';
+
+            pageSensesData.forEach((sense, sIdx) => {
+                const card = document.createElement('div');
+                card.className = 'card border rounded-4 shadow-sm bg-white mb-2';
+                card.style.borderColor = sIdx === 0 ? 'rgba(192, 38, 211, 0.35)' : 'rgba(226, 232, 240, 0.9)';
+                card.innerHTML = `
+                    <div class="card-header py-2.5 px-3 border-bottom d-flex justify-content-between align-items-center" style="background: ${sIdx === 0 ? 'rgba(192, 38, 211, 0.05)' : '#f8fafc'};">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge fw-bold px-2.5 py-1 text-uppercase" style="background: rgba(192, 38, 211, 0.12); color: #c026d3; font-size: 11px;">
+                                Nét nghĩa #${sIdx + 1} ${sIdx === 0 ? '(Nghĩa chính)' : ''}
+                            </span>
+                            <span class="fw-semibold text-slate-700 small" id="pageSenseTitle_${sIdx}">
+                                ${sense.meaning ? '— ' + escapeHtml(sense.meaning) : ''}
+                            </span>
+                        </div>
+                        <div>
+                            ${sIdx > 0 ? `
+                            <button type="button" class="btn btn-sm btn-outline-danger py-0.5 px-2.5 text-xs rounded-pill" onclick="removeSenseForm(${sIdx})" title="Xoá nét nghĩa này">
+                                <i data-lucide="trash-2" style="width: 12px; height: 12px;" class="me-1"></i>Xoá nét nghĩa
+                            </button>` : `
+                            <span class="badge bg-light text-muted border px-2 py-1 small">Nghĩa mặc định</span>`}
+                        </div>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-4">
+                                <label class="form-label text-xs fw-semibold mb-1">Loại từ</label>
+                                <select class="form-select form-select-sm" onchange="pageSensesData[${sIdx}].partOfSpeech = this.value; syncPageSensesHidden();">
+                                    <option value="noun" ${sense.partOfSpeech === 'noun' ? 'selected' : ''}>noun (Danh từ)</option>
+                                    <option value="verb" ${sense.partOfSpeech === 'verb' ? 'selected' : ''}>verb (Động từ)</option>
+                                    <option value="adjective" ${sense.partOfSpeech === 'adjective' ? 'selected' : ''}>adjective (Tính từ)</option>
+                                    <option value="adverb" ${sense.partOfSpeech === 'adverb' ? 'selected' : ''}>adverb (Trạng từ)</option>
+                                    <option value="phrasal verb" ${sense.partOfSpeech === 'phrasal verb' ? 'selected' : ''}>phrasal verb (Cụm động từ)</option>
+                                    <option value="idiom" ${sense.partOfSpeech === 'idiom' ? 'selected' : ''}>idiom (Thành ngữ)</option>
+                                    <option value="preposition" ${sense.partOfSpeech === 'preposition' ? 'selected' : ''}>preposition (Giới từ)</option>
+                                    <option value="conjunction" ${sense.partOfSpeech === 'conjunction' ? 'selected' : ''}>conjunction (Liên từ)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8">
+                                <label class="form-label text-xs fw-semibold mb-1">Nghĩa tiếng Việt <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control form-control-sm fw-semibold" placeholder="vd: bên (tham gia hợp đồng), buổi tiệc, đảng phái..." value="${escapeHtml(sense.meaning || '')}" oninput="pageSensesData[${sIdx}].meaning = this.value; const tEl = document.getElementById('pageSenseTitle_${sIdx}'); if (tEl) tEl.textContent = this.value ? '— ' + this.value : ''; syncPageSensesHidden();" />
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label text-xs fw-semibold mb-1">Định nghĩa tiếng Anh (English Definition)</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="vd: A person or group involved in a legal contract, agreement, or dispute." value="${escapeHtml(sense.englishDefinition || '')}" oninput="pageSensesData[${sIdx}].englishDefinition = this.value; syncPageSensesHidden();" />
+                        </div>
+                        <div class="mb-2 p-2.5 rounded-3 border bg-light/50">
+                            <div class="d-flex justify-content-between align-items-center mb-1.5">
+                                <label class="form-label text-xs fw-bold mb-0 text-secondary d-flex align-items-center gap-1">
+                                    <i data-lucide="quote" style="width: 12px; height: 12px;" class="text-primary"></i>
+                                    <span>Ví dụ bổ sung ngữ cảnh (có thêm / sửa / xóa):</span>
+                                </label>
+                                <button type="button" class="btn btn-xs btn-outline-primary py-0.5 px-2 rounded-pill fw-semibold" style="font-size: 11px;" onclick="addSenseExampleForm(${sIdx})">
+                                    + Thêm ví dụ
+                                </button>
+                            </div>
+                            <div id="senseExList_${sIdx}" class="d-flex flex-column gap-1.5"></div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label text-xs fw-semibold mb-1">Cụm từ đi kèm (Collocations)</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="vd: third party — bên thứ ba, interested party — bên có liên quan, contracting party — bên ký kết" value="${escapeHtml(sense.collocations || '')}" oninput="pageSensesData[${sIdx}].collocations = this.value; syncPageSensesHidden();" />
+                            <div class="form-text text-xs text-muted">Nhập dạng: <code>cụm tiếng Anh — nghĩa tiếng Việt</code>, ngăn cách bởi dấu phẩy hoặc chấm phẩy.</div>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <label class="form-label text-xs fw-semibold mb-1">Từ đồng nghĩa (Synonyms)</label>
+                                <input type="text" class="form-control form-control-sm" placeholder="vd: side, signatory" value="${escapeHtml(sense.synonyms || '')}" oninput="pageSensesData[${sIdx}].synonyms = this.value; syncPageSensesHidden();" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label text-xs fw-semibold mb-1">Từ trái nghĩa (Antonyms)</label>
+                                <input type="text" class="form-control form-control-sm" placeholder="vd: opponent, adversary" value="${escapeHtml(sense.antonyms || '')}" oninput="pageSensesData[${sIdx}].antonyms = this.value; syncPageSensesHidden();" />
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+                renderSenseExamplesForm(sIdx);
+            });
+
+            if (window.lucide) lucide.createIcons();
+            syncPageSensesHidden();
+        }
+
+        function renderSenseExamplesForm(sIdx) {
+            const listEl = document.getElementById(`senseExList_${sIdx}`);
+            if (!listEl) return;
+            listEl.innerHTML = '';
+            const examples = pageSensesData[sIdx].examples || [];
+            if (examples.length === 0) {
+                listEl.innerHTML = '<div class="text-muted fst-italic px-1 py-1" style="font-size: 11px;">Chưa có ví dụ bổ sung cho nét nghĩa này. Bấm <strong>"+ Thêm ví dụ"</strong> ở trên.</div>';
+                return;
+            }
+            examples.forEach((ex, exIdx) => {
+                const row = document.createElement('div');
+                row.className = 'd-flex align-items-center gap-1.5 p-1.5 rounded-2 bg-white border';
+                row.innerHTML = `
+                    <div class="input-group input-group-sm flex-grow-1">
+                        <span class="input-group-text bg-light text-muted px-2" style="font-size: 11px;">En</span>
+                        <input type="text" class="form-control form-control-sm" placeholder="Câu tiếng Anh (vd: Both parties must sign...)" value="${escapeHtml(ex.en || '')}" oninput="pageSensesData[${sIdx}].examples[${exIdx}].en = this.value; syncPageSensesHidden();" />
+                        <span class="input-group-text bg-light text-muted px-2" style="font-size: 11px;">Vi</span>
+                        <input type="text" class="form-control form-control-sm" placeholder="Dịch tiếng Việt..." value="${escapeHtml(ex.vi || '')}" oninput="pageSensesData[${sIdx}].examples[${exIdx}].vi = this.value; syncPageSensesHidden();" />
+                    </div>
+                    <button type="button" class="btn btn-outline-danger btn-sm p-1.5 text-xs rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" onclick="removeSenseExampleForm(${sIdx}, ${exIdx})" title="Xoá câu ví dụ này">
+                        <i data-lucide="trash-2" style="width: 13px; height: 13px;"></i>
+                    </button>
+                `;
+                listEl.appendChild(row);
+            });
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function addNewSenseForm() {
+            if (!pageSensesData) pageSensesData = [];
+            pageSensesData.push({
+                partOfSpeech: document.getElementById('pagePosInput')?.value || 'noun',
+                meaning: '',
+                englishDefinition: '',
+                examples: [{ en: '', vi: '' }],
+                collocations: '',
+                synonyms: '',
+                antonyms: ''
+            });
+            renderPageSensesUI();
+        }
+
+        function removeSenseForm(idx) {
+            if (idx === 0 && pageSensesData.length === 1) {
+                pageSensesData[0].meaning = '';
+                pageSensesData[0].englishDefinition = '';
+                pageSensesData[0].examples = [];
+                pageSensesData[0].collocations = '';
+                pageSensesData[0].synonyms = '';
+                pageSensesData[0].antonyms = '';
+                renderPageSensesUI();
+                return;
+            }
+            pageSensesData.splice(idx, 1);
+            renderPageSensesUI();
+        }
+
+        function addSenseExampleForm(sIdx) {
+            if (!pageSensesData[sIdx].examples) pageSensesData[sIdx].examples = [];
+            pageSensesData[sIdx].examples.push({ en: '', vi: '' });
+            renderSenseExamplesForm(sIdx);
+            syncPageSensesHidden();
+        }
+
+        function removeSenseExampleForm(sIdx, exIdx) {
+            pageSensesData[sIdx].examples.splice(exIdx, 1);
+            renderSenseExamplesForm(sIdx);
+            syncPageSensesHidden();
+        }
+
+        function syncPageSensesHidden() {
+            const hidden = document.getElementById('pageSensesJson');
+            if (!hidden) return;
+            const validSenses = (pageSensesData || []).filter(s => (s.meaning && s.meaning.trim()) || (s.englishDefinition && s.englishDefinition.trim()));
+            hidden.value = validSenses.length > 0 ? JSON.stringify(validSenses) : '';
+
+            // Đồng bộ Nét nghĩa 1 vào các input gốc để gửi form
+            const s1 = pageSensesData && pageSensesData.length > 0 ? pageSensesData[0] : null;
+            if (s1) {
+                const defEl = document.getElementById('pageDefinition');
+                if (defEl) defEl.value = s1.englishDefinition || '';
+                const collEl = document.getElementById('pageCollocations');
+                if (collEl) collEl.value = s1.collocations || '';
+                const synEl = document.getElementById('pageSynonyms');
+                if (synEl) synEl.value = s1.synonyms || '';
+                const antEl = document.getElementById('pageAntonyms');
+                if (antEl) antEl.value = s1.antonyms || '';
+
+                if (Array.isArray(s1.examples) && s1.examples.length > 0) {
+                    const exSentences = s1.examples.map(e => e.en).filter(Boolean);
+                    const exMeanings = s1.examples.map(e => e.vi || ' ');
+                    const hidSent = document.getElementById('hiddenExampleSentence');
+                    if (hidSent) hidSent.value = exSentences.join('\n');
+                    const hidMean = document.getElementById('hiddenExampleMeaning');
+                    if (hidMean) hidMean.value = exMeanings.join('\n');
+                }
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // Khởi tạo ban đầu khi vào trang
+        document.addEventListener('DOMContentLoaded', function () {
+            const catVal = document.getElementById('pageCategoryId').value;
+            if (catVal) {
+                onPageCategoryChange(catVal);
+                document.getElementById('pageTopicId').value = '@Model.TopicId';
+            }
+
+            // Nạp SensesJson ban đầu nếu có
+            const initialSensesJson = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.SensesJson ?? ""));
+            pageSensesData = [];
+            if (initialSensesJson) {
+                try {
+                    const parsed = JSON.parse(initialSensesJson);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        pageSensesData = parsed.map(s => ({
+                            partOfSpeech: s.partOfSpeech || document.getElementById('pagePosInput')?.value || 'noun',
+                            meaning: s.meaning || document.getElementById('pageMeaning')?.value || '',
+                            englishDefinition: s.englishDefinition || '',
+                            examples: Array.isArray(s.examples) ? s.examples.map(e => ({ en: e.en || e.En || (Array.isArray(e) ? e[0] : ''), vi: e.vi || e.Vi || (Array.isArray(e) ? e[1] : '') })) : [],
+                            collocations: s.collocations || '',
+                            synonyms: s.synonyms || '',
+                            antonyms: s.antonyms || ''
+                        }));
+                    }
+                } catch {
+                    pageSensesData = [];
+                }
+            }
+
+            if (!pageSensesData || pageSensesData.length === 0) {
+                const initialEx = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ExampleSentence ?? ""));
+                const initialExM = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.ExampleMeaning ?? ""));
+                const exArr = initialEx.split(/\r?\n|\|\|\|/).map(s => s.trim()).filter(Boolean);
+                const exMArr = initialExM.split(/\r?\n|\|\|\|/).map(s => s.trim());
+                const exList = exArr.map((en, i) => ({ en, vi: exMArr[i] || '' }));
+
+                pageSensesData = [{
+                    partOfSpeech: document.getElementById('pagePosInput')?.value || 'noun',
+                    meaning: document.getElementById('pageMeaning')?.value || '',
+                    englishDefinition: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.EnglishDefinition ?? "")),
+                    examples: exList,
+                    collocations: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Collocations ?? "")),
+                    synonyms: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Synonyms ?? "")),
+                    antonyms: @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Antonyms ?? ""))
+                }];
+            }
+
+            renderPageSensesUI();
+
+            document.getElementById('formWordPage')?.addEventListener('submit', function () {
+                syncPageSensesHidden();
+            });
+
+            updatePageImagePreview();
+            syncPreview();
+        });
+    </script>
+}

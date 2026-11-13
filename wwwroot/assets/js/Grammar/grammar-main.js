@@ -989,28 +989,56 @@
     renderPracticeQuestionMap();
   }
 
+  let practiceQuestionMapDelegated = false;
+
   function renderPracticeQuestionMap() {
     const content = document.getElementById("practiceQuestionMapContent");
-    const answered = sessionQuestions.filter(
-      (_, index) => sessionAnswers[index] !== undefined,
-    ).length;
-    const percent = sessionQuestions.length
-      ? Math.round((answered / sessionQuestions.length) * 100)
-      : 0;
-    document.getElementById("practiceQuestionMapProgress").textContent =
-      `Câu ${questionIndex + 1}/${sessionQuestions.length} · ${percent}% hoàn thành`;
+    if (!content) return;
+
+    if (!practiceQuestionMapDelegated) {
+      content.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-question-index]");
+        if (!btn) return;
+        const index = parseInt(btn.dataset.questionIndex, 10);
+        if (isNaN(index)) return;
+        closePracticeQuestionMap(false);
+        questionIndex = index;
+        renderQuestion();
+        const target =
+          practiceOptions.querySelector("button:not(:disabled)") ||
+          practiceNext;
+        target?.focus({ preventScroll: true });
+      });
+      practiceQuestionMapDelegated = true;
+    }
+
+    const totalQuestions = sessionQuestions.length;
+    let answeredCount = 0;
+    for (let i = 0; i < totalQuestions; i++) {
+      if (sessionAnswers[i] !== undefined) answeredCount++;
+    }
+    const percent = totalQuestions ? Math.round((answeredCount / totalQuestions) * 100) : 0;
+    const progressEl = document.getElementById("practiceQuestionMapProgress");
+    if (progressEl) {
+      progressEl.textContent = `Câu ${questionIndex + 1}/${totalQuestions} · ${percent}% hoàn thành`;
+    }
+
     document.querySelectorAll("[data-map-filter]").forEach((button) => {
       button.setAttribute(
         "aria-pressed",
         String(button.dataset.mapFilter === questionMapFilter),
       );
     });
-    content.replaceChildren();
+
+    const frag = document.createDocumentFragment();
     const groups = new Map();
     sessionQuestions.forEach((question, index) => {
-      if (!groups.has(question.title)) groups.set(question.title, []);
-      groups.get(question.title).push({ question, index });
+      const groupTitle = question.title || "Luyện tập";
+      if (!groups.has(groupTitle)) groups.set(groupTitle, []);
+      groups.get(groupTitle).push({ question, index });
     });
+
+    let renderedCount = 0;
     groups.forEach((entries, title) => {
       const visible = entries.filter(({ question, index }) => {
         const selected = sessionAnswers[index];
@@ -1020,6 +1048,8 @@
         return true;
       });
       if (!visible.length) return;
+      renderedCount += visible.length;
+
       const section = document.createElement("section");
       section.className = "practice-map-group";
       const heading = document.createElement("div");
@@ -1028,11 +1058,14 @@
       name.textContent = title;
       const count = document.createElement("span");
       count.className = "practice-map-group-count";
-      count.textContent = `${entries.filter(({ index }) => sessionAnswers[index] !== undefined).length}/${entries.length}`;
+      const groupAnswered = entries.filter(({ index }) => sessionAnswers[index] !== undefined).length;
+      count.textContent = `${groupAnswered}/${entries.length}`;
       count.setAttribute("aria-label", `${count.textContent} câu đã làm`);
       heading.append(name, count);
+
       const grid = document.createElement("div");
       grid.className = "practice-map-grid";
+
       visible.forEach(({ question, index }) => {
         const selected = sessionAnswers[index];
         const state =
@@ -1042,11 +1075,8 @@
               ? "correct"
               : "incorrect";
         const current = index === questionIndex;
-        const label = {
-          unanswered: "Chưa làm",
-          correct: "Đúng",
-          incorrect: "Làm sai",
-        }[state];
+        const label = state === "unanswered" ? "Chưa làm" : state === "correct" ? "Đúng" : "Làm sai";
+
         const button = document.createElement("button");
         button.type = "button";
         button.className = `practice-map-question is-${state}`;
@@ -1057,28 +1087,24 @@
           `Câu ${index + 1}: ${current ? "Đang làm, " : ""}${label.toLowerCase()}`,
         );
         button.title = `Câu ${index + 1}: ${current ? "Đang làm" : label}`;
-        if (current) button.setAttribute("aria-current", "step");
-        else {
+
+        if (current) {
+          button.setAttribute("aria-current", "step");
+        } else {
           const icon = document.createElement("i");
           icon.className = `practice-map-status-icon ${state === "correct" ? "fa-regular fa-circle-check" : state === "incorrect" ? "fa-solid fa-triangle-exclamation" : "fa-regular fa-circle"}`;
           icon.setAttribute("aria-hidden", "true");
           button.appendChild(icon);
         }
-        button.addEventListener("click", () => {
-          closePracticeQuestionMap(false);
-          questionIndex = index;
-          renderQuestion();
-          const target =
-            practiceOptions.querySelector("button:not(:disabled)") ||
-            practiceNext;
-          target.focus({ preventScroll: true });
-        });
+
         grid.appendChild(button);
       });
+
       section.append(heading, grid);
-      content.appendChild(section);
+      frag.appendChild(section);
     });
-    if (!content.children.length) {
+
+    if (renderedCount === 0) {
       const empty = document.createElement("p");
       empty.className = "practice-map-empty";
       empty.setAttribute("role", "status");
@@ -1086,38 +1112,50 @@
         questionMapFilter === "incorrect"
           ? "Chưa có câu trả lời sai."
           : "Bạn đã làm tất cả câu hỏi.";
-      content.appendChild(empty);
+      frag.appendChild(empty);
     }
+
+    content.replaceChildren(frag);
   }
 
   function openPracticeQuestionMap() {
+    const map = document.getElementById("practiceQuestionMap");
+    if (!map) return;
     renderPracticeQuestionMap();
-    document.getElementById("practiceQuestionMap").hidden = false;
+    map.hidden = false;
     document
       .getElementById("practiceQuestionMapToggle")
-      .setAttribute("aria-expanded", "true");
+      ?.setAttribute("aria-expanded", "true");
     document.body.classList.add("question-map-open");
-    dashboardLayout.inert = true;
-    document
-      .getElementById("practiceQuestionMapClose")
-      .focus({ preventScroll: true });
-    document.getElementById("practiceQuestionMapContent").scrollTop = 0;
-    document
-      .querySelector('.practice-map-question[aria-current="step"]')
-      ?.scrollIntoView({ block: "nearest" });
+
+    requestAnimationFrame(() => {
+      document
+        .getElementById("practiceQuestionMapClose")
+        ?.focus({ preventScroll: true });
+      const content = document.getElementById("practiceQuestionMapContent");
+      if (content) content.scrollTop = 0;
+      document
+        .querySelector('.practice-map-question[aria-current="step"]')
+        ?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    });
   }
 
   function closePracticeQuestionMap(restoreFocus = true) {
     const map = document.getElementById("practiceQuestionMap");
+    if (!map) return;
     const wasOpen = !map.hidden;
     map.hidden = true;
     document
       .getElementById("practiceQuestionMapToggle")
-      .setAttribute("aria-expanded", "false");
+      ?.setAttribute("aria-expanded", "false");
     document.body.classList.remove("question-map-open");
-    dashboardLayout.inert = false;
+
     if (wasOpen && restoreFocus) {
       document
+        .getElementById("practiceQuestionMapToggle")
+        ?.focus({ preventScroll: true });
+    }
+  }
         .getElementById("practiceQuestionMapToggle")
         .focus({ preventScroll: true });
     }

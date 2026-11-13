@@ -1,3 +1,4 @@
+using StudyEnglish.Data.Seed;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using StudyEnglish.Data; // Thêm namespace chứa AppDbContext
@@ -19,6 +20,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     });
 
 builder.Services.AddScoped<StudyEnglish.Services.GrammarContentService>();
+builder.Services.AddScoped<StudyEnglish.Services.VocabAiSuggestionService>();
+builder.Services.AddSingleton<StudyEnglish.Services.IEdgeTtsService, StudyEnglish.Services.EdgeTtsService>();
 builder.Services.AddAntiforgery(options => options.HeaderName = "RequestVerificationToken");
 builder.Services.AddControllersWithViews();
 
@@ -54,6 +57,17 @@ try
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    // Tự động kiểm tra và thêm cột Color vào bảng VocabTopics nếu chưa tồn tại
+    db.Database.ExecuteSqlRaw(@"
+        IF NOT EXISTS (
+            SELECT 1 FROM sys.columns 
+            WHERE object_id = OBJECT_ID('dbo.VocabTopics') AND name = 'Color'
+        )
+        BEGIN
+            ALTER TABLE dbo.VocabTopics ADD Color NVARCHAR(50) NULL;
+        END
+    ");
     db.Database.ExecuteSqlRaw(@"
         IF NOT EXISTS (
             SELECT 1 FROM sys.columns 
@@ -251,9 +265,35 @@ try
             BEGIN
                 ALTER TABLE dbo.GrammarTopics ADD Icon NVARCHAR(100) NULL CONSTRAINT DF_GrammarTopics_Icon DEFAULT ('book-open');
             END
-            EXEC(N'UPDATE dbo.GrammarTopics SET Icon = ''book-open'' WHERE Icon IS NULL OR Icon = ''''');
+                        EXEC(N'UPDATE dbo.GrammarTopics SET Icon = ''book-open'' WHERE Icon IS NULL OR Icon = ''''');
+        END
+
+        IF EXISTS (SELECT 1 FROM sys.tables WHERE name = 'VocabWords')
+        BEGIN
+            IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.VocabWords') AND name = 'QuizDistractorsJson')
+            BEGIN
+                ALTER TABLE dbo.VocabWords ADD QuizDistractorsJson NVARCHAR(1500) NULL;
+            END
+            IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.VocabWords') AND name = 'UseManualQuiz')
+            BEGIN
+                ALTER TABLE dbo.VocabWords ADD UseManualQuiz BIT NOT NULL CONSTRAINT DF_VocabWords_UseManualQuiz DEFAULT (0);
+            END
+        END
+
+        IF EXISTS (SELECT 1 FROM sys.tables WHERE name = 'UserVocabProgresses')
+        BEGIN
+            IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.UserVocabProgresses') AND name = 'AgainCount')
+            BEGIN
+                ALTER TABLE dbo.UserVocabProgresses ADD AgainCount INT NOT NULL CONSTRAINT DF_UserVocabProgresses_AgainCount DEFAULT (0);
+            END
+            IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.UserVocabProgresses') AND name = 'TypingFailCount')
+            BEGIN
+                ALTER TABLE dbo.UserVocabProgresses ADD TypingFailCount INT NOT NULL CONSTRAINT DF_UserVocabProgresses_TypingFailCount DEFAULT (0);
+            END
         END
     ");
+
+    VocabDbInitializer.Initialize(db);
 }
 catch
 {

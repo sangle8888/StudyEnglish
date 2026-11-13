@@ -78,7 +78,7 @@
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>
           <span class="sb-label">Ngữ pháp</span>
         </a>
-        <a class="sb-item" href="#" title="Từ vựng">
+        <a class="sb-item @(ViewContext.RouteData.Values["controller"]?.ToString() == "Vocabulary_management" ? "active" : "")" asp-area="Admin" asp-controller="Vocabulary_management" asp-action="Index" title="Quản lý Từ vựng">
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"/><path d="m8 13 4-7 4 7M9.1 11h5.7"/></svg>
           <span class="sb-label">Từ vựng</span>
         </a>
@@ -254,10 +254,17 @@
       setInterval(updateAllLiveClocks, 1000);
     })();
   </script>
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Lucide Icons (Local + CDN Fallback) -->
+  <script src="~/lib/lucide/lucide.min.js" asp-append-version="true"></script>
   <script>
-    lucide.createIcons();
+    if (typeof lucide === 'undefined') {
+      var cdnScript = document.createElement('script');
+      cdnScript.src = 'https://unpkg.com/lucide@latest';
+      cdnScript.onload = function() { if (window.lucide) lucide.createIcons(); };
+      document.head.appendChild(cdnScript);
+    } else {
+      lucide.createIcons();
+    }
   </script>
   @await RenderSectionAsync("Scripts", required: false)
   <script>

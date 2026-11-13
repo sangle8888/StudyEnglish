@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using StudyEnglish.Models;
 using StudyEnglish.Models.Grammar;
+using StudyEnglish.Models.Vocabulary;
 
 namespace StudyEnglish.Data;
 
@@ -27,6 +28,15 @@ public class AppDbContext : DbContext
     public DbSet<PracticeAnswer> PracticeAnswers => Set<PracticeAnswer>();
     public DbSet<QuestionReport> QuestionReports => Set<QuestionReport>();
     public DbSet<Feedback> Feedbacks => Set<Feedback>();
+
+    // Phân hệ Từ vựng (Vocabulary Module)
+    public DbSet<VocabCategory> VocabCategories => Set<VocabCategory>();
+    public DbSet<VocabTopic> VocabTopics => Set<VocabTopic>();
+    public DbSet<VocabWord> VocabWords => Set<VocabWord>();
+    public DbSet<UserVocabProgress> UserVocabProgresses => Set<UserVocabProgress>();
+    public DbSet<VocabPhrasePair> VocabPhrasePairs => Set<VocabPhrasePair>();
+    public DbSet<VocabSetting> VocabSettings => Set<VocabSetting>();
+    public DbSet<UserPhraseProgress> UserPhraseProgresses => Set<UserPhraseProgress>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -70,5 +80,34 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(f => f.UserId)
             .OnDelete(DeleteBehavior.SetNull);
+
+        // Quan hệ cho Từ vựng (Vocabulary)
+        modelBuilder.Entity<VocabTopic>()
+            .HasOne(t => t.Category)
+            .WithMany(c => c.Topics)
+            .HasForeignKey(t => t.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<VocabWord>()
+            .HasOne(w => w.Topic)
+            .WithMany(t => t.Words)
+            .HasForeignKey(w => w.TopicId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<UserVocabProgress>()
+            .HasIndex(p => new { p.UserId, p.WordId })
+            .IsUnique();
+
+        modelBuilder.Entity<UserVocabProgress>()
+            .HasOne(p => p.User)
+            .WithMany()
+            .HasForeignKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<UserVocabProgress>()
+            .HasOne(p => p.Word)
+            .WithMany()
+            .HasForeignKey(p => p.WordId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

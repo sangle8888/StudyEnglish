@@ -1,0 +1,3291 @@
+@model VocabManagementViewModel
+@{
+    ViewData["Title"] = "Quản lý Từ vựng";
+}
+
+@section Styles {
+<style>
+    /* Admin Filter Bar & Search Input (Đồng bộ chuẩn Trang Quản lý Ngữ pháp) */
+    .admin-filter-bar .input-group-search {
+        display: flex;
+        align-items: center;
+        background: var(--hr-surface, #fff);
+        border: 1.5px solid var(--hr-line-2, #d1d5db);
+        border-radius: 12px;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        height: 42px;
+        overflow: hidden;
+    }
+    .admin-filter-bar .input-group-search:focus-within {
+        border-color: var(--hr-primary, #4f46e5);
+        box-shadow: var(--hr-ring, 0 0 0 4px rgba(79, 70, 229, 0.22));
+    }
+    .admin-filter-bar .input-group-search .search-icon {
+        padding: 0 10px 0 14px;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .admin-filter-bar .input-group-search input.form-control {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+        padding-left: 0 !important;
+        height: 100% !important;
+        font-size: 0.92rem;
+    }
+    .admin-filter-bar .form-select {
+        height: 42px;
+        border-radius: 12px;
+        border: 1.5px solid var(--hr-line-2, #d1d5db);
+        font-size: 0.92rem;
+    }
+    .admin-filter-bar .btn-filter-reset {
+        height: 42px;
+        border-radius: 12px;
+        border: 1.5px solid var(--hr-line-2, #d1d5db);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .admin-filter-bar .btn-filter-reset:not(.w-100) {
+        width: 42px;
+        padding: 0;
+    }
+
+    /* Badges & Box icons giống Quản lý Ngữ pháp */
+    .category-title-link {
+        color: #1e293b;
+        transition: color 0.15s ease;
+    }
+    .category-title-link:hover {
+        color: var(--hr-primary, #4f46e5);
+    }
+    .custom-count-badge {
+        background-color: #f1f5f9;
+        color: #334155;
+        border: 1px solid #e2e8f0;
+    }
+    .topic-icon-box {
+        background-color: #eef2ff;
+        color: #4f46e5;
+        border: 1px solid #e0e7ff;
+    }
+
+    /* Dark Mode styles tương thích đồng bộ */
+    [data-bs-theme="dark"] .card-header {
+        background-color: var(--hr-surface-2, #242247) !important;
+        border-bottom-color: var(--hr-line, #2d2a52) !important;
+        color: var(--hr-ink, #f2f0fb) !important;
+    }
+    [data-bs-theme="dark"] .table thead,
+    [data-bs-theme="dark"] .table thead th {
+        background-color: var(--hr-surface-2, #242247) !important;
+        color: var(--hr-ink, #f2f0fb) !important;
+        border-bottom-color: var(--hr-line, #2d2a52) !important;
+    }
+    [data-bs-theme="dark"] .table > :not(caption) > * > * {
+        background-color: transparent;
+        color: var(--hr-ink, #f2f0fb);
+        border-bottom-color: var(--hr-line, #2d2a52);
+    }
+    [data-bs-theme="dark"] .table-hover > tbody > tr:hover > * {
+        background-color: rgba(143, 136, 255, 0.08) !important;
+        color: var(--hr-ink, #f2f0fb);
+    }
+    [data-bs-theme="dark"] .category-title-link,
+    [data-bs-theme="dark"] .topic-title-text {
+        color: var(--hr-ink, #f2f0fb) !important;
+    }
+    [data-bs-theme="dark"] .category-title-link:hover {
+        color: var(--hr-primary, #8f88ff) !important;
+    }
+    [data-bs-theme="dark"] .topic-filter-panel {
+        background-color: var(--hr-surface, #1b1a37) !important;
+        border-bottom-color: var(--hr-line, #2d2a52) !important;
+    }
+    [data-bs-theme="dark"] .filter-counter-text {
+        color: var(--hr-muted, #aaa6cb) !important;
+    }
+    [data-bs-theme="dark"] .custom-count-badge {
+        background-color: var(--hr-surface-2, #242247) !important;
+        color: var(--hr-ink-2, #d6d2f0) !important;
+        border-color: var(--hr-line-2, #3c3968) !important;
+    }
+    [data-bs-theme="dark"] .topic-icon-box {
+        background-color: rgba(143, 136, 255, 0.16) !important;
+        border-color: rgba(143, 136, 255, 0.28) !important;
+        color: var(--hr-primary, #8f88ff) !important;
+    }
+    [data-bs-theme="dark"] .category-stt,
+    [data-bs-theme="dark"] .topic-stt {
+        color: var(--hr-muted, #aaa6cb) !important;
+    }
+    [data-bs-theme="dark"] .table-active {
+        --bs-table-active-bg: rgba(143, 136, 255, 0.15);
+        --bs-table-active-color: var(--hr-ink, #f2f0fb);
+    }
+</style>
+}
+
+<!-- HEADER TRANG ADMIN QUẢN LÝ TỪ VỰNG -->
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+        <h1 class="h3 mb-1">Quản lý Từ vựng</h1>
+        <p class="text-muted small mb-0">Quản lý hệ thống thư mục cha (<strong>Nhóm bộ từ</strong>) và thư mục con (<strong>Bộ từ vựng</strong>). Nhấn <strong>Từ vựng</strong> ở mỗi bộ để quản lý <strong>Học thẻ</strong> &amp; <strong>Ghép cụm từ</strong>.</p>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+        <button type="button" class="btn btn-outline-secondary" onclick="openBulkImportModal()" title="Nhập danh sách từ vựng từ tệp Excel/CSV">
+            <i data-lucide="file-spreadsheet" class="me-1"></i>Nhập Excel / CSV
+        </button>
+        <button type="button" class="btn btn-outline-primary" onclick="openCategoryModal()">
+            <i data-lucide="plus" class="me-1"></i>Nhóm bộ từ
+        </button>
+        <button type="button" class="btn btn-primary" onclick="openTopicModal(@(Model.SelectedCategoryId ?? 0))">
+            <i data-lucide="plus" class="me-1"></i>Bộ từ
+        </button>
+    </div>
+</div>
+
+<div id="indexAlertContainer"></div>
+
+@if (TempData["Success"] is string success)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i data-lucide="check-circle" class="me-2 text-success"></i>@success
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+    </div>
+}
+
+<!-- ROW THỐNG KÊ KPI CARDS (BORDER-START COLOR THEME) -->
+<div class="row g-3 mb-4">
+    <div class="col-md-3 col-sm-6">
+        <div class="card shadow-sm border-0 border-start border-primary border-4 h-100">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase fw-bold">Nhóm bộ từ (Cha)</div>
+                <div class="display-6 fw-bold text-primary">@Model.Categories.Count</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card shadow-sm border-0 border-start border-success border-4 h-100">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase fw-bold">Bộ từ vựng (Con)</div>
+                <div class="display-6 fw-bold text-success">@Model.TotalTopics</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card shadow-sm border-0 border-start border-info border-4 h-100">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase fw-bold">Từ vựng (Học thẻ)</div>
+                <div class="display-6 fw-bold text-info">@Model.TotalWords</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+        <div class="card shadow-sm border-0 border-start border-warning border-4 h-100">
+            <div class="card-body">
+                <div class="text-muted small text-uppercase fw-bold">Cụm từ ghép</div>
+                <div class="display-6 fw-bold text-warning" id="kpiTotalPhrases">@Model.TotalPhrases</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- [BẢNG 1] NHÓM BỘ TỪ (THƯ MỤC CHA - CATEGORIES)                 -->
+<!-- ============================================================== -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header py-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-primary"><i data-lucide="layers" class="me-1"></i>Nhóm bộ từ</span>
+                <span id="categoryCountBadge" class="badge custom-count-badge">@Model.Categories.Count nhóm</span>
+            </div>
+            <!-- Bộ lọc tìm kiếm nhóm bộ từ tức thì -->
+            <div class="d-flex align-items-center gap-2 flex-nowrap ms-auto admin-filter-bar">
+                <div class="input-group-search" style="width: 260px;">
+                    <span class="search-icon"><i data-lucide="search"></i></span>
+                    <input type="text" id="categorySearchInput" class="form-control" placeholder="Tìm kiếm nhóm bộ từ..." />
+                </div>
+                <select id="categoryStatusFilter" class="form-select" style="width: 170px; flex-shrink: 0;">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="active">Hiển thị</option>
+                    <option value="inactive">Ẩn</option>
+                </select>
+                <button type="button" id="btnResetCategoryFilter" class="btn btn-outline-secondary btn-filter-reset flex-shrink-0" title="Đặt lại bộ lọc nhóm">
+                    <i data-lucide="rotate-ccw"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" id="categoryTable">
+            <thead>
+                <tr>
+                    <th style="width: 60px;" class="text-center">STT</th>
+                    <th>Tiêu đề (Thư mục cha)</th>
+                    <th class="text-center" style="width: 120px;">Bộ từ con</th>
+                    <th class="text-center" style="width: 130px;">Học thẻ</th>
+                    <th class="text-center" style="width: 130px;">Ghép cụm từ</th>
+                    <th style="width: 130px;">Trạng thái</th>
+                    <th class="text-end text-nowrap" style="width: 160px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int catStt = 1; }
+                @foreach (var c in Model.Categories)
+                {
+                    <tr class="category-row @(Model.SelectedCategoryId == c.CategoryId ? "table-active" : "")"
+                        id="row-cat-@c.CategoryId"
+                        data-id="@c.CategoryId"
+                        data-title="@c.Name.ToLower()"
+                        data-status="@(c.IsActive ? "active" : "inactive")">
+                        <td class="category-stt text-center fw-semibold">@(catStt++)</td>
+                        <td>
+                            <a asp-action="Index" asp-route-categoryId="@(Model.SelectedCategoryId == c.CategoryId ? null : c.CategoryId)"
+                               class="category-title-link fw-semibold text-decoration-none"
+                               title="@(Model.SelectedCategoryId == c.CategoryId ? "Bỏ lọc theo nhóm này" : "Lọc các bộ từ con thuộc nhóm này")">
+                                @c.Name
+                            </a>
+                            @if (!string.IsNullOrEmpty(c.Code))
+                            {
+                                <span class="badge bg-light text-muted border ms-1 font-monospace" style="font-size: 11px;">@c.Code</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <span class="badge rounded-pill custom-count-badge">@c.TopicCount bộ từ</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge rounded-pill custom-count-badge text-primary">@c.WordCount từ</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge rounded-pill custom-count-badge text-info">@c.PhraseCount cụm</span>
+                        </td>
+                        <td class="category-status-cell">
+                            @if (c.IsActive)
+                            {
+                                <span class="badge text-bg-success">Hiển thị</span>
+                            }
+                            else
+                            {
+                                <span class="badge text-bg-secondary">Ẩn</span>
+                            }
+                        </td>
+                        <td class="text-end text-nowrap">
+                            <div class="d-inline-flex align-items-center justify-content-end" style="gap: 6px;">
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap"
+                                        onclick="editCategory(@c.CategoryId)" title="Chỉnh sửa nhóm">
+                                    <i data-lucide="square-pen" class="me-1"></i><span>Sửa</span>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap"
+                                        onclick="deleteCategory(@c.CategoryId, '@c.Name')" title="Xoá nhóm">
+                                    <i data-lucide="trash-2" class="me-1"></i><span>Xoá</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if (Model.Categories.Count == 0)
+                {
+                    <tr id="emptyCategoryRow"><td colspan="7" class="text-center text-muted py-4">Chưa có nhóm bộ từ nào.</td></tr>
+                }
+                <tr id="noCategoryMatchRow" style="display: none;">
+                    <td colspan="7" class="text-center text-muted py-4"><i data-lucide="filter-x" class="me-2"></i>Không tìm thấy nhóm bộ từ nào phù hợp.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- [BẢNG 2] BỘ TỪ VỰNG (TOPICS)                                   -->
+<!-- ============================================================== -->
+<div class="card shadow-sm mb-4">
+    <div class="card-header py-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div class="d-flex align-items-center gap-2">
+                <span class="fw-bold text-success"><i data-lucide="book-marked" class="me-1"></i>Bộ từ vựng</span>
+                <span id="topicGroupFilterLabel" class="text-muted small">
+                    @(Model.SelectedCategoryId.HasValue ? "(đang lọc theo nhóm)" : "(tất cả)")
+                </span>
+                <span id="topicCountBadge" class="badge custom-count-badge ms-1">@Model.Topics.Count bộ từ</span>
+            </div>
+            @if (Model.SelectedCategoryId.HasValue)
+            {
+                <a class="btn btn-sm btn-outline-secondary" asp-action="Index">
+                    <i data-lucide="x" class="me-1"></i>Bỏ lọc nhóm URL
+                </a>
+            }
+        </div>
+    </div>
+
+    <!-- Bộ lọc & tìm kiếm bộ từ -->
+    <div class="p-3 border-bottom topic-filter-panel admin-filter-bar">
+        <div class="row g-2 align-items-center">
+            <div class="col-lg-4 col-md-5">
+                <div class="input-group-search w-100">
+                    <span class="search-icon"><i data-lucide="search"></i></span>
+                    <input type="text" id="topicSearchInput" class="form-control" placeholder="Tìm kiếm tên bộ từ, nhóm, cấp độ..." />
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <select id="topicCategoryFilter" class="form-select">
+                    <option value="">-- Tất cả nhóm bộ từ --</option>
+                    @foreach (var c in Model.Categories)
+                    {
+                        <!option value="@c.CategoryId" @(Model.SelectedCategoryId == c.CategoryId ? "selected" : "")>@c.Name@(!c.IsActive ? " (Ẩn)" : "")</!option>
+                    }
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <select id="topicLevelFilter" class="form-select">
+                    <option value="">-- Tất cả cấp độ / kỳ thi --</option>
+                    <option value="A1">A1 - Cơ bản</option>
+                    <option value="A2">A2 - Sơ cấp</option>
+                    <option value="B1">B1 - Trung cấp</option>
+                    <option value="B2">B2 - Khá</option>
+                    <option value="C1">C1 - Cao cấp</option>
+                    <option value="TOEIC">TOEIC</option>
+                    <option value="IELTS">IELTS</option>
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-2">
+                <select id="topicStatusFilter" class="form-select">
+                    <option value="">-- Tất cả trạng thái --</option>
+                    <option value="active">Hiển thị</option>
+                    <option value="inactive">Ẩn</option>
+                </select>
+            </div>
+            <div class="col-lg-1 col-md-12">
+                <button type="button" id="btnResetTopicFilter" class="btn btn-outline-secondary btn-filter-reset w-100" title="Đặt lại bộ lọc">
+                    <i data-lucide="rotate-ccw"></i>
+                </button>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top small filter-counter-text text-muted">
+            <span>Đang hiển thị <strong id="visibleTopicCount" class="text-success">@Model.Topics.Count</strong> trên tổng số <strong>@Model.Topics.Count</strong> bộ từ</span>
+        </div>
+    </div>
+
+    <!-- Thanh thao tác hàng loạt cho các bộ từ có dấu tích chọn -->
+    <div id="bulkTopicActionBar" class="alert alert-info py-2 px-3 mx-3 mt-3 mb-0 d-flex align-items-center justify-content-between flex-wrap gap-2 shadow-sm" style="display: none !important;">
+        <div class="d-flex align-items-center gap-2">
+            <i data-lucide="check-circle" class="text-primary fs-5"></i>
+            <span>Đã chọn <strong id="selectedTopicsBadge" class="text-primary">0</strong> bộ từ</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-sm btn-success rounded-pill px-3" id="btnBulkShowTopics">
+                <i data-lucide="eye" class="me-1"></i>Hiện mục chọn
+            </button>
+            <button type="button" class="btn btn-sm btn-warning text-dark rounded-pill px-3" id="btnBulkHideTopics">
+                <i data-lucide="eye-off" class="me-1"></i>Ẩn mục chọn
+            </button>
+            <button type="button" class="btn btn-sm btn-danger rounded-pill px-3" id="btnBulkDeleteTopics">
+                <i data-lucide="trash-2" class="me-1"></i>Xoá mục chọn
+            </button>
+            <button type="button" class="btn btn-sm btn-link text-decoration-none text-muted" id="btnClearTopicSelection">
+                Bỏ chọn
+            </button>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" id="topicTable">
+            <thead>
+                <tr>
+                    <th style="width: 40px;" class="text-center">
+                        <input type="checkbox" id="checkAllTopics" class="form-check-input" title="Chọn tất cả">
+                    </th>
+                    <th style="width: 60px;" class="text-center">STT</th>
+                    <th>Bộ từ vựng (Thư mục con)</th>
+                    <th>Nhóm cha</th>
+                    <th style="width: 130px;">Cấp độ / Kỳ thi</th>
+                    <th class="text-center" style="width: 110px;">Học thẻ</th>
+                    <th class="text-center" style="width: 120px;">Ghép cụm từ</th>
+                    <th style="width: 110px;">Trạng thái</th>
+                    <th class="text-end text-nowrap" style="width: 320px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ int topicStt = 1; }
+                @foreach (var t in Model.Topics)
+                {
+                    <tr class="topic-row"
+                        id="topic-row-@t.TopicId"
+                        data-id="@t.TopicId"
+                        data-title="@t.Title.ToLower()"
+                        data-category-id="@t.CategoryId"
+                        data-category-title="@t.CategoryName.ToLower()"
+                        data-level="@(t.Level?.ToLower() ?? "")"
+                        data-status="@(t.IsActive ? "active" : "inactive")">
+                        <td class="text-center">
+                            <input type="checkbox" class="form-check-input topic-row-checkbox" value="@t.TopicId">
+                        </td>
+                        <td class="topic-stt text-center fw-semibold">@(topicStt++)</td>
+                        <td class="fw-semibold">
+                            <div class="d-inline-flex align-items-center gap-2">
+                                @{
+                                    var displayColor = !string.IsNullOrEmpty(t.Color) ? t.Color.ToLower() : (!string.IsNullOrEmpty(t.CategoryColor) ? t.CategoryColor.ToLower() : "primary");
+                                    var displayIcon = !string.IsNullOrEmpty(t.Icon) ? t.Icon : "book-open";
+                                    var (boxBg, boxFg) = displayColor switch {
+                                        "fuchsia" => ("rgba(192, 38, 211, 0.12)", "#c026d3"),
+                                        "amber" or "orange" => ("rgba(234, 88, 12, 0.12)", "#ea580c"),
+                                        "emerald" or "green" => ("rgba(5, 150, 105, 0.12)", "#059669"),
+                                        "rose" or "red" => ("rgba(225, 29, 72, 0.12)", "#e11d48"),
+                                        "cyan" => ("rgba(8, 145, 178, 0.12)", "#0891b2"),
+                                        "indigo" => ("rgba(79, 70, 229, 0.12)", "#4f46e5"),
+                                        "purple" => ("rgba(147, 51, 234, 0.12)", "#9333ea"),
+                                        _ => ("rgba(37, 99, 235, 0.12)", "#2563eb")
+                                    };
+                                }
+                                <span class="topic-icon-box d-inline-flex align-items-center justify-content-center rounded-3" style="width: 32px; height: 32px; flex-shrink: 0; background-color: @boxBg; color: @boxFg;" title="Biểu tượng: @displayIcon (@displayColor)">
+                                    <i data-lucide="@displayIcon" style="width: 16px; height: 16px;"></i>
+                                </span>
+                                <span class="topic-title-text">@t.Title</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge custom-count-badge">@t.CategoryName</span>
+                        </td>
+                        <td>
+                            <span class="small text-secondary fw-semibold">@(string.IsNullOrEmpty(t.Level) ? "Mặc định" : t.Level)</span>
+                        </td>
+                        <td class="text-center">
+                            <a asp-action="Words" asp-route-topicId="@t.TopicId" asp-route-tab="flashcards" class="badge rounded-pill custom-count-badge text-primary text-decoration-none" title="Quản lý Học thẻ của bộ từ này">
+                                @t.WordCount từ
+                            </a>
+                        </td>
+                        <td class="text-center">
+                            <a asp-action="Words" asp-route-topicId="@t.TopicId" asp-route-tab="phrases" class="badge rounded-pill custom-count-badge text-info text-decoration-none" title="Quản lý Ghép cụm từ của bộ từ này">
+                                @t.PhraseCount cụm
+                            </a>
+                        </td>
+                        <td class="topic-status-cell">
+                            @if (t.IsActive)
+                            {
+                                <span class="badge text-bg-success"><i data-lucide="check-circle" class="me-1"></i>Hiển thị</span>
+                            }
+                            else
+                            {
+                                <span class="badge text-bg-secondary"><i data-lucide="eye-off" class="me-1"></i>Ẩn</span>
+                            }
+                        </td>
+                        <td class="text-end text-nowrap">
+                            <div class="d-inline-flex align-items-center justify-content-end" style="gap: 6px;">
+                                <a class="btn btn-sm btn-outline-secondary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap"
+                                   asp-action="Words" asp-route-topicId="@t.TopicId" title="Mở trang Từ vựng (Học thẻ &amp; Ghép cụm từ)">
+                                    <i data-lucide="book-open" class="me-1"></i><span>Từ vựng</span>
+                                </a>
+                                <button type="button" class="btn btn-sm btn-outline-success rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap"
+                                        onclick="openWordModal(@t.TopicId)" title="Thêm từ vựng vào bộ này">
+                                    <i data-lucide="plus" class="me-1"></i><span>Thêm từ</span>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap"
+                                        onclick="editTopic(@t.TopicId)" title="Chỉnh sửa bộ từ">
+                                    <i data-lucide="square-pen" class="me-1"></i><span>Sửa</span>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 d-inline-flex align-items-center gap-1 text-nowrap"
+                                        onclick="deleteTopic(@t.TopicId, '@t.Title')" title="Xoá bộ từ">
+                                    <i data-lucide="trash-2" class="me-1"></i><span>Xoá</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                @if (Model.Topics.Count == 0)
+                {
+                    <tr id="emptyTopicRow"><td colspan="9" class="text-center text-muted py-4">Chưa có bộ từ nào.</td></tr>
+                }
+                <tr id="noTopicMatchRow" style="display: none;">
+                    <td colspan="9" class="text-center text-muted py-4"><i data-lucide="filter-x" class="me-2"></i>Không tìm thấy bộ từ vựng nào phù hợp.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ============================================================== -->
+<!-- [BẢNG 3] KIỂM DUYỆT CHẤT LƯỢNG (QUALITY CONTROL LOOP)           -->
+<!-- ============================================================== -->
+<div class="card shadow-sm mb-4" id="qcSection">
+    <div class="card-header py-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <div class="d-flex align-items-center gap-2">
+            <span class="fw-bold text-danger"><i data-lucide="shield-alert" class="me-1"></i>Giám sát Chất lượng &amp; Kiểm duyệt Từ vựng</span>
+            <span class="badge bg-danger-subtle text-danger rounded-pill" id="qcSummaryBadge">Đang tải...</span>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="loadQualityControlData()">
+            <i data-lucide="refresh-cw" style="width: 14px; height: 14px;" class="me-1"></i>Làm mới dữ liệu
+        </button>
+    </div>
+    <div class="px-3 pt-2 border-bottom bg-light">
+        <ul class="nav nav-tabs border-0" id="qcTabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active fw-semibold small" data-bs-toggle="tab" data-bs-target="#qc-errors" type="button" role="tab">
+                    Hộp thư Báo lỗi <span class="badge bg-danger ms-1" id="qcErrorCount">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link fw-semibold small" data-bs-toggle="tab" data-bs-target="#qc-difficult" type="button" role="tab">
+                    Cảnh báo Độ khó bất thường <span class="badge bg-warning text-dark ms-1" id="qcDifficultCount">0</span>
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link fw-semibold small" data-bs-toggle="tab" data-bs-target="#qc-integrity" type="button" role="tab">
+                    Kiểm tra Tính toàn vẹn <span class="badge bg-info text-dark ms-1" id="qcIntegrityCount">0</span>
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body p-0">
+        <div class="tab-content">
+            <!-- TAB QC 1: HỘP THƯ BÁO LỖI -->
+            <div class="tab-pane fade show active p-3" id="qc-errors" role="tabpanel">
+                <div class="table-responsive" style="max-height: 300px;">
+                    <table class="table table-hover table-sm align-middle mb-0">
+                        <thead class="table-light small">
+                            <tr>
+                                <th>Phân loại</th>
+                                <th>Từ vựng</th>
+                                <th>Nội dung học viên báo</th>
+                                <th>Thời gian</th>
+                                <th class="text-end">Xử lý</th>
+                            </tr>
+                        </thead>
+                        <tbody id="qcErrorTableBody" class="small">
+                            <tr><td colspan="5" class="text-center text-muted py-3">Đang tải danh sách báo lỗi...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB QC 2: CẢNH BÁO ĐỘ KHÓ BẤT THƯỜNG -->
+            <div class="tab-pane fade p-3" id="qc-difficult" role="tabpanel">
+                <p class="small text-muted mb-2">Các từ có tỷ lệ học viên chọn <strong>Học lại (Quên) &gt; 70%</strong> hoặc <strong>Gõ sai &ge; 3 lần</strong> để Admin biên tập lại câu ví dụ, đáp án hoặc mẹo nhớ.</p>
+                <div class="table-responsive" style="max-height: 300px;">
+                    <table class="table table-hover table-sm align-middle mb-0">
+                        <thead class="table-light small">
+                            <tr>
+                                <th>Từ vựng</th>
+                                <th>Bộ từ</th>
+                                <th>Lượt ôn</th>
+                                <th>Tỷ lệ Học lại</th>
+                                <th>Lỗi Gõ</th>
+                                <th class="text-end">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="qcDifficultTableBody" class="small">
+                            <tr><td colspan="6" class="text-center text-muted py-3">Đang phân tích dữ liệu SRS...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TAB QC 3: KIỂM TRA TÍNH TOÀN VẸN -->
+            <div class="tab-pane fade p-3" id="qc-integrity" role="tabpanel">
+                <div class="d-flex flex-wrap gap-2 mb-2" id="qcIntegrityFilters">
+                    <button type="button" class="btn btn-xs btn-sm btn-primary rounded-pill active" onclick="filterQcIntegrity('all', this)">Tất cả</button>
+                    <button type="button" class="btn btn-xs btn-sm btn-outline-secondary rounded-pill" onclick="filterQcIntegrity('audio', this)">Thiếu Audio</button>
+                    <button type="button" class="btn btn-xs btn-sm btn-outline-secondary rounded-pill" onclick="filterQcIntegrity('blank', this)">Chưa bọc [...] ô trống</button>
+                    <button type="button" class="btn btn-xs btn-sm btn-outline-secondary rounded-pill" onclick="filterQcIntegrity('example', this)">Thiếu câu ví dụ</button>
+                    <button type="button" class="btn btn-xs btn-sm btn-outline-secondary rounded-pill" onclick="filterQcIntegrity('tip', this)">Thiếu Mẹo nhớ</button>
+                </div>
+                <div class="table-responsive" style="max-height: 300px;">
+                    <table class="table table-hover table-sm align-middle mb-0">
+                        <thead class="table-light small">
+                            <tr>
+                                <th>Từ vựng</th>
+                                <th>Bộ từ</th>
+                                <th>Dữ liệu còn thiếu</th>
+                                <th class="text-end">Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="qcIntegrityTableBody" class="small">
+                            <tr><td colspan="4" class="text-center text-muted py-3">Đang quét tính toàn vẹn dữ liệu...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL THÊM / SỬA TỪ VỰNG (4 TAB TẬP TRUNG) ==================== -->
+<div class="modal fade" id="modalWord" tabindex="-1" aria-labelledby="modalWordTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-bottom px-4 pt-4 pb-3 bg-light">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle bg-primary text-white" style="width: 38px; height: 38px;">
+                        <i data-lucide="spell-check" style="width: 20px; height: 20px;"></i>
+                    </span>
+                    <div>
+                        <h5 class="modal-title fw-bold mb-0" id="modalWordTitle">Thêm Từ Vựng Mới</h5>
+                        <small class="text-muted">Cung cấp đầy đủ 12 thành phần ngữ nghĩa học để tối ưu trải nghiệm học sinh</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+
+            <!-- 4 Tab điều hướng (Thông tin từ · Bài học · Quiz · Gõ) -->
+            <div class="px-4 pt-2 border-bottom bg-light">
+                <ul class="nav nav-tabs border-0" id="modalWordTabs" role="tablist">
+                    <li class="nav-item">
+                        <button class="nav-link active fw-semibold" id="tab-word-core-tab" data-bs-toggle="tab" data-bs-target="#tab-word-core" type="button" role="tab" onclick="updateLiveModalPreview()">
+                            1. Thông tin từ
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link fw-semibold" id="tab-word-lesson-tab" data-bs-toggle="tab" data-bs-target="#tab-word-lesson" type="button" role="tab" onclick="updateLiveModalPreview()">
+                            2. Bài học
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link fw-semibold" id="tab-word-quiz-tab" data-bs-toggle="tab" data-bs-target="#tab-word-quiz" type="button" role="tab" onclick="updateLiveModalPreview()">
+                            3. Quiz
+                        </button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link fw-semibold text-primary" id="tab-word-typing-tab" data-bs-toggle="tab" data-bs-target="#tab-word-typing" type="button" role="tab" onclick="updateLiveModalPreview()">
+                            4. Gõ
+                        </button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="modal-body px-4 py-3">
+                <form id="formWord">
+                    <input type="hidden" id="wordId" name="WordId" value="0" />
+
+                    <div class="tab-content" id="modalWordTabsContent">
+                        <!-- TAB 1: THÔNG TIN TỪ -->
+                        <div class="tab-pane fade show active" id="tab-word-core" role="tabpanel">
+                            <div class="row g-3">
+                                <div class="col-md-7">
+                                    <label class="form-label fw-semibold small">Từ tiếng Anh (Headword) <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <input type="text" id="wordText" name="Word" class="form-control fw-bold fs-5" placeholder="vd: assurance, contract, abide by..." onblur="if(this.value.trim() && !document.getElementById('wordMeaning').value.trim()) autoFillWordFromApi(true)" required />
+                                        <button class="btn btn-primary fw-semibold px-3" type="button" id="btnAutoFillWord" onclick="autoFillWordFromApi(false)" title="Tự động điền từ Từ điển (0 token LLM)">
+                                            <i data-lucide="wand-2" style="width: 16px; height: 16px;" class="me-1"></i>Gợi ý tự động
+                                        </button>
+                                        <button class="btn btn-outline-secondary" type="button" onclick="speakCurrentInput()" title="Nghe phát âm"><i data-lucide="volume-2" style="width: 18px; height: 18px;"></i></button>
+                                    </div>
+                                    <div id="autoFillStatus" class="form-text text-muted small">Phần 1 (Từ điển · 0 token LLM): Tự điền phiên âm US/UK, loại từ, nghĩa Việt &amp; file phát âm ngay khi nhập từ.</div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold small">Bộ từ vựng (Topic) <span class="text-danger">*</span></label>
+                                    <select id="wordTopicId" name="TopicId" class="form-select" required>
+                                        <option value="">-- Chọn bộ từ vựng --</option>
+                                        @foreach (var top in Model.Topics)
+                                        {
+                                            <option value="@top.TopicId">@top.Title (@top.CategoryName)</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold small">Loại từ</label>
+                                    <select id="wordPos" name="PartOfSpeech" class="form-select">
+                                        <option value="noun">Noun</option>
+                                        <option value="verb">Verb</option>
+                                        <option value="adjective">Adj</option>
+                                        <option value="adverb">Adv</option>
+                                        <option value="phrase">Phrase</option>
+                                        <option value="preposition">Prep</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold small">Nghĩa tiếng Việt <span class="text-danger">*</span></label>
+                                    <input type="text" id="wordMeaning" name="Meaning" class="form-control fw-bold" placeholder="vd: sự bảo đảm, lời cam đoan..." required />
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold small">Phiên âm US (Mỹ)</label>
+                                    <input type="text" id="wordPhoneticUs" name="PhoneticUs" class="form-control font-monospace" placeholder="/əˈʃʊrəns/" />
+                                </div>
+
+                                <div class="col-md-3">
+                                    <label class="form-label fw-semibold small">Phiên âm UK (Anh)</label>
+                                    <input type="text" id="wordPhoneticUk" name="PhoneticUk" class="form-control font-monospace" placeholder="/əˈʃʊərəns/" />
+                                </div>
+
+                                <!-- Audio Upload & TTS -->
+                                <div class="col-12">
+                                    <div class="card p-3 bg-light border">
+                                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-2">
+                                            <label class="form-label fw-semibold small mb-0">
+                                                <i data-lucide="music" style="width: 15px; height: 15px;" class="me-1 text-primary"></i>Tệp âm thanh phát âm (Audio MP3 / TTS)
+                                            </label>
+                                            <div class="d-flex flex-wrap gap-2">
+                                                <input type="file" id="wordAudioFileInput" accept=".mp3,.wav,.ogg,.m4a" class="d-none" onchange="uploadWordAudioFile(this)" />
+                                                <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="document.getElementById('wordAudioFileInput').click()">
+                                                    <i data-lucide="upload" style="width: 14px; height: 14px;" class="me-1"></i>Tải file MP3
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" id="btnGenerateTts" onclick="generateWordTts()">
+                                                    <i data-lucide="audio-waveform" style="width: 14px; height: 14px;" class="me-1"></i>Tạo âm thanh TTS
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-success rounded-pill" onclick="playWordAudioUrl()">
+                                                    <i data-lucide="play" style="width: 14px; height: 14px;" class="me-1"></i>Nghe thử Audio
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <input type="text" id="wordAudioUrl" name="AudioUrl" class="form-control form-control-sm" placeholder="/uploads/vocab-audio/... hoặc https://...mp3" />
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold small">Link hình ảnh minh họa</label>
+                                    <input type="url" id="wordImageUrl" name="ImageUrl" class="form-control" placeholder="https://...jpg" />
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label class="form-label fw-semibold small">Thứ tự</label>
+                                    <input type="number" id="wordSortOrder" name="SortOrder" class="form-control" value="1" min="1" />
+                                </div>
+
+                                <div class="col-md-4 d-flex align-items-center pt-4">
+                                    <div class="form-check form-switch form-check-switch">
+                                        <input class="form-check-input" type="checkbox" id="wordIsActive" name="IsActive" checked />
+                                        <label class="form-check-label fw-semibold small ms-1" for="wordIsActive">Hiển thị cho học viên</label>
+                                    </div>
+                                </div>
+
+                                <!-- Xem nhanh thẻ Từ -->
+                                <div class="col-12">
+                                    <div class="p-3 rounded-3 bg-light border d-flex flex-wrap justify-content-between align-items-center gap-3">
+                                        <div>
+                                            <div class="text-uppercase text-muted fw-bold" style="font-size: 0.7rem;">Xem nhanh thẻ Từ</div>
+                                            <div class="d-flex align-items-center gap-2 mt-1">
+                                                <span class="badge bg-secondary-subtle text-secondary" id="prevTermPos">noun</span>
+                                                <span class="fw-bold fs-5 text-dark" id="prevTermWord">Headword</span>
+                                                <span class="text-muted font-monospace small" id="prevTermPhonetics">/phonetics/</span>
+                                            </div>
+                                        </div>
+                                        <div class="text-end">
+                                            <div class="small text-muted">Nghĩa mặt sau</div>
+                                            <div class="fw-bold text-primary" id="prevTermMeaning">Nghĩa tiếng Việt</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 2: BÀI HỌC (KIẾN THỨC & MẸO NHỚ) -->
+                        <div class="tab-pane fade" id="tab-word-lesson" role="tabpanel">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="card border p-3 bg-light d-flex flex-wrap flex-row justify-content-between align-items-center gap-2">
+                                        <div>
+                                            <div class="fw-bold small text-dark">Tự động hóa Bài học (JSON Arrays -> Thẻ Tag)</div>
+                                            <div id="lessonAiStatus" class="text-muted small">AI sinh định nghĩa Anh, Collocations, Synonyms, Antonyms, Word Family, Lỗi sai &amp; Mẹo nhớ để bạn bấm × chọn lọc.</div>
+                                        </div>
+                                        <button type="button" id="btnAiLesson" class="btn btn-sm btn-primary rounded-pill px-3 fw-semibold" onclick="autoFillLessonByAi()">
+                                            <i data-lucide="sparkles" style="width: 14px; height: 14px;" class="me-1"></i>Gợi ý Bài học bằng AI
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- CÁC TRƯỜNG ẨN ĐỒNG BỘ NÉT NGHĨA CHÍNH (TƯƠNG THÍCH HỆ THỐNG GỐC) -->
+                                <input type="hidden" id="wordEnglishDefinition" name="EnglishDefinition" />
+                                <input type="hidden" id="wordCollocations" name="Collocations" />
+                                <input type="hidden" id="wordSynonyms" name="Synonyms" />
+                                <input type="hidden" id="wordAntonyms" name="Antonyms" />
+                                <input type="hidden" id="wordSensesJson" name="SensesJson" />
+
+                                <!-- KHỐI THỐNG NHẤT: NÉT NGHĨA TỪ VỰNG (GỒM ĐỊNH NGHĨA, VÍ DỤ, CỤM TỪ, ĐỒNG/TRÁI NGHĨA) -->
+                                <div class="col-12">
+                                    <div class="card border border-fuchsia-200 rounded-4 shadow-sm bg-fuchsia-50/10">
+                                        <div class="card-header bg-white py-3 px-3 border-bottom border-fuchsia-200 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                            <div>
+                                                <h6 class="fw-bold mb-0 text-slate-800 d-flex align-items-center gap-2">
+                                                    <span class="badge rounded-circle p-1 d-inline-flex align-items-center justify-content-center text-white" style="width: 22px; height: 22px; background-color: #c026d3; font-size: 11px;">★</span>
+                                                    <span>Nét nghĩa từ vựng (Định nghĩa · Ví dụ · Cụm từ · Đồng nghĩa · Trái nghĩa)</span>
+                                                </h6>
+                                                <small class="text-muted">Mỗi nét nghĩa bao gồm đầy đủ Định nghĩa tiếng Anh, Ví dụ bổ sung ngữ cảnh, Cụm từ đi kèm, Từ đồng nghĩa &amp; Từ trái nghĩa. Bạn có thể <strong>Thêm</strong>, <strong>Sửa</strong> hoặc <strong>Xóa</strong> từng nét nghĩa.</small>
+                                            </div>
+                                            <button type="button" class="btn btn-sm btn-primary rounded-pill px-3 fw-semibold shadow-sm" onclick="addNewSenseModal()">
+                                                <i data-lucide="plus" style="width: 14px; height: 14px;" class="me-1"></i>+ Thêm nét nghĩa
+                                            </button>
+                                        </div>
+                                        <div class="card-body p-3">
+                                            <!-- Container chứa danh sách các card nét nghĩa -->
+                                            <div id="modalSensesContainer" class="d-flex flex-column gap-3"></div>
+
+                                            <div class="mt-3 text-center">
+                                                <button type="button" class="btn btn-outline-primary rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-sm" onclick="addNewSenseModal()">
+                                                    <i data-lucide="plus-circle" style="width: 16px; height: 16px;"></i>
+                                                    <span>+ Thêm nét nghĩa mới</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <label class="form-label fw-semibold small mb-0">
+                                            <i data-lucide="layers" style="width: 14px; height: 14px;" class="me-1 text-primary"></i>Họ từ (Word Family)
+                                        </label>
+                                        <div class="btn-group btn-group-sm">
+                                            <button type="button" class="btn btn-outline-secondary py-0" onclick="insertFamilyTemplate('noun')">+ Noun</button>
+                                            <button type="button" class="btn btn-outline-secondary py-0" onclick="insertFamilyTemplate('adjective')">+ Adj</button>
+                                            <button type="button" class="btn btn-outline-secondary py-0" onclick="insertFamilyTemplate('adverb')">+ Adv</button>
+                                        </div>
+                                    </div>
+                                    <textarea id="wordFamily" name="WordFamily" class="form-control font-monospace" rows="2" placeholder="assure · verb · cam đoan&#10;assured · adjective · tự tin"></textarea>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="card p-3 border-warning-subtle bg-warning-subtle">
+                                        <div class="fw-bold text-warning-emphasis small mb-2">
+                                            <i data-lucide="alert-triangle" style="width: 15px; height: 15px;" class="me-1"></i>Lỗi thường gặp (Common Mistakes)
+                                        </div>
+                                        <div class="row g-2">
+                                            <div class="col-md-6">
+                                                <label class="form-label small text-danger fw-semibold">Cách dùng SAI ✕</label>
+                                                <input type="text" id="wordCommonMistakeWrong" name="CommonMistakeWrong" class="form-control text-danger border-danger" placeholder="vd: make an assurance" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small text-success fw-semibold">Cách dùng ĐÚNG ✓</label>
+                                                <input type="text" id="wordCommonMistakeRight" name="CommonMistakeRight" class="form-control text-success border-success" placeholder="vd: give an assurance" />
+                                            </div>
+                                            <div class="col-12">
+                                                <label class="form-label small text-muted">Giải thích quy tắc</label>
+                                                <textarea id="wordCommonMistakeNote" name="CommonMistakeNote" class="form-control" rows="2" placeholder="Giải thích ngắn gọn..."></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="card p-3 border-primary-subtle bg-primary-subtle">
+                                        <label class="form-label fw-bold text-primary small mb-1">
+                                            <i data-lucide="lightbulb" style="width: 15px; height: 15px;" class="me-1"></i>Mẹo ghi nhớ / Nguồn gốc từ (Mnemonic)
+                                        </label>
+                                        <textarea id="wordMemoryTip" name="MemoryTip" class="form-control" rows="2" placeholder="vd: Gốc 'sure' = chắc chắn -> 'assurance' là mang lại sự chắc chắn."></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 3: QUIZ -->
+                        <div class="tab-pane fade" id="tab-word-quiz" role="tabpanel">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="card border p-3 bg-light">
+                                        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                                            <div>
+                                                <div class="d-flex align-items-center gap-2 mb-1">
+                                                    <span class="fw-bold small text-dark">Chế độ tạo đáp án nhiễu Quiz</span>
+                                                    <span id="quizPoolStatusBadge" class="badge bg-success-subtle text-success border border-success-subtle">CSDL nội bộ (0 token)</span>
+                                                </div>
+                                                <div id="quizAiStatus" class="text-muted small">Mặc định tự động bốc 3 từ cùng <strong>Loại từ</strong> &amp; cùng <strong>Chủ đề</strong>, loại bỏ từ đồng nghĩa (tức thì, 0 phí API).</div>
+                                            </div>
+                                            <div class="d-flex flex-wrap align-items-center gap-3">
+                                                <button type="button" id="btnAiQuizTraps" class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-semibold" onclick="suggestQuizTrapsByAi()">
+                                                    <i data-lucide="sparkles" style="width: 14px; height: 14px;" class="me-1"></i>Gợi ý đáp án bẫy bằng AI
+                                                </button>
+                                                <div class="form-check form-switch mb-0">
+                                                    <input class="form-check-input" type="checkbox" id="wordUseManualQuiz" name="UseManualQuiz" onchange="toggleManualQuizInputs()" />
+                                                    <label class="form-check-label fw-bold text-primary small" for="wordUseManualQuiz">Ghi đè thủ công</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold small">Đáp án ĐÚNG (đồng bộ với Nghĩa tiếng Việt)</label>
+                                    <input type="text" id="quizCorrectMeaningSync" class="form-control fw-bold border-success" placeholder="Nhập nghĩa tiếng Việt đúng cho câu hỏi Quiz..." />
+                                </div>
+
+                                <div class="col-12" id="manualQuizDistractorsBox" style="display: none;">
+                                    <div class="card border-primary-subtle bg-primary-subtle p-3">
+                                        <div class="fw-bold small text-primary mb-2">3 Đáp án nhiễu chủ đích</div>
+                                        <div class="row g-2">
+                                            <div class="col-md-4"><input type="text" id="wordDistractor1" class="form-control form-control-sm" placeholder="Đáp án nhiễu 1..." oninput="updateLiveModalPreview()" /></div>
+                                            <div class="col-md-4"><input type="text" id="wordDistractor2" class="form-control form-control-sm" placeholder="Đáp án nhiễu 2..." oninput="updateLiveModalPreview()" /></div>
+                                            <div class="col-md-4"><input type="text" id="wordDistractor3" class="form-control form-control-sm" placeholder="Đáp án nhiễu 3..." oninput="updateLiveModalPreview()" /></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="card border-0 bg-light p-3" style="border-radius: 14px;">
+                                        <div class="small text-uppercase text-muted fw-bold mb-1" style="font-size: 0.7rem;">Xem trước câu hỏi Quiz A / B / C / D</div>
+                                        <div class="fw-bold fs-5 text-dark mb-3" id="quizPreviewPrompt">Nghĩa đúng của "Headword" là gì?</div>
+                                        <div class="row g-2" id="quizPreviewOptions"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TAB 4: GÕ -->
+                        <div class="tab-pane fade" id="tab-word-typing" role="tabpanel">
+                            <div class="row g-3">
+                                <div class="col-12" id="typingMatchAlert"></div>
+
+                                <div class="col-12">
+                                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-1">
+                                        <label class="form-label fw-semibold small mb-0">Câu ví dụ tiếng Anh (bọc từ cần điền bằng <code>[...]</code>)</label>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <button type="button" id="btnAiTyping" class="btn btn-sm btn-primary py-0 px-3 rounded-pill fw-semibold" onclick="autoFillTypingByAi()">
+                                                <i data-lucide="sparkles" style="width: 13px; height: 13px;" class="me-1"></i>Sinh câu ví dụ TOEIC &amp; dịch bằng AI
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-primary py-0 px-2" onclick="wrapSelectedTypingBlank()">
+                                                <i data-lucide="brackets" style="width: 13px; height: 13px;" class="me-1"></i>Đặt làm ô trống
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-outline-secondary py-0 px-2" onclick="applySampleTypingSentence()">
+                                                <i data-lucide="file-text" style="width: 13px; height: 13px;" class="me-1"></i>Mẫu nhanh
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <textarea id="wordExampleSentence" name="ExampleSentence" class="form-control" rows="2" placeholder="vd: The supplier gave us an [assurance] that goods will arrive on time."></textarea>
+                                    <div id="typingAiStatus" class="form-text small text-muted">Bấm <strong>Sinh câu ví dụ TOEIC &amp; dịch bằng AI</strong> để tạo câu ngữ cảnh công sở có sẵn <code>[từ_gốc]</code> và bản dịch Việt, hoặc bôi đen từ rồi bấm <strong>Đặt làm ô trống</strong>.</div>
+                                </div>
+
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold small">Dịch nghĩa tiếng Việt của câu ví dụ</label>
+                                    <textarea id="wordExampleMeaning" name="ExampleMeaning" class="form-control" rows="2" placeholder="vd: Nhà cung cấp cam đoan hàng sẽ đến đúng hạn."></textarea>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="card border-0 bg-light p-3" style="border-radius: 14px;">
+                                        <div class="small text-uppercase text-muted fw-bold mb-2" style="font-size: 0.7rem;">Xem trước bài tập Gõ điền từ</div>
+                                        <div class="fs-5 text-dark mb-2" id="typingPreviewSentence">...</div>
+                                        <div class="small text-muted" id="typingPreviewTranslation">Gợi ý: ...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="modal-footer border-top px-4 py-3 bg-light d-flex justify-content-between align-items-center">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4" data-bs-dismiss="modal">Hủy bỏ</button>
+                <div class="d-flex align-items-center gap-2">
+                    <button type="button" class="btn btn-outline-primary rounded-pill px-3" onclick="nextModalTab()">
+                        <span>Tiếp tục</span> <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                    </button>
+                    <button type="button" class="btn btn-primary rounded-pill px-4 shadow-sm" onclick="saveWord()">
+                        <i data-lucide="save" style="width: 16px; height: 16px;" class="me-1"></i> Lưu Từ Vựng
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL THÊM / SỬA BỘ TỪ (TOPIC) ==================== -->
+<div class="modal fade" id="modalTopic" tabindex="-1" aria-labelledby="modalTopicTitle" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-bottom px-4 pt-4 pb-3">
+                <h5 class="modal-title fw-bold" id="modalTopicTitle">Thêm Bộ Từ Mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body px-4 py-3">
+                <form id="formTopic">
+                    <input type="hidden" id="topicId" name="TopicId" value="0" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Nhóm bộ từ cha <span class="text-danger">*</span></label>
+                        <select id="topicCategoryId" name="CategoryId" class="form-select" required>
+                            <option value="">-- Chọn nhóm bộ từ --</option>
+                            @foreach (var cat in Model.Categories)
+                            {
+                                <option value="@cat.CategoryId">@cat.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Tiêu đề Bộ từ <span class="text-danger">*</span></label>
+                        <input type="text" id="topicTitle" name="Title" class="form-control fw-bold" placeholder="vd: Contracts, Marketing, Warranties..." required />
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small">Cấp độ / Kỳ thi</label>
+                            <select id="topicLevel" name="Level" class="form-select">
+                                <option value="A1">A1 - Cơ bản</option>
+                                <option value="A2">A2 - Sơ cấp</option>
+                                <option value="B1" selected>B1 - Trung cấp</option>
+                                <option value="B2">B2 - Khá</option>
+                                <option value="C1">C1 - Cao cấp</option>
+                                <option value="TOEIC">TOEIC</option>
+                                <option value="IELTS">IELTS</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small">Mã Code (tùy chọn)</label>
+                            <input type="text" id="topicCode" name="Code" class="form-control" placeholder="vd: contracts, travel..." />
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small">Tông màu sắc</label>
+                            <select id="topicColor" name="Color" class="form-select">
+                                <option value="">-- Kế thừa từ nhóm cha --</option>
+                                <option value="fuchsia">Fuchsia (Tím hồng)</option>
+                                <option value="amber">Amber (Cam / Hổ phách)</option>
+                                <option value="emerald">Emerald (Xanh lục)</option>
+                                <option value="rose">Rose (Đỏ hồng)</option>
+                                <option value="cyan">Cyan (Xanh ngọc)</option>
+                                <option value="indigo">Indigo (Chàm tím)</option>
+                                <option value="primary">Primary (Xanh dương)</option>
+                                <option value="purple">Purple (Tím đậm)</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small">Biểu tượng (Icon)</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light d-flex align-items-center justify-content-center" id="topicIconPreviewWrapper" style="width: 44px;">
+                                    <i id="topicIconPreview" data-lucide="book-open" style="width: 18px; height: 18px;"></i>
+                                </span>
+                                <select id="topicIcon" name="Icon" class="form-select" onchange="updateTopicIconPreview(this.value)">
+                                    <option value="book-open">book-open (Mặc định)</option>
+                                    <option value="book">book</option>
+                                    <option value="layers">layers</option>
+                                    <option value="folder">folder</option>
+                                    <option value="file-text">file-text</option>
+                                    <option value="briefcase">briefcase</option>
+                                    <option value="graduation-cap">graduation-cap</option>
+                                    <option value="award">award</option>
+                                    <option value="globe">globe</option>
+                                    <option value="message-square">message-square</option>
+                                    <option value="headphones">headphones</option>
+                                    <option value="mic">mic</option>
+                                    <option value="sparkles">sparkles</option>
+                                    <option value="flame">flame</option>
+                                    <option value="heart">heart</option>
+                                    <option value="coffee">coffee</option>
+                                    <option value="plane">plane</option>
+                                    <option value="shopping-bag">shopping-bag</option>
+                                    <option value="landmark">landmark</option>
+                                    <option value="trending-up">trending-up</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Mô tả chi tiết</label>
+                        <textarea id="topicDesc" name="Description" class="form-control" rows="2" placeholder="Nội dung tóm tắt chủ đề bài học..."></textarea>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small">Thứ tự</label>
+                            <input type="number" id="topicSortOrder" name="SortOrder" class="form-control" value="1" min="1" />
+                        </div>
+                        <div class="col-6 d-flex align-items-center pt-4">
+                            <div class="form-check form-switch form-check-switch">
+                                <input class="form-check-input" type="checkbox" id="topicIsActive" name="IsActive" checked />
+                                <label class="form-check-label fw-semibold small ms-1" for="topicIsActive">Kích hoạt</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top px-4 py-3">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4" onclick="saveTopic()">
+                    <i data-lucide="save" style="width: 16px; height: 16px;" class="me-1"></i> Lưu Bộ Từ
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL THÊM / SỬA NHÓM BỘ TỪ ==================== -->
+<div class="modal fade" id="modalCategory" tabindex="-1" aria-labelledby="modalCategoryTitle" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-bottom px-4 pt-4 pb-3">
+                <h5 class="modal-title fw-bold" id="modalCategoryTitle">Thêm Nhóm Bộ Từ Mới</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body px-4 py-3">
+                <form id="formCategory">
+                    <input type="hidden" id="categoryId" name="CategoryId" value="0" />
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Tên Nhóm bộ từ <span class="text-danger">*</span></label>
+                        <input type="text" id="catName" name="Name" class="form-control fw-bold" placeholder="vd: Từ vựng Giao tiếp, Từ vựng TOEIC..." required />
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small">Mã Code / Slug</label>
+                            <input type="text" id="catCode" name="Code" class="form-control" placeholder="vd: communication, toeic..." />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small">Tông màu sắc</label>
+                            <select id="catColor" name="Color" class="form-select">
+                                <option value="primary">Primary (Xanh dương)</option>
+                                <option value="indigo">Indigo (Chàm tím)</option>
+                                <option value="cyan">Cyan (Xanh ngọc)</option>
+                                <option value="emerald">Emerald (Xanh lục)</option>
+                                <option value="amber">Amber (Vàng hổ phách)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Mô tả</label>
+                        <textarea id="catDesc" name="Description" class="form-control" rows="2" placeholder="Mô tả nhóm bộ từ..."></textarea>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <label class="form-label fw-semibold small">Thứ tự</label>
+                            <input type="number" id="catSortOrder" name="SortOrder" class="form-control" value="1" min="1" />
+                        </div>
+                        <div class="col-6 d-flex align-items-center pt-4">
+                            <div class="form-check form-switch form-check-switch">
+                                <input class="form-check-input" type="checkbox" id="catIsActive" name="IsActive" checked />
+                                <label class="form-check-label fw-semibold small ms-1" for="catIsActive">Kích hoạt</label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top px-4 py-3">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4" onclick="saveCategory()">
+                    <i data-lucide="save" style="width: 16px; height: 16px;" class="me-1"></i> Lưu Nhóm
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== MODAL NHẬP HÀNG LOẠT QUA EXCEL/CSV ==================== -->
+<div class="modal fade" id="modalBulk" tabindex="-1" aria-labelledby="modalBulkTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg" style="border-radius: 20px;">
+            <div class="modal-header border-bottom px-4 pt-4 pb-3">
+                <div>
+                    <h5 class="modal-title fw-bold" id="modalBulkTitle">Nhập Hàng Loạt (Excel/CSV) &amp; Kiểm Tra Lỗi</h5>
+                    <small class="text-muted">Tải file mẫu CSV, kiểm tra tự động dấu <code>[...]</code> và từ trùng lặp trước khi lưu vào CSDL</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+            </div>
+            <div class="modal-body px-4 py-3">
+                <form id="formBulk">
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-5">
+                            <label class="form-label fw-semibold small">Chọn Bộ từ đích <span class="text-danger">*</span></label>
+                            <select id="bulkTopicId" name="TopicId" class="form-select" required>
+                                <option value="">-- Chọn bộ từ --</option>
+                                @foreach (var top in Model.Topics)
+                                {
+                                    <option value="@top.TopicId">@top.Title (@top.CategoryName)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-7 d-flex align-items-end justify-content-md-end flex-wrap gap-2">
+                            <a href="/Admin/Vocabulary_management/DownloadWordTemplate" class="btn btn-sm btn-outline-success rounded-pill fw-semibold">
+                                <i data-lucide="file-spreadsheet" style="width: 15px; height: 15px;" class="me-1"></i>Tải file mẫu CSV/Excel
+                            </a>
+                            <label class="btn btn-sm btn-outline-primary rounded-pill fw-semibold mb-0" style="cursor: pointer;">
+                                <i data-lucide="upload" style="width: 15px; height: 15px;" class="me-1"></i>Chọn file CSV
+                                <input type="file" id="bulkCsvFile" accept=".csv,.txt" class="d-none" onchange="handleBulkCsvUpload(this)" />
+                            </label>
+                            <button type="button" class="btn btn-sm btn-primary rounded-pill fw-semibold" onclick="previewBulkImport()">
+                                <i data-lucide="shield-check" style="width: 15px; height: 15px;" class="me-1"></i>Kiểm tra &amp; Xem trước
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Dữ liệu CSV hoặc ngăn cách bởi dấu <code>|</code> (mỗi dòng một từ)</label>
+                        <textarea id="bulkRawData" name="RawData" class="form-control font-monospace small" rows="6" placeholder="Word,PartOfSpeech,Meaning,Phonetic,ExampleSentence,ExampleMeaning,Mnemonic,Collocations,Synonyms&#10;&quot;assurance&quot;,noun,&quot;sự bảo đảm&quot;,/əˈʃʊərəns/,&quot;The supplier gave us an [assurance] that goods will arrive on time.&quot;,&quot;Nhà cung cấp đã cam đoan hàng sẽ đến đúng hạn.&quot;,&quot;Gốc sure = chắc chắn&quot;,&quot;give an assurance&quot;,&quot;guarantee&quot;"></textarea>
+                    </div>
+
+                    <div id="bulkPreviewWrap" style="display: none;">
+                        <div class="fw-bold small text-dark mb-2" id="bulkPreviewSummary"></div>
+                        <div class="table-responsive border rounded-3" style="max-height: 260px;">
+                            <table class="table table-sm table-hover mb-0 align-middle">
+                                <thead class="table-light sticky-top small">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Từ (Word)</th>
+                                        <th>Loại từ</th>
+                                        <th>Nghĩa</th>
+                                        <th>Ví dụ (<code>[...]</code>)</th>
+                                        <th>Kiểm tra lỗi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bulkPreviewBody" class="small"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top px-4 py-3">
+                <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-outline-primary rounded-pill px-4" onclick="previewBulkImport()">Kiểm tra lại</button>
+                <button type="button" class="btn btn-primary rounded-pill px-4" onclick="commitBulkImport()">
+                    <i data-lucide="check-circle" style="width: 16px; height: 16px;" class="me-1"></i>Lưu các dòng hợp lệ
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="antiforgeryForm" hidden>@Html.AntiForgeryToken()</form>
+
+@section Scripts {
+<script>
+    // ===== HỖ TRỢ PHÁT ÂM AUDIO & WEB SPEECH API =====
+    function speakText(text, audioUrl) {
+        if (audioUrl && audioUrl.trim() !== '') {
+            const audio = new Audio(audioUrl);
+            audio.play().catch(() => speakWithTTS(text));
+        } else {
+            speakWithTTS(text);
+        }
+    }
+
+    function speakWithTTS(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.9;
+            window.speechSynthesis.speak(utterance);
+        } else {
+            alert('Trình duyệt của bạn không hỗ trợ Web Speech API.');
+        }
+    }
+
+    function speakCurrentInput() {
+        const text = document.getElementById('wordText').value.trim();
+        if (text) speakWithTTS(text);
+    }
+
+    function getAntiForgeryToken() {
+        return document.querySelector('#antiforgeryForm input[name="__RequestVerificationToken"]')?.value || '';
+    }
+
+    function showToast(message, type = 'success') {
+        const alertContainer = document.getElementById('indexAlertContainer');
+        if (!alertContainer) return;
+        const alertId = 'alert-' + Date.now();
+        alertContainer.innerHTML = `
+            <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show shadow-sm" role="alert">
+                <div class="d-flex align-items-center gap-2">
+                    <i data-lucide="${type === 'success' ? 'check-circle' : 'alert-circle'}"></i>
+                    <span>${message}</span>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng"></button>
+            </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        setTimeout(() => {
+            const el = document.getElementById(alertId);
+            if (el) bootstrap.Alert.getOrCreateInstance(el).close();
+        }, 4000);
+    }
+
+    // ==========================================
+    // DOM READY & CLIENT SEARCH / FILTERING
+    // ==========================================
+    document.addEventListener("DOMContentLoaded", function () {
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        // ==========================================
+        // 1. BỘ LỌC & TÌM KIẾM NHÓM BỘ TỪ (BẢNG 1)
+        // ==========================================
+        const categorySearchInput = document.getElementById("categorySearchInput");
+        const categoryStatusFilter = document.getElementById("categoryStatusFilter");
+        const btnResetCategoryFilter = document.getElementById("btnResetCategoryFilter");
+        const categoryRows = Array.from(document.querySelectorAll("#categoryTable tbody tr.category-row"));
+        const noCategoryMatchRow = document.getElementById("noCategoryMatchRow");
+        const categoryCountBadge = document.getElementById("categoryCountBadge");
+
+        function filterCategories() {
+            const query = (categorySearchInput?.value || "").trim().toLowerCase();
+            const status = categoryStatusFilter?.value || "";
+
+            let visibleCount = 0;
+            categoryRows.forEach(row => {
+                const title = row.getAttribute("data-title") || "";
+                const rowStatus = row.getAttribute("data-status") || "";
+
+                const matchQuery = !query || title.includes(query);
+                const matchStatus = !status || rowStatus === status;
+
+                if (matchQuery && matchStatus) {
+                    row.style.display = "";
+                    visibleCount++;
+                    const sttCell = row.querySelector(".category-stt");
+                    if (sttCell) sttCell.textContent = visibleCount;
+                } else {
+                    row.style.display = "none";
+                }
+            });
+
+            if (noCategoryMatchRow) {
+                noCategoryMatchRow.style.display = (visibleCount === 0 && categoryRows.length > 0) ? "" : "none";
+            }
+            if (categoryCountBadge) {
+                categoryCountBadge.textContent = `${visibleCount}/${categoryRows.length} nhóm`;
+            }
+        }
+
+        if (categorySearchInput) categorySearchInput.addEventListener("input", filterCategories);
+        if (categoryStatusFilter) categoryStatusFilter.addEventListener("change", filterCategories);
+        if (btnResetCategoryFilter) {
+            btnResetCategoryFilter.addEventListener("click", function () {
+                if (categorySearchInput) categorySearchInput.value = "";
+                if (categoryStatusFilter) categoryStatusFilter.value = "";
+                filterCategories();
+            });
+        }
+
+        // ==========================================
+        // 2. BỘ LỌC, TÌM KIẾM & CHỌN NHIỀU BỘ TỪ (BẢNG 2)
+        // ==========================================
+        const topicSearchInput = document.getElementById("topicSearchInput");
+        const topicCategoryFilter = document.getElementById("topicCategoryFilter");
+        const topicLevelFilter = document.getElementById("topicLevelFilter");
+        const topicStatusFilter = document.getElementById("topicStatusFilter");
+        const btnResetTopicFilter = document.getElementById("btnResetTopicFilter");
+        const topicRows = Array.from(document.querySelectorAll("#topicTable tbody tr.topic-row"));
+        const noTopicMatchRow = document.getElementById("noTopicMatchRow");
+        const visibleTopicCount = document.getElementById("visibleTopicCount");
+        const checkAllTopics = document.getElementById("checkAllTopics");
+        const bulkTopicActionBar = document.getElementById("bulkTopicActionBar");
+        const selectedTopicsBadge = document.getElementById("selectedTopicsBadge");
+        const btnClearTopicSelection = document.getElementById("btnClearTopicSelection");
+        const btnBulkShowTopics = document.getElementById("btnBulkShowTopics");
+        const btnBulkHideTopics = document.getElementById("btnBulkHideTopics");
+        const btnBulkDeleteTopics = document.getElementById("btnBulkDeleteTopics");
+
+        function filterTopics() {
+            const query = (topicSearchInput?.value || "").trim().toLowerCase();
+            const categoryId = topicCategoryFilter?.value || "";
+            const level = (topicLevelFilter?.value || "").trim().toLowerCase();
+            const status = topicStatusFilter?.value || "";
+
+            let visibleCount = 0;
+            topicRows.forEach(row => {
+                const title = row.getAttribute("data-title") || "";
+                const rowCatId = row.getAttribute("data-category-id") || "";
+                const rowCatTitle = row.getAttribute("data-category-title") || "";
+                const rowLevel = row.getAttribute("data-level") || "";
+                const rowStatus = row.getAttribute("data-status") || "";
+
+                const matchQuery = !query || title.includes(query) || rowCatTitle.includes(query) || rowLevel.includes(query);
+                const matchCategory = !categoryId || rowCatId === categoryId;
+                const matchLevel = !level || rowLevel.includes(level);
+                const matchStatus = !status || rowStatus === status;
+
+                if (matchQuery && matchCategory && matchLevel && matchStatus) {
+                    row.style.display = "";
+                    visibleCount++;
+                    const sttCell = row.querySelector(".topic-stt");
+                    if (sttCell) sttCell.textContent = visibleCount;
+                } else {
+                    row.style.display = "none";
+                    const cb = row.querySelector("input.topic-row-checkbox");
+                    if (cb) cb.checked = false;
+                    row.classList.remove("table-active");
+                }
+            });
+
+            if (noTopicMatchRow) {
+                noTopicMatchRow.style.display = (visibleCount === 0 && topicRows.length > 0) ? "" : "none";
+            }
+            if (visibleTopicCount) {
+                visibleTopicCount.textContent = visibleCount;
+            }
+
+            updateSelectedTopicsState();
+        }
+
+        if (topicSearchInput) topicSearchInput.addEventListener("input", filterTopics);
+        if (topicCategoryFilter) topicCategoryFilter.addEventListener("change", filterTopics);
+        if (topicLevelFilter) topicLevelFilter.addEventListener("change", filterTopics);
+        if (topicStatusFilter) topicStatusFilter.addEventListener("change", filterTopics);
+        if (btnResetTopicFilter) {
+            btnResetTopicFilter.addEventListener("click", function () {
+                if (topicSearchInput) topicSearchInput.value = "";
+                if (topicCategoryFilter) topicCategoryFilter.value = "";
+                if (topicLevelFilter) topicLevelFilter.value = "";
+                if (topicStatusFilter) topicStatusFilter.value = "";
+                filterTopics();
+            });
+        }
+
+        function getSelectedTopicIds() {
+            return Array.from(document.querySelectorAll("#topicTable tbody tr.topic-row input.topic-row-checkbox:checked"))
+                .map(cb => parseInt(cb.value, 10))
+                .filter(id => !isNaN(id));
+        }
+
+        function updateSelectedTopicsState() {
+            const checkedBoxes = document.querySelectorAll("#topicTable tbody tr.topic-row:not([style*='display: none']) input.topic-row-checkbox:checked");
+            const visibleBoxes = document.querySelectorAll("#topicTable tbody tr.topic-row:not([style*='display: none']) input.topic-row-checkbox");
+            const count = checkedBoxes.length;
+
+            if (selectedTopicsBadge) selectedTopicsBadge.textContent = count;
+
+            if (bulkTopicActionBar) {
+                if (count > 0) {
+                    bulkTopicActionBar.style.setProperty("display", "flex", "important");
+                } else {
+                    bulkTopicActionBar.style.setProperty("display", "none", "important");
+                }
+            }
+
+            if (checkAllTopics) {
+                checkAllTopics.checked = visibleBoxes.length > 0 && checkedBoxes.length === visibleBoxes.length;
+                checkAllTopics.indeterminate = checkedBoxes.length > 0 && checkedBoxes.length < visibleBoxes.length;
+            }
+        }
+
+        if (checkAllTopics) {
+            checkAllTopics.addEventListener("change", function () {
+                const isChecked = checkAllTopics.checked;
+                topicRows.forEach(row => {
+                    if (row.style.display !== "none") {
+                        const cb = row.querySelector("input.topic-row-checkbox");
+                        if (cb) {
+                            cb.checked = isChecked;
+                            if (isChecked) row.classList.add("table-active");
+                            else row.classList.remove("table-active");
+                        }
+                    }
+                });
+                updateSelectedTopicsState();
+            });
+        }
+
+        document.getElementById("topicTable")?.addEventListener("change", function (e) {
+            if (e.target && e.target.classList.contains("topic-row-checkbox")) {
+                const row = e.target.closest("tr");
+                if (row) {
+                    if (e.target.checked) row.classList.add("table-active");
+                    else row.classList.remove("table-active");
+                }
+                updateSelectedTopicsState();
+            }
+        });
+
+        if (btnClearTopicSelection) {
+            btnClearTopicSelection.addEventListener("click", function () {
+                topicRows.forEach(r => {
+                    const cb = r.querySelector("input.topic-row-checkbox");
+                    if (cb) cb.checked = false;
+                    r.classList.remove("table-active");
+                });
+                updateSelectedTopicsState();
+            });
+        }
+
+        async function executeBulkTopicsAction(action) {
+            const ids = getSelectedTopicIds();
+            if (ids.length === 0) return;
+
+            let confirmMsg = `Bạn có chắc muốn áp dụng hành động "${action}" cho ${ids.length} bộ từ đã chọn?`;
+            if (action === 'delete') {
+                confirmMsg = `CẢNH BÁO: Xoá ${ids.length} bộ từ sẽ xoá toàn bộ từ vựng bên trong! Bạn có chắc chắn muốn xoá không?`;
+            }
+            if (!confirm(confirmMsg)) return;
+
+            try {
+                const res = await fetch('/Admin/Vocabulary_management/BulkUpdateTopics', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'RequestVerificationToken': getAntiForgeryToken()
+                    },
+                    body: JSON.stringify({ ids: ids, action: action })
+                });
+                const json = await res.json();
+                if (json.success) {
+                    showToast(json.message);
+                    setTimeout(() => location.reload(), 600);
+                } else {
+                    showToast(json.message || 'Thao tác hàng loạt thất bại.', 'danger');
+                }
+            } catch (e) {
+                showToast('Lỗi máy chủ khi thao tác hàng loạt.', 'danger');
+            }
+        }
+
+        if (btnBulkShowTopics) btnBulkShowTopics.addEventListener("click", () => executeBulkTopicsAction("show"));
+        if (btnBulkHideTopics) btnBulkHideTopics.addEventListener("click", () => executeBulkTopicsAction("hide"));
+        if (btnBulkDeleteTopics) btnBulkDeleteTopics.addEventListener("click", () => executeBulkTopicsAction("delete"));
+
+        loadQualityControlData();
+    });
+
+    // ===== QUALITY CONTROL LOOP (BÁO LỖI · ĐỘ KHÓ · TOÀN VẸN DỮ LIỆU) =====
+    let qcIntegrityCache = [];
+
+    async function loadQualityControlData() {
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/GetQualityControlData');
+            const json = await res.json();
+            if (!json.success) return;
+
+            const errors = json.errorQueue || [];
+            const difficult = json.difficultWords || [];
+            const integrity = json.integrityIssues || [];
+            qcIntegrityCache = integrity;
+
+            document.getElementById('qcErrorCount').innerText = errors.length;
+            document.getElementById('qcDifficultCount').innerText = difficult.length;
+            document.getElementById('qcIntegrityCount').innerText = integrity.length;
+            document.getElementById('qcSummaryBadge').innerText = `${errors.length + difficult.length} mục cần ưu tiên`;
+
+            renderQcErrors(errors);
+            renderQcDifficult(difficult);
+            renderQcIntegrity(integrity);
+            if (window.lucide) lucide.createIcons();
+        } catch (e) {
+            console.warn('QC load error:', e);
+        }
+    }
+
+    function renderQcErrors(errors) {
+        const tbody = document.getElementById('qcErrorTableBody');
+        if (!tbody) return;
+        if (!errors.length) {
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center text-success py-3">✓ Hộp thư báo lỗi đang trống!</td></tr>';
+            return;
+        }
+        tbody.innerHTML = errors.map(item => `
+            <tr>
+                <td><span class="badge bg-danger-subtle text-danger">${escapeHtmlModal(item.categoryTag)}</span></td>
+                <td class="fw-bold">${escapeHtmlModal(item.word || 'Chưa gắn từ')}</td>
+                <td>${escapeHtmlModal(item.content)}</td>
+                <td class="text-muted">${escapeHtmlModal(item.createdAt)}</td>
+                <td class="text-end text-nowrap">
+                    ${item.wordId > 0 ? `<button type="button" class="btn btn-sm btn-outline-primary rounded-pill me-1" onclick="editWord(${item.wordId})">Mở sửa từ</button>` : ''}
+                    <button type="button" class="btn btn-sm btn-outline-success rounded-pill" onclick="resolveQcFeedback(${item.feedbackId})">Đã xử lý</button>
+                </td>
+            </tr>`).join('');
+    }
+
+    function renderQcDifficult(list) {
+        const tbody = document.getElementById('qcDifficultTableBody');
+        if (!tbody) return;
+        if (!list.length) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-success py-3">✓ Chưa có từ nào có tỷ lệ quên hoặc lỗi gõ bất thường.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = list.map(item => `
+            <tr>
+                <td><div class="fw-bold">${escapeHtmlModal(item.word)}</div><div class="text-muted">${escapeHtmlModal(item.meaning)}</div></td>
+                <td>${escapeHtmlModal(item.topicTitle)}</td>
+                <td>${item.reviewCount} lượt</td>
+                <td><span class="badge ${item.againRate > 70 ? 'bg-danger-subtle text-danger' : 'bg-secondary-subtle text-secondary'}">${item.againRate}%</span></td>
+                <td><span class="badge ${item.typingFailCount >= 3 ? 'bg-warning-subtle text-warning-emphasis' : 'bg-light text-dark'}">${item.typingFailCount} lần</span></td>
+                <td class="text-end">
+                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" onclick="editWord(${item.wordId}, 'tab-word-typing-tab')">Biên tập lại</button>
+                </td>
+            </tr>`).join('');
+    }
+
+    function filterQcIntegrity(kind, btn) {
+        document.querySelectorAll('#qcIntegrityFilters button').forEach(b => {
+            b.className = 'btn btn-xs btn-sm btn-outline-secondary rounded-pill';
+        });
+        if (btn) btn.className = 'btn btn-xs btn-sm btn-primary rounded-pill active';
+
+        let filtered = qcIntegrityCache;
+        if (kind === 'audio') filtered = qcIntegrityCache.filter(x => x.missingAudio);
+        else if (kind === 'blank') filtered = qcIntegrityCache.filter(x => x.missingBlankMarker);
+        else if (kind === 'example') filtered = qcIntegrityCache.filter(x => x.missingExample);
+        else if (kind === 'tip') filtered = qcIntegrityCache.filter(x => x.missingTip);
+        renderQcIntegrity(filtered);
+    }
+
+    function renderQcIntegrity(list) {
+        const tbody = document.getElementById('qcIntegrityTableBody');
+        if (!tbody) return;
+        if (!list.length) {
+            tbody.innerHTML = '<tr><td colspan="4" class="text-center text-success py-3">✓ Không có từ nào bị thiếu dữ liệu trong bộ lọc này.</td></tr>';
+            return;
+        }
+        tbody.innerHTML = list.map(item => {
+            const targetTab = (item.missingBlankMarker || item.missingExample)
+                ? 'tab-word-typing-tab'
+                : (item.missingTip && !item.missingAudio ? 'tab-word-lesson-tab' : 'tab-word-core-tab');
+            return `
+                <tr>
+                    <td><span class="fw-bold">${escapeHtmlModal(item.word)}</span> <span class="text-muted">— ${escapeHtmlModal(item.meaning)}</span></td>
+                    <td>${escapeHtmlModal(item.topicTitle)}</td>
+                    <td>${(item.tags || []).map(t => `<span class="badge bg-warning-subtle text-warning-emphasis me-1">${escapeHtmlModal(t)}</span>`).join('')}</td>
+                    <td class="text-end">
+                        <button type="button" class="btn btn-sm btn-outline-primary rounded-pill" onclick="editWord(${item.wordId}, '${targetTab}')">Bổ sung ngay</button>
+                    </td>
+                </tr>`;
+        }).join('');
+    }
+
+    async function resolveQcFeedback(feedbackId) {
+        try {
+            const res = await fetch(`/Admin/Vocabulary_management/ResolveVocabFeedback?feedbackId=${feedbackId}`, {
+                method: 'POST',
+                headers: { 'RequestVerificationToken': getAntiForgeryToken() }
+            });
+            const json = await res.json();
+            if (json.success) {
+                showToast(json.message);
+                loadQualityControlData();
+            } else {
+                showToast(json.message || 'Không thể xử lý.', 'danger');
+            }
+        } catch {
+            showToast('Lỗi máy chủ khi cập nhật phản hồi.', 'danger');
+        }
+    }
+
+    // ===== MODAL TỪ VỰNG TẬP TRUNG (4 TAB) =====
+    function escapeHtmlModal(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function escapeRegexModal(value) {
+        return String(value ?? '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+
+    function parseTagList(hiddenId, rawValue) {
+        const str = String(rawValue || '').trim();
+        if (!str) return [];
+        if (hiddenId === 'wordCollocations') {
+            if (/[;\r\n|]/.test(str)) {
+                return str.split(/[;\r\n|]+/).map(s => s.trim()).filter(Boolean);
+            }
+            if (str.includes(' — ')) {
+                return [str];
+            }
+            return str.split(/[,;\r\n|]+/).map(s => s.trim()).filter(Boolean);
+        }
+        return str.split(/[,;\r\n|]+/).map(s => s.trim()).filter(Boolean);
+    }
+
+    function joinTagList(hiddenId, items) {
+        return hiddenId === 'wordCollocations' ? items.join('; ') : items.join(', ');
+    }
+
+    function syncTagInputUI(hiddenId) {
+        const hiddenEl = document.getElementById(hiddenId);
+        const container = document.querySelector(`[data-tag-container="${hiddenId}"]`);
+        const textInput = document.querySelector(`[data-tag-input="${hiddenId}"]`);
+        if (!hiddenEl || !container) return;
+
+        container.querySelectorAll('.vocab-tag-chip').forEach(el => el.remove());
+        const tags = parseTagList(hiddenId, hiddenEl.value);
+        if (hiddenId === 'wordCollocations') {
+            const hint = document.getElementById('collocEmptyHint');
+            if (hint) hint.style.display = tags.length ? 'none' : 'inline';
+        }
+
+        tags.forEach((tag, idx) => {
+            const chip = document.createElement('span');
+            if (hiddenId === 'wordCollocations') {
+                chip.className = 'vocab-tag-chip d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill small';
+                chip.style.cssText = 'background-color:#f5e8ff;color:#a21caf;border:1px solid #e9d5ff;font-weight:500;';
+                const parts = tag.split(/\s+—\s+/);
+                const labelHtml = parts.length >= 2
+                    ? `<span class="tag-edit-trigger" style="cursor:pointer;" title="Nhấn để sửa"><strong class="fw-bold">${escapeHtmlModal(parts[0])}</strong> — ${escapeHtmlModal(parts.slice(1).join(' — '))}</span>`
+                    : `<span class="tag-edit-trigger" style="cursor:pointer;" title="Nhấn để sửa"><strong>${escapeHtmlModal(tag)}</strong></span>`;
+                chip.innerHTML = `${labelHtml}<button type="button" class="btn-close" style="font-size: 0.55rem;" aria-label="Xóa"></button>`;
+                chip.querySelector('.tag-edit-trigger')?.addEventListener('click', () => {
+                    const enEl = document.getElementById('collocEnInput');
+                    const viEl = document.getElementById('collocViInput');
+                    if (enEl) enEl.value = parts[0] || '';
+                    if (viEl) viEl.value = parts.length >= 2 ? parts.slice(1).join(' — ') : '';
+                    const updated = tags.filter((_, i) => i !== idx);
+                    hiddenEl.value = joinTagList(hiddenId, updated);
+                    syncTagInputUI(hiddenId);
+                    updateLiveModalPreview();
+                    enEl?.focus();
+                });
+            } else {
+                chip.className = 'vocab-tag-chip badge bg-primary-subtle text-primary d-inline-flex align-items-center gap-1 px-2 py-1 rounded-pill';
+                chip.innerHTML = `<span>${escapeHtmlModal(tag)}</span><button type="button" class="btn-close" style="font-size: 0.55rem;" aria-label="Xóa"></button>`;
+            }
+            chip.querySelector('button').addEventListener('click', () => {
+                const updated = tags.filter((_, i) => i !== idx);
+                hiddenEl.value = joinTagList(hiddenId, updated);
+                syncTagInputUI(hiddenId);
+                updateLiveModalPreview();
+            });
+            if (textInput) container.insertBefore(chip, textInput);
+            else container.appendChild(chip);
+        });
+    }
+
+    function addTagToHidden(hiddenId, rawTag) {
+        const hiddenEl = document.getElementById(hiddenId);
+        if (!hiddenEl) return;
+        const incoming = parseTagList(hiddenId, rawTag);
+        if (!incoming.length) return;
+        const existing = parseTagList(hiddenId, hiddenEl.value);
+        for (const item of incoming) {
+            if (!existing.some(e => e.toLowerCase() === item.toLowerCase())) {
+                existing.push(item);
+            }
+        }
+        hiddenEl.value = joinTagList(hiddenId, existing);
+        syncTagInputUI(hiddenId);
+        updateLiveModalPreview();
+    }
+
+    function addCollocationPair() {
+        const enEl = document.getElementById('collocEnInput');
+        const viEl = document.getElementById('collocViInput');
+        const en = (enEl?.value || '').trim();
+        const vi = (viEl?.value || '').trim();
+        if (!en && !vi) return;
+        if (!en) {
+            showToast('Vui lòng nhập cụm tiếng Anh trước.', 'warning');
+            enEl?.focus();
+            return;
+        }
+        const entry = vi ? `${en} — ${vi}` : en;
+        addTagToHidden('wordCollocations', entry);
+        if (enEl) enEl.value = '';
+        if (viEl) viEl.value = '';
+        enEl?.focus();
+    }
+
+    let extraExamplesList = [];
+
+    function renderExtraExamplesUI() {
+        const container = document.getElementById('extraExamplesPreviewList');
+        if (!container) return;
+        if (!extraExamplesList.length) {
+            container.innerHTML = `<div class="text-muted small fst-italic px-1">Chưa có ví dụ bổ sung. Nhập 2 ô trên hoặc bấm <strong>Gợi ý Bài học bằng AI</strong>.</div>`;
+            return;
+        }
+        container.innerHTML = extraExamplesList.map((ex, idx) => `
+            <div class="p-3 rounded-4 position-relative" style="border:1px solid #e9d5ff;background:#fbf9fe;">
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2" style="font-size:0.65rem;" aria-label="Xóa" onclick="removeExtraExamplePair(${idx})"></button>
+                <div class="extra-ex-edit" style="cursor:pointer;" title="Nhấn để sửa" onclick="editExtraExamplePair(${idx})">
+                    <div class="fw-bold text-uppercase mb-1" style="font-size:0.72rem;color:#9333ea;letter-spacing:0.04em;">❞ VÍ DỤ</div>
+                    <div class="fw-bold fst-italic text-dark small mb-1">“${escapeHtmlModal(ex.en)}”</div>
+                    <div class="text-muted small">${escapeHtmlModal(ex.vi || '(Chưa có bản dịch tiếng Việt)')}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function addExtraExamplePair() {
+        const enEl = document.getElementById('extraExEnInput');
+        const viEl = document.getElementById('extraExViInput');
+        const en = (enEl?.value || '').replace(/\r?\n+/g, ' ').trim();
+        const vi = (viEl?.value || '').replace(/\r?\n+/g, ' ').trim();
+        if (!en) {
+            showToast('Vui lòng nhập câu ví dụ tiếng Anh trước.', 'warning');
+            enEl?.focus();
+            return;
+        }
+        if (!extraExamplesList.some(x => x.en.toLowerCase() === en.toLowerCase())) {
+            extraExamplesList.push({ en, vi });
+        }
+        if (enEl) enEl.value = '';
+        if (viEl) viEl.value = '';
+        renderExtraExamplesUI();
+        enEl?.focus();
+    }
+
+    function removeExtraExamplePair(idx) {
+        extraExamplesList.splice(idx, 1);
+        renderExtraExamplesUI();
+    }
+
+    function editExtraExamplePair(idx) {
+        const item = extraExamplesList[idx];
+        if (!item) return;
+        const enEl = document.getElementById('extraExEnInput');
+        const viEl = document.getElementById('extraExViInput');
+        if (enEl) enEl.value = item.en || '';
+        if (viEl) viEl.value = item.vi || '';
+        extraExamplesList.splice(idx, 1);
+        renderExtraExamplesUI();
+        enEl?.focus();
+    }
+
+    // ===== MODAL MULTIPLE SENSES MANAGEMENT =====
+    let modalSensesData = [];
+
+    function renderModalSensesUI() {
+        const container = document.getElementById('modalSensesContainer');
+        if (!container) return;
+
+        if (!modalSensesData || modalSensesData.length === 0) {
+            modalSensesData = [{
+                partOfSpeech: document.getElementById('wordPos')?.value || 'noun',
+                meaning: document.getElementById('wordMeaning')?.value?.trim() || '',
+                englishDefinition: '',
+                examples: [],
+                collocations: '',
+                synonyms: '',
+                antonyms: ''
+            }];
+        }
+
+        container.innerHTML = '';
+
+        modalSensesData.forEach((sense, sIdx) => {
+            const card = document.createElement('div');
+            card.className = 'card border rounded-4 shadow-sm bg-white mb-2';
+            card.style.borderColor = sIdx === 0 ? 'rgba(192, 38, 211, 0.35)' : 'rgba(226, 232, 240, 0.9)';
+            card.innerHTML = `
+                <div class="card-header py-2.5 px-3 border-bottom d-flex justify-content-between align-items-center" style="background: ${sIdx === 0 ? 'rgba(192, 38, 211, 0.05)' : '#f8fafc'};">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge fw-bold px-2.5 py-1 text-uppercase" style="background: rgba(192, 38, 211, 0.12); color: #c026d3; font-size: 11px;">
+                            Nét nghĩa #${sIdx + 1} ${sIdx === 0 ? '(Nghĩa chính)' : ''}
+                        </span>
+                        <span class="fw-semibold text-slate-700 small" id="senseTitle_${sIdx}">
+                            ${sense.meaning ? '— ' + escapeHtmlModal(sense.meaning) : ''}
+                        </span>
+                    </div>
+                    <div>
+                        ${sIdx > 0 ? `
+                        <button type="button" class="btn btn-sm btn-outline-danger py-0.5 px-2.5 text-xs rounded-pill" onclick="removeSenseModal(${sIdx})" title="Xoá nét nghĩa này">
+                            <i data-lucide="trash-2" style="width: 12px; height: 12px;" class="me-1"></i>Xoá nét nghĩa
+                        </button>` : `
+                        <span class="badge bg-light text-muted border px-2 py-1 small">Nghĩa mặc định</span>`}
+                    </div>
+                </div>
+                <div class="card-body p-3">
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-4">
+                            <label class="form-label text-xs fw-semibold mb-1">Loại từ</label>
+                            <select class="form-select form-select-sm" onchange="modalSensesData[${sIdx}].partOfSpeech = this.value; syncModalSensesHidden();">
+                                <option value="noun" ${sense.partOfSpeech === 'noun' ? 'selected' : ''}>noun (Danh từ)</option>
+                                <option value="verb" ${sense.partOfSpeech === 'verb' ? 'selected' : ''}>verb (Động từ)</option>
+                                <option value="adjective" ${sense.partOfSpeech === 'adjective' ? 'selected' : ''}>adjective (Tính từ)</option>
+                                <option value="adverb" ${sense.partOfSpeech === 'adverb' ? 'selected' : ''}>adverb (Trạng từ)</option>
+                                <option value="phrasal verb" ${sense.partOfSpeech === 'phrasal verb' ? 'selected' : ''}>phrasal verb (Cụm động từ)</option>
+                                <option value="idiom" ${sense.partOfSpeech === 'idiom' ? 'selected' : ''}>idiom (Thành ngữ)</option>
+                                <option value="preposition" ${sense.partOfSpeech === 'preposition' ? 'selected' : ''}>preposition (Giới từ)</option>
+                                <option value="conjunction" ${sense.partOfSpeech === 'conjunction' ? 'selected' : ''}>conjunction (Liên từ)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label text-xs fw-semibold mb-1">Nghĩa tiếng Việt <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control form-control-sm fw-semibold" placeholder="vd: bên (tham gia hợp đồng), buổi tiệc, đảng phái..." value="${escapeHtmlModal(sense.meaning || '')}" oninput="modalSensesData[${sIdx}].meaning = this.value; const tEl = document.getElementById('senseTitle_${sIdx}'); if (tEl) tEl.textContent = this.value ? '— ' + this.value : ''; syncModalSensesHidden();" />
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label text-xs fw-semibold mb-1">Định nghĩa tiếng Anh (English Definition)</label>
+                        <input type="text" class="form-control form-control-sm" placeholder="vd: A person or group involved in a legal contract, agreement, or dispute." value="${escapeHtmlModal(sense.englishDefinition || '')}" oninput="modalSensesData[${sIdx}].englishDefinition = this.value; syncModalSensesHidden();" />
+                    </div>
+                    <div class="mb-2 p-2.5 rounded-3 border bg-light/50">
+                        <div class="d-flex justify-content-between align-items-center mb-1.5">
+                            <label class="form-label text-xs fw-bold mb-0 text-secondary d-flex align-items-center gap-1">
+                                <i data-lucide="quote" style="width: 12px; height: 12px;" class="text-primary"></i>
+                                <span>Ví dụ bổ sung ngữ cảnh (có thêm / sửa / xóa):</span>
+                            </label>
+                            <button type="button" class="btn btn-xs btn-outline-primary py-0.5 px-2 rounded-pill fw-semibold" style="font-size: 11px;" onclick="addSenseExampleModal(${sIdx})">
+                                + Thêm ví dụ
+                            </button>
+                        </div>
+                        <div id="modalSenseExList_${sIdx}" class="d-flex flex-column gap-1.5"></div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label text-xs fw-semibold mb-1">Cụm từ đi kèm (Collocations)</label>
+                        <input type="text" class="form-control form-control-sm" placeholder="vd: third party — bên thứ ba, interested party — bên có liên quan, contracting party — bên ký kết" value="${escapeHtmlModal(sense.collocations || '')}" oninput="modalSensesData[${sIdx}].collocations = this.value; syncModalSensesHidden();" />
+                        <div class="form-text text-xs text-muted">Nhập dạng: <code>cụm tiếng Anh — nghĩa tiếng Việt</code>, ngăn cách bởi dấu phẩy hoặc chấm phẩy.</div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label text-xs fw-semibold mb-1">Từ đồng nghĩa (Synonyms)</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="vd: side, signatory" value="${escapeHtmlModal(sense.synonyms || '')}" oninput="modalSensesData[${sIdx}].synonyms = this.value; syncModalSensesHidden();" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-xs fw-semibold mb-1">Từ trái nghĩa (Antonyms)</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="vd: opponent, adversary" value="${escapeHtmlModal(sense.antonyms || '')}" oninput="modalSensesData[${sIdx}].antonyms = this.value; syncModalSensesHidden();" />
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(card);
+            renderSenseExamplesModal(sIdx);
+        });
+
+        if (window.lucide) lucide.createIcons();
+        syncModalSensesHidden();
+    }
+
+    function renderSenseExamplesModal(sIdx) {
+        const listEl = document.getElementById(`modalSenseExList_${sIdx}`);
+        if (!listEl) return;
+        listEl.innerHTML = '';
+        const examples = modalSensesData[sIdx].examples || [];
+        if (examples.length === 0) {
+            listEl.innerHTML = '<div class="text-muted fst-italic px-1 py-1" style="font-size: 11px;">Chưa có ví dụ bổ sung cho nét nghĩa này. Bấm <strong>"+ Thêm ví dụ"</strong> ở trên.</div>';
+            return;
+        }
+        examples.forEach((ex, exIdx) => {
+            const row = document.createElement('div');
+            row.className = 'd-flex align-items-center gap-1.5 p-1.5 rounded-2 bg-white border';
+            row.innerHTML = `
+                <div class="input-group input-group-sm flex-grow-1">
+                    <span class="input-group-text bg-light text-muted px-2" style="font-size: 11px;">En</span>
+                    <input type="text" class="form-control form-control-sm" placeholder="Câu tiếng Anh (vd: Both parties must sign...)" value="${escapeHtmlModal(ex.en || '')}" oninput="modalSensesData[${sIdx}].examples[${exIdx}].en = this.value; syncModalSensesHidden();" />
+                    <span class="input-group-text bg-light text-muted px-2" style="font-size: 11px;">Vi</span>
+                    <input type="text" class="form-control form-control-sm" placeholder="Dịch tiếng Việt..." value="${escapeHtmlModal(ex.vi || '')}" oninput="modalSensesData[${sIdx}].examples[${exIdx}].vi = this.value; syncModalSensesHidden();" />
+                </div>
+                <button type="button" class="btn btn-outline-danger btn-sm p-1.5 text-xs rounded-circle d-flex align-items-center justify-content-center" style="width: 28px; height: 28px;" onclick="removeSenseExampleModal(${sIdx}, ${exIdx})" title="Xoá câu ví dụ này">
+                    <i data-lucide="trash-2" style="width: 13px; height: 13px;"></i>
+                </button>
+            `;
+            listEl.appendChild(row);
+        });
+        if (window.lucide) lucide.createIcons();
+    }
+
+    function addNewSenseModal() {
+        if (!modalSensesData) modalSensesData = [];
+        modalSensesData.push({
+            partOfSpeech: document.getElementById('wordPos')?.value || 'noun',
+            meaning: '',
+            englishDefinition: '',
+            examples: [{ en: '', vi: '' }],
+            collocations: '',
+            synonyms: '',
+            antonyms: ''
+        });
+        renderModalSensesUI();
+    }
+
+    function removeSenseModal(idx) {
+        if (idx === 0 && modalSensesData.length === 1) {
+            modalSensesData[0].meaning = '';
+            modalSensesData[0].englishDefinition = '';
+            modalSensesData[0].examples = [];
+            modalSensesData[0].collocations = '';
+            modalSensesData[0].synonyms = '';
+            modalSensesData[0].antonyms = '';
+            renderModalSensesUI();
+            return;
+        }
+        modalSensesData.splice(idx, 1);
+        renderModalSensesUI();
+    }
+
+    function addSenseExampleModal(sIdx) {
+        if (!modalSensesData[sIdx].examples) modalSensesData[sIdx].examples = [];
+        modalSensesData[sIdx].examples.push({ en: '', vi: '' });
+        renderSenseExamplesModal(sIdx);
+        syncModalSensesHidden();
+    }
+
+    function removeSenseExampleModal(sIdx, exIdx) {
+        modalSensesData[sIdx].examples.splice(exIdx, 1);
+        renderSenseExamplesModal(sIdx);
+        syncModalSensesHidden();
+    }
+
+    function syncModalSensesHidden() {
+        const hidden = document.getElementById('wordSensesJson');
+        if (!hidden) return;
+        const validSenses = (modalSensesData || []).filter(s => (s.meaning && s.meaning.trim()) || (s.englishDefinition && s.englishDefinition.trim()));
+        hidden.value = validSenses.length > 0 ? JSON.stringify(validSenses) : '';
+
+        // Đồng bộ Nét nghĩa 1 vào các input gốc để gửi form
+        const s1 = modalSensesData && modalSensesData.length > 0 ? modalSensesData[0] : null;
+        if (s1) {
+            const defEl = document.getElementById('wordEnglishDefinition');
+            if (defEl) defEl.value = s1.englishDefinition || '';
+            const collEl = document.getElementById('wordCollocations');
+            if (collEl) collEl.value = s1.collocations || '';
+            const synEl = document.getElementById('wordSynonyms');
+            if (synEl) synEl.value = s1.synonyms || '';
+            const antEl = document.getElementById('wordAntonyms');
+            if (antEl) antEl.value = s1.antonyms || '';
+        }
+    }
+
+    function addSenseExampleModal(sIdx) {
+        if (!modalSensesData[sIdx].examples) modalSensesData[sIdx].examples = [];
+        modalSensesData[sIdx].examples.push({ en: '', vi: '' });
+        renderSenseExamplesModal(sIdx);
+        syncModalSensesHidden();
+    }
+
+    function removeSenseExampleModal(sIdx, exIdx) {
+        modalSensesData[sIdx].examples.splice(exIdx, 1);
+        renderSenseExamplesModal(sIdx);
+        syncModalSensesHidden();
+    }
+
+    function syncModalSensesHidden() {
+        const hidden = document.getElementById('wordSensesJson');
+        if (!hidden) return;
+        const validSenses = (modalSensesData || []).filter(s => (s.meaning && s.meaning.trim()) || (s.englishDefinition && s.englishDefinition.trim()));
+        hidden.value = validSenses.length > 0 ? JSON.stringify(validSenses) : '';
+    }
+
+    async function autoGenerateExtraExamples() {
+        const word = document.getElementById('wordText').value.trim();
+        if (!word) {
+            showToast('Vui lòng nhập Từ tiếng Anh (Headword) ở Tab 1 trước.', 'warning');
+            switchModalWordTab('tab-word-core-tab');
+            return;
+        }
+        const btn = document.getElementById('btnAutoGenExtraExamples');
+        const statusEl = document.getElementById('extraExAiStatus');
+        if (btn) btn.disabled = true;
+        if (statusEl) statusEl.innerText = 'Đang tự sinh câu ví dụ ngữ cảnh & bản dịch tiếng Việt...';
+
+        const existingList = [];
+        const primary = (document.getElementById('wordExampleSentence').value || '').trim();
+        if (primary) existingList.push(primary);
+        for (const item of extraExamplesList) {
+            if (item.en) existingList.push(item.en);
+        }
+
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/SuggestExtraExamplesByAi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': getAntiForgeryToken()
+                },
+                body: JSON.stringify({
+                    Word: word,
+                    PartOfSpeech: document.getElementById('wordPos').value,
+                    Meaning: document.getElementById('wordMeaning').value.trim(),
+                    TopicId: parseInt(document.getElementById('wordTopicId').value) || 0,
+                    TopicTitle: getSelectedModalTopicTitle(),
+                    ExistingExamples: existingList
+                })
+            });
+            const json = await res.json();
+            if (!json.success) {
+                showToast(json.message || 'Không tự sinh được ví dụ.', 'warning');
+                return;
+            }
+            const items = json.data?.examples || [];
+            let addedCount = 0;
+            const primaryNorm = primary.replace(/\[([^\[\]]+)\]/g, '$1').trim().toLowerCase();
+            for (const ex of items) {
+                const en = String(ex?.en || '').replace(/\r?\n+/g, ' ').trim();
+                const vi = String(ex?.vi || '').replace(/\r?\n+/g, ' ').trim();
+                if (!en) continue;
+                const enNorm = en.replace(/\[([^\[\]]+)\]/g, '$1').toLowerCase();
+                if (enNorm === primaryNorm) continue;
+                if (!extraExamplesList.some(x => x.en.replace(/\[([^\[\]]+)\]/g, '$1').toLowerCase() === enNorm)) {
+                    extraExamplesList.push({ en, vi });
+                    addedCount++;
+                }
+            }
+            renderExtraExamplesUI();
+            if (statusEl) {
+                statusEl.innerHTML = addedCount > 0
+                    ? `<span class="text-success fw-semibold">✓ Đã thêm ${addedCount} ví dụ mới (${escapeHtmlModal(formatAiSourceLabel(json.source || json.data?.source))}). Bạn có thể bấm vào thẻ để sửa hoặc bấm tiếp <strong>Tự sinh ví dụ</strong>.</span>`
+                    : `<span class="text-muted">Các ví dụ gợi ý đều đã có trong danh sách hiện tại.</span>`;
+            }
+        } catch {
+            if (statusEl) statusEl.innerText = 'Lỗi kết nối khi tự sinh ví dụ.';
+        } finally {
+            if (btn) btn.disabled = false;
+        }
+    }
+
+    ['wordCollocations', 'wordSynonyms', 'wordAntonyms'].forEach(hiddenId => {
+        const input = document.querySelector(`[data-tag-input="${hiddenId}"]`);
+        if (!input) return;
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ',') {
+                e.preventDefault();
+                addTagToHidden(hiddenId, input.value);
+                input.value = '';
+            }
+        });
+        input.addEventListener('blur', () => {
+            if (input.value.trim()) {
+                addTagToHidden(hiddenId, input.value);
+                input.value = '';
+            }
+        });
+    });
+
+    function switchModalWordTab(tabId) {
+        const tabEl = document.getElementById(tabId);
+        if (tabEl) {
+            const tabInstance = bootstrap.Tab.getOrCreateInstance(tabEl);
+            tabInstance.show();
+        }
+    }
+
+    function nextModalTab() {
+        const activeTab = document.querySelector('#modalWordTabs .nav-link.active');
+        if (!activeTab) return;
+        const targetId = activeTab.getAttribute('data-bs-target');
+        if (targetId === '#tab-word-core') {
+            switchModalWordTab('tab-word-lesson-tab');
+        } else if (targetId === '#tab-word-lesson') {
+            switchModalWordTab('tab-word-quiz-tab');
+        } else if (targetId === '#tab-word-quiz') {
+            switchModalWordTab('tab-word-typing-tab');
+        } else {
+            saveWord();
+            return;
+        }
+        updateLiveModalPreview();
+    }
+
+    function toggleManualQuizInputs() {
+        const isManual = document.getElementById('wordUseManualQuiz')?.checked;
+        const box = document.getElementById('manualQuizDistractorsBox');
+        if (box) box.style.display = isManual ? 'block' : 'none';
+        updateLiveModalPreview();
+    }
+
+    function getManualDistractorsArray() {
+        return [
+            document.getElementById('wordDistractor1')?.value.trim() || '',
+            document.getElementById('wordDistractor2')?.value.trim() || '',
+            document.getElementById('wordDistractor3')?.value.trim() || ''
+        ].filter(Boolean);
+    }
+
+    function insertTextToInput(elementId, text) {
+        const el = document.getElementById(elementId);
+        if (!el) return;
+        const start = el.selectionStart || el.value.length;
+        const end = el.selectionEnd || el.value.length;
+        const before = el.value.substring(0, start);
+        const after = el.value.substring(end);
+        el.value = before + text + after;
+        el.focus();
+        el.selectionStart = el.selectionEnd = start + text.length;
+        updateLiveModalPreview();
+    }
+
+    function insertFamilyTemplate(pos) {
+        const currentWord = document.getElementById('wordText').value.trim() || 'word';
+        let sample = '';
+        if (pos === 'noun') sample = `\n${currentWord} · noun · nghĩa danh từ`;
+        else if (pos === 'adjective') sample = `\n${currentWord}al · adjective · nghĩa tính từ`;
+        else if (pos === 'adverb') sample = `\n${currentWord}ly · adverb · nghĩa trạng từ`;
+        else sample = `\n${currentWord} · ${pos} · nghĩa`;
+
+        const el = document.getElementById('wordFamily');
+        if (el.value.trim().length === 0) {
+            sample = sample.trimStart();
+        }
+        insertTextToInput('wordFamily', sample);
+    }
+
+    function wrapSelectedTypingBlank() {
+        const el = document.getElementById('wordExampleSentence');
+        if (!el) return;
+        let text = el.value;
+        const start = el.selectionStart ?? 0;
+        const end = el.selectionEnd ?? 0;
+
+        if (end > start) {
+            const selected = text.substring(start, end).trim().replace(/^\[|\]$/g, '');
+            if (!selected) return;
+            const before = text.substring(0, start).replace(/\[([^\[\]]+)\]/g, '$1');
+            const after = text.substring(end).replace(/\[([^\[\]]+)\]/g, '$1');
+            el.value = `${before}[${selected}]${after}`;
+            showToast(`Đã đánh dấu [${selected}] làm ô trống!`, 'success');
+            updateLiveModalPreview();
+            return;
+        }
+
+        const word = document.getElementById('wordText').value.trim();
+        if (!word) {
+            showToast('Hãy bôi đen từ cần điền trong câu ví dụ rồi bấm "Đặt làm ô trống".', 'warning');
+            return;
+        }
+        const stripped = text.replace(/\[([^\[\]]+)\]/g, '$1');
+        const re = new RegExp(`\\b(${escapeRegexModal(word)}[a-z]*)\\b`, 'i');
+        if (re.test(stripped)) {
+            el.value = stripped.replace(re, '[$1]');
+            showToast('Đã tự động bọc [...] quanh từ cần điền!', 'success');
+        } else {
+            showToast('Không tìm thấy từ trong câu. Hãy bôi đen trực tiếp từ cần điền rồi bấm nút này.', 'warning');
+        }
+        updateLiveModalPreview();
+    }
+
+    function applySampleTypingSentence() {
+        const word = document.getElementById('wordText').value.trim();
+        if (!word) {
+            showToast('Vui lòng nhập Từ tiếng Anh (Headword) ở Tab 1 trước.', 'warning');
+            switchModalWordTab('tab-word-core-tab');
+            return;
+        }
+        const sampleEn = `We often use [${word}] in daily workplace communication.`;
+        const meaning = document.getElementById('wordMeaning').value.trim();
+        const sentenceEl = document.getElementById('wordExampleSentence');
+        const meaningEl = document.getElementById('wordExampleMeaning');
+        sentenceEl.value = sampleEn;
+        if (!meaningEl.value.trim() && meaning) {
+            meaningEl.value = `Chúng ta thường dùng "${meaning}" trong giao tiếp công việc hàng ngày.`;
+        }
+        updateLiveModalPreview();
+    }
+
+    let cachedDbQuizPreview = null;
+    let dbQuizPreviewTimer = null;
+
+    function formatAiSourceLabel(source) {
+        if (!source) return 'Thông minh';
+        if (source === 'llm-gemini') return 'AI Gemini';
+        if (source === 'llm-openai') return 'AI OpenAI';
+        if (source === 'dictionary+llm-gemini') return 'Từ điển + AI Gemini';
+        if (source === 'dictionary+llm-openai') return 'Từ điển + AI OpenAI';
+        if (source === 'database-cache' || source === 'DatabaseCache') return 'CSDL nội bộ (0 token)';
+        if (source === 'database+dictionary-api') return 'CSDL + Dictionary API (0 token)';
+        if (source === 'dictionary-api' || source === 'DictionaryAPI') return 'Dictionary API & Dịch máy (0 token)';
+        if (source.includes('no-api-key')) return source.replace(/\s*\(no-api-key\)/, '') + ' · chưa cấu hình AI key';
+        return source;
+    }
+
+    function getSelectedModalTopicTitle() {
+        const sel = document.getElementById('wordTopicId');
+        const txt = sel?.selectedOptions?.[0]?.text || '';
+        return txt.startsWith('--') ? '' : txt;
+    }
+
+    async function autoFillWordFromApi(silent = false) {
+        const word = document.getElementById('wordText').value.trim();
+        if (!word) {
+            if (!silent) showToast('Nhập từ tiếng Anh trước khi bấm Gợi ý tự động.', 'warning');
+            return;
+        }
+        const btn = document.getElementById('btnAutoFillWord');
+        const statusEl = document.getElementById('autoFillStatus');
+        if (btn) btn.disabled = true;
+        if (statusEl) statusEl.innerText = 'Đang tra cứu từ điển chuẩn US/UK & nghĩa...';
+
+        const posEl = document.getElementById('wordPos');
+        const queryPos = (!silent && posEl && posEl.value) ? `&pos=${encodeURIComponent(posEl.value)}` : '';
+
+        try {
+            const res = await fetch(`/Admin/Vocabulary_management/AutoFillWord?word=${encodeURIComponent(word)}${queryPos}`);
+            const json = await res.json();
+            if (!json.success) {
+                if (!silent) showToast(json.message || 'Không tra được từ điển.', 'warning');
+                return;
+            }
+            const d = json.data;
+            const hasExistingCore = Boolean(
+                document.getElementById('wordMeaning').value.trim() ||
+                document.getElementById('wordPhoneticUs').value.trim()
+            );
+            const overwriteCore = !silent && hasExistingCore && confirm('Các ô Phần 1 đã có dữ liệu. Bấm OK để cập nhật lại theo từ loại đang chọn, hoặc Cancel để chỉ điền các ô còn trống.');
+
+            if (d.partOfSpeech && (silent || overwriteCore || !posEl.value)) {
+                if ([...posEl.options].some(o => o.value === d.partOfSpeech)) posEl.value = d.partOfSpeech;
+            }
+            if (d.phoneticUs && (overwriteCore || !document.getElementById('wordPhoneticUs').value.trim())) document.getElementById('wordPhoneticUs').value = d.phoneticUs;
+            if (d.phoneticUk && (overwriteCore || !document.getElementById('wordPhoneticUk').value.trim())) document.getElementById('wordPhoneticUk').value = d.phoneticUk;
+            if (d.meaning && (overwriteCore || !document.getElementById('wordMeaning').value.trim())) document.getElementById('wordMeaning').value = d.meaning;
+            if (d.englishDefinition && (overwriteCore || !document.getElementById('wordEnglishDefinition').value.trim())) document.getElementById('wordEnglishDefinition').value = d.englishDefinition;
+            if (d.audioUrl && (overwriteCore || !document.getElementById('wordAudioUrl').value.trim())) document.getElementById('wordAudioUrl').value = d.audioUrl;
+
+            if (statusEl) {
+                statusEl.innerHTML = `<span class="text-success fw-semibold">✓ Đã điền Phần 1 từ ${escapeHtmlModal(formatAiSourceLabel(json.source || d.source))}.</span>`;
+            }
+            updateLiveModalPreview();
+            fetchDbQuizPreview(true);
+        } catch {
+            if (statusEl) statusEl.innerText = 'Không kết nối được máy chủ tra cứu từ điển.';
+        } finally {
+            if (btn) btn.disabled = false;
+        }
+    }
+
+    async function autoFillLessonByAi() {
+        const word = document.getElementById('wordText').value.trim();
+        if (!word) {
+            showToast('Vui lòng nhập Từ tiếng Anh (Headword) ở Tab 1 trước.', 'warning');
+            switchModalWordTab('tab-word-core-tab');
+            return;
+        }
+        const hasExistingLesson = Boolean(
+            document.getElementById('wordEnglishDefinition').value.trim() ||
+            document.getElementById('wordFamily').value.trim() ||
+            document.getElementById('wordMemoryTip').value.trim()
+        );
+        const replaceExisting = hasExistingLesson
+            ? confirm('Tab Bài học đã có dữ liệu. Bấm OK để GHI ĐÈ bằng gợi ý mới theo Từ loại/Nghĩa hiện tại, hoặc Cancel để chỉ điền bổ sung các ô đang trống.')
+            : false;
+
+        const btn = document.getElementById('btnAiLesson');
+        const statusEl = document.getElementById('lessonAiStatus');
+        if (btn) btn.disabled = true;
+        if (statusEl) statusEl.innerText = 'AI đang tạo định nghĩa, Collocations, Synonyms, Word Family & Mẹo nhớ...';
+
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/AutoFillLessonByAi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': getAntiForgeryToken()
+                },
+                body: JSON.stringify({
+                    Word: word,
+                    PartOfSpeech: document.getElementById('wordPos').value,
+                    Meaning: document.getElementById('wordMeaning').value.trim(),
+                    TopicId: parseInt(document.getElementById('wordTopicId').value) || 0,
+                    TopicTitle: getSelectedModalTopicTitle()
+                })
+            });
+            const json = await res.json();
+            if (!json.success) {
+                showToast(json.message || 'Không tạo được gợi ý bài học.', 'warning');
+                return;
+            }
+            const d = json.data;
+            if (!modalSensesData || modalSensesData.length === 0) {
+                modalSensesData = [{ partOfSpeech: document.getElementById('wordPos').value, meaning: document.getElementById('wordMeaning').value.trim(), englishDefinition: '', examples: [], collocations: '', synonyms: '', antonyms: '' }];
+            }
+            const s1 = modalSensesData[0];
+            if (d.englishDefinition && (replaceExisting || !s1.englishDefinition)) {
+                s1.englishDefinition = d.englishDefinition;
+            }
+            if (Array.isArray(d.extraExamples) && d.extraExamples.length) {
+                if (!s1.examples) s1.examples = [];
+                for (const ex of d.extraExamples) {
+                    const en = String(ex?.en || '').replace(/\r?\n+/g, ' ').trim();
+                    const vi = String(ex?.vi || '').replace(/\r?\n+/g, ' ').trim();
+                    if (!en) continue;
+                    if (!s1.examples.some(x => x.en.toLowerCase() === en.toLowerCase())) {
+                        s1.examples.push({ en, vi });
+                    }
+                }
+            }
+            if (Array.isArray(d.collocations) && d.collocations.length) {
+                const addStr = d.collocations.join('; ');
+                s1.collocations = s1.collocations ? (s1.collocations + '; ' + addStr) : addStr;
+            }
+            if (Array.isArray(d.synonyms) && d.synonyms.length) {
+                const addStr = d.synonyms.join(', ');
+                s1.synonyms = s1.synonyms ? (s1.synonyms + ', ' + addStr) : addStr;
+            }
+            if (Array.isArray(d.antonyms) && d.antonyms.length) {
+                const addStr = d.antonyms.join(', ');
+                s1.antonyms = s1.antonyms ? (s1.antonyms + ', ' + addStr) : addStr;
+            }
+            renderModalSensesUI();
+
+            if (Array.isArray(d.wordFamily) && d.wordFamily.length && (replaceExisting || !document.getElementById('wordFamily').value.trim())) {
+                document.getElementById('wordFamily').value = d.wordFamily.join('\n');
+            }
+            if (d.commonMistakeWrong && (replaceExisting || !document.getElementById('wordCommonMistakeWrong').value.trim())) {
+                document.getElementById('wordCommonMistakeWrong').value = d.commonMistakeWrong;
+            }
+            if (d.commonMistakeRight && (replaceExisting || !document.getElementById('wordCommonMistakeRight').value.trim())) {
+                document.getElementById('wordCommonMistakeRight').value = d.commonMistakeRight;
+            }
+            if (d.commonMistakeNote && (replaceExisting || !document.getElementById('wordCommonMistakeNote').value.trim())) {
+                document.getElementById('wordCommonMistakeNote').value = d.commonMistakeNote;
+            }
+            if (d.memoryTip && (replaceExisting || !document.getElementById('wordMemoryTip').value.trim())) {
+                document.getElementById('wordMemoryTip').value = d.memoryTip;
+            }
+
+            if (statusEl) {
+                statusEl.innerHTML = `<span class="text-success fw-semibold">✓ Đã nạp dữ liệu Bài học (${escapeHtmlModal(formatAiSourceLabel(json.source || d.source))}). Bạn có thể bấm × trên từng thẻ tag để lọc bớt.</span>`;
+            }
+            updateLiveModalPreview();
+        } catch {
+            if (statusEl) statusEl.innerText = 'Lỗi kết nối khi gợi ý bài học.';
+        } finally {
+            if (btn) btn.disabled = false;
+        }
+    }
+
+    function fetchDbQuizPreview(immediate = false) {
+        if (dbQuizPreviewTimer) clearTimeout(dbQuizPreviewTimer);
+        const run = async () => {
+            const wordId = parseInt(document.getElementById('wordId').value) || 0;
+            const topicId = parseInt(document.getElementById('wordTopicId').value) || 0;
+            const pos = document.getElementById('wordPos').value || '';
+            const meaning = document.getElementById('wordMeaning').value.trim() || '';
+            try {
+                const url = `/Admin/Vocabulary_management/PreviewAutoQuizDistractors?wordId=${wordId}&topicId=${topicId}&pos=${encodeURIComponent(pos)}&meaning=${encodeURIComponent(meaning)}`;
+                const res = await fetch(url);
+                const json = await res.json();
+                if (json.success && json.data) {
+                    cachedDbQuizPreview = json.data;
+                    const badge = document.getElementById('quizPoolStatusBadge');
+                    const statusEl = document.getElementById('quizAiStatus');
+                    const isManual = document.getElementById('wordUseManualQuiz')?.checked;
+                    if (badge) {
+                        if (isManual) {
+                            badge.className = 'badge bg-primary-subtle text-primary border border-primary-subtle';
+                            badge.innerText = 'Ghi đè thủ công / AI Traps';
+                        } else if (json.data.isLowTopicPool) {
+                            badge.className = 'badge bg-warning-subtle text-warning-emphasis border border-warning-subtle';
+                            badge.innerText = `CSDL mở rộng (Topic chỉ có ${json.data.sameTopicCount} từ khác)`;
+                        } else {
+                            badge.className = 'badge bg-success-subtle text-success border border-success-subtle';
+                            badge.innerText = `CSDL nội bộ · ${json.data.sameTopicPosCount} từ cùng POS/Topic (0 token)`;
+                        }
+                    }
+                    if (statusEl && !isManual && json.data.isLowTopicPool) {
+                        statusEl.innerHTML = `<span class="text-warning-emphasis fw-semibold">Chủ đề hiện tại chưa đủ 4 từ. Hệ thống đang mở rộng CSDL cùng loại từ — bạn có thể bấm <strong>Gợi ý đáp án bẫy bằng AI</strong> để tạo câu hỏi bẫy sắc bén hơn.</span>`;
+                    }
+                    updateLiveModalPreview();
+                }
+            } catch { /* Silent */ }
+        };
+        if (immediate) run();
+        else dbQuizPreviewTimer = setTimeout(run, 300);
+    }
+
+    async function suggestQuizTrapsByAi() {
+        const word = document.getElementById('wordText').value.trim();
+        if (!word) {
+            showToast('Vui lòng nhập Từ tiếng Anh (Headword) ở Tab 1 trước.', 'warning');
+            switchModalWordTab('tab-word-core-tab');
+            return;
+        }
+        const btn = document.getElementById('btnAiQuizTraps');
+        const statusEl = document.getElementById('quizAiStatus');
+        if (btn) btn.disabled = true;
+        if (statusEl) statusEl.innerText = 'AI đang phân tích bẫy ngữ nghĩa dễ nhầm lẫn...';
+
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/SuggestQuizTrapsByAi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': getAntiForgeryToken()
+                },
+                body: JSON.stringify({
+                    Word: word,
+                    PartOfSpeech: document.getElementById('wordPos').value,
+                    Meaning: document.getElementById('wordMeaning').value.trim(),
+                    TopicId: parseInt(document.getElementById('wordTopicId').value) || 0,
+                    WordId: parseInt(document.getElementById('wordId').value) || 0,
+                    TopicTitle: getSelectedModalTopicTitle()
+                })
+            });
+            const json = await res.json();
+            if (!json.success) {
+                showToast(json.message || 'Không tạo được đáp án bẫy.', 'warning');
+                return;
+            }
+            const distractors = json.data?.distractors || [];
+            document.getElementById('wordUseManualQuiz').checked = true;
+            toggleManualQuizInputs();
+            document.getElementById('wordDistractor1').value = distractors[0] || '';
+            document.getElementById('wordDistractor2').value = distractors[1] || '';
+            document.getElementById('wordDistractor3').value = distractors[2] || '';
+            if (statusEl) {
+                statusEl.innerHTML = `<span class="text-primary fw-semibold">✓ ${escapeHtmlModal(json.data?.note || 'Đã bật chế độ ghi đè với 3 đáp án bẫy.')} (${escapeHtmlModal(formatAiSourceLabel(json.source || json.data?.source))})</span>`;
+            }
+            fetchDbQuizPreview(true);
+            updateLiveModalPreview();
+        } catch {
+            if (statusEl) statusEl.innerText = 'Lỗi kết nối khi gọi AI tạo đáp án bẫy.';
+        } finally {
+            if (btn) btn.disabled = false;
+        }
+    }
+
+    async function autoFillTypingByAi() {
+        const word = document.getElementById('wordText').value.trim();
+        if (!word) {
+            showToast('Vui lòng nhập Từ tiếng Anh (Headword) ở Tab 1 trước.', 'warning');
+            switchModalWordTab('tab-word-core-tab');
+            return;
+        }
+        const btn = document.getElementById('btnAiTyping');
+        const statusEl = document.getElementById('typingAiStatus');
+        if (btn) btn.disabled = true;
+        if (statusEl) statusEl.innerText = 'AI đang tạo câu ví dụ chuẩn TOEIC/công sở có [từ_gốc] và bản dịch...';
+
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/AutoFillTypingByAi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': getAntiForgeryToken()
+                },
+                body: JSON.stringify({
+                    Word: word,
+                    PartOfSpeech: document.getElementById('wordPos').value,
+                    Meaning: document.getElementById('wordMeaning').value.trim(),
+                    TopicId: parseInt(document.getElementById('wordTopicId').value) || 0,
+                    TopicTitle: getSelectedModalTopicTitle()
+                })
+            });
+            const json = await res.json();
+            if (!json.success) {
+                showToast(json.message || 'Không sinh được câu ví dụ.', 'warning');
+                return;
+            }
+            const d = json.data;
+            if (d.exampleSentence) document.getElementById('wordExampleSentence').value = d.exampleSentence;
+            if (d.exampleMeaning) document.getElementById('wordExampleMeaning').value = d.exampleMeaning;
+            if (statusEl) {
+                statusEl.innerHTML = `<span class="text-success fw-semibold">✓ Đã sinh câu ví dụ có sẵn <code>[...]</code> và dịch nghĩa (${escapeHtmlModal(formatAiSourceLabel(json.source || d.source))}). Bạn chỉ cần duyệt nhanh ngữ pháp.</span>`;
+            }
+            updateLiveModalPreview();
+        } catch {
+            if (statusEl) statusEl.innerText = 'Lỗi kết nối khi sinh câu ví dụ TOEIC.';
+        } finally {
+            if (btn) btn.disabled = false;
+        }
+    }
+
+    async function uploadWordAudioFile(input) {
+        const file = input?.files?.[0];
+        if (!file) return;
+        const formData = new FormData();
+        formData.append('file', file);
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/UploadWordAudio', {
+                method: 'POST',
+                headers: { 'RequestVerificationToken': getAntiForgeryToken() },
+                body: formData
+            });
+            const json = await res.json();
+            if (json.success && json.url) {
+                document.getElementById('wordAudioUrl').value = json.url;
+                showToast(json.message || 'Đã tải file MP3!');
+            } else {
+                showToast(json.message || 'Tải audio thất bại.', 'danger');
+            }
+        } catch {
+            showToast('Lỗi khi tải tệp âm thanh.', 'danger');
+        } finally {
+            input.value = '';
+        }
+    }
+
+    async function generateWordTts() {
+        const word = document.getElementById('wordText').value.trim();
+        if (!word) {
+            showToast('Nhập từ tiếng Anh trước khi tạo âm thanh TTS.', 'warning');
+            return;
+        }
+        const btn = document.getElementById('btnGenerateTts');
+        if (btn) btn.disabled = true;
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/GenerateWordTts', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': getAntiForgeryToken()
+                },
+                body: JSON.stringify({ Word: word, Accent: 'us' })
+            });
+            const json = await res.json();
+            if (json.success && json.url) {
+                document.getElementById('wordAudioUrl').value = json.url;
+                showToast(json.message || 'Đã tạo âm thanh TTS!');
+                playWordAudioUrl();
+            } else {
+                showToast(json.message || 'Đọc thử qua Web Speech trình duyệt.', 'warning');
+                speakCurrentInput();
+            }
+        } catch {
+            speakCurrentInput();
+        } finally {
+            if (btn) btn.disabled = false;
+        }
+    }
+
+    function playWordAudioUrl() {
+        const url = document.getElementById('wordAudioUrl')?.value.trim();
+        if (url) {
+            const audio = new Audio(url);
+            audio.play().catch(() => speakCurrentInput());
+        } else {
+            speakCurrentInput();
+        }
+    }
+
+    function updateLiveModalPreview() {
+        const wordRaw = document.getElementById('wordText').value.trim();
+        const word = wordRaw || 'Headword';
+        const meaningRaw = document.getElementById('wordMeaning').value.trim();
+        const meaning = meaningRaw || 'Nghĩa tiếng Việt';
+        const pos = document.getElementById('wordPos').value;
+        const us = document.getElementById('wordPhoneticUs').value.trim();
+        const uk = document.getElementById('wordPhoneticUk').value.trim();
+        const phonetics = us || uk ? `${us ? 'US: ' + us : ''} ${uk ? 'UK: ' + uk : ''}`.trim() : '/phonetics/';
+        const engDef = document.getElementById('wordEnglishDefinition').value.trim();
+        const exSent = document.getElementById('wordExampleSentence').value.trim();
+        const exMean = document.getElementById('wordExampleMeaning').value.trim();
+        const collocs = document.getElementById('wordCollocations').value.trim();
+        const isActive = document.getElementById('wordIsActive').checked;
+
+        const topicSelect = document.getElementById('wordTopicId');
+        const selectedTopicText = topicSelect.options[topicSelect.selectedIndex]?.text || 'Bộ từ';
+
+        // Tab 1: Xem nhanh thẻ Từ
+        document.getElementById('prevTermPos').innerText = pos;
+        document.getElementById('prevTermWord').innerText = word;
+        document.getElementById('prevTermPhonetics').innerText = phonetics;
+        document.getElementById('prevTermMeaning').innerText = meaning;
+
+        // Tab 2: Quiz
+        const quizSyncInput = document.getElementById('quizCorrectMeaningSync');
+        if (quizSyncInput && document.activeElement !== quizSyncInput) {
+            quizSyncInput.value = meaningRaw;
+        }
+        document.getElementById('quizPreviewPrompt').innerText = `Nghĩa đúng của "${word}" là gì?`;
+
+        const useManual = document.getElementById('wordUseManualQuiz')?.checked;
+        const distractors = [];
+        if (useManual) {
+            for (const d of getManualDistractorsArray()) {
+                if (d.toLowerCase() !== meaning.toLowerCase() && !distractors.includes(d)) {
+                    distractors.push(d);
+                }
+            }
+        }
+        if (cachedDbQuizPreview?.distractors?.length) {
+            for (const m of cachedDbQuizPreview.distractors) {
+                if (distractors.length >= 3) break;
+                if (m && m.toLowerCase() !== meaning.toLowerCase() && !distractors.includes(m)) {
+                    distractors.push(m);
+                }
+            }
+        }
+        const fallbackDistractors = ['đáp án nhiễu 1 (lọc tự động)', 'đáp án nhiễu 2 (lọc tự động)', 'đáp án nhiễu 3 (lọc tự động)'];
+        for (const fb of fallbackDistractors) {
+            if (distractors.length >= 3) break;
+            distractors.push(fb);
+        }
+
+        const quizLabels = ['A', 'B', 'C', 'D'];
+        const quizList = [{ text: meaning, correct: true }, ...distractors.slice(0, 3).map(d => ({ text: d, correct: false }))];
+        document.getElementById('quizPreviewOptions').innerHTML = quizList.map((opt, idx) => `
+            <div class="col-md-6">
+                <div class="p-2 px-3 rounded-3 border ${opt.correct ? 'border-success bg-success-subtle text-success-emphasis fw-semibold' : 'bg-white text-dark'} d-flex justify-content-between align-items-center">
+                    <span><span class="badge ${opt.correct ? 'bg-success' : 'bg-secondary-subtle text-secondary'} me-2">${quizLabels[idx]}</span>${escapeHtmlModal(opt.text)}</span>
+                    ${opt.correct ? '<span class="small fw-bold">✓ Đúng</span>' : ''}
+                </div>
+            </div>`).join('');
+
+        // Tab 3: Gõ
+        let typingBefore = 'Please learn how to use';
+        let typingAfter = 'in context.';
+        let typingAnswer = wordRaw;
+        let matchedExample = false;
+        let matchedBracket = false;
+        const firstSent = exSent.split(/\r\n|\r|\n|\|\|\|/)[0].trim();
+        if (firstSent) {
+            const bracketMatch = /\[([^\[\]]+)\]/.exec(firstSent);
+            if (bracketMatch && bracketMatch[1].trim()) {
+                matchedExample = true;
+                matchedBracket = true;
+                typingAnswer = bracketMatch[1].trim();
+                typingBefore = firstSent.slice(0, bracketMatch.index).trim();
+                typingAfter = firstSent.slice(bracketMatch.index + bracketMatch[0].length).trim();
+            } else if (wordRaw) {
+                const match = new RegExp(`\\b${escapeRegexModal(wordRaw)}\\b`, 'i').exec(firstSent)
+                    || new RegExp(escapeRegexModal(wordRaw), 'i').exec(firstSent);
+                if (match) {
+                    matchedExample = true;
+                    typingAnswer = match[0];
+                    typingBefore = firstSent.slice(0, match.index).trim();
+                    typingAfter = firstSent.slice(match.index + match[0].length).trim();
+                }
+            }
+        }
+
+        const alertBox = document.getElementById('typingMatchAlert');
+        if (!wordRaw && !matchedBracket) {
+            alertBox.innerHTML = `<div class="alert alert-secondary py-2 px-3 small mb-0">Nhập <strong>Từ tiếng Anh</strong> ở Tab 1 hoặc bọc <code>[từ]</code> trong câu ví dụ.</div>`;
+        } else if (matchedBracket) {
+            alertBox.innerHTML = `<div class="alert alert-success py-2 px-3 small mb-0">✓ Đã đánh dấu ô trống <code>[${escapeHtmlModal(typingAnswer)}]</code>.</div>`;
+        } else if (matchedExample) {
+            alertBox.innerHTML = `<div class="alert alert-warning py-2 px-3 small mb-0">Nên bôi đen từ <strong>${escapeHtmlModal(typingAnswer)}</strong> và bấm <strong>Đặt làm ô trống</strong> để chuẩn hóa cú pháp <code>[...]</code>.</div>`;
+        } else {
+            alertBox.innerHTML = `<div class="alert alert-warning py-2 px-3 small mb-0">Câu ví dụ chưa có <code>[...]</code>. Bôi đen từ cần điền rồi bấm <strong>Đặt làm ô trống</strong>.</div>`;
+        }
+
+        document.getElementById('typingPreviewSentence').innerHTML =
+            `${escapeHtmlModal(typingBefore)} <span class="d-inline-block px-3 py-0 mx-1 rounded-2 border border-primary bg-primary-subtle text-primary fw-bold font-monospace">[ . . . ] <small class="text-muted fw-normal">(${escapeHtmlModal(typingAnswer || '______')})</small></span> ${escapeHtmlModal(typingAfter)}`;
+        document.getElementById('typingPreviewTranslation').innerText =
+            `Gợi ý nghĩa: ${exMean || meaning}`;
+    }
+
+    document.getElementById('formWord')?.addEventListener('input', (e) => {
+        if (e.target?.id === 'quizCorrectMeaningSync') {
+            document.getElementById('wordMeaning').value = e.target.value;
+        }
+        if (e.target?.id === 'wordMeaning' || e.target?.id === 'quizCorrectMeaningSync') {
+            fetchDbQuizPreview(false);
+        }
+        updateLiveModalPreview();
+    });
+    document.getElementById('formWord')?.addEventListener('change', (e) => {
+        if (e.target?.id === 'wordPos' || e.target?.id === 'wordTopicId' || e.target?.id === 'wordUseManualQuiz') {
+            fetchDbQuizPreview(true);
+        }
+        updateLiveModalPreview();
+    });
+
+    function openWordModal(topicId) {
+        document.getElementById('modalWordTitle').innerText = 'Thêm Từ Vựng Mới';
+        document.getElementById('formWord').reset();
+        document.getElementById('wordId').value = '0';
+        document.getElementById('wordSortOrder').value = '1';
+        document.getElementById('wordIsActive').checked = true;
+        document.getElementById('wordCollocations').value = '';
+        if (document.getElementById('collocEnInput')) document.getElementById('collocEnInput').value = '';
+        if (document.getElementById('collocViInput')) document.getElementById('collocViInput').value = '';
+        extraExamplesList = [];
+        if (document.getElementById('extraExEnInput')) document.getElementById('extraExEnInput').value = '';
+        if (document.getElementById('extraExViInput')) document.getElementById('extraExViInput').value = '';
+        renderExtraExamplesUI();
+        modalSensesData = [{
+            partOfSpeech: 'noun',
+            meaning: '',
+            englishDefinition: '',
+            examples: [],
+            collocations: '',
+            synonyms: '',
+            antonyms: ''
+        }];
+        renderModalSensesUI();
+        document.getElementById('wordSynonyms').value = '';
+        document.getElementById('wordAntonyms').value = '';
+        ['wordCollocations', 'wordSynonyms', 'wordAntonyms'].forEach(syncTagInputUI);
+        document.getElementById('wordUseManualQuiz').checked = false;
+        toggleManualQuizInputs();
+        cachedDbQuizPreview = null;
+        document.getElementById('autoFillStatus').innerHTML = 'Phần 1 (Từ điển · 0 token LLM): Tự điền phiên âm US/UK, loại từ, nghĩa Việt &amp; file phát âm ngay khi nhập từ.';
+        document.getElementById('lessonAiStatus').innerText = 'AI sinh định nghĩa Anh, Collocations, Synonyms, Antonyms, Word Family, Lỗi sai & Mẹo nhớ để bạn bấm × chọn lọc.';
+        if (document.getElementById('extraExAiStatus')) document.getElementById('extraExAiStatus').innerHTML = 'Ví dụ chính ở Tab <strong>4. Gõ</strong> hiện ở thẻ học nhanh; bấm <strong>Tự sinh ví dụ</strong> để tạo thêm ví dụ tiếng Anh + dịch Việt cho phần <strong>Xem thêm</strong>.';
+        document.getElementById('quizAiStatus').innerHTML = 'Mặc định tự động bốc 3 từ cùng <strong>Loại từ</strong> &amp; cùng <strong>Chủ đề</strong>, loại bỏ từ đồng nghĩa (tức thì, 0 phí API).';
+        document.getElementById('typingAiStatus').innerHTML = 'Bấm <strong>Sinh câu ví dụ TOEIC &amp; dịch bằng AI</strong> để tạo câu ngữ cảnh công sở có sẵn <code>[từ_gốc]</code> và bản dịch Việt, hoặc bôi đen từ rồi bấm <strong>Đặt làm ô trống</strong>.';
+
+        if (topicId && topicId > 0) {
+            document.getElementById('wordTopicId').value = topicId;
+        }
+
+        fetchDbQuizPreview(true);
+        updateLiveModalPreview();
+        switchModalWordTab('tab-word-core-tab');
+        new bootstrap.Modal(document.getElementById('modalWord')).show();
+        if (window.lucide) lucide.createIcons();
+    }
+
+    async function editWord(id, defaultTabId = 'tab-word-core-tab') {
+        try {
+            const res = await fetch(`/Admin/Vocabulary_management/GetWord/${id}`);
+            const json = await res.json();
+            if (!json.success) {
+                showToast(json.message || 'Không tìm thấy dữ liệu từ vựng.', 'danger');
+                return;
+            }
+            const w = json.data;
+            document.getElementById('modalWordTitle').innerText = `Chỉnh Sửa Từ Vựng: ${w.word}`;
+            document.getElementById('wordId').value = w.wordId;
+            document.getElementById('wordTopicId').value = w.topicId;
+            document.getElementById('wordText').value = w.word;
+            document.getElementById('wordPos').value = (w.partOfSpeech || 'noun').toLowerCase();
+            document.getElementById('wordPhoneticUs').value = w.phoneticUs || '';
+            document.getElementById('wordPhoneticUk').value = w.phoneticUk || '';
+            document.getElementById('wordMeaning').value = w.meaning;
+            document.getElementById('wordEnglishDefinition').value = w.englishDefinition || '';
+            document.getElementById('wordAudioUrl').value = w.audioUrl || '';
+            document.getElementById('wordImageUrl').value = w.imageUrl || '';
+            document.getElementById('wordSortOrder').value = w.sortOrder || 1;
+            document.getElementById('wordIsActive').checked = w.isActive;
+
+            const rawExSentences = String(w.exampleSentence || '').split(/\r\n|\r|\n|\|\|\|/).map(s => s.trim()).filter(Boolean);
+            const rawExMeanings = String(w.exampleMeaning || '').split(/\r\n|\r|\n|\|\|\|/).map(s => s.trim());
+            document.getElementById('wordExampleSentence').value = rawExSentences[0] || '';
+            document.getElementById('wordExampleMeaning').value = rawExMeanings[0] || '';
+            extraExamplesList = rawExSentences.slice(1).map((en, i) => ({
+                en,
+                vi: rawExMeanings[i + 1] || ''
+            }));
+            if (document.getElementById('extraExEnInput')) document.getElementById('extraExEnInput').value = '';
+            if (document.getElementById('extraExViInput')) document.getElementById('extraExViInput').value = '';
+            renderExtraExamplesUI();
+            document.getElementById('wordCollocations').value = w.collocations || '';
+            if (document.getElementById('collocEnInput')) document.getElementById('collocEnInput').value = '';
+            if (document.getElementById('collocViInput')) document.getElementById('collocViInput').value = '';
+            document.getElementById('wordSynonyms').value = w.synonyms || '';
+            document.getElementById('wordAntonyms').value = w.antonyms || '';
+            ['wordCollocations', 'wordSynonyms', 'wordAntonyms'].forEach(syncTagInputUI);
+
+            modalSensesData = [];
+            if (w.sensesJson) {
+                try {
+                    const parsed = JSON.parse(w.sensesJson);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        modalSensesData = parsed.map(s => ({
+                            partOfSpeech: s.partOfSpeech || (w.partOfSpeech || 'noun').toLowerCase(),
+                            meaning: s.meaning || w.meaning || '',
+                            englishDefinition: s.englishDefinition || '',
+                            examples: Array.isArray(s.examples) ? s.examples.map(e => ({ en: e.en || e.En || (Array.isArray(e) ? e[0] : ''), vi: e.vi || e.Vi || (Array.isArray(e) ? e[1] : '') })) : [],
+                            collocations: s.collocations || '',
+                            synonyms: s.synonyms || '',
+                            antonyms: s.antonyms || ''
+                        }));
+                    }
+                } catch { modalSensesData = []; }
+            }
+
+            if (!modalSensesData || modalSensesData.length === 0) {
+                modalSensesData = [{
+                    partOfSpeech: (w.partOfSpeech || 'noun').toLowerCase(),
+                    meaning: w.meaning || '',
+                    englishDefinition: w.englishDefinition || '',
+                    examples: extraExamplesList.length > 0 ? extraExamplesList : [],
+                    collocations: w.collocations || '',
+                    synonyms: w.synonyms || '',
+                    antonyms: w.antonyms || ''
+                }];
+            }
+            renderModalSensesUI();
+
+            document.getElementById('wordFamily').value = w.wordFamily || '';
+            document.getElementById('wordCommonMistakeWrong').value = w.commonMistakeWrong || '';
+            document.getElementById('wordCommonMistakeRight').value = w.commonMistakeRight || '';
+            document.getElementById('wordCommonMistakeNote').value = w.commonMistakeNote || '';
+            document.getElementById('wordMemoryTip').value = w.memoryTip || '';
+
+            document.getElementById('wordUseManualQuiz').checked = Boolean(w.useManualQuiz);
+            let manualArr = [];
+            try {
+                if (w.quizDistractorsJson) manualArr = JSON.parse(w.quizDistractorsJson) || [];
+            } catch { manualArr = []; }
+            document.getElementById('wordDistractor1').value = manualArr[0] || '';
+            document.getElementById('wordDistractor2').value = manualArr[1] || '';
+            document.getElementById('wordDistractor3').value = manualArr[2] || '';
+            toggleManualQuizInputs();
+            cachedDbQuizPreview = null;
+            fetchDbQuizPreview(true);
+
+            updateLiveModalPreview();
+            switchModalWordTab(defaultTabId || 'tab-word-core-tab');
+            new bootstrap.Modal(document.getElementById('modalWord')).show();
+            if (window.lucide) lucide.createIcons();
+        } catch {
+            showToast('Lỗi kết nối khi tải dữ liệu từ vựng.', 'danger');
+        }
+    }
+
+    async function saveWord() {
+        const form = document.getElementById('formWord');
+        if (!form.checkValidity()) {
+            switchModalWordTab('tab-word-core-tab');
+            form.reportValidity();
+            return;
+        }
+
+        const useManual = Boolean(document.getElementById('wordUseManualQuiz')?.checked);
+        const manualDistractors = getManualDistractorsArray();
+
+        const primaryExEn = document.getElementById('wordExampleSentence').value.replace(/\r?\n+/g, ' ').trim();
+        const primaryExVi = document.getElementById('wordExampleMeaning').value.replace(/\r?\n+/g, ' ').trim();
+        const combinedPairs = [];
+        if (primaryExEn || primaryExVi) combinedPairs.push({ en: primaryExEn, vi: primaryExVi });
+        for (const ex of extraExamplesList) {
+            if (ex.en?.trim()) combinedPairs.push({ en: ex.en.replace(/\r?\n+/g, ' ').trim(), vi: (ex.vi || '').replace(/\r?\n+/g, ' ').trim() });
+        }
+        const combinedExampleSentence = combinedPairs.map(p => p.en).join('\n');
+        const combinedExampleMeaning = combinedPairs.some(p => p.vi) ? combinedPairs.map(p => p.vi || ' ').join('\n') : '';
+
+        syncModalSensesHidden();
+        const sensesVal = document.getElementById('wordSensesJson')?.value?.trim() || null;
+
+        const data = {
+            WordId: parseInt(document.getElementById('wordId').value) || 0,
+            TopicId: parseInt(document.getElementById('wordTopicId').value) || 0,
+            Word: document.getElementById('wordText').value.trim(),
+            PartOfSpeech: document.getElementById('wordPos').value,
+            PhoneticUs: document.getElementById('wordPhoneticUs').value.trim(),
+            PhoneticUk: document.getElementById('wordPhoneticUk').value.trim(),
+            Meaning: document.getElementById('wordMeaning').value.trim(),
+            EnglishDefinition: document.getElementById('wordEnglishDefinition').value.trim(),
+            ExampleSentence: combinedExampleSentence,
+            ExampleMeaning: combinedExampleMeaning,
+            Collocations: document.getElementById('wordCollocations').value.trim(),
+            Synonyms: document.getElementById('wordSynonyms').value.trim(),
+            Antonyms: document.getElementById('wordAntonyms').value.trim(),
+            WordFamily: document.getElementById('wordFamily').value.trim(),
+            CommonMistakeWrong: document.getElementById('wordCommonMistakeWrong').value.trim(),
+            CommonMistakeRight: document.getElementById('wordCommonMistakeRight').value.trim(),
+            CommonMistakeNote: document.getElementById('wordCommonMistakeNote').value.trim(),
+            MemoryTip: document.getElementById('wordMemoryTip').value.trim(),
+            QuizDistractorsJson: useManual && manualDistractors.length ? JSON.stringify(manualDistractors) : null,
+            SensesJson: sensesVal,
+            UseManualQuiz: useManual,
+            AudioUrl: document.getElementById('wordAudioUrl').value.trim(),
+            ImageUrl: document.getElementById('wordImageUrl').value.trim(),
+            SortOrder: parseInt(document.getElementById('wordSortOrder').value) || 1,
+            IsActive: document.getElementById('wordIsActive').checked
+        };
+
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/SaveWord', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': getAntiForgeryToken()
+                },
+                body: JSON.stringify(data)
+            });
+            const json = await res.json();
+            if (json.success) {
+                bootstrap.Modal.getInstance(document.getElementById('modalWord'))?.hide();
+                showToast(json.message || 'Lưu từ vựng thành công!');
+                setTimeout(() => location.reload(), 600);
+            } else {
+                showToast(json.message || 'Lưu thất bại.', 'danger');
+            }
+        } catch {
+            showToast('Lỗi máy chủ khi lưu từ vựng.', 'danger');
+        }
+    }
+
+    // ===== CRUD BỘ TỪ (TOPIC) =====
+    function updateTopicIconPreview(iconName) {
+        const wrapper = document.getElementById('topicIconPreviewWrapper');
+        if (wrapper) {
+            wrapper.innerHTML = `<i data-lucide="${iconName || 'book-open'}" style="width: 18px; height: 18px;"></i>`;
+            if (window.lucide && typeof lucide.createIcons === 'function') {
+                lucide.createIcons();
+            }
+        }
+    }
+
+    function openTopicModal(categoryId) {
+        document.getElementById('modalTopicTitle').innerText = 'Thêm Bộ Từ Mới';
+        document.getElementById('formTopic').reset();
+        document.getElementById('topicId').value = '0';
+        document.getElementById('topicSortOrder').value = '1';
+        document.getElementById('topicIsActive').checked = true;
+        document.getElementById('topicColor').value = '';
+        document.getElementById('topicIcon').value = 'book-open';
+        updateTopicIconPreview('book-open');
+
+        if (categoryId && categoryId > 0) {
+            document.getElementById('topicCategoryId').value = categoryId;
+        }
+
+        new bootstrap.Modal(document.getElementById('modalTopic')).show();
+    }
+
+    async function editTopic(id) {
+        try {
+            const res = await fetch(`/Admin/Vocabulary_management/GetTopic/${id}`);
+            const json = await res.json();
+            if (!json.success) return;
+            const t = json.data;
+            document.getElementById('modalTopicTitle').innerText = `Chỉnh Sửa Bộ Từ: ${t.title}`;
+            document.getElementById('topicId').value = t.topicId;
+            document.getElementById('topicCategoryId').value = t.categoryId;
+            document.getElementById('topicTitle').value = t.title;
+            document.getElementById('topicCode').value = t.code || '';
+            document.getElementById('topicLevel').value = t.level || 'B1';
+            document.getElementById('topicColor').value = t.color || '';
+            document.getElementById('topicIcon').value = t.icon || 'book-open';
+            updateTopicIconPreview(t.icon || 'book-open');
+            document.getElementById('topicDesc').value = t.description || '';
+            document.getElementById('topicSortOrder').value = t.sortOrder || 1;
+            document.getElementById('topicIsActive').checked = t.isActive;
+
+            new bootstrap.Modal(document.getElementById('modalTopic')).show();
+        } catch (e) {
+            showToast('Lỗi tải dữ liệu bộ từ.', 'danger');
+        }
+    }
+
+    async function saveTopic() {
+        const form = document.getElementById('formTopic');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const data = {
+            TopicId: parseInt(document.getElementById('topicId').value) || 0,
+            CategoryId: parseInt(document.getElementById('topicCategoryId').value) || 0,
+            Title: document.getElementById('topicTitle').value.trim(),
+            Code: document.getElementById('topicCode').value.trim(),
+            Level: document.getElementById('topicLevel').value,
+            Color: document.getElementById('topicColor').value.trim(),
+            Icon: document.getElementById('topicIcon').value.trim() || 'book-open',
+            Description: document.getElementById('topicDesc').value.trim(),
+            SortOrder: parseInt(document.getElementById('topicSortOrder').value) || 1,
+            IsActive: document.getElementById('topicIsActive').checked
+        };
+
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/SaveTopic', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': getAntiForgeryToken()
+                },
+                body: JSON.stringify(data)
+            });
+            const json = await res.json();
+            if (json.success) {
+                bootstrap.Modal.getInstance(document.getElementById('modalTopic'))?.hide();
+                showToast(json.message || 'Lưu bộ từ thành công!');
+                setTimeout(() => location.reload(), 600);
+            } else {
+                showToast(json.message || 'Lưu thất bại.', 'danger');
+            }
+        } catch (e) {
+            showToast('Lỗi kết nối máy chủ.', 'danger');
+        }
+    }
+
+    async function deleteTopic(id, title) {
+        if (!confirm(`Bạn có chắc chắn muốn xóa bộ từ "${title}"? Tất cả các từ vựng thuộc bộ từ này cũng sẽ bị xóa!`)) return;
+
+        try {
+            const res = await fetch(`/Admin/Vocabulary_management/DeleteTopic/${id}`, {
+                method: 'POST',
+                headers: { 'RequestVerificationToken': getAntiForgeryToken() }
+            });
+            const json = await res.json();
+            if (json.success) {
+                const row = document.getElementById(`topic-row-${id}`);
+                if (row) {
+                    row.style.transition = 'all 0.3s ease';
+                    row.style.opacity = '0';
+                    setTimeout(() => row.remove(), 300);
+                }
+                showToast(json.message || 'Đã xóa bộ từ!');
+            } else {
+                showToast(json.message || 'Không thể xóa.', 'danger');
+            }
+        } catch (e) {
+            showToast('Lỗi khi xóa bộ từ.', 'danger');
+        }
+    }
+
+    // ===== CRUD NHÓM BỘ TỪ (CATEGORY) =====
+    function openCategoryModal() {
+        document.getElementById('modalCategoryTitle').innerText = 'Thêm Nhóm Bộ Từ Mới';
+        document.getElementById('formCategory').reset();
+        document.getElementById('categoryId').value = '0';
+        document.getElementById('catSortOrder').value = '1';
+        document.getElementById('catIsActive').checked = true;
+        new bootstrap.Modal(document.getElementById('modalCategory')).show();
+    }
+
+    async function editCategory(id) {
+        try {
+            const res = await fetch(`/Admin/Vocabulary_management/GetCategory/${id}`);
+            const json = await res.json();
+            if (!json.success) return;
+            const c = json.data;
+            document.getElementById('modalCategoryTitle').innerText = `Chỉnh Sửa Nhóm: ${c.name}`;
+            document.getElementById('categoryId').value = c.categoryId;
+            document.getElementById('catName').value = c.name;
+            document.getElementById('catCode').value = c.code || '';
+            document.getElementById('catColor').value = c.color || 'primary';
+            document.getElementById('catDesc').value = c.description || '';
+            document.getElementById('catSortOrder').value = c.sortOrder || 1;
+            document.getElementById('catIsActive').checked = c.isActive;
+
+            new bootstrap.Modal(document.getElementById('modalCategory')).show();
+        } catch (e) {
+            showToast('Lỗi tải dữ liệu nhóm.', 'danger');
+        }
+    }
+
+    async function saveCategory() {
+        const form = document.getElementById('formCategory');
+        if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+        }
+
+        const data = {
+            CategoryId: parseInt(document.getElementById('categoryId').value) || 0,
+            Name: document.getElementById('catName').value.trim(),
+            Code: document.getElementById('catCode').value.trim(),
+            Color: document.getElementById('catColor').value,
+            Description: document.getElementById('catDesc').value.trim(),
+            SortOrder: parseInt(document.getElementById('catSortOrder').value) || 1,
+            IsActive: document.getElementById('catIsActive').checked
+        };
+
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/SaveCategory', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': getAntiForgeryToken()
+                },
+                body: JSON.stringify(data)
+            });
+            const json = await res.json();
+            if (json.success) {
+                bootstrap.Modal.getInstance(document.getElementById('modalCategory'))?.hide();
+                showToast(json.message || 'Lưu nhóm thành công!');
+                setTimeout(() => location.reload(), 600);
+            } else {
+                showToast(json.message || 'Lưu nhóm thất bại.', 'danger');
+            }
+        } catch (e) {
+            showToast('Lỗi kết nối máy chủ.', 'danger');
+        }
+    }
+
+    async function deleteCategory(id, name) {
+        if (!confirm(`Bạn có chắc muốn xóa nhóm "${name}"? Các bộ từ và từ vựng bên trong cũng sẽ bị xóa!`)) return;
+
+        try {
+            const res = await fetch(`/Admin/Vocabulary_management/DeleteCategory/${id}`, {
+                method: 'POST',
+                headers: { 'RequestVerificationToken': getAntiForgeryToken() }
+            });
+            const json = await res.json();
+            if (json.success) {
+                const row = document.getElementById(`row-cat-${id}`);
+                if (row) {
+                    row.style.transition = 'all 0.3s ease';
+                    row.style.opacity = '0';
+                    setTimeout(() => row.remove(), 300);
+                }
+                showToast(json.message || 'Đã xóa nhóm thành công!');
+            } else {
+                showToast(json.message || 'Không thể xóa nhóm.', 'danger');
+            }
+        } catch (e) {
+            showToast('Lỗi kết nối máy chủ.', 'danger');
+        }
+    }
+
+    // ===== NHẬP HÀNG LOẠT EXCEL/CSV & KIỂM TRA LỖI TRƯỚC KHI LƯU =====
+    function openBulkImportModal() {
+        document.getElementById('formBulk').reset();
+        const wrap = document.getElementById('bulkPreviewWrap');
+        if (wrap) wrap.style.display = 'none';
+        new bootstrap.Modal(document.getElementById('modalBulk')).show();
+        if (window.lucide) lucide.createIcons();
+    }
+
+    function handleBulkCsvUpload(input) {
+        const file = input?.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('bulkRawData').value = e.target?.result || '';
+            previewBulkImport();
+        };
+        reader.readAsText(file, 'UTF-8');
+    }
+
+    async function previewBulkImport() {
+        const topicId = parseInt(document.getElementById('bulkTopicId').value) || 0;
+        const rawData = document.getElementById('bulkRawData').value.trim();
+
+        if (topicId <= 0) {
+            showToast('Vui lòng chọn Bộ từ đích trước khi kiểm tra.', 'warning');
+            return;
+        }
+        if (!rawData) {
+            showToast('Vui lòng chọn tệp CSV hoặc dán dữ liệu trước khi kiểm tra.', 'warning');
+            return;
+        }
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/PreviewBulkImport', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': getAntiForgeryToken()
+                },
+                body: JSON.stringify({ TopicId: topicId, RawData: rawData })
+            });
+            const json = await res.json();
+            if (!json.success) {
+                showToast(json.message || 'Không phân tích được dữ liệu.', 'danger');
+                return;
+            }
+            const wrap = document.getElementById('bulkPreviewWrap');
+            const summary = document.getElementById('bulkPreviewSummary');
+            const tbody = document.getElementById('bulkPreviewBody');
+            wrap.style.display = 'block';
+            summary.innerHTML = `Tổng ${json.totalRows} dòng (${escapeHtmlModal(json.topicTitle)}): <span class="text-success">${json.validCount} hợp lệ</span> · <span class="text-warning">${json.warningCount} cảnh báo</span> · <span class="text-danger">${json.errorCount} lỗi (sẽ bỏ qua)</span>`;
+            tbody.innerHTML = (json.rows || []).map(r => {
+                const badgeClass = r.status === 'error'
+                    ? 'bg-danger-subtle text-danger'
+                    : (r.status === 'warning' ? 'bg-warning-subtle text-warning-emphasis' : 'bg-success-subtle text-success');
+                const statusText = (r.issues && r.issues.length) ? r.issues.join('; ') : 'Hợp lệ ✓';
+                return `
+                    <tr class="${r.status === 'error' ? 'table-danger' : ''}">
+                        <td>${r.rowNumber}</td>
+                        <td class="fw-bold">${escapeHtmlModal(r.word || '(trống)')}</td>
+                        <td>${escapeHtmlModal(r.partOfSpeech || 'noun')}</td>
+                        <td>${escapeHtmlModal(r.meaning || '(trống)')}</td>
+                        <td>${escapeHtmlModal(r.exampleSentence || '-')}</td>
+                        <td><span class="badge ${badgeClass}">${escapeHtmlModal(statusText)}</span></td>
+                    </tr>`;
+            }).join('');
+        } catch {
+            showToast('Lỗi kết nối khi kiểm tra CSV.', 'danger');
+        }
+    }
+
+    async function commitBulkImport() {
+        const topicId = parseInt(document.getElementById('bulkTopicId').value) || 0;
+        const rawData = document.getElementById('bulkRawData').value.trim();
+
+        if (topicId <= 0) {
+            showToast('Vui lòng chọn Bộ từ đích để nhập dữ liệu.', 'warning');
+            return;
+        }
+        if (!rawData) {
+            showToast('Vui lòng dán dữ liệu từ vựng hoặc chọn tệp CSV.', 'warning');
+            return;
+        }
+
+        try {
+            const res = await fetch('/Admin/Vocabulary_management/CommitBulkImport', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'RequestVerificationToken': getAntiForgeryToken()
+                },
+                body: JSON.stringify({ TopicId: topicId, RawData: rawData })
+            });
+            const json = await res.json();
+            if (json.success) {
+                bootstrap.Modal.getInstance(document.getElementById('modalBulk'))?.hide();
+                showToast(json.message || 'Nhập hàng loạt thành công!');
+                setTimeout(() => location.reload(), 900);
+            } else {
+                showToast(json.message || 'Lỗi nhập dữ liệu.', 'danger');
+            }
+        } catch {
+            showToast('Lỗi máy chủ khi nhập dữ liệu.', 'danger');
+        }
+    }
+</script>
+}
